@@ -22,7 +22,7 @@
                                     </form>
                                 </div>
                                 <div class="col-lg-2">
-                                  <a href="/forms/create-topics"> <button class="btn btn-primary"><b style="color:white">Create Topics</b></button> </a>
+                                  <a href="/create-topics"> <button class="btn btn-primary"><b style="color:white">Create Topics</b></button> </a>
                                 </div>
                             </div>
                             

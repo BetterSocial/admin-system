@@ -18,9 +18,7 @@ class TopicsController extends Controller
 
      public function getData(Request $req){
 
-         \Log::debug($req);
-        $host = env('APP_URL','http://localhost/');
-        $topic = "SELECT topic_id,name,".$host."|icon_path,categories,created_at,'location' FROM topics WHERE true";
+        $topic = "SELECT topic_id,name,icon_path,categories,created_at,'location' FROM topics WHERE true";
         if($req->name !=null){
             $topic .= " AND name ILIKE '%$req->name%'";
         }     

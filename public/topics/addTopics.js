@@ -17,7 +17,6 @@ $(document).ready(function () {
 
         }
         var firstUpload = $("#file").prop('files')[0];
-        console.log(firstUpload);
         var formData = new FormData();
         formData.append('file', firstUpload);
         formData.append('name', name);
@@ -52,8 +51,4 @@ $(document).ready(function () {
             }
         });   
       });
-
-
-    
-
 });
