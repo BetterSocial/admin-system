@@ -466,19 +466,19 @@
 		 *      oTable.fnFilter( 'test string' );
 		 *    } );
 		 */
-		this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseInsensitive )
-		{
-			var api = this.api( true );
+		// this.fnFilter = function( sInput, iColumn, bRegex, bSmart, bShowGlobal, bCaseInsensitive )
+		// {
+		// 	var api = this.api( true );
 		
-			if ( iColumn === null || iColumn === undefined ) {
-				api.search( sInput, bRegex, bSmart, bCaseInsensitive );
-			}
-			else {
-				api.column( iColumn ).search( sInput, bRegex, bSmart, bCaseInsensitive );
-			}
+		// 	if ( iColumn === null || iColumn === undefined ) {
+		// 		api.search( sInput, bRegex, bSmart, bCaseInsensitive );
+		// 	}
+		// 	else {
+		// 		api.column( iColumn ).search( sInput, bRegex, bSmart, bCaseInsensitive );
+		// 	}
 		
-			api.draw();
-		};
+		// 	api.draw();
+		// };
 		
 		
 		/**

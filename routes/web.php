@@ -1151,17 +1151,17 @@ Route::group(['middleware' => 'auth'] , function() {
                 // $pageName = 'basic-light';
                 return view('pages.tables.table_dt_basic-light')->with($data);
             });
-            Route::get('/basic', function() {
+            Route::get('/topics', function() {
                 // $category_name = '';
                 $data = [
                     'category_name' => 'datatable',
-                    'page_name' => 'basic',
+                    'page_name' => 'topics',
                 'has_scrollspy' => 0,
                 'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'basic';
-                return view('pages.tables.table_dt_basic')->with($data);
+                return view('pages.tables.table_dt_topics')->with($data);
             });
             Route::get('/custom', function() {
                 // $category_name = '';
@@ -1259,9 +1259,10 @@ Route::group(['middleware' => 'auth'] , function() {
                 // $pageName = 'range_search';
                 return view('pages.tables.table_dt_range_search')->with($data);
             });
+           
+           
         });
     });
-
     // Users
     Route::prefix('users')->group(function () {
         Route::get('/account_settings', function() {
@@ -1289,7 +1290,7 @@ Route::group(['middleware' => 'auth'] , function() {
             return view('pages.users.user_profile')->with($data);
         });
     });
-
+    Route::POST('/topics/data', 'TopicsController@getData')->name('masterTopics.data');
     // Widgets
     Route::get('/widgets', function() {
         // $category_name = '';
@@ -1310,6 +1311,7 @@ Route::group(['middleware' => 'auth'] , function() {
 Auth::routes();
 
 Route::get('/', 'HomeController@index');
+
 
 Route::get('/register', function() {
     return redirect('/login');    

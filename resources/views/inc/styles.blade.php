@@ -843,7 +843,12 @@
       <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
       <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/dt-global_style.css')}}">
       @break
-
+    
+    @case('topics')
+      {{-- Table Dattable Order Sorting --}}
+      <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
+      <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/dt-global_style.css')}}">
+      @break
     @case('range_search')
       {{-- Table Datatable Range Search --}}
       <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
