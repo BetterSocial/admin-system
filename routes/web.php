@@ -918,6 +918,18 @@ Route::group(['middleware' => 'auth'] , function() {
             // $pageName = 'wizard';
             return view('pages.forms.form_wizard')->with($data);
         });
+        Route::get('/create-topics', function() {
+            // $category_name = '';
+            $data = [
+                'category_name' => 'forms',
+                'page_name' => 'create-topics',
+                'has_scrollspy' => 1,
+                'scrollspy_offset' => 100,
+
+            ];
+            // $pageName = 'bootstrap_basic';
+            return view('pages.forms.form_add_topics')->with($data);
+        });
     });
 
     // Maps
@@ -1291,6 +1303,7 @@ Route::group(['middleware' => 'auth'] , function() {
         });
     });
     Route::POST('/topics/data', 'TopicsController@getData')->name('masterTopics.data');
+    Route::POST('/add/topics', 'TopicsController@addTopics')->name('add.topics');
     // Widgets
     Route::get('/widgets', function() {
         // $category_name = '';

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Topics;
 use DB;
+use Carbon\Carbon;
 
 class TopicsController extends Controller
 {
@@ -18,7 +19,8 @@ class TopicsController extends Controller
      public function getData(Request $req){
 
          \Log::debug($req);
-        $topic = "SELECT topic_id,name,icon_path,categories,created_at,'location' FROM topics WHERE true";
+        $host = env('APP_URL','http://localhost/');
+        $topic = "SELECT topic_id,name,".$host."|icon_path,categories,created_at,'location' FROM topics WHERE true";
         if($req->name !=null){
             $topic .= " AND name ILIKE '%$req->name%'";
         }     
@@ -30,12 +32,29 @@ class TopicsController extends Controller
         $data = DB::SELECT($topic);
         $total = count($data);
         $topic .= " LIMIT $req->length OFFSET $req->start ";
-        $data2 = DB::SELECT($topic);
+        $dataLimit = DB::SELECT($topic);
         return response()->json([
             'draw'            => $req->draw,
             'recordsTotal'    => $total,
             "recordsFiltered" => $total,
-            'data'            => $data2,
+            'data'            => $dataLimit,
+        ]);
+     }
+
+     public function addTopics(Request $req){
+        \Log::debug($req);
+        $file = $req->file('file');
+        $location = 'storage/img';
+    
+        $file->move($location,$file->getClientOriginalName());
+        Topics::create([
+            'icon_path' =>$location.'/'.$file->getClientOriginalName(),
+            'name' =>$req->name,
+            'categories'=>$req->category,
+            'created_at'=>Carbon::now()
+        ]);
+        return response()->json([
+            'status' => true,
         ]);
      }
 }

@@ -6,6 +6,9 @@ $(document).ready(function () {
     "searching": false,
     "dom" 		: 'lrtp',
     "stateSave"	: true,
+    "language": {
+      "emptyTable":     "No Data Topics"
+    }, 
     "serverSide"	: true,
     "ajax": {
       url			: '/topics/data',
@@ -34,19 +37,13 @@ $(document).ready(function () {
             if(data != "" || data !=" " || data != null){
               return '<img src="'+data+'" width="30" height="20" />';
             }
-            else{
-              return "<p> No Icon </p>"
-            }
-          }
+           
+          },
+          defaultContent: "No Icon",
         },
         {
           "data" : 'categories',
           "className" : 'menufilter textfilter',
-        },
-        {
-          "data" :'location',
-          "className" : 'menufilter textfilter',
-        
         },
         {
           "data" :'created_at',
@@ -56,7 +53,7 @@ $(document).ready(function () {
         {
           "data" : 'followers',
           render : function(data, type, row) {
-            return "<a href='http://www.facebook.com'>#Followers</a>";
+            return " <div class='btn btn-warning > <a href='http://www.facebook.com'>#Followers</a></div>";
           }    
         },
         {
@@ -73,9 +70,10 @@ $(document).ready(function () {
   $('#search').on('submit', function(e) {
     datatble.draw();
     e.preventDefault();
-});
+  });
 
   
+
 });
 
 

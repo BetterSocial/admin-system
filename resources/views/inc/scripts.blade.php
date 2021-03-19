@@ -8,6 +8,8 @@
 @if ($page_name != 'coming_soon' && $page_name != 'contact_us' && $page_name != 'error404' && $page_name != 'error500' && $page_name != 'error503' && $page_name != 'faq' && $page_name != 'helpdesk' && $page_name != 'maintenence' && $page_name != 'privacy' && $page_name != 'auth_boxed' && $page_name != 'auth_default')
 <script src="{{asset('plugins/perfect-scrollbar/perfect-scrollbar.min.js')}}"></script>
 <script src="{{asset('assets/js/app.js')}}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <script>
     $(document).ready(function() {
         App.init();
@@ -904,7 +906,7 @@
       @case('topics')
       {{-- Table Datatable topics --}}
       <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
-      <script src="{{asset('plugins/table/datatable/topics.js')}}">
+      <script src="{{asset('custom/topics.js')}}">
          
       </script>
       @break
@@ -1082,7 +1084,14 @@
       <script src="{{asset('plugins/jquery-step/custom-jquery.steps.js')}}"></script>
       @break
 
-    @case('topics')  
+    @case('create-topics')
+      <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
+      <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>
+      <script>
+          //First upload
+          var firstUpload = new FileUploadWithPreview('myFirstImage')</script>
+          <script src="{{asset('custom/addTopics.js')}}"></script>
+          
     @default
     <script>console.log('No custom script available.')</script>
 @endswitch

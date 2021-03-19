@@ -998,7 +998,12 @@
           #example-vertical.wizard > .content {min-height: 24.5em;}
       </style>
       @break
+      @case('create-topics')
+      
+      <link href="{{asset('assets/css/scrollspyNav.css')}}" rel="stylesheet" type="text/css" />
+      <link href="{{asset('plugins/file-upload/file-upload-with-preview.min.css')}}" rel="stylesheet" type="text/css" />
 
+      @break
     @default
         <script>console.log('No custom Styles available.')</script>
 @endswitch

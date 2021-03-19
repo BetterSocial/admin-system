@@ -239,9 +239,7 @@
                             <li class="{{ ($page_name === 'topics') ? 'active' : '' }}">
                                 <a href="/tables/datatables/topics"> Topics </a>
                             </li>
-                            <li class="{{ ($page_name === 'range_search') ? 'active' : '' }}">
-                                <a href="/tables/datatables/range_search"> Range Search </a>
-                            </li>
+                            
                             
                             <!-- <li class="{{ ($page_name === 'basic-light') ? 'active' : '' }}">
                                 <a href="/tables/datatables/basic-light"> Light </a>
