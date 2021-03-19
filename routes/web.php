@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth'] , function() {
         // $pageName = 'analytics';
         return view('dashboard2')->with($data);
     });
-    
+
     Route::get('/sales', function() {
         // $category_name = '';
         $data = [
@@ -235,18 +235,18 @@ Route::group(['middleware' => 'auth'] , function() {
 
     // Charts
     // Route::prefix('charts')->group(function () {
-        Route::get('/charts', function() {
-            // $category_name = 'chart';
-            $data = [
-                'category_name' => 'charts',
-                'page_name' => 'charts',
-                'has_scrollspy' => 1,
-                'scrollspy_offset' => 140,
+    Route::get('/charts', function() {
+        // $category_name = 'chart';
+        $data = [
+            'category_name' => 'charts',
+            'page_name' => 'charts',
+            'has_scrollspy' => 1,
+            'scrollspy_offset' => 140,
 
-            ];
-            // $pageName = 'charts';
-            return view('pages.charts.charts_apex')->with($data);
-        });
+        ];
+        // $pageName = 'charts';
+        return view('pages.charts.charts_apex')->with($data);
+    });
     // });
 
 
@@ -454,8 +454,8 @@ Route::group(['middleware' => 'auth'] , function() {
         $data = [
             'category_name' => 'drag_n_drop',
             'page_name' => 'drag_n_drop',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
 
         ];
         // $pageName = 'drag_n_drop';
@@ -691,8 +691,8 @@ Route::group(['middleware' => 'auth'] , function() {
         $data = [
             'category_name' => 'fonticons',
             'page_name' => 'font_icons',
-                'has_scrollspy' => 1,
-                'scrollspy_offset' => 140,
+            'has_scrollspy' => 1,
+            'scrollspy_offset' => 140,
 
         ];
         // $pageName = 'fonticons';
@@ -926,8 +926,8 @@ Route::group(['middleware' => 'auth'] , function() {
         $data = [
             'category_name' => 'maps',
             'page_name' => 'maps',
-                'has_scrollspy' => 1,
-                'scrollspy_offset' => 140,
+            'has_scrollspy' => 1,
+            'scrollspy_offset' => 140,
 
         ];
         // $pageName = 'maps';
@@ -1108,7 +1108,7 @@ Route::group(['middleware' => 'auth'] , function() {
             ];
             // $pageName = 'breadcrumb';
             return view('pages.starter-kit.starter_kit_breadcrumbs')->with($data);
-        });        
+        });
     });
 
 
@@ -1132,8 +1132,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'alternative_pagination',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'alternative_pagination';
@@ -1144,8 +1144,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'basic-light',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'basic-light';
@@ -1156,8 +1156,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'topics',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'basic';
@@ -1168,8 +1168,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'custom',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'custom';
@@ -1180,8 +1180,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'html5',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'html5';
@@ -1192,8 +1192,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'live_dom_ordering',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'live_dom_ordering';
@@ -1204,8 +1204,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'miscellaneous',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'miscellaneous';
@@ -1216,8 +1216,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'multi-column_ordering',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'multi-column_ordering';
@@ -1228,8 +1228,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'multiple_tables',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'multiple_tables';
@@ -1240,8 +1240,8 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'ordering_sorting',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'ordering_sorting';
@@ -1252,15 +1252,15 @@ Route::group(['middleware' => 'auth'] , function() {
                 $data = [
                     'category_name' => 'datatable',
                     'page_name' => 'range_search',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+                    'has_scrollspy' => 0,
+                    'scrollspy_offset' => '',
 
                 ];
                 // $pageName = 'range_search';
                 return view('pages.tables.table_dt_range_search')->with($data);
             });
-           
-           
+
+
         });
     });
     // Users
@@ -1297,13 +1297,31 @@ Route::group(['middleware' => 'auth'] , function() {
         $data = [
             'category_name' => 'widgets',
             'page_name' => 'widgets',
-                'has_scrollspy' => 0,
-                'scrollspy_offset' => '',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
 
         ];
         // $pageName = 'widgets';
         return view('pages.widgets.widgets')->with($data);
     });
+
+
+    // Locations
+    Route::POST('/locations/data', 'LocationsController@getData')->name('masterLocations.data');
+
+    Route::get('/locations', function() {
+        // $category_name = '';
+        $data = [
+            'category_name' => 'locations',
+            'page_name' => 'locations',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+
+        ];
+        // $pageName = 'widgets';
+        return view('pages.locations.locations')->with($data);
+    });
+
 
 
 });
@@ -1314,12 +1332,14 @@ Route::get('/', 'HomeController@index');
 
 
 Route::get('/register', function() {
-    return redirect('/login');    
+    return redirect('/login');
 });
 Route::get('/password/reset', function() {
-    return redirect('/login');    
+    return redirect('/login');
 });
 
 Route::get('/', function() {
-    return redirect('/sales');    
+    return redirect('/sales');
 });
+
+
