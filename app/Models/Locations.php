@@ -7,20 +7,29 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class Locations extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'users_admin';
+    protected $table = 'locations';
+    protected $primaryKey= 'location_id';
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'zip',
+        'neighborhood',
+        'city',
+        'state',
+        'country',
+        'location_level',
+        'status',
+        'slug_name'
     ];
 
     /**
@@ -28,17 +37,13 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = [ ];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $casts = [ ];
+
 }

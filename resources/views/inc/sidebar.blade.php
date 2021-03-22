@@ -2,35 +2,50 @@
 
     <!--  BEGIN SIDEBAR  -->
     <div class="sidebar-wrapper sidebar-theme">
-            
+
         <nav id="sidebar">
             <div class="shadow-bottom"></div>
 
             <ul class="list-unstyled menu-categories" id="accordionExample">
-                
+
                 @if ($page_name != 'alt_menu' && $page_name != 'blank_page' && $page_name != 'boxed' && $page_name != 'breadcrumb' )
 
                     <li class="menu {{ ($category_name === 'dashboard') ? 'active' : '' }}">
                         <a href="#dashboard" data-active="{{ ($category_name === 'dashboard') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'dashboard') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                                 <span>Dashboard</span>
                             </div>
-                            <div>
+                            <!-- <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            </div>
+                            </div> -->
                         </a>
-                        <ul class="collapse submenu list-unstyled {{ ($category_name === 'dashboard') ? 'show' : '' }}" id="dashboard" data-parent="#accordionExample">
+                    <!-- <ul class="collapse submenu list-unstyled {{ ($category_name === 'dashboard') ? 'show' : '' }}" id="dashboard" data-parent="#accordionExample">
                             <li class="{{ ($page_name === 'sales') ? 'active' : '' }}">
                                 <a href="/sales"> Sales </a>
                             </li>
                             <li class="{{ ($page_name === 'analytics') ? 'active' : '' }}">
                                 <a href="/analytics"> Analytics </a>
                             </li>
-                        </ul>
+                        </ul> -->
+                    </li>
+
+                    <li class="menu {{ ($category_name === 'locations') ? 'active' : '' }}">
+                        <a href="/locations" data-active="{{ ($category_name === 'locations') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
+                            <div class="">
+                                <span>Locations</span>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="menu {{ ($category_name === 'topics') ? 'active' : '' }}">
+                        <a href="/topics-index" data-active="{{ ($category_name === 'topics') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'topics') ? 'true' : 'false' }}" class="dropdown-toggle">
+                            <div class="">
+                                <span>Topics</span>
+                            </div>
+                        </a>
                     </li>
 
                     <li class="menu {{ ($category_name === 'apps') ? 'active' : '' }}">
+                    <!-- <li class="menu {{ ($category_name === 'apps') ? 'active' : '' }}">
                         <a href="#app" data-active="{{ ($category_name === 'apps') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'apps') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-cpu"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
@@ -49,7 +64,7 @@
                             </li>
                             <li class="{{ ($page_name === 'todo-list') ? 'active' : '' }}">
                                 <a href="/apps/todoList"> Todo List </a>
-                            </li>                            
+                            </li>
                             <li class="{{ ($page_name === 'notes') ? 'active' : '' }}">
                                 <a href="/apps/notes"> Notes </a>
                             </li>
@@ -66,9 +81,9 @@
                                 <a href="/apps/calendar"> Calendar </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
-                    <li class="menu {{ ($category_name === 'components') ? 'active' : '' }}">
+                    <!-- <li class="menu {{ ($category_name === 'components') ? 'active' : '' }}">
                         <a href="#components" data-active="{{ ($category_name === 'components') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'components') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-box"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
@@ -87,7 +102,7 @@
                             </li>
                             <li class="{{ ($page_name === 'modals') ? 'active' : '' }}">
                                 <a href="/components/modals"> Modals </a>
-                            </li>                            
+                            </li>
                             <li class="{{ ($page_name === 'cards') ? 'active' : '' }}">
                                 <a href="/components/cards"> Cards </a>
                             </li>
@@ -128,9 +143,9 @@
                                 <a href="/components/lightbox"> Lightbox </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
-                    <li class="menu {{ ($category_name === 'elements') ? 'active' : '' }}">
+                    <!-- <li class="menu {{ ($category_name === 'elements') ? 'active' : '' }}">
                         <a href="#elements" data-active="{{ ($category_name === 'elements') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'elements') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
@@ -152,7 +167,7 @@
                             </li>
                             <li class="{{ ($page_name === 'breadcrumbs') ? 'active' : '' }}">
                                 <a href="/elements/breadcrumbs"> Breadcrumbs </a>
-                            </li>                            
+                            </li>
                             <li class="{{ ($page_name === 'buttons') ? 'active' : '' }}">
                                 <a href="/elements/buttons"> Buttons </a>
                             </li>
@@ -223,9 +238,9 @@
                                 <span>Tables</span>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
 
-                    <li class="menu {{ ($category_name === 'datatable') ? 'active' : '' }}">
+                    <!-- <li class="menu {{ ($category_name === 'datatable') ? 'active' : '' }}">
                         <a href="#datatables" data-active="{{ ($category_name === 'datatable') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'datatable') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
@@ -236,10 +251,10 @@
                             </div>
                         </a>
                         <ul class="collapse submenu list-unstyled {{ ($category_name === 'datatable') ? 'show' : '' }}" id="datatables" data-parent="#accordionExample">
-                            <li class="{{ ($page_name === 'basic') ? 'active' : '' }}">
-                                <a href="/tables/datatables/basic"> Basic </a>
-                            </li>
-                            <li class="{{ ($page_name === 'basic-light') ? 'active' : '' }}">
+                             -->
+                            
+                            
+                            <!-- <li class="{{ ($page_name === 'basic-light') ? 'active' : '' }}">
                                 <a href="/tables/datatables/basic-light"> Light </a>
                             </li>
                             <li class="{{ ($page_name === 'ordering_sorting') ? 'active' : '' }}">
@@ -254,9 +269,7 @@
                             <li class="{{ ($page_name === 'alternative_pagination') ? 'active' : '' }}">
                                 <a href="/tables/datatables/alternative_pagination"> Alt. Pagination</a>
                             </li>
-                            <li class="{{ ($page_name === 'custom') ? 'active' : '' }}">
-                                <a href="/tables/datatables/custom"> Custom </a>
-                            </li>
+
                             <li class="{{ ($page_name === 'range_search') ? 'active' : '' }}">
                                 <a href="/tables/datatables/range_search"> Range Search </a>
                             </li>
@@ -268,11 +281,11 @@
                             </li>
                             <li class="{{ ($page_name === 'miscellaneous') ? 'active' : '' }}">
                                 <a href="/tables/datatables/miscellaneous"> Miscellaneous </a>
-                            </li>
+                            </li> -->
                         </ul>
                     </li>
 
-                    <li class="menu {{ ($category_name === 'forms') ? 'active' : '' }}">
+                <!-- <li class="menu {{ ($category_name === 'forms') ? 'active' : '' }}">
                         <a href="#forms" data-active="{{ ($category_name === 'forms') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'forms') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clipboard"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
@@ -309,10 +322,10 @@
                             </li>
                             <li class="{{ ($page_name === 'maxlength') ? 'active' : '' }}">
                                 <a href="/forms/maxlength"> Maxlength </a>
-                            </li>                          
+                            </li>
                             <li class="{{ ($page_name === 'checkbox_radio') ? 'active' : '' }}">
                                 <a href="/forms/checkbox_radio"> Checkbox &amp; Radio </a>
-                            </li>                            
+                            </li>
                             <li class="{{ ($page_name === 'switches') ? 'active' : '' }}">
                                 <a href="/forms/switches"> Switches </a>
                             </li>
@@ -338,8 +351,8 @@
                                 <a href="/forms/typeahead"> Typeahead </a>
                             </li>
                         </ul>
-                    </li>
-                    
+                    </li> -->
+
                     <li class="menu {{ ($category_name === 'users') ? 'active' : '' }}">
                         <a href="#users" data-active="{{ ($category_name === 'users') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'users') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
@@ -360,7 +373,7 @@
                         </ul>
                     </li>
 
-                    <li class="menu {{ ($category_name === 'pages') ? 'active' : '' }}">
+                <!-- <li class="menu {{ ($category_name === 'pages') ? 'active' : '' }}">
                         <a href="#pages" data-active="{{ ($category_name === 'pages') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'pages') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
@@ -391,7 +404,7 @@
                             </li>
                             <li class="{{ ($page_name === 'dashboard') ? 'active' : '' }}">
                                 <a href="#pages-error" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"> Error <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg> </a>
-                                <ul class="collapse list-unstyled sub-submenu" id="pages-error" data-parent="#pages"> 
+                                <ul class="collapse list-unstyled sub-submenu" id="pages-error" data-parent="#pages">
                                     <li class="{{ ($page_name === 'error404') ? 'active' : '' }}">
                                         <a href="/pages/error_404"> 404 </a>
                                     </li>
@@ -407,9 +420,9 @@
                                 </ul>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
-                    <li class="menu {{ ($category_name === 'auth') ? 'active' : '' }}">
+                <!-- <li class="menu {{ ($category_name === 'auth') ? 'active' : '' }}">
                         <a href="#authentication" data-active="{{ ($category_name === 'auth') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'auth') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-lock"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -445,36 +458,36 @@
                                 <a href="/authentication/pass_recovery"> Recover ID Cover </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
-                    <li class="menu {{ ($category_name === 'drag_n_drop') ? 'active' : '' }}">
+                <!-- <li class="menu {{ ($category_name === 'drag_n_drop') ? 'active' : '' }}">
                         <a href="/drag_and_drop" data-active="{{ ($category_name === 'drag_n_drop') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'drag_n_drop') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-move"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
                                 <span>Drag and Drop</span>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
 
-                    <li class="menu {{ ($category_name === 'maps') ? 'active' : '' }}">
+                <!-- <li class="menu {{ ($category_name === 'maps') ? 'active' : '' }}">
                         <a href="/maps" data-active="{{ ($category_name === 'maps') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'maps') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
                                 <span>Maps</span>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
 
-                    <li class="menu {{ ($category_name === 'charts') ? 'active' : '' }}">
+                <!-- <li class="menu {{ ($category_name === 'charts') ? 'active' : '' }}">
                         <a href="/charts" data-active="{{ ($category_name === 'charts') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'charts') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-pie-chart"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
                                 <span>Charts</span>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
 
-                    <li class="menu">
+                    <!-- <li class="menu">
                         <a href="#starter-kit" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-terminal"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
@@ -498,7 +511,7 @@
                                 <a href="/starter-kit/alternative_menu"> Alternate Menu </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
                     <li class="menu">
                         <a href="https://designreset.com/cork/documentation/" aria-expanded="false" class="dropdown-toggle">
@@ -562,7 +575,7 @@
                             </li>
                             <li>
                                 <a href="javascript:void(0);"> Submenu 2 </a>
-                            </li>                           
+                            </li>
                         </ul>
                     </li>
 
@@ -582,7 +595,7 @@
                             </li>
                             <li>
                                 <a href="#sm2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"> Submenu 2 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg> </a>
-                                <ul class="collapse list-unstyled sub-submenu" id="sm2" data-parent="#submenu2"> 
+                                <ul class="collapse list-unstyled sub-submenu" id="sm2" data-parent="#submenu2">
                                     <li>
                                         <a href="javascript:void(0);"> Sub-Submenu 1 </a>
                                     </li>
@@ -596,11 +609,11 @@
                             </li>
                         </ul>
                     </li>
-                
+
                 @endif
-                
+
             </ul>
-            
+
         </nav>
 
     </div>
