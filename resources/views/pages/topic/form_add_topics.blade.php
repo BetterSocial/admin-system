@@ -16,7 +16,7 @@
                                     </div>
                                 </div>
                                 <div class="widget-content widget-content-area">
-                                    <form id="createTopic" class="simple-example" action="javascript:void(0);" method="POST">
+                                    <form id="createTopic" class="simple-example" enctype="multipart/form-data" action="javascript:void(0);" method="POST">
                                     <div class="input-group mb-5">
                                         <div class="col-md-2">
                                             <label>Name</label>
