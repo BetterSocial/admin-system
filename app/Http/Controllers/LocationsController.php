@@ -25,7 +25,7 @@ class LocationsController extends Controller
 
         $data = DB::SELECT($topic);
         $total = count($data);
-//        $topic .= " LIMIT $req->length OFFSET $req->start ";
+        $topic .= " LIMIT $req->length OFFSET $req->start ";
         $data2 = DB::SELECT($topic);
         return response()->json([
             'draw'            => $req->draw,

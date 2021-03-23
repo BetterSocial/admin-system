@@ -2,29 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class Role extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'users_admin';
-    protected $primaryKey = 'user_id';
-    protected $keyType = 'string';
-    public $incrementing = false;
+    protected $table = 'role';
+    protected $primaryKey = 'role_id';
 
+    const CREATED_AT = 'created_at';
+    const UPDATED_AT = 'updated_at';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'role_name',
+        'role_type',
     ];
 
     /**
@@ -32,22 +31,12 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = [ ];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    public function userRole()
-    {
-        return $this->hasOne('App\UserRole');
-    }
+    protected $casts = [ ];
 }
