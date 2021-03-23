@@ -14,13 +14,13 @@ class CreatePostStatistic extends Migration
     public function up()
     {
         Schema::create('post_statistic', function (Blueprint $table) {
-            $table->string('post_id',50)->primary()->nullable(false);;
-            $table->bigIncrements('view_count');
-            $table->bigIncrements('upvote_count');
-            $table->bigIncrements('downvote_count');
-            $table->bigIncrements('block_count');
-            $table->bigIncrements('shared_count');
-            $table->bigIncrements('comment_count');
+            $table->string('post_id',50)->primary()->nullable(false);
+            $table->bigInteger('view_count');
+            $table->bigInteger('upvote_count');
+            $table->bigInteger('downvote_count');
+            $table->bigInteger('block_count');
+            $table->bigInteger('shared_count');
+            $table->bigInteger('comment_count');
         });
     }
 
