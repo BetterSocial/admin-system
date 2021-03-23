@@ -21,6 +21,16 @@ $(document).ready(function () {
         formData.append('file', firstUpload);
         formData.append('name', name);
         formData.append('category', category);
+        Swal.fire({
+            title: 'Please Wait !',
+            html: 'data uploading',
+            showCancelButton: false, // There won't be any cancel button
+            showConfirmButton: false,// There won't be any confirm button       
+            allowOutsideClick: false,
+            onBeforeOpen: () => {
+                Swal.showLoading()
+            },
+        });
         $.ajaxSetup({
             headers: { "X-CSRF-Token" : $("meta[name=csrf-token]").attr("content") }
         });
@@ -33,13 +43,17 @@ $(document).ready(function () {
             url: '/add/topics',
             success: function(data){
                 console.log(data);
-                if(data.status == 'success'){
+                if(data.success){
+                    $("#createTopic")[0].reset();
+                    $("#myFirstImage").val("");
+                    Swal.hideLoading()
                     return Swal.fire({
                         icon: 'success',
                         title: 'Success',
-                        text: 'Topid Created',})
+                        text: 'Topic Created',})
                     
                 }else{
+                    Swal.hideLoading()
                     return Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -47,7 +61,11 @@ $(document).ready(function () {
                 }
             },
             error: function(data){
-                console.log(data);
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.responseJSON.errors.file[0],})
+
             }
         });   
       });

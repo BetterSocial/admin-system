@@ -40,19 +40,21 @@ class TopicsController extends Controller
      }
 
      public function addTopics(Request $req){
-        \Log::debug($req);
         $file = $req->file('file');
-        $location = 'storage/img';
-    
-        $file->move($location,$file->getClientOriginalName());
+
+        $this->validate($req, [
+            'file' => 'image|max:1024|dimensions:min_width=64,min_height=64',
+        
+        ]);
+        $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
         Topics::create([
-            'icon_path' =>$location.'/'.$file->getClientOriginalName(),
+            'icon_path' =>$response,
             'name' =>$req->name,
             'categories'=>$req->category,
             'created_at'=>Carbon::now()
         ]);
         return response()->json([
-            'status' => true,
+            'success' => true,
         ]);
      }
 }
