@@ -32,7 +32,6 @@ $(document).ready(function () {
         {
           "data" : 'icon_path',
           render : function(data, type, row) {
-            console.log(data);
             if(data != "" || data !=" " || data != null){
               return '<img src="'+data+'" width="30" height="20" />';
             }

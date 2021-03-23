@@ -29,7 +29,7 @@ class TopicsController extends Controller
 
         $data = DB::SELECT($topic);
         $total = count($data);
-        $topic .= " LIMIT $req->length OFFSET $req->start ";
+        $topic .= " ORDER BY topic_id,created_at ASC LIMIT $req->length OFFSET $req->start ";
         $dataLimit = DB::SELECT($topic);
         return response()->json([
             'draw'            => $req->draw,

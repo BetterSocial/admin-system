@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable,HasRoles;
 
     protected $table = 'users_admin';
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'id';
     protected $keyType = 'string';
     public $incrementing = false;
 
