@@ -17,11 +17,11 @@ $(document).ready(function () {
             
             d.name = $('#name').val();
             d.category = $('#category').val();
-            console.log(d);
         },
       },
       columns		: [
         {
+          
           "data" : 'topic_id',
           "visible": false,
         },
@@ -31,6 +31,7 @@ $(document).ready(function () {
         },
         {
           "data" : 'icon_path',
+          "orderable":false,
           render : function(data, type, row) {
             if(data != "" || data !=" " || data != null){
               return '<img src="'+data+'" width="30" height="20" />';
