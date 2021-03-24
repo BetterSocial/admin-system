@@ -14,7 +14,7 @@ class CreatePostStatistic extends Migration
     public function up()
     {
         Schema::create('post_statistic', function (Blueprint $table) {
-            $table->string('post_id',50)->primary()->nullable(false);
+            $table->string('post_id',255)->primary()->nullable(false);
             $table->bigInteger('view_count');
             $table->bigInteger('upvote_count');
             $table->bigInteger('downvote_count');
