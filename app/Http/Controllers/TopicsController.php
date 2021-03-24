@@ -56,16 +56,29 @@ class TopicsController extends Controller
 
      public function addTopics(Request $req){
         $file = $req->file('file');
-
+        
         $this->validate($req, [
             'file' => 'image|max:1024|dimensions:min_width=64,min_height=64',
         
         ]);
+        $name = ucfirst($req->name);
+        $category = ucfirst($req->category);
+        $check = DB::table('topics')->where([['name','=',$name],['categories','=',$category]])->count();
+        \Log::debug($check );
+
+        if($check > 0){
+            return response()->json([
+                'success' => false,
+                'message' => 'Data topic with name '.$name.' and category '.$category.' already exists'
+            ]);
+        }
+
         $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
+        
         Topics::create([
             'icon_path' =>$response,
-            'name' =>$req->name,
-            'categories'=>$req->category,
+            'name' =>$name,
+            'categories'=>$category,
             'created_at'=>Carbon::now()
         ]);
         return response()->json([
