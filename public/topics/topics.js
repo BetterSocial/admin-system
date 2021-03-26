@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  console.log("MASKKK");
 
   var datatble =$('#tableTopics').DataTable( {
     "searching": false,
@@ -52,14 +51,14 @@ $(document).ready(function () {
         {
           "data" : 'followers',
           render : function(data, type, row) {
-            return " <div class='btn btn-warning > <a href='http://www.facebook.com'>#Followers</a></div>";
+            return " <a href='http://www.facebook.com'> <button type='button' class='btn btn-primary'>#Followers</button> </a>"
           }    
         },
         {
           "data" : "action",
 					"orderable" : false,
 			    	render : function(data, type, row) {
-                  return "<div class='btn btn-xs btn-danger no-margin-action skeyF1' data-toggle='tooltip' data-placement='bottom' title='CheckBox' onclick='check()' data-tipe='header'><i class='fa fa-check'></i></div>";          
+              return " <a href='http://www.facebook.com'> <button type='button' class='btn btn-primary'>Show</button> </a>"
 			    	}
         }
 			],

@@ -85,7 +85,7 @@ function checkall(clickchk, relChkbox) {
 =========================================
 */
 
-$('.bs-tooltip').tooltip();
+//$('.bs-tooltip').tooltip();
 
 /*
 =========================================
@@ -95,7 +95,7 @@ $('.bs-tooltip').tooltip();
 =========================================
 */
 
-$('.bs-popover').popover();
+//$('.bs-popover').popover();
 
 
 /*
@@ -106,9 +106,9 @@ $('.bs-popover').popover();
 ================================================
 */
 
-$('.t-dot').tooltip({
-    template: '<div class="tooltip status rounded-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
-})
+// $('.t-dot').tooltip({
+//     template: '<div class="tooltip status rounded-tooltip" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+// })
 
 
 /*
