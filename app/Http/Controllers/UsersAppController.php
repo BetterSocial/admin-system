@@ -68,7 +68,7 @@ class UsersAppController extends Controller
         $data = DB::SELECT($user);
 
         $filename = "Data User List-".md5(date("Y-m-d H:i:s")).'.csv';
-        $path = storage_path('csv/'.$filename);
+        $path = storage_path($filename);
         $headers = array(
             "Content-type" => "text/csv",
             "Pragma" => "no-cache",
@@ -111,7 +111,7 @@ class UsersAppController extends Controller
         }
         fclose($file);
         
-        return response()->download($path,$filename,$headers);
+        return response()->download($path,$filename,$headers)->deleteFileAfterSend(true);
     }
 
     public function userDetailView(){
