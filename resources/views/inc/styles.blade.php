@@ -1010,6 +1010,10 @@
         <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/dt-global_style.css')}}">
       @break
+      @case('view Users')
+        <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/dt-global_style.css')}}">
+      @break
     @default
     <script>console.log('No custom Styles available.')</script>
 @endswitch

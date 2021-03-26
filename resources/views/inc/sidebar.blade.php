@@ -44,8 +44,16 @@
                         </a>
                     </li>
 
-                    <li class="menu {{ ($category_name === 'apps') ? 'active' : '' }}">
+                    <li class="menu {{ ($category_name === 'viewUsers') ? 'active' : '' }}">
+                        <a href="/view-users" data-active="{{ ($category_name === 'viewUsers') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'viewUsers') ? 'true' : 'false' }}" class="dropdown-toggle">
+                            <div class="">
+                                <span>View Users</span>
+                            </div>
+                        </a>
+                    </li>
+
                     <!-- <li class="menu {{ ($category_name === 'apps') ? 'active' : '' }}">
+                    <li class="menu {{ ($category_name === 'apps') ? 'active' : '' }}">
                         <a href="#app" data-active="{{ ($category_name === 'apps') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'apps') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-cpu"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
@@ -282,8 +290,8 @@
                             <li class="{{ ($page_name === 'miscellaneous') ? 'active' : '' }}">
                                 <a href="/tables/datatables/miscellaneous"> Miscellaneous </a>
                             </li> -->
-                        </ul>
-                    </li>
+                        <!-- </ul>
+                    </li> --> 
 
                 <!-- <li class="menu {{ ($category_name === 'forms') ? 'active' : '' }}">
                         <a href="#forms" data-active="{{ ($category_name === 'forms') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'forms') ? 'true' : 'false' }}" class="dropdown-toggle">
@@ -353,7 +361,7 @@
                         </ul>
                     </li> -->
 
-                    <li class="menu {{ ($category_name === 'users') ? 'active' : '' }}">
+                    <!-- <li class="menu {{ ($category_name === 'users') ? 'active' : '' }}">
                         <a href="#users" data-active="{{ ($category_name === 'users') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'users') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
@@ -371,7 +379,7 @@
                                 <a href="/users/account_settings"> Account Settings </a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
                 <!-- <li class="menu {{ ($category_name === 'pages') ? 'active' : '' }}">
                         <a href="#pages" data-active="{{ ($category_name === 'pages') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'pages') ? 'true' : 'false' }}" class="dropdown-toggle">
@@ -513,14 +521,14 @@
                         </ul>
                     </li> -->
 
-                    <li class="menu">
+                    <!-- <li class="menu">
                         <a href="https://designreset.com/cork/documentation/" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                                 <span>Documentation</span>
                             </div>
                         </a>
-                    </li>
+                    </li> -->
 
                 @else
 

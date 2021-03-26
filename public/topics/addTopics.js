@@ -57,7 +57,7 @@ $(document).ready(function () {
                     return Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Something Wrong..',})
+                        text: data.message,})
                 }
             },
             error: function(data){
