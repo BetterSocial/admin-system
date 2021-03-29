@@ -13,7 +13,7 @@ class AlterTableUsersAdminAddColumBio extends Migration
      */
     public function up()
     {
-        Schema::table('users_admin', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->longText('bio')->nullable(true);
        
         });
