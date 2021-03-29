@@ -76,7 +76,7 @@ Route::group(['middleware' => 'auth'] , function() {
     // Locations
     Route::POST('/locations/data', 'LocationsController@getData')->name('masterLocations.data');
 
-    Route::get('/locations', function() {
+    Route::get('/locations/index', function() {
         // $category_name = '';
         $data = [
             'category_name' => 'locations',
@@ -88,6 +88,8 @@ Route::group(['middleware' => 'auth'] , function() {
         // $pageName = 'widgets';
         return view('pages.locations.locations')->with($data);
     });
+
+
 });
 
 Auth::routes();
@@ -106,4 +108,31 @@ Route::get('/', function() {
     return redirect('/sales');
 });
 
+Route::get('/forgot-password', function() {
+    // $category_name = 'auth';
+    $data = [
+        'category_name' => 'auth',
+        'page_name' => 'auth_boxed',
+        'has_scrollspy' => 0,
+        'scrollspy_offset' => '',
+    ];
+    // $pageName = 'auth_boxed';
+    return view('auth.passwords.email')->with($data);
+});
 
+Route::post('/forgot-password-email-verification', 'ResetPasswordController@index')->name('forgot.password.confirm');
+
+Route::get('/reset-password/{token}', function ($token) {
+    $data = [
+        'category_name' => 'auth',
+        'page_name' => 'auth_boxed',
+        'has_scrollspy' => 0,
+        'scrollspy_offset' => '',
+        'token' => $token
+    ];
+
+    return view('auth.passwords.reset')->with($data);
+//    return view('auth.passwords.reset', ['token' => $token], ['page_name' => 'test']);
+})->name('password.reset');
+
+Route::post('/reset-password', 'ResetPasswordController@resetPassword')->name('reset.password.update');

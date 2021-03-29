@@ -30,7 +30,7 @@
                     </li>
 
                     <li class="menu {{ ($category_name === 'locations') ? 'active' : '' }}">
-                        <a href="/locations" data-active="{{ ($category_name === 'locations') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
+                        <a href="/locations/index" data-active="{{ ($category_name === 'locations') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <span>Locations</span>
                             </div>

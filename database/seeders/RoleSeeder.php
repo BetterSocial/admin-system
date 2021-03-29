@@ -19,8 +19,8 @@ class RoleSeeder extends Seeder
 			[
 				['role_name' => 'Admin','role_type' => 'Admin','created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
 				['role_name' => 'Editor','role_type' => 'Editor','created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-        ['role_name' => 'Viewer','role_type' => 'Viewer','created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-        ['role_name' => 'Users','role_type' => 'Users','created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')]
+                ['role_name' => 'Viewer','role_type' => 'Viewer','created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['role_name' => 'Users','role_type' => 'Users','created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')]
 			]
 		);
     }
