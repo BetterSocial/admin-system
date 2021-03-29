@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\UserApps;
 use DB;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+
 
 class UsersAppController extends Controller
 {
@@ -68,7 +70,7 @@ class UsersAppController extends Controller
         $data = DB::SELECT($user);
 
         $filename = "Data User List-".md5(date("Y-m-d H:i:s")).'.csv';
-        $path = storage_path('csv/'.$filename);
+        $path = Storage::path($filename);
         $headers = array(
             "Content-type" => "text/csv",
             "Pragma" => "no-cache",
@@ -76,7 +78,6 @@ class UsersAppController extends Controller
             "Expires" => "0"
         );
         $file = fopen($path,'w');
-        //JUDUL
         fputcsv($file,[
             '','','','','',
             "Data User List"
