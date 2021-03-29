@@ -45,7 +45,8 @@ Route::group(['middleware' => 'auth'] , function() {
         // $pageName = 'sales';
         return view('dashboard')->with($data);
     });
-    
+
+    //topics
     Route::get('/topics-index', function() {
         \Log::debug("MSMASMASMASMA");
         $data = [
@@ -89,6 +90,27 @@ Route::group(['middleware' => 'auth'] , function() {
         return view('pages.locations.locations')->with($data);
     });
 
+    //Users
+    Route::get('/view-users', function() {
+        // $category_name = '';
+        $data = [
+            'category_name' => 'viewUsers',
+            'page_name' => 'view Users',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+
+        ];
+        // $pageName = 'widgets';
+        return view('pages.users.user')->with($data);
+    });
+    Route::POST('/users/data', 'UsersAppController@getData')->name('masterUsers.data');
+    Route::GET('/download-csv', 'UsersAppController@downloadCsv')->name('download');
+
+
+    //Users Detail
+    Route::POST('/user-detail', 'UsersAppController@userDetail');
+    Route::GET('/user-detail-view/{id}', 'UsersAppController@userDetailView');
+    Route::POST('/update-status', 'UsersAppController@updateStatus');
 
 });
 
