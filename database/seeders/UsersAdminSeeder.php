@@ -17,16 +17,16 @@ class UserAdminSeeder extends Seeder
     {   
         DB::table('users_admin')->truncate();
 		DB::table('users_admin')->insert([
-                ['name' => 'Bastian','email' => 'bastian@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Ali Irawan','email' => 'aliirawan@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Dede Su','email' => 'dedesu@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Nyoman','email' => 'nyoman@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Budi','email' => 'budi@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Amril','email' => 'amril@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Putu','email' => 'putu@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Usup','email' => 'usup@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Kevin','email' => 'kevin@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
-                ['name' => 'Reyvin','email' => 'reyvin@better.com','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Bastian','email' => 'bastian@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Ali Irawan','email' => 'aliirawan@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Dede Su','email' => 'dedesu@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Nyoman','email' => 'nyoman@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Budi','email' => 'budi@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Amril','email' => 'amril@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Putu','email' => 'putu@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Usup','email' => 'usup@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Kevin','email' => 'kevin@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Reyvin','email' => 'reyvin@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
 
 
                 ]
