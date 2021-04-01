@@ -7,7 +7,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 
-class SpattyRolePermissionSeeder extends Seeder
+class SpattyRoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
