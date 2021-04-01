@@ -111,7 +111,6 @@ Route::group(['middleware' => 'auth'] , function() {
     Route::POST('/user-detail', 'UsersAppController@userDetail');
     Route::GET('/user-detail-view/{id}', 'UsersAppController@userDetailView');
     Route::POST('/update-status', 'UsersAppController@updateStatus');
-
 });
 
 Auth::routes();

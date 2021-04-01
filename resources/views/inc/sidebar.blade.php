@@ -29,6 +29,8 @@
                         </ul> -->
                     </li>
 
+                    @hasanyrole('editor|admin')
+
                     <li class="menu {{ ($category_name === 'locations') ? 'active' : '' }}">
                         <a href="/locations/index" data-active="{{ ($category_name === 'locations') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
@@ -36,6 +38,10 @@
                             </div>
                         </a>
                     </li>
+                    @endhasanyrole
+
+                    @hasanyrole('admin')
+
                     <li class="menu {{ ($category_name === 'topics') ? 'active' : '' }}">
                         <a href="/topics-index" data-active="{{ ($category_name === 'topics') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'topics') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
@@ -51,6 +57,10 @@
                             </div>
                         </a>
                     </li>
+
+                    @endhasanyrole
+
+
 
                     <!-- <li class="menu {{ ($category_name === 'apps') ? 'active' : '' }}">
                     <li class="menu {{ ($category_name === 'apps') ? 'active' : '' }}">

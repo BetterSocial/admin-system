@@ -983,7 +983,7 @@
     @case('locations')
     {{-- Table Datatable Multi Column Ordering --}}
     <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
-    <script src="{{asset('plugins/table/datatable/locations.js')}}"></script>
+    <script src="{{asset('locations/locations.js')}}"></script>
     @break
 
     @case('bootstrap_select')

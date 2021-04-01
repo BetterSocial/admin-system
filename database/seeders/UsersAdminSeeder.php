@@ -27,6 +27,8 @@ class UserAdminSeeder extends Seeder
                 ['name' => 'Usup','email' => 'usup@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
                 ['name' => 'Kevin','email' => 'kevin@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
                 ['name' => 'Reyvin','email' => 'reyvin@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'SuperAdmin','email' => 'superadmin@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
+                ['name' => 'Viewer Sample','email' => 'viewer@bettersocial.org','password'=>bcrypt('bettersocial'),'created_at'=> Carbon::now()->format('Y-m-d H:i:s'), 'updated_at'=>Carbon::now()->format('Y-m-d H:i:s')],
 
 
                 ]
