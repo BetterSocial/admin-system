@@ -2,9 +2,14 @@
     console.log("MASUUKKK");
     $('#tableLocations').DataTable( {
         "searching": false,
-        "dom" 		: 'lrtp',
         "stateSave"	: true,
         "serverSide"	: true,
+        "processing": true,
+        "language": {
+            'loadingRecords': '</br></br></br></br>;',
+            'processing': 'Loading...',
+            "emptyTable":     "No Data Locations"
+        }, 
         "ajax": {
             url			: '/locations/data',
             type		: 'POST',

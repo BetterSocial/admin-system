@@ -115,20 +115,18 @@ class UsersAppController extends Controller
         return response()->download($path,$filename,$headers);
     }
 
-    public function userDetailView(){
-        return view('pages.users.userDetail')->with('page_name','Users Detail')
-        ->with('category_name','view_users')->with('has_scrollspy','0')->with('scrollspy_offset','');
-    }
+    public function userDetailView(Request $req){
+        $user = UserApps::find($req->user_id);
 
-    public function userDetail(Request $req){
-        $data = UserApps::find($req->user_id);
-        
-        return response()->json([
-            'success'=> true,
-            'data' =>$data
-
+        return view('pages.users.userDetail', [
+            'category_name' => 'view_users',
+            'page_name' => 'User Detail ',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+            'data'   => $user,
         ]);
     }
+
 
     public function updateStatus(Request $req){
         $data = UserApps::find($req->user_id);

@@ -22,9 +22,9 @@
                                     </form>
                                 </div>
                                 <div class="col-lg-2">
-                                  @hasanyrole('viewer')
+                                  @unlessrole('viewer')
                                     <a href="/create-topics"> <button class="btn btn-primary"><b style="color:white">Create Topics</b></button> </a>
-                                  @endhasanyrole
+                                  @endunlessrole
                                 </div>
                             </div>
                             

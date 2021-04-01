@@ -2,9 +2,10 @@ $(document).ready(function () {
 
   var datatble =$('#tableTopics').DataTable( {
     "searching": false,
-    "dom" 		: 'lrtp',
     "stateSave"	: true,
+    "processing": true,
     "language": {
+      'processing': 'Loading...',
       "emptyTable":     "No Data Topics"
     }, 
     "serverSide"	: true,
@@ -51,7 +52,8 @@ $(document).ready(function () {
         {
           "data" : 'followers',
           render : function(data, type, row) {
-            return " <a href='http://www.facebook.com'> <button type='button' class='btn btn-primary'>#Followers</button> </a>"
+            return " <a href='/follow-topics?topic_id="+row.topic_id +"'> <button type='button' class='btn btn-primary'>#Followers</button> </a>"
+
           }    
         },
         {
