@@ -2,13 +2,14 @@ $(document).ready(function () {
 
     var datatble =$('#tableUsers').DataTable( {
       "searching": false,
-      "dom" 		: 'lrtp',
       "stateSave"	: true,
       "lengthMenu": [ 50, 100, 250],
       "pageLength":50,
       "language": {
-        "emptyTable":     "No Data Users"
-      }, 
+        'loadingRecords': '</br></br></br></br>;',
+        'processing': 'Loading...',
+        "emptyTable":     "No User Follow"
+        }, 
       "serverSide"	: true,
       "ajax": {
         url			: '/users/data',
@@ -25,7 +26,7 @@ $(document).ready(function () {
                 "data" : 'Action',
                 "orderable":false,
                     render : function(data, type, row) {
-                        var html = "<a href='/user-detail-view/"+row.user_id+"'> <button type='button' class='btn btn-primary btn-sm'>Show Detail</button> </a>";
+                        var html = "<a href='/user-detail-view?user_id="+row.user_id+"'> <button type='button' class='btn btn-primary btn-sm'>Show Detail</button> </a>";
                         if(row.status == 'Y'){
                             html += "<button type='button' onclick='chageStatus(this,\""+row.user_id+"\")' class='btn btn-danger btn-sm'>Deactived</button>";
 
@@ -71,14 +72,16 @@ $(document).ready(function () {
                 "data" : 'followers',
                 "orderable":false,
                 render : function(data, type, row) {
-                return "<a href='http://www.facebook.com'> <button type='button' class='btn btn-warning btn-sm'>#Followers</button> </a>";
-                }    
+                //return "<a href='/user-follow/FOLLOWERS/"+row.user_id +"'> <button type='button' class='btn btn-primary btn-sm'>#Followers</button> </a>";
+                return "<a href='/user-follow-detail?type=FOLLOWERS&user_id="+row.user_id +"'> <button type='button' class='btn btn-primary  btn-sm'>#Followers</button> </a>";
+            
+            }    
             },
             {
                 "data" : 'following',
                 "orderable":false,
                 render : function(data, type, row) {
-                return " <a href='http://www.facebook.com'> <button type='button' class='btn btn-primary btn-sm'>#Following</button> </a>";
+                    return "<a href='/user-follow-detail?type=FOLLOWING&user_id="+row.user_id +"'> <button type='button' class='btn btn-primary btn-sm'>#Following</button> </a>";
                 }    
             },
             {

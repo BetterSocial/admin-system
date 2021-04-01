@@ -14,45 +14,51 @@
      
                                     <form id="detail" class="simple-example" enctype="multipart/form-data" action="javascript:void(0);" method="POST">
                                     <div class="input-group mb-12">
-                                        <img src="" id='profilePict' width="150px" height="120px" alt="">
+                                        <img src="{{$data->profile_pic_path}}" id='profilePict' width="150px" height="120px" alt="">
                                     </div>
                                     </br></br>
                                     <div class="input-group mb-5">
                                         <div class="col-md-2">
                                             <label>Username</label>
                                         </div>
-                                        <input id="username" type="text" class="form-control"  disabled>
+                                        <input id="username" type="text" class="form-control"  value="{{$data->username}}" disabled>
                                     </div>
                                     <div class="input-group mb-5">
                                         <div class="col-md-2">
                                             <label >Real Name</label>
                                         </div>
-                                        <input type="text" id="realName" class="form-control"  disabled>
+                                        <input type="text" id="realName" class="form-control" value="{{$data->real_name}}"  disabled>
                                     </div>
                                     <div class="input-group mb-5">
                                         <div class="col-md-2">
                                             <label >Country Code</label>
                                         </div>
-                                        <input type="text" id="countryCode" class="form-control"   disabled>
+                                        <input type="text" id="countryCode" class="form-control" value="{{$data->country_code}}"  disabled>
                                     </div>
                                     <div class="input-group mb-5">
                                         <div class="col-md-2">
                                             <label >Registered At</label>
                                         </div>
-                                        <input type="text" id="registeredAt" class="form-control"  disabled>
+                                        <input type="text" id="registeredAt" class="form-control" value="{{$data->created_at}}" disabled>
                                     </div>
                                     <div class="input-group mb-5">
                                         <div class="col-md-2">
                                             <label >Last Active At</label>
                                         </div>
-                                        <input type="text" id="lastActive" class="form-control"  disabled>
+                                        <input type="text" id="lastActive" class="form-control" value="{{$data->last_active_at}}" disabled>
                                     </div>
                                     
                                     <div class="input-group mb-5">
                                         <div class="col-md-2">
                                             <label >Status</label>
                                         </div>
-                                        <input type="text" id="status" class="form-control"   disabled>
+                                        @if($data->status == 'N')
+                                            <input type="text" id="status" class="form-control" value="Deactive"  disabled>
+                                        
+                                        @else
+                                            <input type="text" id="status" class="form-control" value="Active"  disabled>
+                                        
+                                        @endif
                                     </div>
 
                                     </form>

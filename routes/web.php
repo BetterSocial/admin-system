@@ -48,7 +48,6 @@ Route::group(['middleware' => 'auth'] , function() {
 
     //topics
     Route::get('/topics-index', function() {
-        \Log::debug("MSMASMASMASMA");
         $data = [
             'category_name' => 'topics',
             'page_name' => 'topics',
@@ -77,7 +76,7 @@ Route::group(['middleware' => 'auth'] , function() {
     // Locations
     Route::POST('/locations/data', 'LocationsController@getData')->name('masterLocations.data');
 
-    Route::get('/locations/index', function() {
+    Route::get('/locations-index', function() {
         // $category_name = '';
         $data = [
             'category_name' => 'locations',
@@ -108,9 +107,20 @@ Route::group(['middleware' => 'auth'] , function() {
 
 
     //Users Detail
-    Route::POST('/user-detail', 'UsersAppController@userDetail');
-    Route::GET('/user-detail-view/{id}', 'UsersAppController@userDetailView');
+    Route::GET('/user-detail', 'UsersAppController@userDetail');
+    Route::GET('/user-detail-view', 'UsersAppController@userDetailView');
     Route::POST('/update-status', 'UsersAppController@updateStatus');
+
+    //User Follow Data Topic
+    Route::get('/follow-topics','UserFollowController@index');
+    
+    // Route::POST("/topic-detail","UserFollowController@topicDetail");
+    Route::POST("/user/topic","UserFollowController@getList");
+
+
+   
+    Route::GET("/user-follow-detail","UserFollowController@userFollowDetail");
+    Route::POST("/user/follow/list","UserFollowController@getUserFollowList");
 });
 
 Auth::routes();

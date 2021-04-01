@@ -12,9 +12,20 @@ class LocationsController extends Controller
 
     public function getData(Request $req){
 
-        \Log::debug($req);
-        \Log::debug("cobaaa ini [parameter]");
-        $topic = "SELECT location_id,zip,neighborhood,city,state,country,location_level,status,slug_name FROM location WHERE true";
+        
+        $columns = array(
+            // datatable column index  => database column name
+            0 => 'location_id',
+            1 => 'zip',
+            2 => 'neighborhood',
+            3 => 'city',
+            4 => 'state',
+            5 => 'country',
+            6 => 'location_level',
+            7 => 'status',
+            8 => 'slug_name',
+        );
+        $location = "SELECT location_id,zip,neighborhood,city,state,country,location_level,status,slug_name,created_at FROM location WHERE true";
 //        if($req->name !=null){
 //            $topic .= " AND name ILIKE '%$req->name%'";
 //        }
@@ -23,15 +34,19 @@ class LocationsController extends Controller
 //        }
 
 
-        $data = DB::SELECT($topic);
+        $data = DB::SELECT($location);
         $total = count($data);
-        $topic .= " LIMIT $req->length OFFSET $req->start ";
-        $data2 = DB::SELECT($topic);
+        if ($req->draw == 1) {
+            $location .= " ORDER BY created_at ASC LIMIT $req->length OFFSET $req->start ";
+        } else {
+            $location .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+        }
+        $dataLimit = DB::SELECT($location);
         return response()->json([
             'draw'            => $req->draw,
             'recordsTotal'    => $total,
             "recordsFiltered" => $total,
-            'data'            => $data2,
+            'data'            => $dataLimit,
         ]);
     }
 
