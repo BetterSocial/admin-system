@@ -45,7 +45,7 @@ class UserFollowController extends Controller
 
         $data = DB::SELECT($userTopic);
         $total = count($data);
-        if ($req->draw == 1) {
+        if ($req->order[0]['column'] == 'user_id') {
             $userTopic .= " ORDER BY username asc LIMIT $req->length OFFSET $req->start ";
         } else {
             $userTopic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
@@ -81,6 +81,7 @@ class UserFollowController extends Controller
     // }
     public function userFollowDetail(Request $req)
     {
+
         $user = UserApps::find($req->user_id);
         if ($req->type == 'FOLLOWERS') {
             $type = "FOLLOWERS";
@@ -128,7 +129,7 @@ class UserFollowController extends Controller
 
         $data = DB::SELECT($userFollow);
         $total = count($data);
-        if ($req->draw == 1) {
+        if ($req->order[0]['column'] == 'user_id') {
             $userFollow .= " ORDER BY username asc LIMIT $req->length OFFSET $req->start ";
         } else {
             $userFollow .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";

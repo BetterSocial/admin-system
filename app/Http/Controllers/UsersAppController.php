@@ -38,7 +38,7 @@ class UsersAppController extends Controller
 
         $data = DB::SELECT($user);
         $total = count($data);
-        if($req->draw == 1){
+        if($req->order[0]['column'] == 'user_id'){
             $user .= " ORDER BY created_at asc LIMIT $req->length OFFSET $req->start ";
 
         }
@@ -129,18 +129,34 @@ class UsersAppController extends Controller
 
 
     public function updateStatus(Request $req){
-        $data = UserApps::find($req->user_id);
-        if($data->status == 'Y'){
-            $data->status = 'N';
-        }
-        else{
-            $data->status = 'Y';
+        try{
+            $data = UserApps::find($req->user_id);
+            if($data != null){
+                if($data->status == 'Y'){
+                    $data->status = 'N';
+                }
+                else{
+                    $data->status = 'Y';
+                    
+                }
+                $data->save();
+                return response()->json([
+                    'success'=> true,
+                ]);
+            }
+            else{
+                return response()->json([
+                    'success'=> false,
+                    'message'=> "Data User Not Found"
+                ]);
+            }
             
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'=> false,
+                'message'=>$e->getMessage()
+            ]);
         }
-        $data->save();
-        return response()->json([
-            'success'=> true,
-        ]);
     }
 
 
