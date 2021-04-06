@@ -72,7 +72,9 @@ Route::group(['middleware' => 'auth'] , function() {
     });
     Route::POST('/topics/data', 'TopicsController@getData')->name('masterTopics.data');
     Route::POST('/add/topics', 'TopicsController@addTopics')->name('add.topics');
-    
+    Route::POST('/show/topics', 'TopicsController@showTopics')->name('add.topics');
+
+
     // Locations
     Route::POST('/locations/data', 'LocationsController@getData')->name('masterLocations.data');
 

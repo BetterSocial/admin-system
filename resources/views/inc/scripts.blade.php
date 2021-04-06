@@ -980,14 +980,12 @@
     <script src="{{asset('assets/js/widgets/modules-widgets.js')}}"></script>
     @break
 
-<<<<<<< Updated upstream
     @case('locations')
     {{-- Table Datatable Multi Column Ordering --}}
     <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
     <script src="{{asset('locations/locations.js')}}"></script>
     @break
-=======
->>>>>>> Stashed changes
+
 
     @case('bootstrap_select')
     {{-- Forms Bootstrap Select --}}
@@ -1111,14 +1109,12 @@
       </script>
     @break
 
-<<<<<<< Updated upstream
     
     @case('Users Detail')
       <script src="{{asset('users/userDetail.js')}}">
          
       </script>
     @break
-=======
     @case('User Follow Topic')
         <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
         <script src="{{asset('userFollow/userFollowTopic.js')}}">
@@ -1136,7 +1132,6 @@
     <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
     <script src="{{asset('locations/locations.js')}}"></script>
     @break
->>>>>>> Stashed changes
     @default
     <script>console.log('No custom script available.')</script>
 @endswitch
