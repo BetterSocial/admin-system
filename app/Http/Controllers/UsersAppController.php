@@ -38,14 +38,11 @@ class UsersAppController extends Controller
 
         $data = DB::SELECT($user);
         $total = count($data);
-        if($req->order[0]['column'] == 'user_id'){
-            $user .= " ORDER BY created_at asc LIMIT $req->length OFFSET $req->start ";
+        
+      
+        $user .= " ORDER BY " .$columns[$req->order[0]['column']]. " ".$req->order[0]['dir']." LIMIT $req->length OFFSET $req->start ";
 
-        }
-        else{
-            $user .= " ORDER BY " .$columns[$req->order[0]['column']]. " ".$req->order[0]['dir']." LIMIT $req->length OFFSET $req->start ";
-
-        }
+        
         $dataLimit = DB::SELECT($user);
         return response()->json([
             'draw'            => $req->draw,

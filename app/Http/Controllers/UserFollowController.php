@@ -45,11 +45,9 @@ class UserFollowController extends Controller
 
         $data = DB::SELECT($userTopic);
         $total = count($data);
-        if ($req->order[0]['column'] == 'user_id') {
-            $userTopic .= " ORDER BY username asc LIMIT $req->length OFFSET $req->start ";
-        } else {
-            $userTopic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-        }
+       
+        $userTopic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+        
         $dataLimit = DB::SELECT($userTopic);
         return response()->json([
             'draw'            => $req->draw,
@@ -129,11 +127,9 @@ class UserFollowController extends Controller
 
         $data = DB::SELECT($userFollow);
         $total = count($data);
-        if ($req->order[0]['column'] == 'user_id') {
-            $userFollow .= " ORDER BY username asc LIMIT $req->length OFFSET $req->start ";
-        } else {
-            $userFollow .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-        }
+        
+        $userFollow .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+        
         $dataLimit = DB::SELECT($userFollow);
         return response()->json([
             'draw'            => $req->draw,

@@ -20,7 +20,7 @@ class TopicsController extends Controller
     public function getData(Request $req)
     {
         \Log::debug($req->all());
-        \Log::debug($req->order[0]['column']);
+  
         $columns = array(
             // datatable column index  => database column name
                 0 => 'topic_id',
@@ -38,15 +38,12 @@ class TopicsController extends Controller
             $topic .= " AND categories ILIKE '%$req->category%'";
         }        
         
-        
 
         $data = DB::SELECT($topic);
         $total = count($data);
-        if ($req->order[0]['column'] == 'topic_id') {
-            $topic .= " ORDER BY created_at ASC LIMIT $req->length OFFSET $req->start ";
-        } else {
-            $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-        }
+        
+        $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+       
         $dataLimit = DB::SELECT($topic);
         return response()->json([
             'draw'            => $req->draw,

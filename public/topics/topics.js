@@ -24,7 +24,6 @@ $(document).ready(function () {
         {
           
           "data" : 'topic_id',
-          "orderable":false,
           "visible": false,
         },
         {
@@ -62,7 +61,6 @@ $(document).ready(function () {
           "data" : "flg_show",
 					"orderable" : false,
 			    	render : function(data, type, row) {
-              console.log(row);
              
               if(row.flg_show =='N'){
                 return "<input type='checkbox' class='new-control-input' style='zoom:1.5;' onChange='showTopic("+row.topic_id+")'>"
@@ -102,7 +100,7 @@ function showTopic(topicId){
       success: function(data){
           console.log(data);
           if(data.success){
-              datatble.draw();
+              datatble.ajax.reload(null,false);
               
           }else{
               
