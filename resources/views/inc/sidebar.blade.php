@@ -32,7 +32,7 @@
                     @hasanyrole('editor|admin|viewer')
 
                     <li class="menu {{ ($category_name === 'locations') ? 'active' : '' }}">
-                        <a href="/locations-index" data-active="{{ ($category_name === 'locations') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
+                        <a href="/locations/index" data-active="{{ ($category_name === 'locations') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <span>Locations</span>
                             </div>
@@ -40,7 +40,7 @@
                     </li>
 
                     <li class="menu {{ ($category_name === 'topics') ? 'active' : '' }}">
-                        <a href="/topics-index" data-active="{{ ($category_name === 'topics') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'topics') ? 'true' : 'false' }}" class="dropdown-toggle">
+                        <a href="/topics/index" data-active="{{ ($category_name === 'topics') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'topics') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <span>Topics</span>
                             </div>

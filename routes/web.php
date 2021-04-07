@@ -46,8 +46,10 @@ Route::group(['middleware' => 'auth'] , function() {
         return view('dashboard')->with($data);
     });
 
-    //topics
-    Route::get('/topics-index', function() {
+    /*
+     *  topics
+     */
+    Route::get('/topics/index', function() {
         $data = [
             'category_name' => 'topics',
             'page_name' => 'topics',
@@ -75,11 +77,15 @@ Route::group(['middleware' => 'auth'] , function() {
     Route::POST('/show/topics', 'TopicsController@showTopics')->name('add.topics');
 
 
-    // Locations
-    Route::POST('/locations/data', 'LocationsController@getData')->name('masterLocations.data');
 
-    Route::get('/locations-index', function() {
-        // $category_name = '';
+    /*
+     * Locations
+     */
+    Route::post('/locations/data', 'LocationsController@getData')->name('masterLocations.data');
+
+    Route::post('/locations/add', 'LocationsController@addLocations')->name('masterLocations.add');
+
+    Route::get('/locations/index', function() {
         $data = [
             'category_name' => 'locations',
             'page_name' => 'locations',
@@ -87,11 +93,26 @@ Route::group(['middleware' => 'auth'] , function() {
             'scrollspy_offset' => '',
 
         ];
-        // $pageName = 'widgets';
         return view('pages.locations.locations')->with($data);
     });
 
-    //Users
+    Route::get('/create-locations', function() {
+        // $category_name = '';
+        $data = [
+            'category_name' => 'forms',
+            'page_name' => 'create-locations',
+            'has_scrollspy' => 1,
+            'scrollspy_offset' => 100,
+
+        ];
+        return view('pages.locations.form_add_locations')->with($data);
+    });
+
+
+
+    /*
+     * Users
+     */
     Route::get('/view-users', function() {
         // $category_name = '';
         $data = [
@@ -108,7 +129,9 @@ Route::group(['middleware' => 'auth'] , function() {
     Route::GET('/download-csv', 'UsersAppController@downloadCsv')->name('download');
 
 
-    //Users Detail
+    /*
+     *  Users Detail
+     */
     Route::GET('/user-detail', 'UsersAppController@userDetail');
     Route::GET('/user-detail-view', 'UsersAppController@userDetailView');
     Route::POST('/update-status', 'UsersAppController@updateStatus');

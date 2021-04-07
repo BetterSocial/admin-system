@@ -980,13 +980,6 @@
     <script src="{{asset('assets/js/widgets/modules-widgets.js')}}"></script>
     @break
 
-    @case('locations')
-    {{-- Table Datatable Multi Column Ordering --}}
-    <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
-    <script src="{{asset('locations/locations.js')}}"></script>
-    @break
-
-
     @case('bootstrap_select')
     {{-- Forms Bootstrap Select --}}
     <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
@@ -1132,6 +1125,16 @@
     <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
     <script src="{{asset('locations/locations.js')}}"></script>
     @break
+
+    @case('create-locations')
+    <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
+{{--    <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>--}}
+{{--    <script>--}}
+{{--        var firstUpload = new FileUploadWithPreview('myFirstImage')</script>--}}
+    <script src="{{asset('locations/addLocations.js')}}"></script>
+    @break
+
+
     @default
     <script>console.log('No custom script available.')</script>
 @endswitch

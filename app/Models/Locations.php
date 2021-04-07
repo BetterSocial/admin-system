@@ -11,10 +11,11 @@ class Locations extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'locations';
+    protected $table = 'location';
     protected $primaryKey= 'location_id';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
+    public $timestamps = true;
 
     /**
      * The attributes that are mass assignable.
