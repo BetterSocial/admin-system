@@ -14,7 +14,6 @@ class AlterTableTopicsFlgShow extends Migration
     public function up()
     {
         Schema::table('topics', function (Blueprint $table) {
-            $table->timestamp('updated_at');
             $table->string('flg_show',1)->default('N');
        
         });
