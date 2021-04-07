@@ -20,25 +20,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'] , function() {
 
-    // $this->middleware
-
-    Route::get('/analytics', function() {
+    Route::get('/dashboard', function() {
         // $category_name = '';
         $data = [
             'category_name' => 'dashboard',
-            'page_name' => 'analytics',
-            'has_scrollspy' => 0,
-            'scrollspy_offset' => '',
-        ];
-        // $pageName = 'analytics';
-        return view('dashboard2')->with($data);
-    });
-
-    Route::get('/sales', function() {
-        // $category_name = '';
-        $data = [
-            'category_name' => 'dashboard',
-            'page_name' => 'sales',
+            'page_name' => 'dashboard',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
         ];
@@ -146,6 +132,8 @@ Route::group(['middleware' => 'auth'] , function() {
    
     Route::GET("/user-follow-detail","UserFollowController@userFollowDetail");
     Route::POST("/user/follow/list","UserFollowController@getUserFollowList");
+    
+    Route::GET("/change-password","HomeController@changePasswordIndex");
 });
 
 Auth::routes();

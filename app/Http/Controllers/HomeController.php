@@ -25,4 +25,13 @@ class HomeController extends Controller
     {
         return view('dashboard2');
     }
+
+    public function changePasswordIndex(){
+        return view('auth.passwords.change_password', [
+            'category_name' => 'auth',
+            'page_name' => 'Change Password',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+        ]);
+    }
 }

@@ -1128,9 +1128,8 @@
 
     @case('create-locations')
     <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
-{{--    <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>--}}
-{{--    <script>--}}
-{{--        var firstUpload = new FileUploadWithPreview('myFirstImage')</script>--}}
+{   <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>
+
     <script src="{{asset('locations/addLocations.js')}}"></script>
     @break
 

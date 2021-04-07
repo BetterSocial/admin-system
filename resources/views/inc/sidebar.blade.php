@@ -9,27 +9,16 @@
             <ul class="list-unstyled menu-categories" id="accordionExample">
 
                 @if ($page_name != 'alt_menu' && $page_name != 'blank_page' && $page_name != 'boxed' && $page_name != 'breadcrumb' )
-
+                @hasanyrole('editor|admin|viewer')
                     <li class="menu {{ ($category_name === 'dashboard') ? 'active' : '' }}">
-                        <a href="#dashboard" data-active="{{ ($category_name === 'dashboard') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'dashboard') ? 'true' : 'false' }}" class="dropdown-toggle">
+                        <a href="/dashboard" data-active="{{ ($category_name === 'dashboard') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <span>Dashboard</span>
                             </div>
-                            <!-- <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            </div> -->
                         </a>
-                    <!-- <ul class="collapse submenu list-unstyled {{ ($category_name === 'dashboard') ? 'show' : '' }}" id="dashboard" data-parent="#accordionExample">
-                            <li class="{{ ($page_name === 'sales') ? 'active' : '' }}">
-                                <a href="/sales"> Sales </a>
-                            </li>
-                            <li class="{{ ($page_name === 'analytics') ? 'active' : '' }}">
-                                <a href="/analytics"> Analytics </a>
-                            </li>
-                        </ul> -->
                     </li>
 
-                    @hasanyrole('editor|admin|viewer')
+                    
 
                     <li class="menu {{ ($category_name === 'locations') ? 'active' : '' }}">
                         <a href="/locations/index" data-active="{{ ($category_name === 'locations') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
