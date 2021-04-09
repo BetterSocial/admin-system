@@ -3,7 +3,7 @@ $(document).ready(function () {
     var datatableLocations = $('#tableLocations').DataTable( {
         "searching": false,
         "stateSave"	: true,
-        "serverSide"	: true,
+        "serverSide": true,
         "processing": true,
         "language": {
             'loadingRecords': '</br></br></br></br>;',

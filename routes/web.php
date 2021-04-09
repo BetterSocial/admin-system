@@ -134,6 +134,10 @@ Route::group(['middleware' => 'auth'] , function() {
     Route::POST("/user/follow/list","UserFollowController@getUserFollowList");
     
     Route::GET("/change-password","HomeController@changePasswordIndex");
+
+    Route::GET("/sample-getstream","SampleGetStream@index");
+
+
 });
 
 Auth::routes();
@@ -149,7 +153,7 @@ Route::get('/password/reset', function() {
 });
 
 Route::get('/', function() {
-    return redirect('/sales');
+    return redirect('/dashboard');
 });
 
 Route::get('/forgot-password', function() {
@@ -163,6 +167,12 @@ Route::get('/forgot-password', function() {
     // $pageName = 'auth_boxed';
     return view('auth.passwords.email')->with($data);
 });
+
+
+
+
+
+//TODO hapus custom url reset-forget
 
 Route::post('/forgot-password-email-verification', 'ResetPasswordController@index')->name('forgot.password.confirm');
 
@@ -180,3 +190,4 @@ Route::get('/reset-password/{token}', function ($token) {
 })->name('password.reset');
 
 Route::post('/reset-password', 'ResetPasswordController@resetPassword')->name('reset.password.update');
+

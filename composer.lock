@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "343e2c33a2b9ab812bc97f96368f5089",
+    "content-hash": "bd3b27b22eb3df06a0c40d5f740f2b27",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -974,6 +974,56 @@
             "time": "2020-10-22T13:48:01+00:00"
         },
         {
+            "name": "firebase/php-jwt",
+            "version": "v5.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/firebase/php-jwt.git",
+                "reference": "f42c9110abe98dd6cfe9053c49bc86acc70b2d23"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/f42c9110abe98dd6cfe9053c49bc86acc70b2d23",
+                "reference": "f42c9110abe98dd6cfe9053c49bc86acc70b2d23",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=4.8 <=9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Firebase\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Neuman Vong",
+                    "email": "neuman+pear@twilio.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anant Narayanan",
+                    "email": "anant@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+            "homepage": "https://github.com/firebase/php-jwt",
+            "keywords": [
+                "jwt",
+                "php"
+            ],
+            "time": "2021-02-12T00:02:00+00:00"
+        },
+        {
             "name": "fruitcake/laravel-cors",
             "version": "v2.0.3",
             "source": {
@@ -1045,6 +1095,61 @@
                 }
             ],
             "time": "2020-10-22T13:57:20+00:00"
+        },
+        {
+            "name": "get-stream/stream",
+            "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GetStream/stream-php.git",
+                "reference": "8911a10e873386ac136106a5a0ac72b54779875f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GetStream/stream-php/zipball/8911a10e873386ac136106a5a0ac72b54779875f",
+                "reference": "8911a10e873386ac136106a5a0ac72b54779875f",
+                "shasum": ""
+            },
+            "require": {
+                "firebase/php-jwt": "^v5.0.0",
+                "guzzlehttp/guzzle": "^6.3.3 || ^7.0.1",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.18.0",
+                "phan/phan": "^4.0.3",
+                "phpunit/phpunit": "^8.2.1",
+                "ramsey/uuid": "^3.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "GetStream\\Stream": "lib/"
+                },
+                "psr-4": {
+                    "GetStream\\Stubs\\": "tests/stubs/",
+                    "GetStream\\Unit\\": "tests/unit/",
+                    "GetStream\\Integration\\": "tests/integration/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Tommaso Barbugli",
+                    "email": "support@getstream.io"
+                }
+            ],
+            "description": "A PHP client for Stream (https://getstream.io)",
+            "homepage": "https://getstream.io",
+            "keywords": [
+                "feedly",
+                "newsfeed",
+                "stream"
+            ],
+            "time": "2021-03-26T12:16:38+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -2818,16 +2923,16 @@
         },
         {
             "name": "spatie/laravel-permission",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-permission.git",
-                "reference": "7936ea9ebbd0d91877109dfeda1659fc4570a6cc"
+                "reference": "29c05324c170c0be108ccb86dd29f6a719c0a617"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/7936ea9ebbd0d91877109dfeda1659fc4570a6cc",
-                "reference": "7936ea9ebbd0d91877109dfeda1659fc4570a6cc",
+                "url": "https://api.github.com/repos/spatie/laravel-permission/zipball/29c05324c170c0be108ccb86dd29f6a719c0a617",
+                "reference": "29c05324c170c0be108ccb86dd29f6a719c0a617",
                 "shasum": ""
             },
             "require": {
@@ -2888,7 +2993,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-01-27T23:03:34+00:00"
+            "time": "2021-03-22T18:38:29+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
