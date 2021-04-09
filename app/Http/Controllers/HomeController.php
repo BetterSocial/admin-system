@@ -29,9 +29,6 @@ class HomeController extends Controller
         $totalTopic = Topics::count();
         $totalUser = UserApps::count();
         $totalLocation = Locations::count();
-        \Log::debug($totalTopic);
-        \Log::debug($totalUser);
-        \Log::debug($totalLocation);
         return view('dashboard',[
             'category_name' => 'dashboard',
             'page_name' => 'dashboard',

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,8 +19,19 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => 'auth'] , function() {
-
     Route::get('/dashboard', "HomeController@index");
+
+    // Route::get('/dashboard', function() {
+    //     // $category_name = '';
+    //     $data = [
+    //         'category_name' => 'dashboard',
+    //         'page_name' => 'dashboard',
+    //         'has_scrollspy' => 0,
+    //         'scrollspy_offset' => '',
+    //     ];
+    //     // $pageName = 'sales';
+    //     return view('dashboard')->with($data);
+    // });
 
     /*
      *  topics
