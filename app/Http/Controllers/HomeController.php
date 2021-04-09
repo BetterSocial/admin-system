@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Topics;
+use App\Models\UserApps;
+use App\Models\Locations;
 
 class HomeController extends Controller
 {
@@ -23,7 +26,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard2');
+        $totalTopic = Topics::count();
+        $totalUser = UserApps::count();
+        $totalLocation = Locations::count();
+        \Log::debug($totalTopic);
+        \Log::debug($totalUser);
+        \Log::debug($totalLocation);
+        return view('dashboard',[
+            'category_name' => 'dashboard',
+            'page_name' => 'dashboard',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+            'total_topic' =>$totalTopic,
+            'total_user' =>$totalUser,
+            'total_location' =>$totalLocation,
+        ]);
     }
 
     public function changePasswordIndex(){

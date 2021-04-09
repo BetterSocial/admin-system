@@ -1,6 +1,7 @@
+var datatableLocations
 $(document).ready(function () {
     console.log("MASUUKKK");
-    var datatableLocations = $('#tableLocations').DataTable( {
+    datatableLocations = $('#tableLocations').DataTable( {
         "searching": false,
         "stateSave"	: true,
         "serverSide": true,
@@ -93,10 +94,15 @@ $(document).ready(function () {
             //     }
             // },
             {
-                "data" : "action",
+                "data" : "flg_show",
                 "orderable" : false,
                 render : function(data, type, row) {
-                    return "<div class='btn btn-xs btn-danger no-margin-action skeyF1' data-toggle='tooltip' data-placement='bottom' title='CheckBox' onclick='check()' data-tipe='header'><i class='fa fa-check'></i></div>";
+                    if(row.flg_show =='N'){
+                      return "<input type='checkbox' class='new-control-input' style='zoom:1.5;' onChange='showTopic("+row.location_id+")'>"
+                    }
+                    else{
+                      return "<input type='checkbox' checked class='new-control-input' style='zoom:1.5;' onChange='showTopic("+row.location_id+")'>"
+                    }
                 }
             }
         ],
@@ -108,3 +114,41 @@ $(document).ready(function () {
     });
 
 });
+
+function showTopic(locationId){
+    var formData = new FormData();
+    formData.append('location_id', locationId);
+   
+    $.ajaxSetup({
+      headers: { "X-CSRF-Token" : $("meta[name=csrf-token]").attr("content") }
+    });
+    $.ajax({
+        type: 'POST',
+        dataType:'JSON',
+        data:formData,
+        contentType: false, 
+        processData: false,
+        url: '/show/location',
+        success: function(data){
+            if(data.success){
+                datatableLocations.ajax.reload(null,false);
+                
+            }else{
+                
+                return Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: data.message,})
+            }
+        },
+        error: function(data){
+          console.log(data);
+            return Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: data.message})
+  
+       }
+    });   
+  
+  }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Locations;
 use DB;
 use Illuminate\Support\Facades\Log;
+use phpDocumentor\Reflection\Location;
 
 class LocationsController extends Controller
 {
@@ -28,7 +29,7 @@ class LocationsController extends Controller
             7 => 'status',
             8 => 'slug_name',
         );
-        $location = "SELECT location_id,zip,neighborhood,city,state,country,location_level,status,slug_name,created_at,location_level as location_icon FROM location WHERE true";
+        $location = "SELECT location_id,zip,neighborhood,city,state,country,location_level,status,slug_name,created_at,location_level as location_icon,flg_show FROM location WHERE true";
 
         Log::debug($req->all());
         if($req->neighborhood !=null){
@@ -112,5 +113,38 @@ class LocationsController extends Controller
             'success' => true,
         ]);
     }
+
+
+    public function showLocation(Request $req){
+        try {
+		 	
+            $data = Locations::find($req->location_id);
+            if($data !=null){
+                if($data->flg_show == 'Y'){
+                    $data->flg_show = 'N';
+                }
+                else{
+                    $data->flg_show = 'Y';
+                    
+                }
+                $data->save();
+                return response()->json([
+                    'success'=> true,
+                ]);
+            }
+            else{
+                return response()->json([
+                    'success'=> false,
+                    'message'=> "Data Location Not Found"
+                ]);
+            }
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'=> false,
+                'message'=>$e->getMessage()
+            ]);
+        }
+     }
 
 }
