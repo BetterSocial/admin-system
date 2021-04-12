@@ -19,10 +19,10 @@
     <link href="{{asset('assets/css/dashboard/dash_2.css')}}" rel="stylesheet" type="text/css" />
     @break
 
-    @case('sales')
+    @case('dashboard')
     {{-- Dashboard 2 --}}
     <link href="{{asset('plugins/apex/apexcharts.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{asset('assets/css/dashboard/dash_1.css')}}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/widgets/modules-widgets.css')}}">
     @break
 
     @case('calendar')
@@ -1014,6 +1014,12 @@
         <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
         <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/dt-global_style.css')}}">
       @break
+
+      @case('domain list')
+        <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/datatables.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{asset('plugins/table/datatable/dt-global_style.css')}}">
+      @break
+      
     @default
     <script>console.log('No custom Styles available.')</script>
 @endswitch

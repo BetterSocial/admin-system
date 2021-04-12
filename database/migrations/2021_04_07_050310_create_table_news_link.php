@@ -13,7 +13,7 @@ class CreateTableNewsLink extends Migration
      */
     public function up()
     {
-        Schema::create('table_news_link', function (Blueprint $table) {
+        Schema::create('news_link', function (Blueprint $table) {
             $table->bigIncrements("news_link_id");
             $table->longText("news_url");
             $table->bigInteger("domain_page_id");
@@ -36,6 +36,6 @@ class CreateTableNewsLink extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_news_link');
+        Schema::dropIfExists('news_link');
     }
 }

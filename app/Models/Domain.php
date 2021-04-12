@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Locations extends Authenticatable
+class Domain extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'location';
-    protected $primaryKey= 'location_id';
+    protected $table = 'table_domain_page';
+    protected $primaryKey= 'domain_id';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     public $timestamps = true;
@@ -23,15 +23,10 @@ class Locations extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'zip',
-        'neighborhood',
-        'city',
-        'state',
-        'country',
-        'location_level',
-        'status',
-        'slug_name'
-    ];
+        'domain_name',
+        'logo',
+        'short_description',
+        ];
 
     /**
      * The attributes that should be hidden for arrays.
