@@ -138,6 +138,8 @@ Route::group(['middleware' => 'auth'] , function() {
     
     Route::GET("/change-password","HomeController@changePasswordIndex");
 
+    Route::POST("/change-password", "Auth\ChangePasswordController@index")->name('change.password');
+
     Route::GET("/sample-getstream","SampleGetStream@index");
 
 
