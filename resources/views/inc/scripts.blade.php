@@ -1090,8 +1090,9 @@
       <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
       <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>
       <script>
-          var firstUpload = new FileUploadWithPreview('myFirstImage')</script>
-    <script src="{{asset('topics/addTopics.js')}}"></script>
+        var firstUpload = new FileUploadWithPreview('myFirstImage')
+      </script>
+      <script src="{{asset('topics/addTopics.js')}}"></script>
     @break      
 
     @case('view Users')
@@ -1128,9 +1129,14 @@
 
     @case('create-locations')
     <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
-{   <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>
+    <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>
 
     <script src="{{asset('locations/addLocations.js')}}"></script>
+    @break
+
+    @case('domain list')
+    <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
+    <script src="{{asset('domain/domain.js')}}"></script>
     @break
 
 

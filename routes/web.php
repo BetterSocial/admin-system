@@ -20,19 +20,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'auth'] , function() {
     Route::get('/dashboard', "HomeController@index");
-
-    // Route::get('/dashboard', function() {
-    //     // $category_name = '';
-    //     $data = [
-    //         'category_name' => 'dashboard',
-    //         'page_name' => 'dashboard',
-    //         'has_scrollspy' => 0,
-    //         'scrollspy_offset' => '',
-    //     ];
-    //     // $pageName = 'sales';
-    //     return view('dashboard')->with($data);
-    // });
-
     /*
      *  topics
      */
@@ -141,6 +128,24 @@ Route::group(['middleware' => 'auth'] , function() {
     Route::POST("/change-password", "Auth\ChangePasswordController@index")->name('change.password');
 
     Route::GET("/sample-getstream","SampleGetStream@index");
+
+    /*
+    *Domain
+    */
+    Route::get('/domain/index', function() {
+        // $category_name = '';
+        $data = [
+            'category_name' => 'domain',
+            'page_name' => 'domain list',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+
+        ];
+        // $pageName = 'widgets';
+        return view('pages.domain.domain')->with($data);
+    });
+
+    Route::POST('/domain/data', 'DomainController@getData');
 
 
 });

@@ -67,6 +67,4 @@
                 </div> 
             </div>
 
-            <br><br>
-            <a href="/sample-getstream"> <button class="btn btn-primary"><b style="color:white">Sample GetStream</b></button> </a>
-@endsection
+            <br><br>@endsection

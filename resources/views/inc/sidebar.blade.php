@@ -18,13 +18,31 @@
                         </a>
                     </li>
 
+                    <li class="menu {{ ($category_name === 'domain') ? 'active' : '' }}">
+                        <a href="#app" data-active="{{ ($category_name === 'domain') ? 'true' : 'false' }}" data-toggle="collapse" aria-expanded="{{ ($category_name === 'apps') ? 'true' : 'false' }}" class="dropdown-toggle">
+                            <div class="">
+                                <span>Domain</span>
+                            </div>
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </a>
+                        <ul class="collapse submenu list-unstyled {{ ($category_name === 'domain') ? 'show' : '' }}" id="app" data-parent="#accordionExample">
+                            <li class="{{ ($page_name === 'domain') ? 'active' : '' }}">
+                                <a href="/domain/index"> Domain List </a>
+                            </li>
+                            <li class="{{ ($page_name === 'news') ? 'active' : '' }}">
+                                <a href="/apps/mailbox"> News Link Detail </a>
+                            </li>
+                        </ul>
+                    </li>
                     
 
                     <li class="menu {{ ($category_name === 'locations') ? 'active' : '' }}">
                         <a href="/locations/index" data-active="{{ ($category_name === 'locations') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'locations') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
                                 <span>Locations</span>
-                            </div>
+                            </div>  
                         </a>
                     </li>
 

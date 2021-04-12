@@ -13,11 +13,11 @@ class CreateTableDomainPage extends Migration
      */
     public function up()
     {
-        Schema::create('table_domain_page', function (Blueprint $table) {
+        Schema::create('domain_page', function (Blueprint $table) {
             $table->bigIncrements("domain_page_id");
             $table->string("domain_name");
             $table->string("logo",255);
-            $table->longText("shot_description")->nullable(true);
+            $table->longText("short_description")->nullable(true);
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
         });
@@ -30,6 +30,6 @@ class CreateTableDomainPage extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_domain_page');
+        Schema::dropIfExists('domain_page');
     }
 }
