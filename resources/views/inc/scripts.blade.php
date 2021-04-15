@@ -1139,6 +1139,19 @@
     <script src="{{asset('domain/domain.js')}}"></script>
     @break
 
+    @case('add-logo-domain')
+      <script src="{{asset('assets/js/scrollspyNav.js')}}"></script>
+      <script src="{{asset('plugins/file-upload/file-upload-with-preview.min.js')}}"></script>
+      <script>
+        var firstUpload = new FileUploadWithPreview('myFirstImage')
+      </script>
+      <script src="{{asset('domain/addLogoDomain.js')}}"></script>
+    @break
+    
+    @case('news-link')
+        <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
+        <script src="{{asset('news/news.js')}}"></script>
+    @break
 
     @default
     <script>console.log('No custom script available.')</script>

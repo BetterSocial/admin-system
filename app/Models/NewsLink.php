@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Domain extends Authenticatable
+class NewsLink extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'domain_page';
-    protected $primaryKey= 'domain_page_id';
+    protected $table = 'news_link';
+    protected $primaryKey= 'news_link_id';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     public $timestamps = true;
@@ -23,9 +23,15 @@ class Domain extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'domain_name',
-        'logo',
-        'short_description',
+        'domain_page_id',
+        'site_name',
+        'title',
+        'image',
+        'description',
+        'url',
+        'keyword',
+        'author',
+
         ];
 
     /**

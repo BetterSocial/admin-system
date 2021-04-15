@@ -19,8 +19,7 @@ class TopicsController extends Controller
 
     public function getData(Request $req)
     {
-        \Log::debug($req->all());
-  
+
         $columns = array(
             // datatable column index  => database column name
                 0 => 'topic_id',

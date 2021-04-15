@@ -32,7 +32,7 @@
                                 <a href="/domain/index"> Domain List </a>
                             </li>
                             <li class="{{ ($page_name === 'news') ? 'active' : '' }}">
-                                <a href="/apps/mailbox"> News Link Detail </a>
+                                <a href="/news/index"> News Link </a>
                             </li>
                         </ul>
                     </li>

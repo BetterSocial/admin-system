@@ -14,7 +14,6 @@ class DomainController extends Controller
 {
     public function getData(Request $req)
     {
-        \Log::debug($req->all());
   
         $columns = array(
             // datatable column index  => database column name
@@ -43,6 +42,53 @@ class DomainController extends Controller
             "recordsFiltered" => $total,
             'data'            => $dataLimit,
         ]);
-     }
+    }
+
+    public function formEdit(Request $req){
+        $findDomain = Domain::find($req->domain_page_id);
+      
+        return view('pages.domain.add_logo_domain',[
+            'category_name' => 'dashboard',
+            'page_name' => 'add-logo-domain',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+            'data' => $findDomain,
+            
+        ]);
+    }
+
+    public function saveLogo(Request $req){
+
+        try {
+            $file = $req->file('file');
+            
+            $this->validate($req, [
+                'file' => 'image|max:1024|dimensions:min_width=64,min_height=64',
+            
+            ]);
+            $findDomain =  Domain::find($req->id);
+
+            if($findDomain->count() <= 0){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Data topic not found'
+                ]);
+            }
+
+            $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
+            $findDomain->logo = $response;
+            $findDomain->save();
+           
+            return response()->json([
+                'success' => true,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'=> false,
+                'message'=>$e->getMessage()
+            ]);
+        }
+       
+    }
 
 }

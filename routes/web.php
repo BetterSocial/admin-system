@@ -145,8 +145,27 @@ Route::group(['middleware' => 'auth'] , function() {
         return view('pages.domain.domain')->with($data);
     });
 
-    Route::POST('/domain/data', 'DomainController@getData');
 
+    Route::get('/news/index', function() {
+        // $category_name = '';
+        $data = [
+            'category_name' => 'domain',
+            'page_name' => 'news-link',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+
+        ];
+        // $pageName = 'widgets';
+        return view('pages.news.news')->with($data);
+    });
+
+    Route::POST('/domain/data', 'DomainController@getData');
+    Route::GET('/domain/add-logo', 'DomainController@formEdit');
+    Route::POST('/domain/add-logo', 'DomainController@saveLogo');
+    
+    Route::GET('/news-link', 'NewsController@readAsJson');
+
+    Route::POST('/news/data', 'NewsController@getData');
 
 });
 
