@@ -134,7 +134,7 @@ function showTopic(locationId){
                 datatableLocations.ajax.reload(null,false);
                 
             }else{
-                
+                datatble.ajax.reload(null,false);
                 return Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -143,6 +143,7 @@ function showTopic(locationId){
         },
         error: function(data){
           console.log(data);
+          datatble.ajax.reload(null,false);
             return Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
