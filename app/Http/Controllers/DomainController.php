@@ -48,7 +48,7 @@ class DomainController extends Controller
         $findDomain = Domain::find($req->domain_page_id);
       
         return view('pages.domain.add_logo_domain',[
-            'category_name' => 'dashboard',
+            'category_name' => 'domain',
             'page_name' => 'add-logo-domain',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
@@ -75,7 +75,7 @@ class DomainController extends Controller
                 ]);
             }
 
-            $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
+            $response =  $req->file->storeOnCloudinary('domain-image')->getSecurePath();
             $findDomain->logo = $response;
             $findDomain->save();
            

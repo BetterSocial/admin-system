@@ -17,9 +17,12 @@ class NewsController extends Controller
 
     function readAsJson(Request $req)
     {
-        $url = "https://hot.detik.com/celeb/d-5522315/prof-muradi-bantah-tuduhan-nikah-siri-telantarkan-anak-era-setyowati?tag_from=wp_hl_judul&_ga=2.22160059.1209018323.1617701876-462039762.1617701876";
-        //$parse = parse_url($req->url);
+        
+        //$url = "https://hot.detik.com/celeb/d-5522315/prof-muradi-bantah-tuduhan-nikah-siri-telantarkan-anak-era-setyowati?tag_from=wp_hl_judul&_ga=2.22160059.1209018323.1617701876-462039762.1617701876";
+        $url = $req->url;
+        \Log::debug(  parse_url($url));
         $parse = parse_url($url);
+        \Log::debug( $parse);
         $domain = $parse['host'];
 
         $findDomain = Domain::where('domain_name', $domain )->first();

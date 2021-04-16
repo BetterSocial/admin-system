@@ -160,7 +160,7 @@ Route::group(['middleware' => 'auth'] , function() {
     });
 
     Route::POST('/domain/data', 'DomainController@getData');
-    Route::GET('/domain/add-logo', 'DomainController@formEdit');
+    Route::GET('/domain/form-logo', 'DomainController@formEdit');
     Route::POST('/domain/add-logo', 'DomainController@saveLogo');
     
     Route::GET('/news-link', 'NewsController@readAsJson');
