@@ -97,7 +97,6 @@ class TopicsController extends Controller
         try {
             $user = Auth::user();
             $roles = $user->roles->pluck('name')->first();
-            \Log::debug($roles);
             if($roles == 'viewer'){
                 return response()->json([
                     'success'=> false,
