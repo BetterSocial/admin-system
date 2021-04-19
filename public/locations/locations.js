@@ -1,4 +1,4 @@
-var datatableLocations
+var datatableLocations;
 $(document).ready(function () {
     console.log("MASUUKKK");
     datatableLocations = $('#tableLocations').DataTable( {
@@ -73,7 +73,8 @@ $(document).ready(function () {
                             return '<img src="https://res.cloudinary.com/hpjivutj2/image/upload/v1616639587/icons/state_uyxckp.png" width="30" height="30" />';
                         }
 
-                        //TODO  icon Country
+
+
                     }
 
                 },

@@ -31,7 +31,7 @@ class LocationsController extends Controller
         );
         $location = "SELECT location_id,zip,neighborhood,city,state,country,location_level,status,slug_name,created_at,location_level as location_icon,flg_show FROM location WHERE true";
 
-        Log::debug($req->all());
+//        Log::debug($req->all());
         if($req->neighborhood !=null){
             $location .= " AND neighborhood ILIKE '%$req->neighborhood%'";
         }
@@ -52,6 +52,7 @@ class LocationsController extends Controller
         $location .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
 
         $dataLimit = DB::SELECT($location);
+        Log::debug($dataLimit);
         return response()->json([
             'draw'            => $req->draw,
             'recordsTotal'    => $total,

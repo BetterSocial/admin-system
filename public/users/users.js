@@ -88,7 +88,7 @@ $(document).ready(function () {
                 "data" : 'posts',
                 "orderable":false,
                 render : function(data, type, row) {
-                return " <a href='http://www.facebook.com'> <button type='button' class='btn btn-primary btn-sm'>#posts</button> </a>";
+                return " <a href='/user-show-post-list?user_id="+row.user_id+"'> <button type='button' class='btn btn-primary btn-sm'>#posts</button> </a>";
                 }    
             },
             {
@@ -204,7 +204,6 @@ function chageStatus(e,data){
 
 
 
-  
   
   
   

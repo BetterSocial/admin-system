@@ -71,7 +71,7 @@ class UsersAppController extends Controller
         $headers = array(
             "Content-type" => "text/csv",
             "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Cache-Control" => "must-revalidate, userPost-check=0, pre-check=0",
             "Expires" => "0"
         );
         $file = fopen($path,'w');
