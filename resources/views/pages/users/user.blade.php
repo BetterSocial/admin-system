@@ -48,21 +48,6 @@
                                 </tr>
                             </thead>
                             <tbody></tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="no-content">Action</th>
-                                    <th>User Id</th>
-                                    <th>Username</th>
-                                    <th>Country Code</th>
-                                    <th>Registered At</th>
-                                    <th>Status</th>
-                                    <th>Followers</th>
-                                    <th>Following</th>
-                                    <th>Posts</th>
-                                    <th>Sessions</th>
-                                    <th>User Score</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>

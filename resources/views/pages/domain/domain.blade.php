@@ -35,16 +35,6 @@
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th class="no-content">Action</th>
-                                            <th>id</th>
-                                            <th>Domain Name</th>
-                                            <th>Logo</th>
-                                            <th>Short Description</th>
-                                            <th>Created At</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>

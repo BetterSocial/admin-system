@@ -66,19 +66,6 @@
                             </tr>
                             </thead>
                             <tbody></tbody>
-                            <tfoot>
-                            <tr>
-                                <th>ID</th>
-                                <th>Zip</th>
-                                <th>Neighborhood</th>
-                                <th>City</th>
-                                <th>State</th>
-                                <th>Country</th>
-                                <th>Location Level</th>
-                                <th>Icon</th>
-                                <th>Action</th>
-                            </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>
