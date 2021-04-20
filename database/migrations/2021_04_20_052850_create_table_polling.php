@@ -17,7 +17,7 @@ class CreateTablePolling extends Migration
             $table->uuid('polling_id')->primary();
             $table->longText('question')->nullable(false);
             $table->string('user_id',50)->nullable(false);
-            $table->boolean('flg_multiple')->default('N');;
+            $table->boolean('flg_multiple')->default('N');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
         });
