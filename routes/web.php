@@ -127,7 +127,12 @@ Route::group(['middleware' => 'auth'] , function() {
 
     Route::POST("/change-password", "Auth\ChangePasswordController@index")->name('change.password');
 
+    Route::GET("/user-show-post-list","ShowPostListController@index");
+    Route::POST("/user-show-post-list/data","ShowPostListController@getData");
+
     Route::GET("/sample-getstream","SampleGetStream@index");
+
+
 
     /*
     *Domain

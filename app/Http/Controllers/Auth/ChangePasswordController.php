@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class ChangePasswordController extends Controller
@@ -17,14 +18,10 @@ class ChangePasswordController extends Controller
 
         try {
 
-            Log::debug($request);
-            Log::debug("Sedang VALIDASI biasa");
-
-
             $validator = Validator::make($request->all(), [
-                'old_password' => ['required', function ($attribute, $value, $fail) {
+                'current_password' => ['required', function ($attribute, $value, $fail) {
                     if (!Hash::check($value, Auth::user()->password)) {
-                        $fail('Old Password didn\'t match');
+                        $fail('Current Password didn\'t match');
                     }
                 }],
                 'password' => ['required','min:8','same:confirm_password'],
@@ -37,30 +34,27 @@ class ChangePasswordController extends Controller
                     ->withInput();
             }
 
-            Log::debug("Sudah VALIDASI biasa");
+//            Log::debug("Sudah VALIDASI biasa");
 
-//            $password = $request->old_password;
+            $user = Auth::user();
 
-//            $user = Auth::user();
+            $user->fill([
+                'password' => bcrypt($request->password)
+            ])->save();
+
+//            $request->session()->flash('success', 'Password changed');
+////            return redirect('/')->with('status','Password has changed successfully');
 //
-//            Log::debug("MASHOQQQ VALIDASI PASWROD");
-//
-//            if (Hash::check($request->old_password, $user->password)) {
-//
-//                $user->fill([
-//                    'password' => bycrypt($request->password)
-//                ])->save();
-//
-//                $request->session()->flash('success', 'Password changed');
-//                return redirect('/login')->with('message','Password changed successfully');
-//
-//            } else {
-//                return Redirect::back()
-////                    ->with('status','Cannot find email')
-//                    ->withErrors(['password' => "Wrong Password"]);
-//            }
+//            return redirect('/')->with(['status' => 'Password has changed successfully']);
 
 
+
+            Session::flash("flash_notification", [
+                "level"     => "success",
+                "message"   => "Password changed successfully"
+            ]);
+
+            return redirect('/');
 
 
         } catch (\Exception $e) {

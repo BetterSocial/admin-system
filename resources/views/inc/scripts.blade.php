@@ -1121,6 +1121,11 @@
         <script src="{{asset('userFollow/userFollowUser.js')}}"></script>
     @break
 
+    @case('show_post_list')
+    <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
+    <script src="{{asset('userPost/showPostList.js')}}"></script>
+    @break
+
     @case('locations')
     {{-- Table Datatable Multi Column Ordering --}}
     <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>

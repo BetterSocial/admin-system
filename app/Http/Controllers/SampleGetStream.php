@@ -10,7 +10,7 @@ class SampleGetStream extends Controller
 {
     public function index(){
 
-        Log::debug(" MASHOQ TEST GET STREAM ");
+        Log::debug(" MASHOQQQ TEST GET STREAM ");
 
         $client = new Client(env("GET_STREAM_KEY"), env("GET_STREAM_SECRET"));
 
@@ -18,6 +18,27 @@ class SampleGetStream extends Controller
         $feed = $client->feed('main_feed', '8a84f60a-745d-4d34-993c-463c1d526ee0');
 
         $response = $feed->getActivities();
+        $response2 = json_encode($feed->getActivities());
+
+        $single_resp = $feed->getActivities(6); //['result']
+
+
+
+//        Log::debug($response2["results"]);
+//        Log::debug($response->results[0]);
+
+        $result=  $response["results"];
+
+        Log::debug(print_r($result, true));
+
+
+
+
+
+
+
+
+
 
 
 
@@ -26,13 +47,17 @@ class SampleGetStream extends Controller
 
 
 
-        Log::info(print_r($feed, true));
-
+//        Log::info(print_r($feed, true));
+//
         Log::debug("\n\n ===========feed=========== \n\n");
-
+//
         Log::info(print_r($response, true));
 
-        Log::debug("\n\n ===========3=========== \n\n");
+        Log::debug("\n\n ===========single=========== \n\n");
+
+//        Log::info(print_r($single_resp, true));
+
+//        Log::info(print_r($total, true));
 
 //        Log::info(print_r($feed3, true));
 
