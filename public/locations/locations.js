@@ -1,6 +1,6 @@
 var datatableLocations;
 $(document).ready(function () {
-    console.log("MASUUKKK");
+    // console.log("MASUUKKK");
     datatableLocations = $('#tableLocations').DataTable( {
         "searching": false,
         "stateSave"	: true,
@@ -80,20 +80,6 @@ $(document).ready(function () {
                 },
                 defaultContent: "No Icon",
             },
-            // {
-            //     "data" :'created_at',
-            //     "className" : 'menufilter textfilter',
-            // },
-            // {
-            //     "data" :'updated_at',
-            //     "className" : 'menufilter textfilter',
-            // },
-            // {
-            //     "data" : 'followers',
-            //     render : function(data, type, row) {
-            //         return "<a href='http://www.facebook.com'>#Followers</a>";
-            //     }
-            // },
             {
                 "data" : "flg_show",
                 "orderable" : false,

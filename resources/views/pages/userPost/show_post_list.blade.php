@@ -14,11 +14,10 @@
                             <form class="form-inline" method="POST" id="search">
                                 <div class="form-group">
                                     <input type="hidden" id="userId" value="{{$data->user_id}}" readonly class="form-control">
-                                    <input type="text" id="message"  class="form-control">
-                                    &nbsp;&nbsp;
-{{--                                    <input type="text" id="topicCategory" value="{{$data->categories}}" readonly class="form-control">--}}
-
-                                    &nbsp;&nbsp;
+{{--                                    <input type="text" id="message"  class="form-control" placeholder="Content Search">--}}
+{{--                                    &nbsp;&nbsp;&nbsp;--}}
+{{--                                    <button type="submit" class="btn btn-primary">Search</button>--}}
+                                    &nbsp;&nbsp;&nbsp;
                                 </div>
                             </form>
                         </div>
@@ -31,27 +30,9 @@
                             <tr>
                                 <th>Post Id</th>
                                 <th>Content</th>
-{{--                                <th>Timestamp</th>--}}
-{{--                                <th>Photos</th>--}}
-{{--                                <th>Username</th>--}}
-{{--                                <th>Up Votes</th>--}}
-{{--                                <th>DownVote</th>--}}
-{{--                                <th>Blocks</th>--}}
                             </tr>
                             </thead>
                             <tbody></tbody>
-                            <tfoot>
-                            <tr>
-                                <th>Post Id</th>
-                                <th>Content</th>
-{{--                                <th>Timestamp</th>--}}
-{{--                                <th>Photos</th>--}}
-{{--                                <th>Username</th>--}}
-{{--                                <th>Votes</th>--}}
-{{--                                <th>DownVote</th>--}}
-{{--                                <th>Blocks</th>--}}
-                            </tr>
-                            </tfoot>
                         </table>
                     </div>
                 </div>

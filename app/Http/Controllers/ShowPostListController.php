@@ -18,8 +18,7 @@ class ShowPostListController extends Controller
 //        Log::debug($req);
 //        Log::debug("MASHOQ");
 //        Log::debug($req->user_id);
-        Log::debug("dayototoaoao");
-        Log::debug($user);
+//        Log::debug($user);
 
         return view('pages.userPost.show_post_list', [
             'category_name' => 'user_post',
@@ -36,13 +35,11 @@ class ShowPostListController extends Controller
         Log::debug($req);
         Log::debug("MASHOQ");
 
-        $client = new Client(env("GET_STREAM_KEY"), env("GET_STREAM_SECRET"));
+        $client = new Client(config('setting.get_stream_key'), config('setting.get_stream_secret'));
 
         $feed = $client->feed('main_feed', $req->user_id);
-//        $feed = $client->feed('main_feed', '8a84f60a-745d-4d34-993c-463c1d526ee0');
-//        $feed = $client->feed('main_feed', '259cdb63-c21f-4015-8fa7-b1e53420a072');
 
-        $response = $feed->getActivities();
+        $response = $feed->getActivities($req->start, $req->length);
 
         $result=  $response["results"];
 
@@ -52,10 +49,5 @@ class ShowPostListController extends Controller
             "recordsFiltered" => 0,
             'data'            => $result,
         ]);
-
-
-
-
-
     }
 }

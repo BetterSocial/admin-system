@@ -5,7 +5,7 @@ $(document).ready(function () {
         "searching": false,
         "stateSave"	: true,
         "serverSide": true,
-        "processing": true,
+        "lengthMenu": [ 10, 20, 50],
         "language": {
             'loadingRecords': '</br></br></br></br>;',
             'processing': 'Loading...',
@@ -52,68 +52,48 @@ $(document).ready(function () {
                     var object = JSON.parse(row.object);
 
                     let user_id = row.actor.substring(3);
+
                     let timestamp = new Date(Date.parse(row.time)).toString().substring(24,-1);
 
-                    /*
-                    1. pake variable tunggl untuk return
-                    2. pake if untuk icon profile picture
-                    3. redirect profile dan nama ke user detail
-                    http://127.0.0.1:8000/user-detail-view?user_id=07b76370-243b-4e62-a9cb-9beee4c12580
-                    4.
-                     */
-
-
-
-                    let aa = " <a href=\"/user-detail-view?user_id=" + user_id +" \" > ";
+                    let profile_picture_item = " <a href=\"/user-detail-view?user_id=" + user_id +" \" > ";
 
                     if(object.profile_pic_path == null)
-                        aa += "  <img src=\"https://res.cloudinary.com/hpjivutj2/image/upload/v1618554083/icons/no-profile_mvjney.jpg\" width=\"50\" height=\"50\">  ";
+                        profile_picture_item += "  <img src=\"https://res.cloudinary.com/hpjivutj2/image/upload/v1618554083/icons/no-profile_mvjney.jpg\" width=\"50\" height=\"50\">  ";
                     else
-                        aa += "  <img src=\"" + object.profile_pic_path + "\" width=\"60\" height=\"60\">  ";
-                    aa += " </a> "
+                        profile_picture_item += "  <img src=\"" + object.profile_pic_path + "\" width=\"60\" height=\"60\">  ";
+                    profile_picture_item += " </a> "
 
-                    let bb = " <h6> <a href=\"/user-detail-view?user_id=" + user_id +" \" > " + object.username + " </a> </h6>  ";
-                    let dd = " <b>" + timestamp.toString() + " </b> <br> ";
-                    let jarak = "   " ;
-                    // let cc = " <b> Post Content </b> &nbsp; : " + row.message + " <br> ";
-                    let cc = " <p> " + row.message + " </p>";
-                    // let dd = " <b> Timestamp </b> &nbsp; : " + timestamp.toString() + " <br> ";
+                    let username_item = " <h6> <a href=\"/user-detail-view?user_id=" + user_id +" \" > " + object.username + " </a> </h6>  ";
 
-                    let ee = " <b> Images URL </b> &nbsp; :" + images_url_string;
-                    let ff =  row.count_upvote + " Upvote ";
-                    let gg =  row.count_topicNamedownvote + " Downvote ";
+                    let post_item = " <p> " + row.message + " </p>";
 
-                    // return aa + bb + dd + cc + ee +ff + gg;
+                    let upvote_item =  row.count_upvote + " Upvote ";
+
+                    let downvote_item =  row.count_downvote + " Downvote ";
 
                     return " " +
-                        // "<div class=\"widget widget-card-one\">\n" +
                         "    <div class=\"widget-content\">\n" +
                         "        <div class=\"media\">\n" +
                         "            <div class=\"w-img\">\n" +
-
-                        aa +
-
+                                            profile_picture_item +
                         "            </div>\n" +
                         "            <div class=\"media-body\">\n" +
-                        bb +
-                        // "                <h6>Jimmy Turner</h6>\n" +
+                                            username_item +
                         "                <p class=\"meta-date-time\">" + timestamp + " </p>\n" +
                         "            </div>\n" +
                         "        </div>\n" +
-
-                        cc +
+                        "        <p> " + row.message + " </p>" +
                         "        <div>    " +
-                        images_url_string +
+                                    images_url_string +
                         "        </div> <br> " +
                         "        <div class=\"w-action\">\n" +
                         "            <div class=\"card-like\">\n" +
-                        "                <span> " +ff+ " </span>\n" +
+                        "                <span> " +upvote_item+ " </span>\n" +
                         "  &nbsp;&nbsp;&nbsp;&nbsp;   " +
-                        "                <span> " +gg+ " </span>\n" +
+                        "                <span> " +downvote_item+ " </span>\n" +
                         "            </div>\n" +
                         "        </div>\n" +
                         "    </div>\n" +
-                        // "</div> " +
                         " ";
 
                 }

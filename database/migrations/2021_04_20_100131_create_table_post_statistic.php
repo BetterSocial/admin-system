@@ -13,8 +13,10 @@ class CreateTablePostStatistic extends Migration
      */
     public function up()
     {
-        Schema::create('table_post_statistic', function (Blueprint $table) {
-            $table->uuid('post_id');
+        Schema::dropIfExists('post_statistic');
+
+        Schema::create('post_statistic', function (Blueprint $table) {
+            $table->uuid('post_id')->primary();;
             $table->double('view_count')->nullable(false);
             $table->double('upvote_count')->default(0);
             $table->double('downvote_count')->default(0);
@@ -33,6 +35,6 @@ class CreateTablePostStatistic extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_post_statistic');
+        Schema::dropIfExists('post_statistic');
     }
 }

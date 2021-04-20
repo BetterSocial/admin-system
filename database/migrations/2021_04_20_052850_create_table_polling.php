@@ -15,6 +15,7 @@ class CreateTablePolling extends Migration
     {
         Schema::create('polling', function (Blueprint $table) {
             $table->uuid('polling_id')->primary();
+            $table->uuid('post_id');
             $table->longText('question')->nullable(false);
             $table->string('user_id',50)->nullable(false);
             $table->boolean('flg_multiple')->default('N');

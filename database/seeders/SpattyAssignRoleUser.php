@@ -18,7 +18,6 @@ class SpattyAssignRoleUser extends Seeder
         $user = User::where('email','viewer@bettersocial.org')->first();
         $user->assignRole('viewer');
 
-
         $user = User::where('email','bastian@bettersocial.org')->first();
         $user->assignRole('editor');
         $user = User::where('email','aliirawan@bettersocial.org')->first();
