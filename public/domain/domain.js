@@ -24,7 +24,7 @@ $(document).ready(function () {
         {
             "data" : 'action',
             render : function(data, type, row) {
-              return " <a href='/edit-domain?domain_page_id="+row.domain_page_id +"'> <button type='button' class='btn btn-primary'>Add Logo</button> </a>"
+              return " <a href='/domain/form-logo?domain_page_id="+row.domain_page_id +"'> <button type='button' class='btn btn-primary'>Add Logo</button> </a>"
   
             }    
         },

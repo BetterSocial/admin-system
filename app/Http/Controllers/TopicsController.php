@@ -8,6 +8,7 @@ use App\Models\Topics;
 use DB;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class TopicsController extends Controller
 {
@@ -19,8 +20,7 @@ class TopicsController extends Controller
 
     public function getData(Request $req)
     {
-        \Log::debug($req->all());
-  
+
         $columns = array(
             // datatable column index  => database column name
                 0 => 'topic_id',
@@ -95,26 +95,35 @@ class TopicsController extends Controller
      
      public function showTopics(Request $req){
         try {
-		 	
-            $data = Topics::find($req->topic_id);
-            if($data !=null){
-                if($data->flg_show == 'Y'){
-                    $data->flg_show = 'N';
-                }
-                else{
-                    $data->flg_show = 'Y';
-                    
-                }
-                $data->save();
+            $user = Auth::user();
+            $roles = $user->roles->pluck('name')->first();
+            if($roles == 'viewer'){
                 return response()->json([
-                    'success'=> true,
+                    'success'=> false,
+                    'message'=> "You not have an access"
                 ]);
             }
             else{
-                return response()->json([
-                    'success'=> false,
-                    'message'=> "Data Topic Not Found"
-                ]);
+                $data = Topics::find($req->topic_id);
+                if($data !=null){
+                    if($data->flg_show == 'Y'){
+                        $data->flg_show = 'N';
+                    }
+                    else{
+                        $data->flg_show = 'Y';
+                        
+                    }
+                    $data->save();
+                    return response()->json([
+                        'success'=> true,
+                    ]);
+                }
+                else{
+                    return response()->json([
+                        'success'=> false,
+                        'message'=> "Data Topic Not Found"
+                    ]);
+                }
             }
             
         } catch (Exception $e) {

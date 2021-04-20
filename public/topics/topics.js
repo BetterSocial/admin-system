@@ -61,7 +61,7 @@ $(document).ready(function () {
           "data" : "flg_show",
 					"orderable" : false,
 			    	render : function(data, type, row) {
-             
+              
               if(row.flg_show =='N'){
                 return "<input type='checkbox' class='new-control-input' style='zoom:1.5;' onChange='showTopic("+row.topic_id+")'>"
               }
@@ -103,7 +103,7 @@ function showTopic(topicId){
               datatble.ajax.reload(null,false);
               
           }else{
-              
+            datatble.ajax.reload(null,false);
               return Swal.fire({
                   icon: 'error',
                   title: 'Oops...',
@@ -112,6 +112,7 @@ function showTopic(topicId){
       },
       error: function(data){
         console.log(data);
+        datatble.ajax.reload(null,false);
           return Swal.fire({
               icon: 'error',
               title: 'Oops...',

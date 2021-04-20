@@ -31,7 +31,7 @@ class LocationsController extends Controller
         );
         $location = "SELECT location_id,zip,neighborhood,city,state,country,location_level,status,slug_name,created_at,location_level as location_icon,flg_show FROM location WHERE true";
 
-        Log::debug($req->all());
+//        Log::debug($req->all());
         if($req->neighborhood !=null){
             $location .= " AND neighborhood ILIKE '%$req->neighborhood%'";
         }
@@ -52,6 +52,7 @@ class LocationsController extends Controller
         $location .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
 
         $dataLimit = DB::SELECT($location);
+        Log::debug($dataLimit);
         return response()->json([
             'draw'            => $req->draw,
             'recordsTotal'    => $total,
@@ -117,26 +118,35 @@ class LocationsController extends Controller
 
     public function showLocation(Request $req){
         try {
-		 	
-            $data = Locations::find($req->location_id);
-            if($data !=null){
-                if($data->flg_show == 'Y'){
-                    $data->flg_show = 'N';
-                }
-                else{
-                    $data->flg_show = 'Y';
-                    
-                }
-                $data->save();
+            $user = Auth::user();
+            $roles = $user->roles->pluck('name')->first();
+            if($roles == 'viewer'){
                 return response()->json([
-                    'success'=> true,
+                    'success'=> false,
+                    'message'=> "You not have an access"
                 ]);
             }
             else{
-                return response()->json([
-                    'success'=> false,
-                    'message'=> "Data Location Not Found"
-                ]);
+                $data = Locations::find($req->location_id);
+                if($data !=null){
+                    if($data->flg_show == 'Y'){
+                        $data->flg_show = 'N';
+                    }
+                    else{
+                        $data->flg_show = 'Y';
+                        
+                    }
+                    $data->save();
+                    return response()->json([
+                        'success'=> true,
+                    ]);
+                }
+                else{
+                    return response()->json([
+                        'success'=> false,
+                        'message'=> "Data Location Not Found"
+                    ]);
+                }
             }
             
         } catch (\Exception $e) {

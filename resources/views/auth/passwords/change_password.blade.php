@@ -14,12 +14,12 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="old_password" class="col-md-4 col-form-label text-md-right">Old Password</label>
+                            <label for="current_password" class="col-md-4 col-form-label text-md-right">Current Password</label>
 
                             <div class="col-md-6">
-                                <input id="old_password" type="password" class="form-control @error('old_password') is-invalid @enderror" name="old_password" value="{{ $old_password ?? old('old_password') }}" required autocomplete="old_password" autofocus>
+                                <input id="current_password" type="password" class="form-control @error('current_password') is-invalid @enderror" name="current_password" value="{{ $current_password ?? old('current_password') }}" required autocomplete="current_password" autofocus>
 
-                                @error('old_password')
+                                @error('current_password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
