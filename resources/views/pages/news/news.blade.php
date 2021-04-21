@@ -41,18 +41,6 @@
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>news_link_id</th>
-                                            <th>Action</th>
-                                            <th>Domain Page</th>
-                                            <th>Site Name</th>
-                                            <th>Title</th>
-                                            <th>Author</th>
-                                            <th>Keyword</th>
-                                            <th>Created At</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>

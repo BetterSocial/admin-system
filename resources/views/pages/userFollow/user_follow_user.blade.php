@@ -36,14 +36,6 @@
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th>User Id</th>
-                                            <th>Username</th>
-                                            <th>Real name</th>
-                                            <th>Country Code</th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>
