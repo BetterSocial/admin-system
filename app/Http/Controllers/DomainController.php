@@ -17,12 +17,12 @@ class DomainController extends Controller
   
         $columns = array(
             // datatable column index  => database column name
-                0 => 'domain_page_id',
-                1 => 'domain_name',
-                2 => 'logo',
-                3 => 'short_description',
-                4 => 'created_at',
-                5 => 'updated_at'
+                1 => 'domain_page_id',
+                2 => 'domain_name',
+                3 => 'logo',
+                4 => 'short_description',
+                5 => 'created_at',
+                6 => 'updated_at'
             );
         $topic = "SELECT domain_page_id,domain_name,logo,short_description,created_at,'updated_at' FROM domain_page WHERE true";
         if($req->domainName !=null){
