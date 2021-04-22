@@ -46,6 +46,14 @@
                         </a>
                     </li>
 
+                    <li class="menu {{ ($category_name === 'polling') ? 'active' : '' }}">
+                        <a href="/polling/index" data-active="{{ ($category_name === 'polling') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'polling') ? 'true' : 'false' }}" class="dropdown-toggle">
+                            <div class="">
+                                <span>Polling</span>
+                            </div>
+                        </a>
+                    </li>
+
                     <li class="menu {{ ($category_name === 'topics') ? 'active' : '' }}">
                         <a href="/topics/index" data-active="{{ ($category_name === 'topics') ? 'true' : 'false' }}" aria-expanded="{{ ($category_name === 'topics') ? 'true' : 'false' }}" class="dropdown-toggle">
                             <div class="">
