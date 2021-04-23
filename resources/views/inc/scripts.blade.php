@@ -1158,6 +1158,16 @@
         <script src="{{asset('news/news.js')}}"></script>
     @break
 
+    @case('polling-link')
+        <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
+        <script src="{{asset('news/news.js')}}"></script>
+    @break
+
+    @case('polling-list')
+        <script src="{{asset('plugins/table/datatable/datatables.js')}}"></script>
+        <script src="{{asset('polling/polling.js')}}"></script>
+    @break
+
     @default
     <script>console.log('No custom script available.')</script>
 @endswitch
