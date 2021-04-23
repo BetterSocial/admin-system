@@ -28,10 +28,10 @@ class UsersAppController extends Controller
             );
         $user = "SELECT user_id,username,country_code,created_at,status FROM users WHERE true";
         if($req->username !=null){
-            $user .= " AND username ILIKE '%$req->username%'";
+            $user .= " AND username ='".$req->username."'";
         }     
         if($req->countryCode !=null){
-            $user .= " AND country_code ILIKE '%$req->countryCode%'";
+            $user .= " AND country_code ='".$req->countryCode."'";
         }        
         
         

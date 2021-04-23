@@ -172,6 +172,24 @@ Route::group(['middleware' => 'auth'] , function() {
 
     Route::POST('/news/data', 'NewsController@getData');
 
+
+    //Polling
+    Route::get('/polling/index', function() {
+        // $category_name = '';
+        $data = [
+            'category_name' => 'polling',
+            'page_name' => 'polling-list',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+
+        ];
+        // $pageName = 'widgets';
+        return view('pages.polling.polling')->with($data);
+    });
+
+    Route::POST('/polling/data', 'PollingController@getData');
+    Route::GET('/polling/detail', 'PollingController@pollingDetail');
+
 });
 
 Auth::routes();
