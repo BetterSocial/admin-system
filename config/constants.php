@@ -59,7 +59,7 @@ return [
     'weight_downvote' => env('W_DOWN',-1.2),
     'weight_no_vote' => env('W_N',-0.05),
     'duration_minimum_post' => env('DUR_MIN',2500),
-    'duration_marginal_per_word' => env('DUR_MIN',400),
+    'duration_marginal_per_word' => env('DUR_MARG',400),
 
     //Previous interactions with this post
     'multiplier_downvoted_previous_post' => env('PREV_D',0.05),

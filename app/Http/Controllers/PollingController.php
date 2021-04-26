@@ -50,6 +50,7 @@ class PollingController extends Controller
 
     }
 
+
     public function pollingDetail(Request $req){
 
         $polling = DB::table('polling')
