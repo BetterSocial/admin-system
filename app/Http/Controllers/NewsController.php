@@ -81,7 +81,6 @@ class NewsController extends Controller
             }
         }
         // end foreach
-        \Log::debug($res);
         $newsLink = new NewsLink();
         $newsLink->domain_page_id =  $findDomain->domain_page_id;
         $newsLink->site_name = $res['site_name'];

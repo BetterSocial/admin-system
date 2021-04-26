@@ -85,7 +85,6 @@ class LocationsController extends Controller
                 ['neighborhood','=',$neighborhood],
                 ['zip','=',$zip]])->count();
 //                ['location_level','=',$location_level]]
-        \Log::debug($check );
 
         //TODO rappiin mesage
         if($check > 0){
