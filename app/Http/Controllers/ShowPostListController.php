@@ -35,7 +35,7 @@ class ShowPostListController extends Controller
         Log::debug($req);
         Log::debug("MASHOQ");
 
-        $client = new Client(config('setting.get_stream_key'), config('setting.get_stream_secret'));
+        $client = new Client(config('constant.get_stream_key'), config('constant.get_stream_secret'));
 
         $feed = $client->feed('main_feed', $req->user_id);
 
