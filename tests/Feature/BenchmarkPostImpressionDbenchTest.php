@@ -22,7 +22,7 @@ class BenchmarkPostImpressionDbenchTest extends TestCase
         $words = 30;
         $controller = new FormulaController();
         $response = $controller->BenchmarkPostImpression($dur_min,$dur_marg,$words);
-    
+
         $this->assertEquals(14500, $response);
     }
 

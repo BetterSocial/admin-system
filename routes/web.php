@@ -242,4 +242,5 @@ Route::get('/reset-password/{token}', function ($token) {
 })->name('password.reset');
 
 Route::post('/reset-password', 'ResetPasswordController@resetPassword')->name('reset.password.update');
+
 Route::post('/impression1','FormulaController@BenchmarkPostImpression1');
