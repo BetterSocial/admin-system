@@ -103,10 +103,33 @@ class FormulaController extends Controller
 //=(((1-(#BP/#IMPR))+(z_nonBP^2/(2*#IMPR)))/(1+(z_nonBP^2)/#IMPR)) /  EV_nonBP"
 //    }
 
-//    public function MultiplicationFromQualityCriteriaScore($method, $parameters)
-//    {
-//
-//    }
+    public function FinalScorePost()
+    {
+        //TODO reyvin
+        //T_t = u^w_u  *  p1^w_p1  * p2^w_p2  * p3^w_p3  *  prev^w_prev"
+
+    }
+
+    public  function AveragePostScore()
+    {
+        //TODO reyvin
+        //(IFERROR ∑p3 (last 10 posts) + (10-MIN(10,Count(posts so far)) / 10)"
+    }
+
+    public function MultiplicationFromQualityCriteriaScore($method, $parameters)
+    {
+        //TODO reyvin
+    }
+
+    public function QualityFollowers()
+    {
+        //TODO reyvin
+    }
+
+
+
+
+
 
 
 
