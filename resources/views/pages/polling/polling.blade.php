@@ -13,9 +13,9 @@
                         <div class=col-lg-10>
                             <form class="form-inline" method="POST" id="search">
                                 <div class="form-group">
-                                    <input type="text" id="question"  class="form-control" placeholder="Content Search">
+                                    <input type="text" id="question"  class="form-control" placeholder="Question">
                                     &nbsp;&nbsp;&nbsp;
-                                    <input type="text" id="username"  class="form-control" placeholder="Content Search">
+                                    <input type="text" id="username"  class="form-control" placeholder="Username">
                                     &nbsp;&nbsp;&nbsp;
                                     <button type="submit" class="btn btn-primary">Search</button>
                                     &nbsp;&nbsp;&nbsp;
