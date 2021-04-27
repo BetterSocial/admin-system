@@ -10,6 +10,7 @@ use App\Models\Locations;
 use DB;
 use Illuminate\Support\Facades\Log;
 use phpDocumentor\Reflection\Location;
+use Illuminate\Support\Facades\Auth;
 
 class LocationsController extends Controller
 {
