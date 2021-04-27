@@ -109,7 +109,8 @@ class FormulaController extends Controller
     public function FinalScorePost()
     {
         //TODO reyvin
-        //T_t = u^w_u  *  p1^w_p1  * p2^w_p2  * p3^w_p3  *  prev^w_prev"
+        // $formula = 
+        // T_t = u^w_u  *  p1^w_p1  * p2^w_p2  * p3^w_p3  *  prev^w_prev
 
     }
 
