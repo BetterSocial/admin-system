@@ -96,12 +96,15 @@ class FormulaController extends Controller
         return (($s_updown+($z_updown^2 / (2*$impr))) / (1+($z_updown^2) / $impr))/$ev_updown;
     }
 
-//    public function NonBPScoreWilsonScore($impr, )
-//    {
-//        "nonBP Score's ""Wilson"" score
-//
-//=(((1-(#BP/#IMPR))+(z_nonBP^2/(2*#IMPR)))/(1+(z_nonBP^2)/#IMPR)) /  EV_nonBP"
-//    }
+    public function NonBPScoreWilsonScore($impr, $bp, $z_nonBP,	$EV_nonBP)
+    {
+        return (((1-($bp/$impr)) + ($z_nonBP^2/(2*$impr))) / (1+($z_nonBP^2)/$impr)) /  $EV_nonBP;
+    }
+
+    public function DurationScoreWilsonScore($impr, $duration, $z_value_duration_dist, $duration_distribution)
+    {
+        return (((($duration/$impr) + ($z_value_duration_dist^2/(2*$impr)))/(1+($z_value_duration_dist^2)/$impr))/$duration_distribution);
+    }
 
     public function FinalScorePost()
     {
