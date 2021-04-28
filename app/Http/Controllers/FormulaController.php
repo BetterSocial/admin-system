@@ -85,7 +85,12 @@ class FormulaController extends Controller
         }
     }
 
-    public function UpdownScore($impr, $upvote, $downvote, $w_down, $w_n)
+    public function BlockedPerPostImpression($BlockpointsPerImpression)
+    {
+        return 2 / (1 + 200^($BlockpointsPerImpression^0.4-1));
+    }
+
+    public function UpDownScore($impr, $upvote, $downvote, $w_down, $w_n)
     {
         return  ((-$impr * $w_down) + $upvote + ($downvote*$w_down) +
                 $w_n * ($impr - $upvote - $downvote)) / ($impr * (1-$w_down));
@@ -106,18 +111,10 @@ class FormulaController extends Controller
         return (((($duration/$impr) + ($z_value_duration_dist^2/(2*$impr)))/(1+($z_value_duration_dist^2)/$impr))/$duration_distribution);
     }
 
-    public function FinalScorePost()
+    public  function AveragePostScore($postPerformanceScore, $count_posts)
     {
-        //TODO reyvin
-        // $formula = 
-        // T_t = u^w_u  *  p1^w_p1  * p2^w_p2  * p3^w_p3  *  prev^w_prev
-
-    }
-
-    public  function AveragePostScore()
-    {
-        //TODO reyvin
-        //(IFERROR ∑p3 (last 10 posts) + (10-MIN(10,Count(posts so far)) / 10)"
+        //TODO gimana IFErRor nya
+        return ( $postPerformanceScore + (10 - min(10,$count_posts)) ) / 10;
     }
 
     public function MultiplicationFromQualityCriteriaScore($method, $parameters)
@@ -125,9 +122,25 @@ class FormulaController extends Controller
         //TODO reyvin
     }
 
-    public function QualityFollowers()
+    public function FollowersQuality($user_score_without_followers_score, $followers_count)
     {
-        //TODO reyvin
+        //TODO pastikan input nya
+        return $user_score_without_followers_score / $followers_count;
+    }
+
+    public function DomainScore()
+    {
+        return 1;
+    }
+
+    public function FollowerScore($followers_count)
+    {
+        return ($followers_count / 150)^(0.05);
+    }
+
+    public function FinalScorePost($user_score, $weight_user_score, $p1, $weight_p1, $p2, $weight_p2, $p3, $weight_p3, $prev, $weight_prev)
+    {
+        return  $user_score^$weight_user_score  *  $p1^$weight_p1  * $p2^$weight_p2  * $p3^$weight_p3  *  $prev^$weight_prev;
     }
 
 
