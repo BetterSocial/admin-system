@@ -65,7 +65,6 @@ class TopicsController extends Controller
             $name = ucfirst($req->name);
             $category = ucfirst($req->category);
             $check = DB::table('topics')->where([['name','=',$name],['categories','=',$category]])->count();
-            \Log::debug($check);
 
             if($check > 0){
                 return response()->json([

@@ -85,10 +85,10 @@ $(document).ready(function () {
                 "orderable" : false,
                 render : function(data, type, row) {
                     if(row.flg_show =='N'){
-                      return "<input type='checkbox' class='new-control-input' style='zoom:1.5;' onChange='showTopic("+row.location_id+")'>"
+                      return "<input type='checkbox' class='new-control-input' style='zoom:1.5;' onChange='showLocation("+row.location_id+")'>"
                     }
                     else{
-                      return "<input type='checkbox' checked class='new-control-input' style='zoom:1.5;' onChange='showTopic("+row.location_id+")'>"
+                      return "<input type='checkbox' checked class='new-control-input' style='zoom:1.5;' onChange='showLocation("+row.location_id+")'>"
                     }
                 }
             }
@@ -102,7 +102,8 @@ $(document).ready(function () {
 
 });
 
-function showTopic(locationId){
+function showLocation(locationId){
+    console.log("MASUK YUK");
     var formData = new FormData();
     formData.append('location_id', locationId);
    
@@ -121,7 +122,7 @@ function showTopic(locationId){
                 datatableLocations.ajax.reload(null,false);
                 
             }else{
-                datatble.ajax.reload(null,false);
+                datatableLocations.ajax.reload(null,false);
                 return Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
@@ -130,7 +131,7 @@ function showTopic(locationId){
         },
         error: function(data){
           console.log(data);
-          datatble.ajax.reload(null,false);
+          datatableLocations.ajax.reload(null,false);
             return Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

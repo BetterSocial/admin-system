@@ -15,9 +15,6 @@ class ResetPasswordController extends Controller
     {
 
         try {
-
-            Log::debug('masuk reset');
-
             $nama = "Reset Password Better Account";
             $email = $request->email;
             $token = $request->_token;
@@ -26,21 +23,20 @@ class ResetPasswordController extends Controller
             $dataUser = User::where('email',$email)->first();
 
             if( $dataUser != null ) {
-
-                Log::debug('masukmail');
                 $send = Mail::to($email)->send(new ResetPasswordMail($token));
                 return Redirect::back();
 
             } else {
-                Log::debug('masuksalahh');
                 return Redirect::back()
 //                    ->with('status','Cannot find email')
                     ->withErrors(['email' => "We can't find a user with that email address."]);
             }
 
-
         }catch (\Exception $e) {
-            Log::debug($e);
+            return response()->json([
+                'success'=> false,
+                'message'=>$e->getMessage()
+            ]);
         };
 
     }
@@ -48,8 +44,6 @@ class ResetPasswordController extends Controller
     public function resetPassword(Request $request) {
 
         try {
-
-            Log::debug($request);
 
             $rules = [
                 'email'             =>  'required|email|unique:users',
@@ -95,8 +89,10 @@ class ResetPasswordController extends Controller
 
 
         }catch (\Exception $e) {
-            Log::debug($request);
-
+            return response()->json([
+                'success'=> false,
+                'message'=>$e->getMessage()
+            ]);
         }
 
 

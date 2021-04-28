@@ -10,6 +10,7 @@ use App\Models\Locations;
 use DB;
 use Illuminate\Support\Facades\Log;
 use phpDocumentor\Reflection\Location;
+use Illuminate\Support\Facades\Auth;
 
 class LocationsController extends Controller
 {
@@ -85,7 +86,6 @@ class LocationsController extends Controller
                 ['neighborhood','=',$neighborhood],
                 ['zip','=',$zip]])->count();
 //                ['location_level','=',$location_level]]
-        \Log::debug($check );
 
         //TODO rappiin mesage
         if($check > 0){

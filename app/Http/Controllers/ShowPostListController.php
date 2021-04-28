@@ -15,11 +15,6 @@ class ShowPostListController extends Controller
 
         $user = UserApps::where('user_id',$req->user_id)->first();
 
-//        Log::debug($req);
-//        Log::debug("MASHOQ");
-//        Log::debug($req->user_id);
-//        Log::debug($user);
-
         return view('pages.userPost.show_post_list', [
             'category_name' => 'user_post',
             'page_name' => 'show_post_list',
@@ -32,10 +27,7 @@ class ShowPostListController extends Controller
 
     public function getData(Request $req) {
 
-        Log::debug($req);
-        Log::debug("MASHOQ");
-
-        $client = new Client(config('setting.get_stream_key'), config('setting.get_stream_secret'));
+        $client = new Client(config('constant.get_stream_key'), config('constant.get_stream_secret'));
 
         $feed = $client->feed('main_feed', $req->user_id);
 
