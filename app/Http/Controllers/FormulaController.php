@@ -25,7 +25,7 @@ class FormulaController extends Controller
     
     }
 
-    public function PostCountScore($max_amount_post_weekly, $total_posts_last_week)
+    public function PostCountScore($total_posts_last_week, $max_amount_post_weekly)
     {
 
         if($total_posts_last_week == 0)
@@ -48,9 +48,9 @@ class FormulaController extends Controller
         if($impr < 5) {
             return $p_pref;
         } elseif ($impr < 50) {
-            return $p_pref * ( $ws_nonBP^$ww_nonBP ) * ( $ws_D^$ww_D );
+            return $p_pref * ( $ws_nonBP**$ww_nonBP ) * ( $ws_D**$ww_D );
         } else {
-            return $p_pref * ( $ws_nonBP^$ww_nonBP ) * ( $ws_D^$ww_D ) * ($ws_updown^$ww_updown);
+            return $p_pref * ( $ws_nonBP**$ww_nonBP ) * ( $ws_D**$ww_D ) * ($ws_updown**$ww_updown);
         }
 
     }
@@ -58,7 +58,7 @@ class FormulaController extends Controller
     public function WeightPostLongComments($LongC, $impr, $w_longC)
     {
         // weight rewarding if a post has long comments (>80char)
-        return  (1+($LongC / $impr))^$w_longC;
+        return  (1+($LongC / $impr))**$w_longC;
     }
 
     public function PostPerformanceScore($p_pref, $p_longC)
@@ -66,14 +66,14 @@ class FormulaController extends Controller
         return $p_pref * $p_longC;
     }
 
-    public function UserScoreWithoutFollower($f,$w_f, $b,$w_b, $q, $w_q, $a, $w_a)
+    public function UserScoreWithoutFollower($f,$w_f, $b,$w_b, $r, $w_r, $q, $w_q, $a, $w_a)
     {
-        return ($f^$w_f) * ($b^$w_b) * ($q^$w_q) * ($a^$w_a);
+        return ($f**$w_f) * ($b**$w_b) * ($r**$w_r) * ($q**$w_q) * ($a**$w_a);
     }
 
     public function UserScore($u1, $y, $w_y)
     {
-        return $u1 * $y^$w_y;
+        return $u1 * $y**$w_y;
     }
 
     public function BlockpointsPerImpression($total_blocks, $impr, $bpImpr_global){
@@ -87,7 +87,7 @@ class FormulaController extends Controller
 
     public function BlockedPerPostImpression($BlockpointsPerImpression)
     {
-        return 2 / (1 + 200^($BlockpointsPerImpression^0.4-1));
+        return 2 / (1 + 200**($BlockpointsPerImpression**0.4-1));
     }
 
     public function UpDownScore($impr, $upvote, $downvote, $w_down, $w_n)
@@ -98,17 +98,17 @@ class FormulaController extends Controller
 
     public function UpDownScoreWilsonScore($impr, $s_updown, $z_updown, $ev_updown)
     {
-        return (($s_updown+($z_updown^2 / (2*$impr))) / (1+($z_updown^2) / $impr))/$ev_updown;
+        return (($s_updown+($z_updown**2 / (2*$impr))) / (1+($z_updown**2) / $impr))/$ev_updown;
     }
 
     public function NonBPScoreWilsonScore($impr, $bp, $z_nonBP,	$EV_nonBP)
     {
-        return (((1-($bp/$impr)) + ($z_nonBP^2/(2*$impr))) / (1+($z_nonBP^2)/$impr)) /  $EV_nonBP;
+        return (((1-($bp/$impr)) + ($z_nonBP**2/(2*$impr))) / (1+($z_nonBP**2)/$impr)) /  $EV_nonBP;
     }
 
     public function DurationScoreWilsonScore($impr, $duration, $z_value_duration_dist, $duration_distribution)
     {
-        return (((($duration/$impr) + ($z_value_duration_dist^2/(2*$impr)))/(1+($z_value_duration_dist^2)/$impr))/$duration_distribution);
+        return (((($duration/$impr) + ($z_value_duration_dist**2/(2*$impr)))/(1+($z_value_duration_dist**2)/$impr))/$duration_distribution);
     }
 
     public  function AveragePostScore($postPerformanceScore, $count_posts)
@@ -135,12 +135,12 @@ class FormulaController extends Controller
 
     public function FollowerScore($followers_count)
     {
-        return ($followers_count / 150)^(0.05);
+        return ($followers_count / 150)**(0.05);
     }
 
     public function FinalScorePost($user_score, $weight_user_score, $p1, $weight_p1, $p2, $weight_p2, $p3, $weight_p3, $prev, $weight_prev)
     {
-        return  $user_score^$weight_user_score  *  $p1^$weight_p1  * $p2^$weight_p2  * $p3^$weight_p3  *  $prev^$weight_prev;
+        return  $user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev;
     }
 
 
