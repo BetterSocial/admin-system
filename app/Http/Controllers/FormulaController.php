@@ -117,9 +117,25 @@ class FormulaController extends Controller
         return ( $postPerformanceScore + (10 - min(10,$count_posts)) ) / 10;
     }
 
-    public function MultiplicationFromQualityCriteriaScore($method, $parameters)
+    public function MultiplicationFromQualityCriteriaScore($w_edu,$edu_email,$w_email,$w_twitter, $follower_twitter,$email,$w_useratt)
     {
-        //TODO reyvin
+        if($edu_email){
+            $verified_edu = $w_edu**1;
+        }
+        else{
+            $verified_edu = $w_edu**0;
+        }
+        $veridied_email = $w_email**(min(3,$email)**0.25);
+        if($follower_twitter > 200){
+            $twitter = $w_twitter**1;
+        }
+        else{
+            $twitter = $w_twitter**0;
+        }
+
+        $result = $verified_edu *$veridied_email * $twitter *$w_useratt;
+        \Log::debug($result);
+        return $result;
     }
 
     public function FollowersQuality($user_score_without_followers_score, $followers_count)
