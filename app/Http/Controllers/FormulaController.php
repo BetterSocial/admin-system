@@ -111,7 +111,7 @@ class FormulaController extends Controller
         return (((($duration/$impr) + ($z_value_duration_dist**2/(2*$impr)))/(1+($z_value_duration_dist**2)/$impr))/$duration_distribution);
     }
 
-    public  function AveragePostScore($postPerformanceScore, $count_posts)
+    public function AveragePostScore($postPerformanceScore, $count_posts)
     {
         //TODO gimana IFErRor nya
         return ( $postPerformanceScore + (10 - min(10,$count_posts)) ) / 10;
@@ -157,6 +157,20 @@ class FormulaController extends Controller
     public function FinalScorePost($user_score, $weight_user_score, $p1, $weight_p1, $p2, $weight_p2, $p3, $weight_p3, $prev, $weight_prev)
     {
         return  $user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev;
+    }
+
+    public function PreviousInteractionScore($prev_interact, $prev_d, $prev_uc, $prev_pre){
+        //p_prev
+
+        if($prev_interact == 'seen'){
+            return $prev_pre;
+        } elseif ($prev_interact == 'downvote'){
+            return $prev_d;
+        } elseif ($prev_interact == 'upvote' || $prev_interact == 'comment') {
+            return $prev_uc;
+        } else
+            return 1;   //none interaction
+
     }
 
 

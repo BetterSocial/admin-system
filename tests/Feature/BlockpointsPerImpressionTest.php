@@ -35,6 +35,12 @@ class BlockpointsPerImpressionTest extends TestCase
         $this->assertEquals(3.75000000023437, $bpp_impr_un);
     }
 
+    public function test_7(){
+        $formula = new FormulaController();
+        $bpp_impr_un = $formula->BlockpointsPerImpression(10, 1000, config('constants.block_per_post_impression'));
+        $this->assertEquals(1.87500000011719, $bpp_impr_un);
+    }
+
     public function test_8(){
         $formula = new FormulaController();
         $bpp_impr_un = $formula->BlockpointsPerImpression(2500, 10000, config('constants.block_per_post_impression'));

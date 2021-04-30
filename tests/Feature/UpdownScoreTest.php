@@ -38,16 +38,16 @@ class UpdownScoreTest extends TestCase
         $this->assertEquals(1, $upDownScore);
     }
 
+    public function test_9() {
+        $formula = new FormulaController();
+        $upDownScore = $formula->UpdownScore(750, 500, 10,
+            config('constants.weight_downvote'),config('constants.weight_no_vote'));
+        $this->assertEquals(0.8339393939, $upDownScore);
+    }
+
     public function test_11() {
         $formula = new FormulaController();
         $upDownScore = $formula->UpdownScore(2, 1, 1,
-            config('constants.weight_downvote'),config('constants.weight_no_vote'));
-        $this->assertEquals(0.5, $upDownScore);
-    }
-
-    public function test_16() {
-        $formula = new FormulaController();
-        $upDownScore = $formula->UpdownScore(100, 50, 50,
             config('constants.weight_downvote'),config('constants.weight_no_vote'));
         $this->assertEquals(0.5, $upDownScore);
     }
@@ -59,13 +59,12 @@ class UpdownScoreTest extends TestCase
         $this->assertEquals(0.5227272727, $upDownScore);
     }
 
-    public function test_9() {
+    public function test_16() {
         $formula = new FormulaController();
-        $upDownScore = $formula->UpdownScore(750, 500, 10,
+        $upDownScore = $formula->UpdownScore(100, 50, 50,
             config('constants.weight_downvote'),config('constants.weight_no_vote'));
-        $this->assertEquals(0.8339393939, $upDownScore);
+        $this->assertEquals(0.5, $upDownScore);
     }
-
 
 
 }
