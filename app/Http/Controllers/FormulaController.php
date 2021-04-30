@@ -173,6 +173,10 @@ class FormulaController extends Controller
 
     }
 
+    public function RecencyScore(){}
+
+    public function AgeOfPost(){}
+
 
 
 
