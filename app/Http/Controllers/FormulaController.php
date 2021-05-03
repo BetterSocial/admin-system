@@ -94,7 +94,10 @@ class FormulaController extends Controller
 
     public function UpDownScoreWilsonScore($impr, $s_updown, $z_updown, $ev_updown)
     {
-        return (($s_updown+($z_updown**2 / (2*$impr))) / (1+($z_updown**2) / $impr))/$ev_updown;
+        $ev_updown_percentage =  $ev_updown /100;
+        $result = number_format((($s_updown+($z_updown**2 / (2*$impr))) / (1+($z_updown**2) / $impr))/$ev_updown_percentage,4, '.', '');
+        \Log::debug($result);
+        return $result;
     }
 
     public function NonBPScoreWilsonScore($impr, $bp, $z_nonBP,	$EV_nonBP)
@@ -152,8 +155,7 @@ class FormulaController extends Controller
 
     public function FinalScorePost($user_score, $weight_user_score, $p1, $weight_p1, $p2, $weight_p2, $p3, $weight_p3, $prev, $weight_prev)
     {   
-        $result = number_format((double)$user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev, 3, '.', '');
-        \Log::debug($result);
+        $result = number_format($user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev, 3, '.', '');
         return  $result;
     }
 
@@ -170,7 +172,14 @@ class FormulaController extends Controller
             return 1;   //none interaction
 
     }
+    public function ApplyMultipliesToTotalScore($w_topic,$topic_followed,$w_follow,$w_2degree,$w_link_domain,$user_follow_author,$follow_author_followers,$link_post){
+        $constant = 0.5;
+        $followed_topic = $w_topic^($topic_followed^$constant);
 
+        if($user_follow_author){
+           $calculate =  $followed_topic * $w_follow;
+        }
+    }
     public function RecencyScore(){}
 
     public function AgeOfPost(){}
