@@ -134,7 +134,6 @@ class FormulaController extends Controller
         }
 
         $result = $verified_edu *$veridied_email * $twitter *$w_useratt;
-        \Log::debug($result);
         return $result;
     }
 
@@ -155,8 +154,10 @@ class FormulaController extends Controller
     }
 
     public function FinalScorePost($user_score, $weight_user_score, $p1, $weight_p1, $p2, $weight_p2, $p3, $weight_p3, $prev, $weight_prev)
-    {
-        return  $user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev;
+    {   
+        $result = number_format((double)$user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev, 3, '.', '');
+        \Log::debug($result);
+        return  $result;
     }
 
 
