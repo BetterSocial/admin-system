@@ -179,6 +179,14 @@ class FormulaController extends Controller
         if($user_follow_author){
            $calculate =  $followed_topic * $w_follow;
         }
+        else if($follow_author_followers == 1){
+           $calculate =   $followed_topic * $w_follow;
+        }
+        else{
+            $calculate =   $followed_topic * 1;
+        }
+        $result =  $calculate * $w_link_domain**$link_post;
+        return $result;
     }
     public function RecencyScore(){}
 

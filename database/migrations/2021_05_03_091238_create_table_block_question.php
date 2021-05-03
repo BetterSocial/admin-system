@@ -20,6 +20,7 @@ class CreateTableBlockQuestion extends Migration
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
         });
+        DB::statement('ALTER TABLE block_question ALTER COLUMN block_question_id SET DEFAULT uuid_generate_v4 ()');
     }
 
     /**
