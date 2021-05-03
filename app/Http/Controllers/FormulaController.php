@@ -22,7 +22,6 @@ class FormulaController extends Controller
     {
         $value =$req->dur_min + $req->dur_marg * $req->words;
         return $value;
-    
     }
 
     public function PostCountScore($total_posts_last_week, $max_amount_post_weekly)
@@ -36,13 +35,11 @@ class FormulaController extends Controller
     }
 
     public function TotalPost() {
-
         // blm tau dapet dari mana dan proses apa
 
     }
 
     public function PostScore($impr, $ws_nonBP,	$ww_nonBP, $ws_D, $ww_D, $ws_updown, $ww_updown) {
-
         $p_pref = 1;
 
         if($impr < 5) {
@@ -52,7 +49,6 @@ class FormulaController extends Controller
         } else {
             return $p_pref * ( $ws_nonBP**$ww_nonBP ) * ( $ws_D**$ww_D ) * ($ws_updown**$ww_updown);
         }
-
     }
 
     public function WeightPostLongComments($LongC, $impr, $w_longC)
@@ -106,8 +102,9 @@ class FormulaController extends Controller
         return (((1-($bp/$impr)) + ($z_nonBP**2/(2*$impr))) / (1+($z_nonBP**2)/$impr)) /  $EV_nonBP;
     }
 
-    public function DurationScoreWilsonScore($impr, $duration, $z_value_duration_dist, $duration_distribution)
+    public function DurationScoreWilsonScore($impr, $duration, $z_value_duration_dist, $duration_distribution_percentage)
     {
+        $duration_distribution = $duration_distribution_percentage / 100;
         return (((($duration/$impr) + ($z_value_duration_dist**2/(2*$impr)))/(1+($z_value_duration_dist**2)/$impr))/$duration_distribution);
     }
 
