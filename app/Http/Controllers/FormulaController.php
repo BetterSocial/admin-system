@@ -54,7 +54,10 @@ class FormulaController extends Controller
     public function WeightPostLongComments($LongC, $impr, $w_longC)
     {
         // weight rewarding if a post has long comments (>80char)
-        return  (1+($LongC / $impr))**$w_longC;
+        if($impr == 0)
+            return 1;
+        else
+            return  (1+($LongC / $impr))**$w_longC;
     }
 
     public function PostPerformanceScore($p_pref, $p_longC)
@@ -113,8 +116,11 @@ class FormulaController extends Controller
 
     public function AveragePostScore($postPerformanceScore, $count_posts)
     {
-        //TODO gimana IFErRor nya
-        return ( $postPerformanceScore + (10 - min(10,$count_posts)) ) / 10;
+        //TODO recheck if nya
+        if($count_posts == 1)
+            return 1;
+        else
+            return ( $postPerformanceScore + (10 - min(10,$count_posts)) ) / 10;
     }
 
     public function MultiplicationFromQualityCriteriaScore($w_edu,$edu_email,$w_email,$w_twitter, $follower_twitter,$email,$w_useratt)
@@ -187,6 +193,18 @@ class FormulaController extends Controller
         $result =  $calculate * $w_link_domain**$link_post;
         return number_format($result, 8, '.', '');
     }
+
+    public function PostCharacteristicsScore($rec, $w_rec, $att, $w_att, $link_post_bollean , $d, $w_d, $p, $w_p){
+
+        $result = 1;
+
+        $result *= $rec**$w_rec * $att**$w_att * $p**$w_p;
+        if ($link_post_bollean)
+            $result *= $d ** $w_d;
+
+        return $result;
+    }
+
     public function RecencyScore(){}
 
     public function AgeOfPost(){}
