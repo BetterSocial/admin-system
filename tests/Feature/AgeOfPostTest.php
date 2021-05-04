@@ -16,12 +16,31 @@ class AgeOfPostTest extends TestCase
      */
 
     /** @test **/
-    public function test_()
+    public function test_1()
     {
         $formula = new FormulaController();
-        $post_time = $formula->AgeOfPost(1,"04/28/2021 07:00:00", "04/28/2021 07:00:00");
-//        $this->assertEquals(14500, $post_time);
-
-
+        $post_time = $formula->AgeOfPost(1,"4/28/2021 7:00:00", "4/28/2021 9:00:00");
+        $this->assertEquals(1, $post_time);
     }
+
+    public function test_2(){
+        $formula = new FormulaController();
+        $post_time = $formula->AgeOfPost(1,"4/28/2021 7:00:00", "4/28/2021 12:00:00");
+        $this->assertEquals(1, $post_time);
+    }
+    public function test_3(){
+        $formula = new FormulaController();
+        $post_time = $formula->AgeOfPost(1,"4/28/2021 7:00:00", "4/29/2021 13:00:00");
+        $this->assertEquals(1, $post_time);
+    }
+
+    public function test_4(){
+        $formula = new FormulaController();
+        $post_time = $formula->AgeOfPost(1,"4/28/2021 7:00:00", "4/30/2021 7:00:00");
+        $this->assertEquals(1, $post_time);
+    }
+
+    // TODO test sampai 10 item
+
+
 }
