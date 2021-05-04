@@ -192,6 +192,16 @@ class FormulaController extends Controller
         return number_format($result, 8, '.', '');
     }
 
+    public function ScoreBasedPostCharacteristics($rec,$w_rec,$att,$w_att,$d,$w_d,$p,$w_p,$post_link){
+        $formula = $rec**$w_rec * $att**$w_att;
+        if($post_link){
+            $result = $formula * $d**$w_d;
+        }
+        else{
+            $result = $formula * 1 * $p**$w_p;
+        }
+        return $result;
+    }
 
     public function RecencyScore($age_of_post, $expiration_setting){
 
