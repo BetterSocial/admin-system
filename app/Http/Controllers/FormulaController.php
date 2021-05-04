@@ -96,7 +96,7 @@ class FormulaController extends Controller
     {
         $ev_updown_percentage =  $ev_updown /100;
         $result = number_format((($s_updown+($z_updown**2 / (2*$impr))) / (1+($z_updown**2) / $impr))/$ev_updown_percentage,8, '.', '');
-        \Log::debug($result);
+       
         return $result;
     }
 
