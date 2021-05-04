@@ -26,7 +26,6 @@ class FollowerScoreTest extends TestCase
     {
         $formula = new FormulaController();
         $follower_score = $formula->FollowerScore(1);
-        \Log::debug($follower_score);
         $this->assertEquals(0.7783867544, $follower_score);
     }
     public function test_3()

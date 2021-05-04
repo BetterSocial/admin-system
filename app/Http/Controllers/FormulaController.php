@@ -174,19 +174,18 @@ class FormulaController extends Controller
     }
     public function ApplyMultipliesToTotalScore($w_topic,$topic_followed,$w_follow,$w_2degree,$w_link_domain,$user_follow_author,$follow_author_followers,$link_post){
         $constant = 0.5;
-        $followed_topic = $w_topic^($topic_followed^$constant);
-
+        $followed_topic = $w_topic**($topic_followed**$constant);
         if($user_follow_author){
            $calculate =  $followed_topic * $w_follow;
         }
         else if($follow_author_followers == 1){
-           $calculate =   $followed_topic * $w_follow;
+           $calculate =   $followed_topic * $w_2degree;
         }
         else{
             $calculate =   $followed_topic * 1;
         }
         $result =  $calculate * $w_link_domain**$link_post;
-        return $result;
+        return number_format($result, 8, '.', '');
     }
     public function RecencyScore(){}
 
