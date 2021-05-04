@@ -95,7 +95,7 @@ class FormulaController extends Controller
     public function UpDownScoreWilsonScore($impr, $s_updown, $z_updown, $ev_updown)
     {
         $ev_updown_percentage =  $ev_updown /100;
-        $result = number_format((($s_updown+($z_updown**2 / (2*$impr))) / (1+($z_updown**2) / $impr))/$ev_updown_percentage,4, '.', '');
+        $result = number_format((($s_updown+($z_updown**2 / (2*$impr))) / (1+($z_updown**2) / $impr))/$ev_updown_percentage,8, '.', '');
         \Log::debug($result);
         return $result;
     }
@@ -155,7 +155,7 @@ class FormulaController extends Controller
 
     public function FinalScorePost($user_score, $weight_user_score, $p1, $weight_p1, $p2, $weight_p2, $p3, $weight_p3, $prev, $weight_prev)
     {   
-        $result = number_format($user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev, 3, '.', '');
+        $result = number_format($user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev, 8, '.', '');
         return  $result;
     }
 
@@ -187,6 +187,8 @@ class FormulaController extends Controller
         $result =  $calculate * $w_link_domain**$link_post;
         return number_format($result, 8, '.', '');
     }
+
+
     public function RecencyScore(){}
 
     public function AgeOfPost(){}

@@ -24,7 +24,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(0.8239, $final_score_post);
+        $this->assertEquals(0.82387404, $final_score_post);
     }
     public function test_2()
     {
@@ -34,7 +34,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(1.0070, $final_score_post);
+        $this->assertEquals(1.00695716, $final_score_post);
     }
     public function test_3()
     {
@@ -44,7 +44,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(0.8239, $final_score_post);
+        $this->assertEquals(0.82387404, $final_score_post);
     }
     
     public function test_4()
@@ -55,7 +55,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(1.0070, $final_score_post);
+        $this->assertEquals(1.00695716, $final_score_post);
     }
     public function test_5()
     {
@@ -65,7 +65,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(5.2516, $final_score_post);
+        $this->assertEquals(5.25159475, $final_score_post);
     }
     public function test_6()
     {
@@ -75,7 +75,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(13.7043, $final_score_post);
+        $this->assertEquals(13.70430999, $final_score_post);
     }
     public function test_7()
     {
@@ -85,7 +85,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(33.6688, $final_score_post);
+        $this->assertEquals(33.66881775, $final_score_post);
     }
     public function test_8()
     {
@@ -95,7 +95,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(43.2318, $final_score_post);
+        $this->assertEquals(43.23179705, $final_score_post);
     }
     public function test_9()
     {
@@ -105,7 +105,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(88.3924, $final_score_post);
+        $this->assertEquals(88.39238883, $final_score_post);
     }
     public function test_10()
     {
@@ -115,7 +115,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(179.8621, $final_score_post);
+        $this->assertEquals(179.86207978, $final_score_post);
     }
     public function test_11()
     {
@@ -125,7 +125,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(1.6912, $final_score_post);
+        $this->assertEquals(1.69119153, $final_score_post);
     }
     public function test_12()
     {
@@ -135,7 +135,7 @@ class UpDownScoreWilsonScoreTest extends TestCase
         $z_updown = config('constants.z_value_updown_score');
         $ev_updown = config("constants.expected_value_updown_score");
         $final_score_post = $formula->UpDownScoreWilsonScore($impr,$s_updown,$z_updown, $ev_updown);
-        $this->assertEquals(0.7744, $final_score_post);
+        $this->assertEquals(0.77436543, $final_score_post);
     }
 
 }
