@@ -12,10 +12,14 @@ return [
     'weight_post_domainpost2nd'=> env('W_DOMAINPOST2ND',1.3),
     //p2 PostScore stable factors
     'weight_recency_score' => env('W_REC',1),
+    'weight_attribute_jobs' => env('W_ATT',1),
+    'weight_domain_score' => env('W_D',1),
     'weight_post_count' => env('W_P',1),
     'recommended_count_post_weekly' => env('P_REC',7),
     'weight_anonymous_post' => env('W_ANON',0.8),
     'weight_post_has_topic' => env('W_HASTOPIC',1.05),
+    'weight_post_has_media' => env('W_HASMEDIA',0.9),
+    'weight_post_has_poll' => env('W_HASPOLL',1.8),
     'weight_post_has_link' => env('W_HASLINK',1.2),
     'weight_post_short' => env('W_SHORT',0.6),
     'weight_post_long' => env('W_LONG',1.2),
@@ -67,5 +71,5 @@ return [
     'weight_account_age' => env('W_A',1),
     'weight_follower_quality' => env('W_Y',1),
     'block_per_post_impression' => env('BPIMPR_GLOBAL',0.005333333333),
-    'weight_attribute_jobs' => env('W_ATT',1),
+
 ];

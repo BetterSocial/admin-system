@@ -100,6 +100,10 @@ class FormulaController extends Controller
         return $result;
     }
 
+    public function PostCharacteristicsScore(){
+
+    }
+
     public function NonBPScoreWilsonScore($impr, $bp, $z_nonBP,	$EV_nonBP)
     {
         return (((1-($bp/$impr)) + ($z_nonBP**2/(2*$impr))) / (1+($z_nonBP**2)/$impr)) /  $EV_nonBP;
@@ -189,9 +193,27 @@ class FormulaController extends Controller
     }
 
 
-    public function RecencyScore(){}
+    public function RecencyScore($age_of_post, $expiration_setting){
 
-    public function AgeOfPost(){}
+        if($expiration_setting == 1)
+            return 1 - 0.007 * $age_of_post;
+
+        elseif($expiration_setting == 7)
+            return 1.3 - 0.4 * $age_of_post**0.15;
+
+        elseif($expiration_setting == 30)
+            return 0.95 - 0.225 * $age_of_post**0.215;
+
+        elseif($expiration_setting == 'forever')
+            return  max(0.02, 0.95 - 0.225 * $age_of_post**0.215);
+
+    }
+
+    public function AgeOfPost(){
+
+
+
+    }
 
 
 
