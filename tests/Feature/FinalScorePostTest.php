@@ -31,8 +31,9 @@ class FinalScorePostTest extends TestCase
         $weight_prev = config('constants.weight_previous_interaction');
         $final_score_post = $formula->FinalScorePost($user_score_u,$weight_user_score,$p1,$weight_p1,
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
-        $this->assertEquals(626.02753805, $final_score_post);
+        $this->assertEquals(626.027538050851, $final_score_post);
     }
+
     public function test_2()
     {
         $formula = new FormulaController();
@@ -50,6 +51,7 @@ class FinalScorePostTest extends TestCase
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
         $this->assertEquals(332.91880432, $final_score_post);
     }
+
     public function test_3()
     {
         $formula = new FormulaController();
@@ -67,6 +69,7 @@ class FinalScorePostTest extends TestCase
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
         $this->assertEquals(2874.96787067, $final_score_post);
     }
+
     public function test_4()
     {
         $formula = new FormulaController();
@@ -84,6 +87,7 @@ class FinalScorePostTest extends TestCase
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
         $this->assertEquals(790.84787738, $final_score_post);
     }
+
     public function test_5()
     {
         $formula = new FormulaController();
@@ -101,6 +105,7 @@ class FinalScorePostTest extends TestCase
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
         $this->assertEquals(0.01386134, $final_score_post);
     }
+
     public function test_6()
     {
         $formula = new FormulaController();
@@ -118,6 +123,7 @@ class FinalScorePostTest extends TestCase
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
         $this->assertEquals(5163.20101878, $final_score_post);
     }
+
     public function test_7()
     {
         $formula = new FormulaController();
@@ -135,6 +141,7 @@ class FinalScorePostTest extends TestCase
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
         $this->assertEquals(22029.61095165, $final_score_post);
     }
+
     public function test_8()
     {
         $formula = new FormulaController();
@@ -152,6 +159,7 @@ class FinalScorePostTest extends TestCase
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
         $this->assertEquals(0.00000000, $final_score_post);
     }
+
     public function test_9()
     {
         $formula = new FormulaController();
@@ -169,6 +177,7 @@ class FinalScorePostTest extends TestCase
         $p2,$weight_p2,$p3,$weight_p3,$prev, $weight_prev);
         $this->assertEquals(10544798823.87460000, $final_score_post);
     }
+
     public function test_10()
     {
         $formula = new FormulaController();

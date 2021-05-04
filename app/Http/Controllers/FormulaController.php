@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Carbon\Carbon;
+use Faker\Provider\DateTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Domain;
@@ -112,13 +113,19 @@ class FormulaController extends Controller
     public function DurationScoreWilsonScore($impr, $duration, $z_value_duration_dist, $duration_distribution_percentage)
     {
         $duration_distribution = $duration_distribution_percentage / 100;
-        return (((($duration/$impr) + ($z_value_duration_dist**2/(2*$impr)))/(1+($z_value_duration_dist**2)/$impr))/$duration_distribution);
+
+        if ($impr ==0)
+            return 1;
+        else
+            return (((($duration/$impr) + ($z_value_duration_dist**2/(2*$impr)))/(1+($z_value_duration_dist**2)/$impr))/$duration_distribution);
     }
 
     public function AveragePostScore($postPerformanceScore, $count_posts)
     {
-        //TODO gimana IFErRor nya
-        return ( $postPerformanceScore + (10 - min(10,$count_posts)) ) / 10;
+        if ($count_posts == 0)
+            return 1;
+        else
+            return ( $postPerformanceScore + (10 - min(10,$count_posts)) ) / 10;
     }
 
     public function MultiplicationFromQualityCriteriaScore($w_edu,$edu_email,$w_email,$w_twitter, $follower_twitter,$email,$w_useratt)
@@ -176,6 +183,7 @@ class FormulaController extends Controller
             return 1;   //none interaction
 
     }
+
     public function ApplyMultipliesToTotalScore($w_topic,$topic_followed,$w_follow,$w_2degree,$w_link_domain,$user_follow_author,$follow_author_followers,$link_post){
         $constant = 0.5;
         $followed_topic = $w_topic**($topic_followed**$constant);
@@ -219,9 +227,14 @@ class FormulaController extends Controller
 
     }
 
-    public function AgeOfPost(){
+    /**
+     * @throws \Exception
+     */
+    public function AgeOfPost($expiration_setting, $post_datetime, $now_datetime){
 
+         $diffDays = (strtotime($now_datetime) - strtotime($post_datetime)) / 60 / 60 / 24;
 
+         return min($expiration_setting, max(1, $diffDays));
 
     }
 
