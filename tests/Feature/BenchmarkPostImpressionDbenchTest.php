@@ -16,7 +16,7 @@ class BenchmarkPostImpressionDbenchTest extends TestCase
      */
 
     /** @test **/
-    public function TestImpressionScore1()
+    public function testImpressionScore1()
     {
         $dur_min = 2500;
         $dur_marg = 400;
@@ -26,56 +26,48 @@ class BenchmarkPostImpressionDbenchTest extends TestCase
 
         $this->assertEquals(14500, $response);
     }
-    /** @test **/
-    public function TestImpressionScore2()
+    public function testImpressionScore2()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>30 ])->getContent();
         $this->assertEquals(14500, $response);
     }
      /** @test **/
-    public function TestImpressionScore3()
+    public function testImpressionScore3()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>200 ])->getContent();
         $this->assertEquals('82500', $response);
     }
-     /** @test **/
-    public function TestImpressionScore4()
+    public function testImpressionScore4()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>300 ])->getContent();
         $this->assertEquals('122500', $response);
     }
-     /** @test **/
-    public function TestImpressionScore5()
+    public function testImpressionScore5()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>120 ])->getContent();
         $this->assertEquals('50500', $response);
     }
-     /** @test **/
-    public function TestImpressionScore6()
+    public function testImpressionScore6()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>80 ])->getContent();
         $this->assertEquals('34500', $response);
     }
-     /** @test **/
-    public function TestImpressionScore7()
+    public function testImpressionScore7()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>2 ])->getContent();
         $this->assertEquals('3300', $response);
     }
-     /** @test **/
-    public function TestImpressionScore8()
+    public function testImpressionScore8()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>89 ])->getContent();
         $this->assertEquals('38100', $response);
     }
-     /** @test **/
-    public function TestImpressionScore9()
+    public function testImpressionScore9()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>182 ])->getContent();
         $this->assertEquals('75300', $response);
     }
-     /** @test **/
-    public function TestImpressionScore10()
+    public function testImpressionScore10()
     {
         $response = $this->call('POST', '/impression1', ['dur_min' =>config('constants.duration_minimum_post'),'dur_marg' =>config('constants.duration_marginal_per_word'),'words'=>19 ])->getContent();
         $this->assertEquals('10100', $response);
