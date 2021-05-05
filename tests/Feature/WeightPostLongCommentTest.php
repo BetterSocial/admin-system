@@ -16,9 +16,12 @@ class WeightPostLongCommentTest extends TestCase
      */
     public function test_1()
     {
-        $w_longC = config('constants.weight_long_comments');
+        
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(2, 1, $w_longC);
+        $w_longC = config('constants.weight_long_comments');
+        $longC = 2;
+        $impr = 1;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(3, $p_longC);
     }
 
@@ -26,7 +29,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(3, 2, $w_longC);
+        $longC = 3;
+        $impr = 2;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(2.5, $p_longC);
     }
 
@@ -34,7 +39,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(4, 5, $w_longC);
+        $longC = 4;
+        $impr = 5;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(1.8, $p_longC);
     }
 
@@ -42,7 +49,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(6, 10, $w_longC);
+        $longC = 6;
+        $impr = 10;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(1.6, $p_longC);
     }
 
@@ -50,7 +59,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(1, 20, $w_longC);
+        $longC = 1;
+        $impr = 20;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(1.05, $p_longC);
     }
 
@@ -58,7 +69,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(0, 90, $w_longC);
+        $longC = 0;
+        $impr = 90;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(1, $p_longC);
     }
 
@@ -66,7 +79,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(3, 100, $w_longC);
+        $longC = 3;
+        $impr = 100;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(1.03, $p_longC);
     }
 
@@ -74,7 +89,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(2, 250, $w_longC);
+        $longC = 2;
+        $impr = 250;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(1.008, $p_longC);
     }
 
@@ -82,7 +99,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(7, 700, $w_longC);
+        $longC = 7;
+        $impr = 700;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(1.01, $p_longC);
     }
 
@@ -90,7 +109,9 @@ class WeightPostLongCommentTest extends TestCase
     {
         $w_longC = config('constants.weight_long_comments');
         $formula = new FormulaController();
-        $p_longC = $formula->WeightPostLongComments(5, 1000, $w_longC);
+        $longC = 5;
+        $impr = 1000;
+        $p_longC = $formula->WeightPostLongComments($longC, $impr, $w_longC);
         $this->assertEquals(1.005, $p_longC);
     }
 

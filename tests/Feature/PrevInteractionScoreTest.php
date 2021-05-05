@@ -19,8 +19,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "seen";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('seen', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(0.5, $p_prev);
     }
@@ -29,8 +30,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "comment";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('comment', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(0.8, $p_prev);
     }
@@ -39,8 +41,10 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "seen";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('seen', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
+
 
         $this->assertEquals(0.5, $p_prev);
     }
@@ -49,8 +53,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "none";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('none', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(1, $p_prev);
     }
@@ -59,8 +64,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "downvote";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('downvote', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(0.05, $p_prev);
     }
@@ -69,8 +75,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "seen";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('seen', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(0.5, $p_prev);
     }
@@ -79,8 +86,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "downvote";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('downvote', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(0.05, $p_prev);
     }
@@ -89,8 +97,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "upvote";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('upvote', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(0.8, $p_prev);
     }
@@ -99,8 +108,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "none";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('none', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(1, $p_prev);
     }
@@ -109,8 +119,9 @@ class PrevInteractionScoreTest extends TestCase
         $prev_d = config('constants.multiplier_downvoted_previous_post');
         $prev_uc = config('constants.multiplier_upvoted_or_comment_previous_post');
         $prev_pre = config('constants.multiplier_seen_previous_post');
+        $prev_interact = "upvote";
         $formula = new FormulaController();
-        $p_prev = $formula->PreviousInteractionScore('upvote', $prev_d, $prev_uc, $prev_pre);
+        $p_prev = $formula->PreviousInteractionScore( $prev_interact , $prev_d, $prev_uc, $prev_pre);
 
         $this->assertEquals(0.8, $p_prev);
     }
