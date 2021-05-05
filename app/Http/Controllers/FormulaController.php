@@ -101,10 +101,6 @@ class FormulaController extends Controller
         return $result;
     }
 
-    public function PostCharacteristicsScore(){
-
-    }
-
     public function NonBPScoreWilsonScore($impr, $bp, $z_nonBP,	$EV_nonBP)
     {
         return (((1-($bp/$impr)) + ($z_nonBP**2/(2*$impr))) / (1+($z_nonBP**2)/$impr)) /  $EV_nonBP;
@@ -227,9 +223,6 @@ class FormulaController extends Controller
 
     }
 
-    /**
-     * @throws \Exception
-     */
     public function AgeOfPost($expiration_setting, $post_datetime, $now_datetime){
 
          $diffDays = (strtotime($now_datetime) - strtotime($post_datetime)) / 60 / 60 / 24;
@@ -237,6 +230,8 @@ class FormulaController extends Controller
          return min($expiration_setting, max(1, $diffDays));
 
     }
+
+
 
 
 
