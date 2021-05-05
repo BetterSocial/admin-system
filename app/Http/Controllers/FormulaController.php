@@ -227,7 +227,10 @@ class FormulaController extends Controller
 
          $diffDays = (strtotime($now_datetime) - strtotime($post_datetime)) / 60 / 60 / 24;
 
-         return min($expiration_setting, max(1, $diffDays));
+         if($expiration_setting == "forever")
+             return max(1, $diffDays);
+         else
+             return min($expiration_setting, max(1, $diffDays));
 
     }
 
