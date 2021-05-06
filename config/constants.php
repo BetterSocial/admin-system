@@ -2,7 +2,7 @@
 return [
     'get_stream_key' => env('GET_STREAM_KEY'),
     'get_stream_secret' => env('GET_STREAM_SECRET'),
-    
+
     //p1 PostScore 1 (User & Post specific)
     'weight_post_topic'=>env('W_TOPIC',2),
     'weight_post_follows'=>env('W_FOLLOWS',3),
@@ -33,11 +33,11 @@ return [
     'weight_privacy_following' => env('W_FOLLOWING',1.3),
     //p3 (Post Performance + Comments)
     'weight_long_comments' => env('W_LONGC',1),
-    'z_value_non_bp' => env('Z_NONBP',0.1),
+    'z_value_non_bp' => env('Z_NONBP', 0.1),
     'z_value_updown_score' => env('Z_UPDOWN',3),
     'z_value_d' => env('Z_D',0.9),
-    'expected_value_non_bp' => env('EV_NONBP_PERCENTAGE','99.90'),
-    'expected_value_updown_score' => env('EV_UPDOWN_PERCENTAGE','54.62'),
+    'expected_value_non_bp' => env('EV_NONBP_PERCENTAGE', 99.90),
+    'expected_value_updown_score' => env('EV_UPDOWN_PERCENTAGE', 54.62),
     'expected_value_d' => env('EV_D_PERCENTAGE','30.00'),
     'weight_exponential_non_bp' => env('WW_NONBP',45),
     'weight_exponential_updown_score' => env('WW_UPDOWN',8),

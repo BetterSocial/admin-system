@@ -97,12 +97,13 @@ class FormulaController extends Controller
     {
         $ev_updown_percentage =  $ev_updown /100;
         $result = number_format((($s_updown+($z_updown**2 / (2*$impr))) / (1+($z_updown**2) / $impr))/$ev_updown_percentage,8, '.', '');
-       
+
         return $result;
     }
 
-    public function NonBPScoreWilsonScore($impr, $bp, $z_nonBP,	$EV_nonBP)
+    public function NonBPScoreWilsonScore($bp, $impr, $z_nonBP,	$EV_nonBP)
     {
+        $EV_nonBP = $EV_nonBP / 100;
         return (((1-($bp/$impr)) + ($z_nonBP**2/(2*$impr))) / (1+($z_nonBP**2)/$impr)) /  $EV_nonBP;
     }
 
@@ -161,7 +162,7 @@ class FormulaController extends Controller
     }
 
     public function FinalScorePost($user_score, $weight_user_score, $p1, $weight_p1, $p2, $weight_p2, $p3, $weight_p3, $prev, $weight_prev)
-    {   
+    {
         $result = number_format($user_score**$weight_user_score  *  $p1**$weight_p1  * $p2**$weight_p2  * $p3**$weight_p3  *  $prev**$weight_prev, 8, '.', '');
         return  $result;
     }
