@@ -31,13 +31,13 @@ class PostPerformanceScoreTest extends TestCase
     public function test_3()
     {
         $score = $this->formula()->PostPerformanceScore(2.89156559871079, 1.8);
-        $this->assertEquals(5.204818078, $score);
+        $this->assertEquals(5.20481807767941, $score);
     }
 
     public function test_4()
     {
         $score = $this->formula()->PostPerformanceScore(3.0189, 1.15);
-        $this->assertEquals(3.471739278, $score);
+        $this->assertEquals(3.4717392777172, $score);
     }
 
     public function test_5()
@@ -49,13 +49,13 @@ class PostPerformanceScoreTest extends TestCase
     public function test_6()
     {
         $score = $this->formula()->PostPerformanceScore(1.3442, 1.001428571);
-        $this->assertEquals(1.346166147, $score);
+        $this->assertEquals(1.3461661470161, $score);
     }
 
     public function test_7()
     {
         $score = $this->formula()->PostPerformanceScore(1.3436, 1.222222222);
-        $this->assertEquals(1.642158021, $score);
+        $this->assertEquals(1.64215802100145, $score);
     }
 
     public function test_8()

@@ -35,8 +35,13 @@ class FormulaController extends Controller
 
     }
 
-    public function TotalPost() {
+    public function TotalPost($totalPost) {
         // blm tau dapet dari mana dan proses apa
+
+        if ($totalPost == 0)
+            return 1;
+        else
+            return $totalPost;
 
     }
 

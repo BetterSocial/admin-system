@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableForUuid extends Migration
+class AlterTableUserBlockedUser extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AlterTableForUuid extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE user_blocked_user ALTER COLUMN blocked_action_id SET DEFAULT uuid_generate_v4 ()');
-        DB::statement('ALTER TABLE domain_page ALTER COLUMN domain_page_id SET DEFAULT uuid_generate_v4 () ');
+        Schema::table('user_blocked_user', function (Blueprint $table) {
+            $table->json('reason_blocked');
+
+        });
 
     }
 
