@@ -32,7 +32,7 @@ $(document).ready(function () {
                 "data" : 'news_url',
                 "orderable" :true,
                 render : function(data, type, row) {
-                  return " <a href="+row.news_url +"'> <button type='button' class='btn btn-primary'>Open Page</button> </a>"
+                  return " <a href="+row.news_url +"> <button type='button' class='btn btn-primary'>Open Page</button> </a>"
       
                 }    
                
@@ -82,7 +82,6 @@ $(document).ready(function () {
 
 
 
-  
   
   
   
