@@ -15,7 +15,7 @@ class CreateUserBlockedDomainHistory extends Migration
     {
         Schema::create('user_blocked_domain_history', function (Blueprint $table) {
             $table->string('user_id_blocker',50);
-            $table->string('domain_page_id',50);
+            $table->bigInteger('domain_page_id');
             $table->string('action',5);
             $table->string('source',50);
         });

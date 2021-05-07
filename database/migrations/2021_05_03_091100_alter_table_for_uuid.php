@@ -14,7 +14,6 @@ class AlterTableForUuid extends Migration
     public function up()
     {
         DB::statement('ALTER TABLE user_blocked_user ALTER COLUMN blocked_action_id SET DEFAULT uuid_generate_v4 ()');
-        DB::statement('ALTER TABLE domain_page ALTER COLUMN domain_page_id SET DEFAULT uuid_generate_v4 () ');
 
     }
 

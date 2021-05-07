@@ -14,11 +14,11 @@ class CreateUserBlockedDomain extends Migration
     public function up()
     {
         Schema::create('user_blocked_domain', function (Blueprint $table) {
-            $table->uuid('user_blocked_domain_id',50);
+            $table->uuid('user_blocked_domain_id');
             $table->string('user_id_blocker',50);
-            $table->string('domain_page_id',50);
+            $table->bigInteger('domain_page_id');
             $table->json('reason_blocked')->nullable();
-            $table->unique(['user_id_blocker', 'user_id_blocked']);
+            $table->unique(['user_id_blocker', 'domain_page_id']);
             $table->timestamps();
         });
 
