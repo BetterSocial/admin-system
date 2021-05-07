@@ -13,6 +13,8 @@ class NewsLink extends Authenticatable
 
     protected $table = 'news_link';
     protected $primaryKey= 'news_link_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
     public $timestamps = true;
