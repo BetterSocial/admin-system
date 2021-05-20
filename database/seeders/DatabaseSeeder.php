@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(DomainSeeder::class);
 //        $this->call(RoleSeeder::class);
-        $this->call(UserAdminSeeder::class);
+        $this->call(UsersAdminSeeder::class);
         $this->call(SpattyRoleSeeder::class);
         $this->call(SpattyAssignRoleUser::class);
 

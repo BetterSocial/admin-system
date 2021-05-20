@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class UserAdminSeeder extends Seeder
+class UsersAdminSeeder extends Seeder
 {
     /**
      * Run the database seeds.
