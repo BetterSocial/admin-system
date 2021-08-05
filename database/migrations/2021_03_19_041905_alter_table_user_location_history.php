@@ -13,7 +13,8 @@ class AlterTableUserLocationHistory extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE user_location_history DROP COLUMN  user_location_id');    }
+        DB::statement('ALTER TABLE user_location_history DROP COLUMN  user_location_id') 
+    }
 
     /**
      * Reverse the migrations.

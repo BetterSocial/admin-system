@@ -14,10 +14,10 @@ class CreateBannedDevice extends Migration
     public function up()
     {
         Schema::create('banned_device', function (Blueprint $table) {
-            $table->string('device_id',80)->primary()->nullable(false);
+            $table->string('device_id', 80)->primary()->nullable(false);
             $table->text('internal_remark');
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

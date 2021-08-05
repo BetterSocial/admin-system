@@ -17,9 +17,9 @@ class CreateTableLogPolling extends Migration
             $table->uuid('log_polling_id')->primary();
             $table->uuid('polling_option_id')->nullable(false);
             $table->uuid('polling_id')->nullable(false);
-            $table->string('user_id',50)->nullable(false);
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->string('user_id', 50)->nullable(false);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

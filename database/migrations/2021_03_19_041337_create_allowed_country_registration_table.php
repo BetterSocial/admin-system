@@ -14,9 +14,9 @@ class CreateAllowedCountryRegistrationTable extends Migration
     public function up()
     {
         Schema::create('allowed_country_registration', function (Blueprint $table) {
-            $table->string('country_code',3)->primary()->nullable(false);
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');      
+            $table->string('country_code', 3)->primary()->nullable(false);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

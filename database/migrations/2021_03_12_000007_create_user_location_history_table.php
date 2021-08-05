@@ -15,10 +15,11 @@ class CreateUserLocationHistoryTable extends Migration
     {
         Schema::create('user_location_history', function (Blueprint $table) {
             $table->bigInteger('user_location_id');
-            $table->string('user_id',50);
+            $table->string('user_id', 50);
             $table->bigInteger('location_id');
-            $table->string('action',5);
-            $table->timestamp('created_at');
+            $table->string('action', 5);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,10 +15,10 @@ class CreateRoleTable extends Migration
     {
         Schema::create('role', function (Blueprint $table) {
             $table->bigIncrements('role_id')->nullable(false);
-            $table->string('role_name',50);
-            $table->string('role_type',50);            
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');          
+            $table->string('role_name', 50);
+            $table->string('role_type', 50);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
     /**

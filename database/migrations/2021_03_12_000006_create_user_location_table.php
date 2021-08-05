@@ -15,12 +15,11 @@ class CreateUserLocationTable extends Migration
     {
         Schema::create('user_location', function (Blueprint $table) {
             $table->bigIncrements('user_location_id')->nullable(false);
-            $table->string('user_id',50);
+            $table->string('user_id', 50);
             $table->bigInteger('location_id');
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->unique(['user_id', 'location_id']);
-
         });
     }
 

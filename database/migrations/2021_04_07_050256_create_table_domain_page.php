@@ -16,10 +16,10 @@ class CreateTableDomainPage extends Migration
         Schema::create('domain_page', function (Blueprint $table) {
             $table->bigIncrements("domain_page_id");
             $table->string("domain_name");
-            $table->string("logo",255);
+            $table->string("logo", 255);
             $table->longText("short_description")->nullable(true);
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

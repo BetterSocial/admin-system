@@ -23,8 +23,8 @@ class CreateTablePostStatistic extends Migration
             $table->double('block_count')->nullable(true);
             $table->double('shared_count')->nullable(true);
             $table->double('comment_count')->nullable(true);
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

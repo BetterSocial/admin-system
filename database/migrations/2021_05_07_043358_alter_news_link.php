@@ -19,19 +19,18 @@ class AlterNewsLink extends Migration
             $table->uuid("news_link_id");
             $table->longText("news_url");
             $table->uuid("domain_page_id");
-            $table->string("site_name",255)->nullable(true);
-            $table->string("title",255)->nullable(true);
-            $table->string("image",255)->nullable(true);
+            $table->string("site_name", 255)->nullable(true);
+            $table->string("title", 255)->nullable(true);
+            $table->string("image", 255)->nullable(true);
             $table->longText("description")->nullable(true);
             $table->longText("url")->nullable(true);
-            $table->string("keyword",255)->nullable(true);
-            $table->string("author",255)->nullable(true);
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->string("keyword", 255)->nullable(true);
+            $table->string("author", 255)->nullable(true);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
 
         DB::statement('ALTER TABLE news_link ALTER COLUMN news_link_id SET DEFAULT uuid_generate_v4 ()');
-
     }
 
     /**

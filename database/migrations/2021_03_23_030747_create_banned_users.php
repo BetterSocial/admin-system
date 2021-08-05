@@ -14,10 +14,10 @@ class CreateBannedUsers extends Migration
     public function up()
     {
         Schema::create('banned_users', function (Blueprint $table) {
-            $table->string('user_id',50)->primary()->nullable(false);
+            $table->string('user_id', 50)->primary()->nullable(false);
             $table->text('internal_remark');
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

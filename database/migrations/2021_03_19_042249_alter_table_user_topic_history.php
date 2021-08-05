@@ -13,9 +13,10 @@ class AlterTableUserTopicHistory extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE user_topic_history RENAME COLUMN location_id 
-        TO topic_id ');
-
+        // DB::statement('ALTER TABLE user_topic_history RENAME COLUMN location_id TO topic_id ');
+        Schema::table('user_topic_history', function (Blueprint $table) {
+            Schema::rename('location_id', 'topic_id');
+        });
     }
 
     /**
