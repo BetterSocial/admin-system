@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserFollowDomainHistoryTabel extends Migration
+class CreateUserFollowDomainHistory extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserFollowDomainHistoryTabel extends Migration
      */
     public function up()
     {
-        Schema::create('user_follow_domain_history_tabel', function (Blueprint $table) {
+        Schema::create('user_follow_domain_history', function (Blueprint $table) {
             $table->string('follow_domain_history_id', 50)->primary();
             $table->string('user_id_follower', 50);
             $table->integer('domain_id_followed');
@@ -30,6 +30,6 @@ class CreateUserFollowDomainHistoryTabel extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_follow_domain_history_tabel');
+        Schema::dropIfExists('user_follow_domain_history');
     }
 }
