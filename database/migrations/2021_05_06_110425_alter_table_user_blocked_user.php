@@ -14,10 +14,9 @@ class AlterTableUserBlockedUser extends Migration
     public function up()
     {
         Schema::table('user_blocked_user', function (Blueprint $table) {
-            $table->json('reason_blocked');
+            // $table->json('reason_blocked');
 
         });
-
     }
 
     /**
