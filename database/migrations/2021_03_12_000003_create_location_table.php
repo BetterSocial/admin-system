@@ -15,16 +15,16 @@ class CreateLocationTable extends Migration
     {
         Schema::create('location', function (Blueprint $table) {
             $table->bigIncrements('location_id')->nullable(false);
-            $table->string('zip',15);
-            $table->string('neighborhood',100);
-            $table->string('city',100);
-            $table->string('state',100);
-            $table->string('country',100);
-            $table->string('location_level',30);
-            $table->string('status',1);
+            $table->string('zip', 15);
+            $table->string('neighborhood', 100);
+            $table->string('city', 100);
+            $table->string('state', 100);
+            $table->string('country', 100);
+            $table->string('location_level', 30);
+            $table->string('status', 1);
             $table->text('slug_name');
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

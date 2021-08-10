@@ -14,10 +14,10 @@ class CreateBannedIpAddress extends Migration
     public function up()
     {
         Schema::create('banned_ip_address', function (Blueprint $table) {
-            $table->string('ip_address',20)->primary()->nullable(false);
+            $table->string('ip_address', 20)->primary()->nullable(false);
             $table->text('internal_remark');
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 

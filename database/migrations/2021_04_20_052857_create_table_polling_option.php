@@ -17,9 +17,9 @@ class CreateTablePollingOption extends Migration
             $table->uuid('polling_option_id')->primary();
             $table->uuid('polling_id')->nullable(false);
             $table->longText('option')->nullable(false);
-            $table->bigInteger('counter')->default(0);;
-            $table->timestamp('created_at');
-            $table->timestamp('updated_at');
+            $table->bigInteger('counter')->default(0);
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
