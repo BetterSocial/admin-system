@@ -14,8 +14,9 @@ class CreateUserBlockedPostAnonymousHistory extends Migration
     public function up()
     {
         Schema::create('user_blocked_post_anonymous_history', function (Blueprint $table) {
-            $table->string('user_id_blocker', 50);
-            $table->uuid('post_id_blocked');
+            $table->string('user_blocked_post_anonymous_history_id', 50)->primary();
+            $table->uuid('user_id_blocker', 50);
+            $table->uuid('post_anonymous_id_blocked');
             $table->string('action', 5);
             $table->string('source', 50);
             $table->timestamps();
