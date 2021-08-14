@@ -16,7 +16,7 @@ class CreateUserBlockedPostAnonymous extends Migration
         Schema::create('user_blocked_post_anonymous', function (Blueprint $table) {
             $table->string('blocked_action_id', 50)->primary();
             $table->uuid('user_id_blocker');
-            $table->uuid('user_id_blocked');
+            $table->uuid('post_anonymous_id_blocked');
             $table->json('reason_blocked')->nullable();
             $table->timestamps();
         });
