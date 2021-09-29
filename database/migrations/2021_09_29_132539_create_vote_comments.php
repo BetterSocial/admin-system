@@ -21,7 +21,7 @@ class CreateVoteComments extends Migration
             $table->uuid('id');
             $table->uuid('comment_id');
             $table->uuid('user_id');
-            $table->string('table');
+            $table->string('status');
             $table->timestamps();
         });
 
