@@ -15,7 +15,7 @@ class AlterTableNewslinkColumnTitle extends Migration
     {
         Schema::table('news_link', function (Blueprint $table) {
             $table->longText('title')->nullable()->change();
-        })
+        });
     }
 
     /**
