@@ -28,6 +28,6 @@ class AlterTableNewslinkColumnTitle extends Migration
         //
         Schema::table('news_link', function (Blueprint $table) {
             $table->string("title", 255)->nullable(true);
-        })
+        });
     }
 }
