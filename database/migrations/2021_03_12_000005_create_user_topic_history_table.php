@@ -15,7 +15,7 @@ class CreateUserTopicHistoryTable extends Migration
     {
         Schema::create('user_topic_history', function (Blueprint $table) {
             $table->string('user_id', 50);
-            $table->bigInteger('location_id');
+            $table->bigInteger('topic_id');
             $table->string('action', 5);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP'));
