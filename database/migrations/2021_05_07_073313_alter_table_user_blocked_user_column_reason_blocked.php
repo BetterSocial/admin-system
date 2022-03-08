@@ -14,7 +14,7 @@ class AlterTableUserBlockedUserColumnReasonBlocked extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE user_blocked_user ALTER COLUMN reason_blocked DROP NOT NULL;');
+        // DB::statement('ALTER TABLE user_blocked_user ALTER COLUMN reason_blocked DROP NOT NULL;');
     }
 
     /**
