@@ -16,7 +16,7 @@ class AlterTableUserTopicHistory extends Migration
     {
 
         // DB::statement('ALTER TABLE user_topic_history RENAME COLUMN location_id TO topic_id ');
-        DB::statement('ALTER TABLE `user_topic_history` CHANGE `location_id` `topic_id` BIGINT(20) NOT NULL;');
+        DB::statement('ALTER TABLE user_topic_history CHANGE location_id topic_id BIGINT(20) NOT NULL;');
         // Schema::table('user_topic_history', function (Blueprint $table) {
         //     Schema::rename('location_id', 'topic_id');
         // });
