@@ -15,6 +15,7 @@ class CreateUserBlockedUserTable extends Migration
             $table->string('blocked_action_id',50);
             $table->string('user_id_blocker',50);
             $table->string('user_id_blocked',50);
+            $table->json('reason_blocked')->nullable(true);
             $table->unique(['user_id_blocker', 'user_id_blocked']);
         });
     }

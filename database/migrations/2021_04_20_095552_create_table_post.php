@@ -16,7 +16,7 @@ class CreateTablePost extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->uuid('post_id')->primary();
             $table->string('author_user_id', 50)->nullable(false);
-            $table->boolean('anonymous')->default('N');
+            $table->boolean('anonymous')->default(false);
             $table->uuid('parent_post_id')->nullable(true);
             $table->string('audience_id', 50)->nullable(true);
             $table->string('duration')->nullable(true);
