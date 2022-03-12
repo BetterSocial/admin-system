@@ -14,9 +14,9 @@ class CreatePostViewTime extends Migration
     public function up()
     {
         Schema::create('post_view_time', function (Blueprint $table) {
-            $table->string('post_id')->nullable(false);
-            $table->string('user_id')->nullable(false);
-            $table->string('view_time')->nullable(false);
+            $table->string('post_id')->nullable(true);
+            $table->string('user_id')->nullable(true);
+            $table->string('view_time')->nullable(true);
         });
     }
 
