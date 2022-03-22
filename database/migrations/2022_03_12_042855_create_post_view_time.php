@@ -13,19 +13,11 @@ class CreatePostViewTime extends Migration
      */
     public function up()
     {
-        if(Schema::hasTable('post_view_time')) {
-            Schema::table('post_view_time', function (Blueprint $table) {
-                $table->string('post_id')->nullable(true);
-                $table->string('user_id')->nullable(true);
-                $table->string('view_time')->nullable(true);
-            });  
-        } else {
-            Schema::create('post_view_time', function (Blueprint $table) {
-                $table->string('post_id')->nullable(true);
-                $table->string('user_id')->nullable(true);
-                $table->string('view_time')->nullable(true);
-            });     
-        }
+        // Schema::create('post_view_time', function (Blueprint $table) {
+        //     $table->string('post_id')->nullable(true);
+        //     $table->string('user_id')->nullable(true);
+        //     $table->string('view_time')->nullable(true);
+        // });
     }
 
     /**
@@ -35,6 +27,6 @@ class CreatePostViewTime extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('post_view_time');
+        // Schema::dropIfExists('post_view_time');
     }
 }
