@@ -14,7 +14,7 @@ class AlterViewPostTime extends Migration
     public function up()
     {
         Schema::table('post_view_time', function($table) {
-            $table->text('source');
+            $table->text('source')->nullable(true);
         });
     }
 
