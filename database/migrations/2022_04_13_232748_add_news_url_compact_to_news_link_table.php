@@ -14,7 +14,7 @@ class AddNewsUrlCompactToNewsLinkTable extends Migration
     public function up()
     {
         Schema::table('news_link', function (Blueprint $table) {
-            $table->string('url_compact')->nullable()->after('url');
+            $table->text('url_compact')->after('url')->nullable();
         });
     }
 
