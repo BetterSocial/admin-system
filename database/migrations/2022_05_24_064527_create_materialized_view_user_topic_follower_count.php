@@ -43,7 +43,7 @@ class CreateMaterializedViewUserTopicFollowerCount extends Migration
                 C.follower_count
             ) AS user_topic_by_follower_count
         WHERE 
-            user_topic_by_follower_count.topic_follower_rank < 5
+            user_topic_by_follower_count.topic_follower_rank <= 5
         ORDER BY 
             user_topic_by_follower_count.topic_id ASC,
             user_topic_by_follower_count.topic_follower_rank ASC
