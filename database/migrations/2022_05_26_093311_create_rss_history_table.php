@@ -14,7 +14,7 @@ class CreateRssHistoryTable extends Migration
     public function up()
     {
         Schema::create('rss_history', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id');
             $table->string('domain_name');
             $table->text('link');
             $table->timestamps();
