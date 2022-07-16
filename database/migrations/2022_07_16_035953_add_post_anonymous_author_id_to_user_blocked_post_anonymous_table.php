@@ -14,7 +14,7 @@ class AddPostAnonymousAuthorIdToUserBlockedPostAnonymousTable extends Migration
     public function up()
     {
         Schema::table('user_blocked_post_anonymous', function (Blueprint $table) {
-            $table->string('post_anonymous_author_id');
+            $table->string('post_anonymous_author_id')->after('post_anonymous_id_blocked')->nullable();
         });
     }
 
