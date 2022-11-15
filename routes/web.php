@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostBlockController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,12 +19,12 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-Route::group(['middleware' => 'auth'] , function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', "HomeController@index");
     /*
      *  topics
      */
-    Route::get('/topics/index', function() {
+    Route::get('/topics/index', function () {
         $data = [
             'category_name' => 'topics',
             'page_name' => 'topics',
@@ -34,7 +35,7 @@ Route::group(['middleware' => 'auth'] , function() {
         return view('pages.topic.topics')->with($data);
     });
 
-    Route::get('/create-topics', function() {
+    Route::get('/create-topics', function () {
         // $category_name = '';
         $data = [
             'category_name' => 'forms',
@@ -59,7 +60,7 @@ Route::group(['middleware' => 'auth'] , function() {
 
     Route::post('/locations/add', 'LocationsController@addLocations')->name('masterLocations.add');
 
-    Route::get('/locations/index', function() {
+    Route::get('/locations/index', function () {
         $data = [
             'category_name' => 'locations',
             'page_name' => 'locations',
@@ -70,7 +71,7 @@ Route::group(['middleware' => 'auth'] , function() {
         return view('pages.locations.locations')->with($data);
     });
 
-    Route::get('/create-locations', function() {
+    Route::get('/create-locations', function () {
         // $category_name = '';
         $data = [
             'category_name' => 'forms',
@@ -89,7 +90,7 @@ Route::group(['middleware' => 'auth'] , function() {
     /*
      * Users
      */
-    Route::get('/view-users', function() {
+    Route::get('/view-users', function () {
         // $category_name = '';
         $data = [
             'category_name' => 'viewUsers',
@@ -113,31 +114,31 @@ Route::group(['middleware' => 'auth'] , function() {
     Route::POST('/update-status', 'UsersAppController@updateStatus');
 
     //User Follow Data Topic
-    Route::get('/follow-topics','UserFollowController@index');
-    
+    Route::get('/follow-topics', 'UserFollowController@index');
+
     // Route::POST("/topic-detail","UserFollowController@topicDetail");
-    Route::POST("/user/topic","UserFollowController@getList");
+    Route::POST("/user/topic", "UserFollowController@getList");
 
 
-   
-    Route::GET("/user-follow-detail","UserFollowController@userFollowDetail");
-    Route::POST("/user/follow/list","UserFollowController@getUserFollowList");
-    
-    Route::GET("/change-password","HomeController@changePasswordIndex");
+
+    Route::GET("/user-follow-detail", "UserFollowController@userFollowDetail");
+    Route::POST("/user/follow/list", "UserFollowController@getUserFollowList");
+
+    Route::GET("/change-password", "HomeController@changePasswordIndex");
 
     Route::POST("/change-password", "Auth\ChangePasswordController@index")->name('change.password');
 
-    Route::GET("/user-show-post-list","ShowPostListController@index");
-    Route::POST("/user-show-post-list/data","ShowPostListController@getData");
+    Route::GET("/user-show-post-list", "ShowPostListController@index");
+    Route::POST("/user-show-post-list/data", "ShowPostListController@getData");
 
-    Route::GET("/sample-getstream","SampleGetStream@index");
+    Route::GET("/sample-getstream", "SampleGetStream@index");
 
 
 
     /*
     *Domain
     */
-    Route::get('/domain/index', function() {
+    Route::get('/domain/index', function () {
         // $category_name = '';
         $data = [
             'category_name' => 'domain',
@@ -151,7 +152,7 @@ Route::group(['middleware' => 'auth'] , function() {
     });
 
 
-    Route::get('/news/index', function() {
+    Route::get('/news/index', function () {
         // $category_name = '';
         $data = [
             'category_name' => 'domain',
@@ -167,14 +168,14 @@ Route::group(['middleware' => 'auth'] , function() {
     Route::POST('/domain/data', 'DomainController@getData');
     Route::GET('/domain/form-logo', 'DomainController@formEdit');
     Route::POST('/domain/add-logo', 'DomainController@saveLogo');
-    
+
     Route::GET('/news-link', 'NewsController@readAsJson');
 
     Route::POST('/news/data', 'NewsController@getData');
 
 
     //Polling
-    Route::get('/polling/index', function() {
+    Route::get('/polling/index', function () {
         // $category_name = '';
         $data = [
             'category_name' => 'polling',
@@ -190,6 +191,7 @@ Route::group(['middleware' => 'auth'] , function() {
     Route::POST('/polling/data', 'PollingController@getData');
     Route::GET('/polling/detail', 'PollingController@pollingDetail');
 
+    Route::get('/post-blocks', 'PostBlockController@index')->name('post-block');
 });
 
 Auth::routes();
@@ -197,18 +199,18 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 
 
-Route::get('/register', function() {
+Route::get('/register', function () {
     return redirect('/login');
 });
-Route::get('/password/reset', function() {
+Route::get('/password/reset', function () {
     return redirect('/login');
 });
 
-Route::get('/', function() {
+Route::get('/', function () {
     return redirect('/dashboard');
 });
 
-Route::get('/forgot-password', function() {
+Route::get('/forgot-password', function () {
     // $category_name = 'auth';
     $data = [
         'category_name' => 'auth',
@@ -238,9 +240,9 @@ Route::get('/reset-password/{token}', function ($token) {
     ];
 
     return view('auth.passwords.reset')->with($data);
-//    return view('auth.passwords.reset', ['token' => $token], ['page_name' => 'test']);
+    //    return view('auth.passwords.reset', ['token' => $token], ['page_name' => 'test']);
 })->name('password.reset');
 
 Route::post('/reset-password', 'ResetPasswordController@resetPassword')->name('reset.password.update');
 
-Route::post('/impression1','FormulaController@BenchmarkPostImpression1');
+Route::post('/impression1', 'FormulaController@BenchmarkPostImpression1');
