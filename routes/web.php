@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PostBlockController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -192,6 +193,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::GET('/polling/detail', 'PollingController@pollingDetail');
 
     Route::get('/post-blocks', 'PostBlockController@index')->name('post-block');
+    Route::post('/post-blocks/data', 'PostBlockController@data')->name('post-block.data');
+    Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
 });
 
 Auth::routes();

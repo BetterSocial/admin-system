@@ -10,17 +10,33 @@
 
                 <div class="widget-content widget-content-area br-6">
                     <div class="row">
-                        <div class=col-lg-10>
-                            <form class="form-inline" method="POST" id="search">
-                                <div class="form-group">
-                                    <input type="text" id="name" class="form-control" placeholder="Name">
-                                    &nbsp;&nbsp;
-                                    <input type="text" id="category" class="form-control" placeholder="Category">
-                                    &nbsp;&nbsp;
-                                    <button type="submit" class="btn btn-primary">Search</button>
+                        <form class="form-inline" method="POST" id="search" action="/post/hide/1">
+                            @csrf
+                            <div class="widget-content widget-content-area">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="mr-3 ml-3">
+                                            <select name="main_feed" id="mainFeed" class="form-control">
+                                                <option value="">Select Feed group</option>
+                                                <option value="main_feed">Main Feed</option>
+                                                <option value="user">User</option>
+                                                <option value="topic">Topic</option>
+                                                <option value="timeline">Timeline</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group">
+                                            <select class="form-control select-2" name="user_id" id="userId">
+                                                <option value="">Select User</option>
+                                                @foreach ($users as $user)
+                                                    <option value="{{ $user->user_id }}">{{ $user->username }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-search">Search</button>
+                                    </div>
                                 </div>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                         <div class="col-lg-2">
 
                         </div>
@@ -28,16 +44,14 @@
 
 
                     <div class="table-responsive mb-4 mt-4">
-                        <table id="tableTopics" class="table table-hover" style="width:100%">
+                        <table id="tablePostBlock" class="table table-hover" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>Name</th>
-                                    <th>Icon</th>
-                                    <th>Categories</th>
-                                    <th>Created at</th>
-                                    <th class="no-content">Followers</th>
-                                    <th class="no-content">Action</th>
+                                    <th>message</th>
+                                    <th>privacy</th>
+                                    <th>score</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

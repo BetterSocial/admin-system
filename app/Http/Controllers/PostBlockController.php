@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\UserApps;
 use Illuminate\Http\Request;
 use FeedManager;
+use GetStream\Stream\Client;
 
 class PostBlockController extends Controller
 {
@@ -15,83 +18,89 @@ class PostBlockController extends Controller
     public function index()
     {
 
-        $feed = FeedManager::getFeed('main_feed', '57c7dd68-9836-4ac7-9b7a-38d10c7165ac');
-        $activities = $feed->getActivities(0, 25);
+        // $activities = $feed->getActivities(0, 25)['results'];
 
-        dd($activities);
+        // return $activities;
+
+        // $data = [];
+
+        // while (count($data) >= 10) {
+        //     # code...
+        // }
+
+        // $ids = [
+        //     'd59fc522-8c52-4f26-a8f9-58e3034e1fee',
+        //     '57c7dd68-9836-4ac7-9b7a-38d10c7165ac',
+        //     '74e090a4-4020-48b6-8136-f334b750d9b4',
+        //     'a3c59170-c110-4fac-929e-7834f6c6827f'
+        // ];
+
+        // // $query_params = ["ids" => join(',', $ids)];
+        // // return $query_params;
+
+        // return $client->getActivities($ids, null, true);
+
+
+        // $foreign_id_times = null;
+        // $enrich = true;
+        // $reactions = [
+        //     'own',
+        //     'recent',
+        //     'counts',
+        //     'kinds'
+        // ];
+
+        // return response()->json([
+        //     'draw'            => 0,
+        //     'recordsTotal'    => 0,
+        //     "recordsFiltered" => 0,
+        //     'data'            => $result,
+        // ]);
+
+        // return $this->getFeeds();
+        $users = UserApps::all();
 
 
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
-            'page_name' => 'Change Password',
+            'page_name' => 'Post Block',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
+            'users' => $users,
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function data(Request $request)
     {
-        //
+        try {
+            $data = $this->getFeeds();
+            return $data;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    private function getFeeds()
     {
-        //
+        $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
+        $options = ['ranking' => 'betterscore'];
+        $feed = $client->feed('main_feed', "57c7dd68-9836-4ac7-9b7a-38d10c7165ac");
+        $response = $feed->getActivities(0, 5, $options, $enrich = true);
+        $data =  $response["results"];
+        return $data;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function updateFeed(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
+        $payload = [
+            [
+                'id' => $id,
+                "set" => ["is_deleted" => $request->is_deleted]
+            ]
+        ];
+        $status = $client->batchPartialActivityUpdate($payload);
+        return $status;
     }
 }
