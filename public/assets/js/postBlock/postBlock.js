@@ -104,7 +104,7 @@ $(document).ready(function () {
       language: {
         loadingRecords: "</br></br></br></br>;",
         processing: "Loading...",
-        emptyTable: "No Data Locations",
+        emptyTable: "No Data",
       },
       data: data,
       columns: [
