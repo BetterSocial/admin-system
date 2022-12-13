@@ -9,7 +9,7 @@
                 <h2><b>Post by Blocks</b></h2>
 
                 <div class="widget-content widget-content-area br-6">
-                    <div class="row" hidden>
+                    {{-- <div class="row" hidden>
                         <form class="form-inline" method="POST" id="search" action="/post/hide/1">
                             @csrf
                             <div class="widget-content widget-content-area">
@@ -40,7 +40,7 @@
                         <div class="col-lg-2">
 
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <div class="table-responsive mb-4 mt-4">

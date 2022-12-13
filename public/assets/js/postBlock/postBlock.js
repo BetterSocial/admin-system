@@ -62,7 +62,6 @@ const hidePost = (status, postId) => {
         .catch((err) => {
           console.log(err);
         });
-      //   Swal.fire("Deleted!", "Your file has been deleted.", "success");
     }
   });
 };
@@ -88,7 +87,6 @@ const showPost = (status, postId) => {
         .catch((err) => {
           console.log(err);
         });
-      //   Swal.fire("Deleted!", "Your file has been deleted.", "success");
     }
   });
 };
@@ -99,7 +97,6 @@ $(document).ready(function () {
     dataTableLocations = $("#tablePostBlock").DataTable({
       searching: false,
       stateSave: true,
-      //   serverSide: true,
       processing: true,
       language: {
         loadingRecords: "</br></br></br></br>;",
@@ -132,9 +129,6 @@ $(document).ready(function () {
           data: "post_type",
           className: "menufilter textfilter",
           render: function (data, type, row) {
-            // console.log("ini data: ", data);
-            // console.log("ini type: ", type);
-            // console.log("ini row: ", row);
             let isHide = false;
             if (row.is_hide) {
               isHide = true;
@@ -153,9 +147,6 @@ $(document).ready(function () {
           data: "post_type",
           orderable: false,
           render: function (data, type, row) {
-            // console.log("ini data: ", data);
-            // console.log("ini type: ", type);
-            // console.log("ini row: ", row);
             let isHide = false;
             if (row.is_hide) {
               isHide = true;

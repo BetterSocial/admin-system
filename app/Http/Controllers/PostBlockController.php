@@ -17,56 +17,13 @@ class PostBlockController extends Controller
      */
     public function index()
     {
-
-        // $activities = $feed->getActivities(0, 25)['results'];
-
-        // return $activities;
-
-        // $data = [];
-
-        // while (count($data) >= 10) {
-        //     # code...
-        // }
-
-        // $ids = [
-        //     'd59fc522-8c52-4f26-a8f9-58e3034e1fee',
-        //     '57c7dd68-9836-4ac7-9b7a-38d10c7165ac',
-        //     '74e090a4-4020-48b6-8136-f334b750d9b4',
-        //     'a3c59170-c110-4fac-929e-7834f6c6827f'
-        // ];
-
-        // // $query_params = ["ids" => join(',', $ids)];
-        // // return $query_params;
-
-        // return $client->getActivities($ids, null, true);
-
-
-        // $foreign_id_times = null;
-        // $enrich = true;
-        // $reactions = [
-        //     'own',
-        //     'recent',
-        //     'counts',
-        //     'kinds'
-        // ];
-
-        // return response()->json([
-        //     'draw'            => 0,
-        //     'recordsTotal'    => 0,
-        //     "recordsFiltered" => 0,
-        //     'data'            => $result,
-        // ]);
-
-        // return $this->getFeeds();
-        $users = UserApps::all();
-
-
+        // $users = UserApps::all();
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
-            'users' => $users,
+            // 'users' => $users,
         ]);
     }
 
