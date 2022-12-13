@@ -83,11 +83,17 @@ class PostBlockController extends Controller
 
     private function getFeeds()
     {
+        $offset = 0;
+        $data = [];
         $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
-        $options = ['ranking' => 'betterscore'];
-        $feed = $client->feed('main_feed', "57c7dd68-9836-4ac7-9b7a-38d10c7165ac");
-        $response = $feed->getActivities(0, 5, $options, $enrich = true);
+        $options = [];
+        $feed = $client->feed('user', "bettersocial");
+
+        $response = $feed->getActivities($offset, 15, $options, $enrich = true);
         $data =  $response["results"];
+        // while ($data <= 10) {
+        //     $offset++;
+        // }
         return $data;
     }
 
@@ -97,10 +103,10 @@ class PostBlockController extends Controller
         $payload = [
             [
                 'id' => $id,
-                "set" => ["is_deleted" => $request->is_deleted]
+                "set" => ["is_hide" => $request->is_hide]
             ]
         ];
         $status = $client->batchPartialActivityUpdate($payload);
-        return $status;
+        return $payload;
     }
 }

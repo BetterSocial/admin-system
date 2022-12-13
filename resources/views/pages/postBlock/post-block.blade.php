@@ -9,7 +9,7 @@
                 <h2><b>Post by Blocks</b></h2>
 
                 <div class="widget-content widget-content-area br-6">
-                    <div class="row">
+                    <div class="row" hidden>
                         <form class="form-inline" method="POST" id="search" action="/post/hide/1">
                             @csrf
                             <div class="widget-content widget-content-area">
@@ -48,9 +48,11 @@
                             <thead>
                                 <tr>
                                     <th>id</th>
+                                    <th>username</th>
                                     <th>message</th>
                                     <th>privacy</th>
-                                    <th>score</th>
+                                    <th>Anonymous</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>

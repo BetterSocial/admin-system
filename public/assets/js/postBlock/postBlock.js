@@ -20,10 +20,10 @@ const getFeeds = async (feedGroup, user_id) => {
   }
 };
 
-const hideOrShowPost = async (id, isDeleted) => {
+const hideOrShowPost = async (id, isHide) => {
   try {
     const body = {
-      is_deleted: isDeleted,
+      is_hide: isHide,
     };
     console.log(body);
     const response = await fetch(`/post/hide/${id}`, {
@@ -43,18 +43,21 @@ const hideOrShowPost = async (id, isDeleted) => {
 
 const hidePost = (status, postId) => {
   Swal.fire({
-    title: "Are you sure?" + status,
+    title: "Are you sure?",
     text: "You won't be able to revert this!",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
+    confirmButtonText: "Yes, hide it!",
   }).then((result) => {
     if (result.isConfirmed) {
       hideOrShowPost(postId, status)
         .then((res) => {
           console.log(res);
+          Swal.fire("Success", "Success hide post", "success").then(() => {
+            location.reload();
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -64,7 +67,7 @@ const hidePost = (status, postId) => {
   });
 };
 
-const showPost = (e, postId) => {
+const showPost = (status, postId) => {
   Swal.fire({
     title: "Are you sure?",
     text: "You won't be able to revert this!",
@@ -72,10 +75,20 @@ const showPost = (e, postId) => {
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
     cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
+    confirmButtonText: "Yes, show it!",
   }).then((result) => {
     if (result.isConfirmed) {
-      Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      hideOrShowPost(postId, status)
+        .then((res) => {
+          console.log(res);
+          Swal.fire("Success", "Success show post", "success").then(() => {
+            location.reload();
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      //   Swal.fire("Deleted!", "Your file has been deleted.", "success");
     }
   });
 };
@@ -100,6 +113,10 @@ $(document).ready(function () {
           className: "menufilter textfilter",
         },
         {
+          data: "actor.data.username",
+          className: "menufilter textfilter",
+        },
+        {
           data: "message",
           className: "menufilter textfilter",
         },
@@ -108,8 +125,29 @@ $(document).ready(function () {
           className: "menufilter textfilter",
         },
         {
-          data: "score_details.D_bench_score",
+          data: "anonimity",
           className: "menufilter textfilter",
+        },
+        {
+          data: "post_type",
+          className: "menufilter textfilter",
+          render: function (data, type, row) {
+            // console.log("ini data: ", data);
+            // console.log("ini type: ", type);
+            // console.log("ini row: ", row);
+            let isHide = false;
+            if (row.is_hide) {
+              isHide = true;
+            }
+            let html = "";
+            if (isHide) {
+              html = `<p class="info">Hidden</p>`;
+            } else {
+              html = `<p>Show</p>`;
+            }
+
+            return html;
+          },
         },
         {
           data: "post_type",
@@ -118,16 +156,16 @@ $(document).ready(function () {
             // console.log("ini data: ", data);
             // console.log("ini type: ", type);
             // console.log("ini row: ", row);
-            let isDeleted = false;
-            if (row.is_deleted) {
-              isDeleted = true;
+            let isHide = false;
+            if (row.is_hide) {
+              isHide = true;
             }
             let html = "";
-            if (isDeleted) {
+            if (isHide) {
               html =
-                "<button type='button' data-deleted='false' onclick='hidePost(false,\"" +
+                "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
                 row.id +
-                "\")' class='btn btn-danger btn-sm'>Show</button>";
+                "\")' class='btn btn-info btn-sm'>Show</button>";
             } else {
               html =
                 "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +

@@ -15,7 +15,7 @@ class PostController extends Controller
         $payload = [
             [
                 'id' => $id,
-                "set" => ["is_deleted" => $request->is_deleted]
+                "set" => ["is_hide" => $request->is_hide]
             ]
         ];
         $status = $client->batchPartialActivityUpdate($payload);
