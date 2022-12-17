@@ -93,7 +93,6 @@ const showPost = (status, postId) => {
 
 $(document).ready(function () {
   getFeeds().then((data) => {
-    console.log(data);
     dataTableLocations = $("#tablePostBlock").DataTable({
       searching: false,
       stateSave: true,
@@ -123,6 +122,10 @@ $(document).ready(function () {
         },
         {
           data: "anonimity",
+          className: "menufilter textfilter",
+        },
+        {
+          data: "total_block",
           className: "menufilter textfilter",
         },
         {

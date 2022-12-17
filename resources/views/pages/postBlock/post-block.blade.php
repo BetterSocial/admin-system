@@ -52,6 +52,7 @@
                                     <th>message</th>
                                     <th>privacy</th>
                                     <th>Anonymous</th>
+                                    <th>Total Block</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>

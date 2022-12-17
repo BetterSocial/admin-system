@@ -4,20 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserApps;
+use App\Models\UserBlockedUser;
 use Illuminate\Http\Request;
 use FeedManager;
 use GetStream\Stream\Client;
+use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Constraint\Count;
 
 class PostBlockController extends Controller
 {
+
+    private $posts;
+    public function __construct()
+    {
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // $users = UserApps::all();
+        // return $this->getFeeds();
+        // return $this->data($request);
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
@@ -31,15 +41,17 @@ class PostBlockController extends Controller
     {
         try {
             $data = $this->getFeeds();
-            return $data;
+            return json_encode($data);
         } catch (\Throwable $th) {
-            throw $th;
+            throw $th->getMessage();
         }
     }
 
 
     private function getFeeds()
     {
+
+        $this->posts =  $this->getPostsByBlockedUser();
         $offset = 0;
         $data = [];
         $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
@@ -48,10 +60,20 @@ class PostBlockController extends Controller
 
         $response = $feed->getActivities($offset, 15, $options, $enrich = true);
         $data =  $response["results"];
-        // while ($data <= 10) {
-        //     $offset++;
-        // }
-        return $data;
+        $withSortDescData = [];
+        foreach ($data as $key => $value) {
+            $value['total_block'] = 0;
+            foreach ($this->posts as $key => $post) {
+                if ($post->post_id == $value['id']) {
+                    $value['total_block'] = $post->total_block;
+                }
+            }
+            $withSortDescData[] = $value;
+        }
+        usort($withSortDescData, function ($a, $b) {
+            return $a['total_block'] < $b['total_block'];
+        });
+        return $withSortDescData;
     }
 
     public function updateFeed(Request $request, $id)
@@ -65,5 +87,16 @@ class PostBlockController extends Controller
         ];
         $status = $client->batchPartialActivityUpdate($payload);
         return $payload;
+    }
+
+    public function getPostsByBlockedUser()
+    {
+        $posts = DB::table('user_blocked_user')
+            ->selectRaw('post_id, count(*) as total_block')
+            ->where('post_id', '!=', null)
+            ->groupBy('post_id')
+            ->orderBy('total_block', 'DESC')
+            ->get();
+        return $posts;
     }
 }
