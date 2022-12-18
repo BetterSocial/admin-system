@@ -93,16 +93,16 @@ const showPost = (status, postId) => {
 
 $(document).ready(function () {
   getFeeds().then((data) => {
-    console.log(data);
     dataTableLocations = $("#tablePostBlock").DataTable({
-      searching: false,
-      stateSave: true,
-      processing: true,
+      //   searching: false,
+      //   stateSave: true,
+      //   processing: true,
       language: {
         loadingRecords: "</br></br></br></br>;",
         processing: "Loading...",
         emptyTable: "No Data",
       },
+      order: [[5, "desc"]],
       data: data,
       columns: [
         {
@@ -123,6 +123,10 @@ $(document).ready(function () {
         },
         {
           data: "anonimity",
+          className: "menufilter textfilter",
+        },
+        {
+          data: "total_block",
           className: "menufilter textfilter",
         },
         {
