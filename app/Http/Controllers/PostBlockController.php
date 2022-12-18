@@ -41,7 +41,7 @@ class PostBlockController extends Controller
     {
         try {
             $data = $this->getFeeds();
-            return json_encode($data);
+            return $data;
         } catch (\Throwable $th) {
             throw $th->getMessage();
         }
