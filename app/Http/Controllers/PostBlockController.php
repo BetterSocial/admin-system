@@ -15,9 +15,6 @@ class PostBlockController extends Controller
 {
 
     private $posts;
-    public function __construct()
-    {
-    }
     /**
      * Display a listing of the resource.
      *
@@ -61,9 +58,9 @@ class PostBlockController extends Controller
         $response = $feed->getActivities($offset, 15, $options, $enrich = true);
         $data =  $response["results"];
         $withSortDescData = [];
-        foreach ($data as $key => $value) {
+        foreach ($data as  $value) {
             $value['total_block'] = 0;
-            foreach ($this->posts as $key => $post) {
+            foreach ($this->posts as $post) {
                 if ($post->post_id == $value['id']) {
                     $value['total_block'] = $post->total_block;
                 }
@@ -91,12 +88,11 @@ class PostBlockController extends Controller
 
     public function getPostsByBlockedUser()
     {
-        $posts = DB::table('user_blocked_user')
+        return DB::table('user_blocked_user')
             ->selectRaw('post_id, count(*) as total_block')
             ->where('post_id', '!=', null)
             ->groupBy('post_id')
             ->orderBy('total_block', 'DESC')
             ->get();
-        return $posts;
     }
 }
