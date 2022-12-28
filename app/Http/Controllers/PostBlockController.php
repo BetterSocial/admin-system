@@ -51,12 +51,20 @@ class PostBlockController extends Controller
         $this->posts =  $this->getPostsByBlockedUser();
         $offset = 0;
         $data = [];
-        $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
-        $options = [];
+        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
+        $options = [
+            'own' => true,
+            'recent' => true,
+            'counts' => true,
+            'counts',
+            'kinds',
+            'reactions.recent' => true
+        ];
         $feed = $client->feed('user', "bettersocial");
-
-        $response = $feed->getActivities($offset, 15, $options, $enrich = true);
+        $response = $feed->getActivities($offset, 15, $options, $enrich = true, $options);
         $data =  $response["results"];
+
+
         $withSortDescData = [];
         foreach ($data as  $value) {
             $value['total_block'] = 0;

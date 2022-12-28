@@ -44,7 +44,7 @@ const hideOrShowPost = async (id, isHide) => {
 const hidePost = (status, postId) => {
   Swal.fire({
     title: "Are you sure?",
-    text: "You won't be able to revert this!",
+    text: "",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -69,7 +69,7 @@ const hidePost = (status, postId) => {
 const showPost = (status, postId) => {
   Swal.fire({
     title: "Are you sure?",
-    text: "You won't be able to revert this!",
+    text: "",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -152,6 +152,7 @@ $(document).ready(function () {
           orderable: false,
           render: function (data, type, row) {
             let isHide = false;
+            console.log(row);
             if (row.is_hide) {
               isHide = true;
             }
