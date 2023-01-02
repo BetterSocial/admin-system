@@ -91,6 +91,10 @@ const showPost = (status, postId) => {
   });
 };
 
+const detail = (data) => {
+  $("#detailModal").modal("show");
+};
+
 $(document).ready(function () {
   getFeeds().then((data) => {
     dataTableLocations = $("#tablePostBlock").DataTable({
@@ -99,11 +103,15 @@ $(document).ready(function () {
       //   processing: true,
       language: {
         loadingRecords: "</br></br></br></br>;",
-        processing: "Loading...",
+        processing:
+          "<span class='fa-stack fa-lg'>\n\
+        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+   </span>&emsp;Processing ...",
         emptyTable: "No Data",
       },
       order: [[5, "desc"]],
       data: data,
+      deferLoading: 57,
       columns: [
         {
           data: "id",
@@ -116,6 +124,40 @@ $(document).ready(function () {
         {
           data: "message",
           className: "menufilter textfilter",
+          render: function (data, type, row) {
+            let { images_url } = row;
+            console.log(row);
+            if (row.post_type === 1) {
+              return `
+                <div class="btn-detail"  data-item="${row}">${data}</div>
+                `;
+            } else if (row.post_type === 2) {
+              return `
+                <div class="btn-detail"  data-item="${row}">${data}</div>
+                `;
+            } else {
+              return `
+              <div class="btn-detail"  data-item="${row}">${data}</div>
+              `;
+            }
+          },
+        },
+        {
+          data: "message",
+          className: "menufilter textfilter",
+          render: function (data, type, row) {
+            let { images_url } = row;
+            console.log(row);
+            if (images_url.length >= 1) {
+              return `
+                  <div class="btn-detail" style="100px"  data-item="${row}"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></div>
+                  `;
+            } else {
+              return `
+                <div class="btn-detail"  data-item="${row}">-</div>
+                `;
+            }
+          },
         },
         {
           data: "privacy",
@@ -152,7 +194,7 @@ $(document).ready(function () {
           orderable: false,
           render: function (data, type, row) {
             let isHide = false;
-            console.log(row);
+            let item = JSON.stringify(row);
             if (row.is_hide) {
               isHide = true;
             }
@@ -161,14 +203,17 @@ $(document).ready(function () {
               html =
                 "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
                 row.id +
-                "\")' class='btn btn-info btn-sm'>Show</button>";
+                "\")' class='btn btn-info btn-sm'>Show</button>" +
+                "<br/>" +
+                `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
             } else {
               html =
                 "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
                 row.id +
-                "\")' class='btn btn-danger btn-sm'>Hide</button>";
+                "\")' class='btn btn-danger btn-sm'>Hide</button>" +
+                " <br/>" +
+                `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
             }
-
             return html;
           },
         },
