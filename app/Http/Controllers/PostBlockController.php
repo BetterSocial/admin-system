@@ -90,7 +90,7 @@ class PostBlockController extends Controller
 
     public function updateFeed(Request $request, $id)
     {
-        $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
+        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
         $payload = [
             [
                 'id' => $id,
@@ -99,6 +99,13 @@ class PostBlockController extends Controller
         ];
         $status = $client->batchPartialActivityUpdate($payload);
         return $payload;
+    }
+
+    public function deleteComment($id)
+    {
+        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
+        $client->reactions()->delete($id);
+        return $id;
     }
 
     public function getPostsByBlockedUser()
