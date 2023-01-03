@@ -38,13 +38,16 @@ const hideOrShowPost = async (id, isHide) => {
     return res;
   } catch (error) {
     console.log(error);
+    Swal.fire("Error", "Error load data from getstream", "error").then(() => {
+      location.reload();
+    });
   }
 };
 
 const hidePost = (status, postId) => {
   Swal.fire({
     title: "Are you sure?",
-    text: "You won't be able to revert this!",
+    text: "",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -69,7 +72,7 @@ const hidePost = (status, postId) => {
 const showPost = (status, postId) => {
   Swal.fire({
     title: "Are you sure?",
-    text: "You won't be able to revert this!",
+    text: "",
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#3085d6",
@@ -91,6 +94,10 @@ const showPost = (status, postId) => {
   });
 };
 
+const detail = (data) => {
+  $("#detailModal").modal("show");
+};
+
 $(document).ready(function () {
   getFeeds().then((data) => {
     dataTableLocations = $("#tablePostBlock").DataTable({
@@ -99,11 +106,15 @@ $(document).ready(function () {
       //   processing: true,
       language: {
         loadingRecords: "</br></br></br></br>;",
-        processing: "Loading...",
+        processing:
+          "<span class='fa-stack fa-lg'>\n\
+        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+   </span>&emsp;Processing ...",
         emptyTable: "No Data",
       },
       order: [[5, "desc"]],
       data: data,
+      deferLoading: 57,
       columns: [
         {
           data: "id",
@@ -116,14 +127,79 @@ $(document).ready(function () {
         {
           data: "message",
           className: "menufilter textfilter",
+          render: function (data, type, row) {
+            let { images_url } = row;
+            if (row.post_type === 1) {
+              return `
+                <div class="btn-detail"  data-item="${row}">${data}</div>
+                `;
+            } else if (row.post_type === 2) {
+              return `
+                <div class="btn-detail"  data-item="${row}">${data}</div>
+                `;
+            } else {
+              return `
+              <div class="btn-detail"  data-item="${row}">${data}</div>
+              `;
+            }
+          },
         },
         {
-          data: "privacy",
+          data: "message",
           className: "menufilter textfilter",
+          render: function (data, type, row) {
+            let { images_url } = row;
+            // image
+            if (images_url.length >= 1) {
+              return `
+                  <div class="btn-detail" style="100px"  data-item="${row}"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></div>
+                  `;
+            } else {
+              return `
+                <div class="btn-detail"  data-item="${row}">-</div>
+                `;
+            }
+          },
+        },
+        {
+          data: "message",
+          className: "menufilter textfilter",
+          render: function (data, type, row) {
+            // comments;
+            let value = "";
+            if (data.includes("test post quesgion")) {
+              console.log(row);
+            }
+            let { latest_reactions } = row;
+            if (latest_reactions) {
+              let { comment } = latest_reactions;
+              if (comment) {
+                comment.forEach((element) => {
+                  let item = "<p>" + element.data.text + "</p>";
+                  value = value + item;
+                });
+              }
+            }
+            return value;
+          },
+        },
+        {
+          data: "id",
+          className: "menufilter textfilter",
+          render: function (data, type, row) {
+            // upvote
+            let { reaction_counts } = row;
+            return reaction_counts.upvotes || 0;
+          },
         },
         {
           data: "anonimity",
           className: "menufilter textfilter",
+          render: function (data, type, row) {
+            // downvote;
+            let { reaction_counts } = row;
+            return reaction_counts.downvotes || 0;
+          },
         },
         {
           data: "total_block",
@@ -133,6 +209,7 @@ $(document).ready(function () {
           data: "post_type",
           className: "menufilter textfilter",
           render: function (data, type, row) {
+            //status
             let isHide = false;
             if (row.is_hide) {
               isHide = true;
@@ -151,7 +228,9 @@ $(document).ready(function () {
           data: "post_type",
           orderable: false,
           render: function (data, type, row) {
+            // action
             let isHide = false;
+            let item = JSON.stringify(row);
             if (row.is_hide) {
               isHide = true;
             }
@@ -160,14 +239,17 @@ $(document).ready(function () {
               html =
                 "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
                 row.id +
-                "\")' class='btn btn-info btn-sm'>Show</button>";
+                "\")' class='btn btn-info btn-sm'>Show</button>" +
+                "<br/>";
+              // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
             } else {
               html =
                 "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
                 row.id +
-                "\")' class='btn btn-danger btn-sm'>Hide</button>";
+                "\")' class='btn btn-danger btn-sm'>Hide</button>" +
+                " <br/>";
+              // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
             }
-
             return html;
           },
         },

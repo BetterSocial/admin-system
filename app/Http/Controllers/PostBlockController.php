@@ -48,29 +48,44 @@ class PostBlockController extends Controller
     private function getFeeds()
     {
 
-        $this->posts =  $this->getPostsByBlockedUser();
-        $offset = 0;
-        $data = [];
-        $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
-        $options = [];
-        $feed = $client->feed('user', "bettersocial");
+        try {
 
-        $response = $feed->getActivities($offset, 15, $options, $enrich = true);
-        $data =  $response["results"];
-        $withSortDescData = [];
-        foreach ($data as  $value) {
-            $value['total_block'] = 0;
-            foreach ($this->posts as $post) {
-                if ($post->post_id == $value['id']) {
-                    $value['total_block'] = $post->total_block;
+            $this->posts =  $this->getPostsByBlockedUser();
+            $offset = 0;
+            $data = [];
+            $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
+            $options = [
+                'own' => true,
+                'recent' => true,
+                'counts' => true,
+                'counts',
+                'kinds',
+                // 'reactions.recent' => true
+            ];
+            $feed = $client->feed('user', "bettersocial");
+            $response = $feed->getActivities($offset, 15, $options, $enrich = true, $options);
+            $data =  $response["results"];
+
+
+            $withSortDescData = [];
+            foreach ($data as  $value) {
+                $value['total_block'] = 0;
+                foreach ($this->posts as $post) {
+                    if ($post->post_id == $value['id']) {
+                        $value['total_block'] = $post->total_block;
+                    }
                 }
+                $withSortDescData[] = $value;
             }
-            $withSortDescData[] = $value;
+            usort($withSortDescData, function ($a, $b) {
+                return $a['total_block'] < $b['total_block'];
+            });
+            return $withSortDescData;
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            dd($th->getMessage());
         }
-        usort($withSortDescData, function ($a, $b) {
-            return $a['total_block'] < $b['total_block'];
-        });
-        return $withSortDescData;
     }
 
     public function updateFeed(Request $request, $id)
