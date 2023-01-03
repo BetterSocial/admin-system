@@ -60,7 +60,7 @@ class PostBlockController extends Controller
                 'counts' => true,
                 'counts',
                 'kinds',
-                'reactions.recent' => true
+                // 'reactions.recent' => true
             ];
             $feed = $client->feed('user', "bettersocial");
             $response = $feed->getActivities($offset, 15, $options, $enrich = true, $options);

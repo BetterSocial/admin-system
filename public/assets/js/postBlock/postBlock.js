@@ -38,6 +38,9 @@ const hideOrShowPost = async (id, isHide) => {
     return res;
   } catch (error) {
     console.log(error);
+    Swal.fire("Error", "Error load data from getstream", "error").then(() => {
+      location.reload();
+    });
   }
 };
 
@@ -126,7 +129,6 @@ $(document).ready(function () {
           className: "menufilter textfilter",
           render: function (data, type, row) {
             let { images_url } = row;
-            console.log(row);
             if (row.post_type === 1) {
               return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
@@ -147,7 +149,7 @@ $(document).ready(function () {
           className: "menufilter textfilter",
           render: function (data, type, row) {
             let { images_url } = row;
-            console.log(row);
+            // image
             if (images_url.length >= 1) {
               return `
                   <div class="btn-detail" style="100px"  data-item="${row}"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></div>
@@ -160,12 +162,44 @@ $(document).ready(function () {
           },
         },
         {
-          data: "privacy",
+          data: "message",
           className: "menufilter textfilter",
+          render: function (data, type, row) {
+            // comments;
+            let value = "";
+            if (data.includes("test post quesgion")) {
+              console.log(row);
+            }
+            let { latest_reactions } = row;
+            if (latest_reactions) {
+              let { comment } = latest_reactions;
+              if (comment) {
+                comment.forEach((element) => {
+                  let item = "<p>" + element.data.text + "</p>";
+                  value = value + item;
+                });
+              }
+            }
+            return value;
+          },
+        },
+        {
+          data: "id",
+          className: "menufilter textfilter",
+          render: function (data, type, row) {
+            // upvote
+            let { reaction_counts } = row;
+            return reaction_counts.upvotes || 0;
+          },
         },
         {
           data: "anonimity",
           className: "menufilter textfilter",
+          render: function (data, type, row) {
+            // downvote;
+            let { reaction_counts } = row;
+            return reaction_counts.downvotes || 0;
+          },
         },
         {
           data: "total_block",
@@ -175,6 +209,7 @@ $(document).ready(function () {
           data: "post_type",
           className: "menufilter textfilter",
           render: function (data, type, row) {
+            //status
             let isHide = false;
             if (row.is_hide) {
               isHide = true;
@@ -193,6 +228,7 @@ $(document).ready(function () {
           data: "post_type",
           orderable: false,
           render: function (data, type, row) {
+            // action
             let isHide = false;
             let item = JSON.stringify(row);
             if (row.is_hide) {
@@ -204,15 +240,15 @@ $(document).ready(function () {
                 "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
                 row.id +
                 "\")' class='btn btn-info btn-sm'>Show</button>" +
-                "<br/>" +
-                `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
+                "<br/>";
+              // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
             } else {
               html =
                 "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
                 row.id +
                 "\")' class='btn btn-danger btn-sm'>Hide</button>" +
-                " <br/>" +
-                `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
+                " <br/>";
+              // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
             }
             return html;
           },
