@@ -94,8 +94,57 @@ const showPost = (status, postId) => {
   });
 };
 
+function tableCreate() {
+  const exampleArray = [
+    {
+      header: "ID",
+      values: [1, 2],
+    },
+    {
+      header: "First Name",
+      values: ["John", "Jayne"],
+    },
+    {
+      header: "Last Name",
+      values: ["Doe", "Doe"],
+    },
+  ];
+
+  const header = $("#tableReaction thead tr");
+  const body = $("#tableReaction tbody");
+
+  exampleArray.forEach((column) => {
+    header.append($(`<th>${column.header}</th>`));
+  });
+
+  // Compute the number of rows in the array
+  const nRows = exampleArray[0].values.length;
+
+  for (let i = 0; i < nRows; i++) {
+    // row contains all cells in a row
+    let row = $("<tr/>");
+    // Loop over the columns
+    exampleArray.forEach((column) => {
+      // For each column, we add the i-th value, since we're building the i-th row
+      row.append(`<td>${column.values[i]}</td>`);
+    });
+    // Add the row to the table body
+    body.append(row);
+  }
+}
+
 const detail = (data) => {
-  $("#detailModal").modal("show");
+  console.log(data);
+  tableCreate();
+  $(".test-class").val("testing set");
+  let { latest_reactions } = data;
+  if (latest_reactions) {
+    let { comment } = latest_reactions;
+    if (comment) {
+    }
+  }
+  //   $("#detailModal").modal("show");
+  getFeeds;
 };
 
 $(document).ready(function () {
@@ -162,20 +211,52 @@ $(document).ready(function () {
           },
         },
         {
+          data: "verb",
+          className: "menufilter textfilter",
+          render: function (data, type, row) {
+            // comments;
+            let value = "";
+            if (data === "poll") {
+              let ul = document.createElement("ul");
+              value = value + "<ul>";
+              row.polling_options.forEach(renderProductList);
+              function renderProductList(element, index, arr) {
+                let item = "<li>" + element + "</li>";
+                value = value + item;
+                // var li = document.createElement("li");
+                // li.setAttribute("class", "item");
+
+                // ul.appendChild(li);
+
+                // li.innerHTML = li.innerHTML + element;
+              }
+
+              value = value + "</ul>";
+              //   return ul;
+            }
+            return value;
+          },
+        },
+        {
           data: "message",
           className: "menufilter textfilter",
           render: function (data, type, row) {
             // comments;
             let value = "";
             if (data.includes("test post quesgion")) {
-              console.log(row);
+              //   console.log(row);
             }
             let { latest_reactions } = row;
             if (latest_reactions) {
               let { comment } = latest_reactions;
               if (comment) {
                 comment.forEach((element) => {
-                  let item = "<p>" + element.data.text + "</p>";
+                  let item =
+                    "<p>" +
+                    element.user.data.username +
+                    ": " +
+                    element.data.text +
+                    "</p>";
                   value = value + item;
                 });
               }

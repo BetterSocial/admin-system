@@ -198,6 +198,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/post/comment/{id}', [PostController::class, 'deleteComment'])->name('post.comment.delete');
 });
 
+Auth::routes();
+
 Route::get('/', 'HomeController@index');
 
 

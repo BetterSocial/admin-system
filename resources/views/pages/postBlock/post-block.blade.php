@@ -51,6 +51,7 @@
                                     <th>username</th>
                                     <th>message</th>
                                     <th>Image</th>
+                                    <th>Poll</th>
                                     <th>Comments</th>
                                     <th>Upvote</th>
                                     <th>Downvote</th>
@@ -67,7 +68,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="detailModal" tabindex="1" aria-labelledby="detailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -77,56 +78,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card" id="chat3" style="border-radius: 15px;">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
-                                                <div class="">
-                                                    <div data-mdb-perfect-scrollbar="true"
-                                                        style="position: relative; height: 400px">
-                                                        <ul class="list-unstyled mb-0">
-                                                            <li class="p-2 border-bottom">
-                                                                <a href="#!" class="d-flex justify-content-between">
-                                                                    <div class="d-flex flex-row">
-                                                                        <div>
-                                                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
-                                                                                alt="avatar"
-                                                                                class="d-flex align-self-center me-3"
-                                                                                width="60">
-                                                                            <span class="badge bg-success badge-dot"></span>
-                                                                        </div>
-                                                                        <div class="pt-1">
-                                                                            <p class="fw-bold mb-0">Marie Horwitz</p>
-                                                                            <p class="small text-muted">Hello, Are you
-                                                                                there?</p>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="pt-1">
-                                                                        <p class="small text-muted mb-1">Just now</p>
-                                                                        <span
-                                                                            class="badge bg-danger rounded-pill float-end">3</span>
-                                                                    </div>
-                                                                </a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
+                    <p class="test-class"> testing</p>
+                    <table id="tableReaction">
 
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-
+                    </table>
                 </div>
                 <div class="modal-footer">
                 </div>
