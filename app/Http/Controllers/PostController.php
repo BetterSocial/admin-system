@@ -11,7 +11,7 @@ class PostController extends Controller
 
     public function postHide(Request $request, $id)
     {
-        $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
+        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
         $payload = [
             [
                 'id' => $id,
@@ -20,5 +20,18 @@ class PostController extends Controller
         ];
         $status = $client->batchPartialActivityUpdate($payload);
         return $status;
+    }
+
+    public function deleteComment($id)
+    {
+        try {
+            //code...
+            $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
+            $client->reactions()->delete($id);
+            return $this->successResponse('success delete comment');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->errorResponse('error delete comment ' . $th->getMessage());
+        }
     }
 }

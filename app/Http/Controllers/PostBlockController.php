@@ -101,12 +101,7 @@ class PostBlockController extends Controller
         return $payload;
     }
 
-    public function deleteComment($id)
-    {
-        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
-        $client->reactions()->delete($id);
-        return $id;
-    }
+
 
     public function getPostsByBlockedUser()
     {
