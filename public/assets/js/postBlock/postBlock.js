@@ -178,6 +178,7 @@ $(document).ready(function () {
           className: "menufilter textfilter",
           render: function (data, type, row) {
             let { images_url } = row;
+            // message tab
             if (row.post_type === 1) {
               return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
@@ -198,7 +199,7 @@ $(document).ready(function () {
           className: "menufilter textfilter",
           render: function (data, type, row) {
             let { images_url } = row;
-            // image
+            // image tab
             if (images_url.length >= 1) {
               return `
                   <div class="btn-detail" style="100px"  data-item="${row}"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></div>
@@ -214,7 +215,7 @@ $(document).ready(function () {
           data: "verb",
           className: "menufilter textfilter",
           render: function (data, type, row) {
-            // poll options;
+            // poll options tab;
             let value = "";
             if (data === "poll") {
               value = value + "<ul>";
@@ -233,7 +234,7 @@ $(document).ready(function () {
           data: "message",
           className: "menufilter textfilter",
           render: function (data, type, row) {
-            // comments;
+            // comments tab;
             let value = "";
             if (data.includes("test post quesgion")) {
               //   console.log(row);
@@ -295,6 +296,7 @@ $(document).ready(function () {
             }
 
             return html;
+            // status tab
           },
         },
         {
