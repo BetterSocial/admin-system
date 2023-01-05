@@ -14,9 +14,19 @@ const getFeeds = async (feedGroup, user_id) => {
       body: JSON.stringify(body),
     });
     let res = await response.json();
-    return res;
+    console.log(res.status);
+    if (res.status === "success") {
+      return res.data;
+    } else {
+      Swal.fire("Error", res.message).then(() => {
+        location.reload();
+      });
+    }
   } catch (err) {
     console.log(err);
+    Swal.fire("Error", err).then(() => {
+      location.reload();
+    });
   }
 };
 
@@ -147,7 +157,93 @@ const detail = (data) => {
   getFeeds;
 };
 
+const generateCommentObject = (id, text, avatar, username) => {
+  return {
+    id,
+    text,
+    avatar,
+    username,
+  };
+};
+
+function makeImage(avatar) {
+  const image = document.createElement("img");
+  image.classList.add("border", "rounded-circle", "me-2");
+  image.setAttribute("src", avatar);
+  image.style.height = "40px";
+  return image;
+}
+
+function makeProfile(username) {
+  let container = document.createElement("a");
+  container.classList.add("text-dark", "mb-0");
+  let item = document.createElement("strong");
+  item.innerText = username;
+  container.append(item);
+  return container;
+}
+
+function makeItemComment(text) {
+  let container = document.createElement("a");
+  container.classList.add("text-muted", "d-block");
+  let item = document.createElement("strong");
+  item.innerText = text;
+  container.append(item);
+  return container;
+}
+
+function makeContent(text, username) {
+  let container = document.createElement("div");
+  container.classList.add("ml-3", "w-75");
+  let containerContent = document.createElement("div");
+  containerContent.classList.add("bg-light", "rounded-3", "px-3", "py-1");
+  let profile = makeProfile(username);
+  containerContent.append(profile);
+  let itemComment = makeItemComment(text);
+  containerContent.append(itemComment);
+  container.append(containerContent);
+  return container;
+}
+
+function makeComment(comment) {
+  let { id, text, avatar, username } = comment;
+  const container = document.createElement("div");
+  container.classList.add("d-flex", "mb-3");
+
+  let image = makeImage(avatar);
+  container.append(image);
+
+  let content = makeContent(text, username);
+  container.append(content);
+  return container;
+}
+
+const detailComment = (post) => {
+  console.log(post);
+  let { latest_reactions } = post;
+
+  $("#detailCommentModal").modal("show");
+  let container = $("#cardBodyComment");
+  latest_reactions.comment.map((item) => {
+    let commentItem = generateCommentObject(
+      item.id,
+      item.data.text,
+      item.user.data.profile_pic_url,
+      item.user.data.username
+    );
+    let comment = makeComment(commentItem);
+    container.append(comment);
+  });
+};
+
 $(document).ready(function () {
+  $("#detailCommentModal").on("hide.bs.modal", function (e) {
+    let container = document.getElementById("cardBodyComment");
+    while (container.firstChild) {
+      container.removeChild(container.lastChild);
+    }
+  });
+
   getFeeds().then((data) => {
     dataTableLocations = $("#tablePostBlock").DataTable({
       //   searching: false,
@@ -198,12 +294,47 @@ $(document).ready(function () {
           data: "message",
           className: "menufilter textfilter",
           render: function (data, type, row) {
+            // comments tab;
+            let value = "";
+            let { latest_reactions } = row;
+            if (latest_reactions) {
+              let { comment } = latest_reactions;
+              if (comment) {
+                let postInJson = JSON.stringify(row);
+                value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
+                comment.forEach((element) => {
+                  let item =
+                    "<p>" +
+                    element.user.data.username +
+                    ": " +
+                    element.data.text +
+                    "</p>";
+                  value = value + item;
+                });
+
+                value += "</button>";
+              }
+            }
+            return value;
+          },
+        },
+        {
+          data: "message",
+          className: "menufilter textfilter",
+          render: function (data, type, row) {
             let { images_url } = row;
             // image tab
-            if (images_url.length >= 1) {
+            if (images_url.length > 1) {
+              let value = `<div class="btn-detail" style="100px"  data-item="${row}">`;
+              images_url.map((item) => {
+                value += `<a href="${item}" target="_blank"><img src="${item}" alt="${data}" class="rounded h-10" width="128" height="128"></a>`;
+              });
+              value += "</div>";
+              return value;
+            } else if (images_url.length == 1) {
               return `
-                  <div class="btn-detail" style="100px"  data-item="${row}"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></div>
-                  `;
+                    <div class="btn-detail" style="100px"  data-item="${row}"><a href="${images_url}" target="_blank"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></a></div>
+                    `;
             } else {
               return `
                 <div class="btn-detail"  data-item="${row}">-</div>
@@ -226,33 +357,6 @@ $(document).ready(function () {
               }
 
               value = value + "</ul>";
-            }
-            return value;
-          },
-        },
-        {
-          data: "message",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            // comments tab;
-            let value = "";
-            if (data.includes("test post quesgion")) {
-              //   console.log(row);
-            }
-            let { latest_reactions } = row;
-            if (latest_reactions) {
-              let { comment } = latest_reactions;
-              if (comment) {
-                comment.forEach((element) => {
-                  let item =
-                    "<p>" +
-                    element.user.data.username +
-                    ": " +
-                    element.data.text +
-                    "</p>";
-                  value = value + item;
-                });
-              }
             }
             return value;
           },

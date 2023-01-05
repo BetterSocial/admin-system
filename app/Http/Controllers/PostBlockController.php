@@ -86,11 +86,10 @@ class PostBlockController extends Controller
             usort($withSortDescData, function ($a, $b) {
                 return $a['total_block'] < $b['total_block'];
             });
-            return $withSortDescData;
-            //code...
+            return $this->successResponse('success get data', $withSortDescData);
         } catch (\Throwable $th) {
             //throw $th;
-            dd($th->getMessage());
+            return $this->errorResponse('failed load data ' . $th->getMessage());
         }
     }
 
