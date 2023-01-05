@@ -214,25 +214,17 @@ $(document).ready(function () {
           data: "verb",
           className: "menufilter textfilter",
           render: function (data, type, row) {
-            // comments;
+            // poll options;
             let value = "";
             if (data === "poll") {
-              let ul = document.createElement("ul");
               value = value + "<ul>";
               row.polling_options.forEach(renderProductList);
               function renderProductList(element, index, arr) {
                 let item = "<li>" + element + "</li>";
                 value = value + item;
-                // var li = document.createElement("li");
-                // li.setAttribute("class", "item");
-
-                // ul.appendChild(li);
-
-                // li.innerHTML = li.innerHTML + element;
               }
 
               value = value + "</ul>";
-              //   return ul;
             }
             return value;
           },
