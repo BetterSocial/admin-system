@@ -323,6 +323,7 @@ $(document).ready(function () {
                 " <br/>";
               // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
             }
+            // action tab
             return html;
           },
         },
