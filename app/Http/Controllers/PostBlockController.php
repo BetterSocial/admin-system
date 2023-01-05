@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Polling;
+use App\Models\PollingOption;
 use App\Models\User;
 use App\Models\UserApps;
 use App\Models\UserBlockedUser;
@@ -69,6 +71,10 @@ class PostBlockController extends Controller
 
             $withSortDescData = [];
             foreach ($data as  $value) {
+                if ($value['verb'] == 'poll') {
+                    $value['poll'] = $this->getPoll($value['polling_id']);
+                    $value['polling_options'] = $this->getPollOption($value['polling_id']);
+                }
                 $value['total_block'] = 0;
                 foreach ($this->posts as $post) {
                     if ($post->post_id == $value['id']) {
@@ -90,7 +96,7 @@ class PostBlockController extends Controller
 
     public function updateFeed(Request $request, $id)
     {
-        $client = new Client("hqfuwk78kb3n", "pgx8b6zy3dcwnbz43jw7t2e8pmhesjn24zwxesx8cbmphvhpnvbejakrxbwzb75x");
+        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
         $payload = [
             [
                 'id' => $id,
@@ -101,6 +107,8 @@ class PostBlockController extends Controller
         return $payload;
     }
 
+
+
     public function getPostsByBlockedUser()
     {
         return DB::table('user_blocked_user')
@@ -109,5 +117,22 @@ class PostBlockController extends Controller
             ->groupBy('post_id')
             ->orderBy('total_block', 'DESC')
             ->get();
+    }
+
+    private function getPoll($pollingId): string
+    {
+        $polling =  Polling::where('polling_id', $pollingId)->first();
+        return $polling->question;
+    }
+
+    private function getPollOption($pollingId)
+    {
+
+        $pollingOptions = PollingOption::select('option')->where('polling_id', $pollingId)->get();
+        $options = array();
+        foreach ($pollingOptions as $key => $value) {
+            $options[] = $value->option;
+        }
+        return $options;
     }
 }

@@ -195,6 +195,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/post-blocks', 'PostBlockController@index')->name('post-block');
     Route::post('/post-blocks/data', 'PostBlockController@data')->name('post-block.data');
     Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
+    Route::delete('/post/comment/{id}', [PostController::class, 'deleteComment'])->name('post.comment.delete');
 });
 
 Auth::routes();
