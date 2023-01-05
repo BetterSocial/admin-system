@@ -49,10 +49,10 @@
                                 <tr>
                                     <th>id</th>
                                     <th>username</th>
-                                    <th>message</th>
+                                    <th style="width: 30%">message</th>
+                                    <th style="width: 30%">Comments</th>
                                     <th>Image</th>
                                     <th>Poll</th>
-                                    <th>Comments</th>
                                     <th>Upvote</th>
                                     <th>Downvote</th>
                                     <th>Total Block</th>

@@ -14,6 +14,7 @@ const getFeeds = async (feedGroup, user_id) => {
       body: JSON.stringify(body),
     });
     let res = await response.json();
+    console.log(res);
     return res;
   } catch (err) {
     console.log(err);
@@ -198,12 +199,46 @@ $(document).ready(function () {
           data: "message",
           className: "menufilter textfilter",
           render: function (data, type, row) {
+            // comments tab;
+            let value = "";
+            if (data.includes("test post quesgion")) {
+              //   console.log(row);
+            }
+            let { latest_reactions } = row;
+            if (latest_reactions) {
+              let { comment } = latest_reactions;
+              if (comment) {
+                comment.forEach((element) => {
+                  let item =
+                    "<p>" +
+                    element.user.data.username +
+                    ": " +
+                    element.data.text +
+                    "</p>";
+                  value = value + item;
+                });
+              }
+            }
+            return value;
+          },
+        },
+        {
+          data: "message",
+          className: "menufilter textfilter",
+          render: function (data, type, row) {
             let { images_url } = row;
             // image tab
-            if (images_url.length >= 1) {
+            if (images_url.length > 1) {
+              let value = `<div class="btn-detail" style="100px"  data-item="${row}">`;
+              images_url.map((item) => {
+                value += `<a href="${item}" target="_blank"><img src="${item}" alt="${data}" class="rounded h-10" width="128" height="128"></a>`;
+              });
+              value += "</div>";
+              return value;
+            } else if (images_url.length == 1) {
               return `
-                  <div class="btn-detail" style="100px"  data-item="${row}"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></div>
-                  `;
+                    <div class="btn-detail" style="100px"  data-item="${row}"><a href="${images_url}" target="_blank"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></a></div>
+                    `;
             } else {
               return `
                 <div class="btn-detail"  data-item="${row}">-</div>
@@ -226,33 +261,6 @@ $(document).ready(function () {
               }
 
               value = value + "</ul>";
-            }
-            return value;
-          },
-        },
-        {
-          data: "message",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            // comments tab;
-            let value = "";
-            if (data.includes("test post quesgion")) {
-              //   console.log(row);
-            }
-            let { latest_reactions } = row;
-            if (latest_reactions) {
-              let { comment } = latest_reactions;
-              if (comment) {
-                comment.forEach((element) => {
-                  let item =
-                    "<p>" +
-                    element.user.data.username +
-                    ": " +
-                    element.data.text +
-                    "</p>";
-                  value = value + item;
-                });
-              }
             }
             return value;
           },
