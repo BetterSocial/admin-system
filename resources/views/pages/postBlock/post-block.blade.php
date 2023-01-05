@@ -103,16 +103,16 @@
                     <div class="">
                         <div id="cardBodyComment" class="">
                             <!-- Single answer -->
-                            <div class="d-flex mb-3">
-                                <!-- item image -->
-                                <a href="">
+                            {{-- <div class="d-flex mb-3"> --}}
+                            <!-- item image -->
+                            {{-- <a href="">
                                     <img src="https://mdbcdn.b-cdn.net/img/new/avatars/10.webp"
                                         class="border rounded-circle me-2" alt="Avatar" style="height: 40px" />
-                                </a>
-                                <!-- item image -->
+                                </a> --}}
+                            <!-- item image -->
 
-                                <!-- container content -->
-                                <div>
+                            <!-- container content -->
+                            {{-- <div>
                                     <div class="bg-light rounded-3 px-3 py-1">
                                         <a href="" class="text-dark mb-0">
                                             <strong>Hollie James</strong>
@@ -122,10 +122,10 @@
                                                 necessitatibus</small>
                                         </a>
                                     </div>
-                                </div>
+                                </div> --}}
 
-                                <!-- container content -->
-                            </div>
+                            <!-- container content -->
+                            {{-- </div> --}}
 
 
                         </div>
