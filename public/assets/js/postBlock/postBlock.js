@@ -205,6 +205,57 @@ function makeContent(text, username) {
   return container;
 }
 
+function deleteComment(commentId) {
+  console.log(commentId);
+  Swal.fire({
+    title: "Are you sure?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`/post/comment/${commentId}`, {
+          method: "DELETE",
+          headers: {
+            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+          },
+        });
+        let res = await response.json();
+        console.log(res);
+        if (res.status === "success") {
+          Swal.fire("Success", "Success delete comment", "success").then(() => {
+            location.reload();
+          });
+        } else {
+          Swal.fire("Error", res.message).then(() => {
+            location.reload();
+          });
+        }
+      } catch (err) {
+        console.log(err);
+        Swal.fire("Error", err).then(() => {
+          location.reload();
+        });
+      }
+    }
+  });
+}
+
+function makeBtnDelete(commentId) {
+  // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`
+  let btn = document.createElement("button");
+  btn.classList.add("btn", "btn-danger");
+  btn.innerText = "X";
+  btn.addEventListener("click", function () {
+    deleteComment(commentId);
+  });
+  return btn;
+}
+
 function makeComment(comment) {
   let { id, text, avatar, username } = comment;
   const container = document.createElement("div");
@@ -215,6 +266,8 @@ function makeComment(comment) {
 
   let content = makeContent(text, username);
   container.append(content);
+  let btnDelete = makeBtnDelete(id);
+  container.append(btnDelete);
   return container;
 }
 
