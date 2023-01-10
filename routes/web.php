@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::delete('/post/comment/{commentId}', [PostController::class, 'deleteComment']);
+
     Route::get('/dashboard', "HomeController@index");
     /*
      *  topics
