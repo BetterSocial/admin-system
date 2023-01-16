@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\UsersAppController;
+use App\Http\Controllers\ViewUserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -94,18 +96,7 @@ Route::group(['middleware' => 'auth'], function () {
     /*
      * Users
      */
-    Route::get('/view-users', function () {
-        // $category_name = '';
-        $data = [
-            'category_name' => 'viewUsers',
-            'page_name' => 'view Users',
-            'has_scrollspy' => 0,
-            'scrollspy_offset' => '',
-
-        ];
-        // $pageName = 'widgets';
-        return view('pages.users.user')->with($data);
-    });
+    Route::get('/view-users', [ViewUserController::class, 'index']);
     Route::POST('/users/data', 'UsersAppController@getData')->name('masterUsers.data');
     Route::GET('/download-csv', 'UsersAppController@downloadCsv')->name('download');
 
@@ -115,7 +106,7 @@ Route::group(['middleware' => 'auth'], function () {
      */
     Route::GET('/user-detail', 'UsersAppController@userDetail');
     Route::GET('/user-detail-view', 'UsersAppController@userDetailView');
-    Route::POST('/update-status', 'UsersAppController@updateStatus');
+    Route::POST('/update-status',  [UsersAppController::class, 'updateStatus']);
 
     //User Follow Data Topic
     Route::get('/follow-topics', 'UserFollowController@index');
