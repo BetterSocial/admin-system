@@ -196,35 +196,32 @@ function changeStatus(status, data) {
           Swal.showLoading();
         },
       });
-      updateStatus(status, formData)
-        .then(() => {
+
+      $.ajaxSetup({
+        headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+      });
+
+      $.ajax({
+        type: "POST",
+        data: formData,
+        dataType: "JSON",
+        contentType: false,
+        processData: false,
+        url: "/update-status",
+        success: function (data) {
+          console.log(data);
           $("#tableUsers").DataTable().ajax.reload();
           Swal.close();
-        })
-        .catch((error) => {
-          console.log(error);
+        },
+        error: function (data) {
           Swal.close();
           return Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: error.message,
+            text: data.message,
           });
-        });
+        },
+      });
     }
-  });
-}
-
-function updateStatus(status, formData) {
-  return fetch(`/update-${status}`, {
-    method: "POST",
-    body: formData,
-    headers: {
-      "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-    },
-  }).then((response) => {
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-    return response.json();
   });
 }

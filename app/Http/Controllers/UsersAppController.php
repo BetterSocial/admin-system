@@ -133,24 +133,24 @@ class UsersAppController extends Controller
 
     public function updateStatus(Request $request)
     {
-        $validatedData = $request->validate([
-            'user_id' => 'required|integer',
-        ]);
-
-        $userApp = UserApps::find($validatedData['user_id']);
-        if (!$userApp) {
-            return response()->json([
-                'success' => false,
-                'message' => "Data User Not Found"
-            ], 404);
-        }
-
         try {
+            $validatedData = $request->validate([
+                'user_id' => 'required|string',
+            ]);
+
+            $userApp = UserApps::find($validatedData['user_id']);
+            if (!$userApp) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Data User Not Found"
+                ], 404);
+            }
+
             if ($userApp->status == 'Y') {
-                $this->updateRemoteStatus('delete', $userApp);
+                // $this->updateRemoteStatus('delete', $userApp);
                 $userApp->status = 'N';
             } else {
-                $this->updateRemoteStatus('add', $userApp);
+                // $this->updateRemoteStatus('add', $userApp);
                 $userApp->status = 'Y';
             }
             $userApp->save();
