@@ -29,6 +29,12 @@ $(document).ready(function () {
         {
           "data" : 'name',
           "className" : 'menufilter textfilter',
+          render: function(data, type, row) {
+            let item = JSON.parse(row);
+            return `
+                <div class="btn-detail"  data-item="${item}">${data}</div>
+                `;
+          }
         },
         {
           "data" : 'icon_path',

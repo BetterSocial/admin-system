@@ -35,9 +35,7 @@ $(document).ready(function () {
               "\")' class='btn btn-danger btn-sm'>Banned</button>";
           } else {
             html +=
-              "<button type='button' onclick='changeStatus(this,\"" +
-              row.user_id +
-              "\")' class='btn btn-success btn-sm'>Active</button>";
+              "<button type='button' class='btn btn-success btn-sm'>Active</button>";
           }
           return html;
         },

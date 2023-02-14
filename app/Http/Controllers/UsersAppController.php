@@ -147,7 +147,7 @@ class UsersAppController extends Controller
             }
 
             if ($userApp->status == 'Y') {
-                // $this->updateRemoteStatus('delete', $userApp);
+                $this->updateRemoteStatus('delete', $userApp);
                 $userApp->status = 'N';
             } else {
                 // $this->updateRemoteStatus('add', $userApp);

@@ -4,6 +4,7 @@ use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UsersAppController;
 use App\Http\Controllers\ViewUserController;
+use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -30,16 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
     /*
      *  topics
      */
-    Route::get('/topics/index', function () {
-        $data = [
-            'category_name' => 'topics',
-            'page_name' => 'topics',
-            'has_scrollspy' => 0,
-            'scrollspy_offset' => '',
-
-        ];
-        return view('pages.topic.topics')->with($data);
-    });
+    Route::get('/topics/index', [TopicController::class, 'index']);
 
     Route::get('/create-topics', function () {
         // $category_name = '';
@@ -53,9 +45,9 @@ Route::group(['middleware' => 'auth'], function () {
         // $pageName = 'bootstrap_basic';
         return view('pages.topic.form_add_topics')->with($data);
     });
-    Route::POST('/topics/data', 'TopicsController@getData')->name('masterTopics.data');
-    Route::POST('/add/topics', 'TopicsController@addTopics')->name('add.topics');
-    Route::POST('/show/topics', 'TopicsController@showTopics')->name('add.topics');
+    Route::POST('/topics/data', 'TopicController@getData')->name('masterTopics.data');
+    Route::POST('/add/topics', 'TopicController@addTopics')->name('add.topics');
+    Route::POST('/show/topics', 'TopicController@showTopics')->name('add.topics');
 
 
 
