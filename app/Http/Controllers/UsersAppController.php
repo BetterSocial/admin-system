@@ -27,7 +27,7 @@ class UsersAppController extends Controller
             2 => 'country_code',
             3 => 'created_at',
         );
-        $user = "SELECT user_id,username,country_code,created_at,status FROM users WHERE true";
+        $user = "SELECT user_id,username,country_code,created_at, is_banned FROM users WHERE true";
         if ($req->username != null) {
             $user .= " AND username ='" . $req->username . "'";
         }
@@ -178,6 +178,27 @@ class UsersAppController extends Controller
             ]);
         } elseif ($action == 'delete') {
             $status = $client->users()->delete($userApp->user_id);
+        }
+    }
+
+    public function bannedUser($id)
+    {
+        try {
+
+            DB::beginTransaction();
+            $userApp = UserApps::find($id);
+            if ($userApp) {
+                $userApp->status = "N";
+                $userApp->is_banned = true;
+                $userApp->save();
+                DB::commit();
+                return $this->successResponse('success banned user');
+            }
+            return $this->errorResponse('failed banned user', 400);
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return $this->errorResponse($th->getMessage());
         }
     }
 }

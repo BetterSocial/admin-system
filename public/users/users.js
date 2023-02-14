@@ -28,14 +28,11 @@ $(document).ready(function () {
             "<a href='/user-detail-view?user_id=" +
             row.user_id +
             "'> <button type='button' class='btn btn-primary btn-sm'>Show Detail</button> </a>";
-          if (row.status == "Y") {
+          if (!row.is_banned) {
             html +=
-              `<button type='button' onclick='changeStatus(this,\"` +
+              `<button type='button' onclick='bannedUser(this,\"` +
               row.user_id +
               "\")' class='btn btn-danger btn-sm'>Banned</button>";
-          } else {
-            html +=
-              "<button type='button' class='btn btn-success btn-sm'>Active</button>";
           }
           return html;
         },
@@ -60,10 +57,11 @@ $(document).ready(function () {
         data: "status",
         orderable: false,
         render: function (data, type, row) {
-          if (row.status == "Y") {
-            return "<span class='badge badge-success'>Active</span>";
-          } else {
+          console.log(row.is_banned);
+          if (row.is_banned) {
             return "<span class='badge badge-danger'>Banned</span>";
+          } else {
+            return "<span class='badge badge-success'>Active</span>";
           }
         },
       },
@@ -171,10 +169,9 @@ function downloadCsv(e) {
     "/download-csv" + "?username=" + username + "&countryCode=" + countryCode;
 }
 
-function changeStatus(status, data) {
+function bannedUser(status, userId) {
   var formData = new FormData();
-  console.log(status);
-  formData.append("user_id", data);
+  formData.append("user_id", userId);
   Swal.fire({
     title: "Are you sure?",
     text: "",
@@ -205,7 +202,7 @@ function changeStatus(status, data) {
         dataType: "JSON",
         contentType: false,
         processData: false,
-        url: "/update-status",
+        url: `/users/banned/${userId}`,
         success: function (data) {
           console.log(data);
           $("#tableUsers").DataTable().ajax.reload();
