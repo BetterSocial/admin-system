@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\UserApps;
 use App\Services\ChatGetStreamService;
+use App\Services\FeedGetStreamService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use GetStream\Stream\Client;
@@ -201,6 +202,8 @@ class UsersAppController extends Controller
                 $userApp->save();
                 $streamChat = new ChatGetStreamService();
                 $streamChat->deActiveUser($id);
+                $feed = new FeedGetStreamService();
+                $feed->removeUser($id);
                 DB::commit();
                 return $this->successResponse('success banned user');
             }
