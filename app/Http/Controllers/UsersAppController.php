@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\UserApps;
+use App\Services\ChatGetStreamService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use GetStream\Stream\Client;
@@ -185,18 +186,26 @@ class UsersAppController extends Controller
     {
         try {
 
+            /**
+             * TODO:
+             * 1. update status is banned menjadi true
+             * 2. hapus semua post berdasarkan user tersebut
+             * 3. hapus semua atau keluarkan user tersebut dari chat
+             */
+
             DB::beginTransaction();
             $userApp = UserApps::find($id);
             if ($userApp) {
                 $userApp->status = "N";
                 $userApp->is_banned = true;
                 $userApp->save();
+                $streamChat = new ChatGetStreamService();
+                $streamChat->deActiveUser($id);
                 DB::commit();
                 return $this->successResponse('success banned user');
             }
             return $this->errorResponse('failed banned user', 400);
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             return $this->errorResponse($th->getMessage());
         }
