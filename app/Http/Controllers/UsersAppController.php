@@ -186,14 +186,6 @@ class UsersAppController extends Controller
     public function bannedUser($id)
     {
         try {
-
-            /**
-             * TODO:
-             * 1. update status is banned menjadi true
-             * 2. hapus semua post berdasarkan user tersebut
-             * 3. hapus semua atau keluarkan user tersebut dari chat
-             */
-
             DB::beginTransaction();
             $userApp = UserApps::find($id);
             if ($userApp) {
