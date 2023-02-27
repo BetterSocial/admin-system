@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\FeedGetStreamService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use GetStream\StreamChat\Client as StreamClient;
 
@@ -21,6 +23,10 @@ class ViewUserController extends Controller
      */
     public function index(Request $request)
     {
+
+        $feedService = new FeedGetStreamService();
+        return $feedService->getFeeds('0fdc3c75-b0a9-4440-a36a-844399867050');
+        return $feedService->updateExpireFeed('0fdc3c75-b0a9-4440-a36a-844399867050');
         $data = [
             'category_name' => 'viewUsers',
             'page_name' => 'view Users',
