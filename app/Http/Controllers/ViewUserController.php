@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\FeedGetStreamService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use GetStream\StreamChat\Client as StreamClient;
 

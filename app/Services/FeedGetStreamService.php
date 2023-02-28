@@ -3,12 +3,17 @@
 
 namespace App\Services;
 
+use App\Models\UserApps;
 use Carbon\Carbon;
+use DateTime;
 use GetStream\Stream\Client;
+use Illuminate\Support\Facades\Date;
+use Ramsey\Uuid\Uuid;
+
 
 class FeedGetStreamService
 {
-    private $client;
+    private Client $client;
 
     public function __construct()
     {
@@ -20,13 +25,61 @@ class FeedGetStreamService
         $this->client->users()->delete($userId);
     }
 
-    public function addUser($userId, $humanId, $pic, $username)
+    public function getFeeds($userId)
     {
-        $this->client->users()->add($userId, [
+        $feed = $this->client->feed('user_excl', $userId);
+
+        $response = $feed->getActivities(0, 30);
+
+        $result =  $response["results"];
+        return $result;
+    }
+
+    public function removeFeed($userId)
+    {
+        $yesterday = Carbon::yesterday();
+        $time = $yesterday->toIso8601String();
+        $this->client->feed('user_excl', $userId)->updateActivityToTargets("e585beb2-b4e7-11ed-a5a9-0e0d34fb440f", $time, [], [], []);
+    }
+
+    public function updateExpireFeed($userId)
+    {
+        $tatus = false;
+        try {
+            $now = new DateTime('now');
+            $feeds = $this->getFeeds($userId);
+            $activities = [];
+            foreach ($feeds as $key => $value) {
+                $time = $now->format(DateTime::ISO8601);
+                $uuid = Uuid::uuid4();
+                $date = Carbon::yesterday();
+                $expireTime = $date->toISOString();
+                $value['expired_at'] = $expireTime;
+
+                $activities[] = $value;
+                $set = [
+                    "expired_at" => $expireTime,
+                    "duration_feed" => "1",
+                ];
+                $unset = [];
+                $this->client->doPartialActivityUpdate($value['id'], null, null, $set, $unset);
+            }
+            return $this->getFeeds($userId);
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+            return false;
+        }
+    }
+
+    public function addUser($userId)
+    {
+        $userApp = UserApps::find($userId);
+        return $this->client->users()->add($userApp->user_id, [
             "created_at" => Carbon::now()->toISOString(),
-            "human_id" => $humanId,
-            "profile_pic_url" => $pic,
-            "username" => $username
+            "human_id" => $userApp->human_id,
+            "profile_pic_url" => $userApp->profile_pic_path,
+            "username" => $userApp->username
         ]);
     }
 }
