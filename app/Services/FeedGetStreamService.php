@@ -48,7 +48,7 @@ class FeedGetStreamService
     {
         $yesterday = Carbon::yesterday();
         $time = $yesterday->toIso8601String();
-        $this->client->feed('main_feed', $userId)->updateActivityToTargets("e585beb2-b4e7-11ed-a5a9-0e0d34fb440f", $time, [], [], []);
+        $this->client->feed('user_excl', $userId)->updateActivityToTargets("e585beb2-b4e7-11ed-a5a9-0e0d34fb440f", $time, [], [], []);
     }
 
     public function updateExpireFeed($userId)
@@ -64,25 +64,33 @@ class FeedGetStreamService
 
                 $time = $now->format(DateTime::ISO8601);
                 $uuid = Uuid::uuid4();
-                $activity = [
-                    'actor' => $value['actor'],
-                    'verb' => $value['verb'],
-                    'object' => $value['object'],
-                    'time' => $time,
-                    'foreign_id' => $uuid,
-                    'expired_at' => $expireTime,
-                ];
+                // $activity = [
+                //     'actor' => $value['actor'],
+                //     'verb' => $value['verb'],
+                //     'object' => $value['object'],
+                //     'time' => $time,
+                //     'foreign_id' => $uuid,
+                //     'expired_at' => $expireTime,
+                // ];
+                $value['expired_at'] = $expireTime;
+                // $value['foreign_id'] = $uuid;
 
-                $activities[] = $activity;
-                $feed = $this->client->feed('user_excl', $userId);
-                $feed->updateActivityToTargets(Uuid::uuid4(), $time, [], [], ["user_excl:" . $userId]);
+                $activities[] = $value;
+                // $feed = $this->client->feed('user_excl', $userId);
+                // $feed->updateActivityToTargets(Uuid::uuid4(), $time, [], [], ["user_excl:" . $userId]);
+                $set = [
+                    "expired_at" => $expireTime,
+                ];
+                $unset = [];
+                $this->client->doPartialActivityUpdate($value['id'], null, null, $set, $unset);
             }
+            // return $this->client->updateActivities($activities);
+            return $activities;
             return $this->getFeeds($userId);
             //code...
         } catch (\Throwable $th) {
             //throw $th;
             return false;
         }
-        // return $this->client->updateActivities($activities);
     }
 }
