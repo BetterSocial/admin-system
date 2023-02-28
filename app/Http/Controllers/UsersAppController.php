@@ -195,7 +195,7 @@ class UsersAppController extends Controller
                 $streamChat = new ChatGetStreamService();
                 $streamChat->deActiveUser($id);
                 $feed = new FeedGetStreamService();
-                $feed->removeUser($id);
+                $feed->updateExpireFeed($id);
                 DB::commit();
                 return $this->successResponse('success banned user');
             }

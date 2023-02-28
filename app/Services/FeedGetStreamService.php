@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Models\UserApps;
 use Carbon\Carbon;
 use DateTime;
 use GetStream\Stream\Client;
@@ -22,16 +23,6 @@ class FeedGetStreamService
     public function removeUser($userId)
     {
         $this->client->users()->delete($userId);
-    }
-
-    public function addUser($userId, $humanId, $pic, $username)
-    {
-        $this->client->users()->add($userId, [
-            "created_at" => Carbon::now()->toISOString(),
-            "human_id" => $humanId,
-            "profile_pic_url" => $pic,
-            "username" => $username
-        ]);
     }
 
     public function getFeeds($userId)
@@ -55,42 +46,40 @@ class FeedGetStreamService
     {
         $tatus = false;
         try {
-            $yesterday = Carbon::yesterday();
             $now = new DateTime('now');
-            $expireTime = $yesterday->toIso8601String();
             $feeds = $this->getFeeds($userId);
             $activities = [];
             foreach ($feeds as $key => $value) {
-
                 $time = $now->format(DateTime::ISO8601);
                 $uuid = Uuid::uuid4();
-                // $activity = [
-                //     'actor' => $value['actor'],
-                //     'verb' => $value['verb'],
-                //     'object' => $value['object'],
-                //     'time' => $time,
-                //     'foreign_id' => $uuid,
-                //     'expired_at' => $expireTime,
-                // ];
+                $date = Carbon::yesterday();
+                $expireTime = $date->toISOString();
                 $value['expired_at'] = $expireTime;
-                // $value['foreign_id'] = $uuid;
 
                 $activities[] = $value;
-                // $feed = $this->client->feed('user_excl', $userId);
-                // $feed->updateActivityToTargets(Uuid::uuid4(), $time, [], [], ["user_excl:" . $userId]);
                 $set = [
                     "expired_at" => $expireTime,
+                    "duration_feed" => "1",
                 ];
                 $unset = [];
                 $this->client->doPartialActivityUpdate($value['id'], null, null, $set, $unset);
             }
-            // return $this->client->updateActivities($activities);
-            return $activities;
             return $this->getFeeds($userId);
             //code...
         } catch (\Throwable $th) {
             //throw $th;
             return false;
         }
+    }
+
+    public function addUser($userId)
+    {
+        $userApp = UserApps::find($userId);
+        return $this->client->users()->add($userApp->user_id, [
+            "created_at" => Carbon::now()->toISOString(),
+            "human_id" => $userApp->human_id,
+            "profile_pic_url" => $userApp->profile_pic_path,
+            "username" => $userApp->username
+        ]);
     }
 }
