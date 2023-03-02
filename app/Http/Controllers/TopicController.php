@@ -15,7 +15,7 @@ class TopicController extends Controller
 
     public function index(Request $request)
     {
-        $data = Topics::select('categories')->groupBy('categories')->get();
+        $categories = Topics::category()->get();
         $data = [
             'category_name' => 'topics',
             'page_name' => 'topics',
@@ -26,39 +26,45 @@ class TopicController extends Controller
         return view('pages.topic.topics')->with($data);
     }
 
-    public function getData(Request $req)
+    public function data(Request $req)
     {
 
-        $columns = array(
-            // datatable column index  => database column name
-            0 => 'topic_id',
-            1 => 'name',
-            2 => 'icon_path',
-            3 => 'categories',
-            4 => 'created_at',
-            5 => 'flg_show'
-        );
-        $topic = "SELECT topic_id,name,icon_path,categories,created_at,'location',flg_show FROM topics WHERE true";
-        if ($req->name != null) {
-            $topic .= " AND name ILIKE '%$req->name%'";
+        try {
+            //code...
+            $columns = array(
+                // datatable column index  => database column name
+                0 => 'topic_id',
+                1 => 'name',
+            );
+            $user = "SELECT topic_id,name FROM topics WHERE true";
+            // if ($req->username != null) {
+            //     $user .= " AND username ='" . $req->username . "'";
+            // }
+            // if ($req->countryCode != null) {
+            //     $user .= " AND country_code ='" . $req->countryCode . "'";
+            // }
+
+
+
+            $data = DB::SELECT($user);
+            $total = count($data);
+
+
+            $user .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+
+
+            $dataLimit = DB::SELECT($user);
+            file_put_contents('topic.json', json_encode($dataLimit));
+            return response()->json([
+                'draw'            => $req->draw,
+                'recordsTotal'    => $total,
+                "recordsFiltered" => $total,
+                'data'            => $dataLimit,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            file_put_contents('test.text', $th->getMessage());
         }
-        if ($req->category != null) {
-            $topic .= " AND categories ILIKE '%$req->category%'";
-        }
-
-
-        $data = DB::SELECT($topic);
-        $total = count($data);
-
-        $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-
-        $dataLimit = DB::SELECT($topic);
-        return response()->json([
-            'draw'            => $req->draw,
-            'recordsTotal'    => $total,
-            "recordsFiltered" => $total,
-            'data'            => $dataLimit,
-        ]);
     }
 
     public function addTopics(Request $req)

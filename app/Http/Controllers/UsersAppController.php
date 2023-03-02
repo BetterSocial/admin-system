@@ -47,6 +47,7 @@ class UsersAppController extends Controller
 
 
         $dataLimit = DB::SELECT($user);
+        file_put_contents('user.json', json_encode($dataLimit));
         return response()->json([
             'draw'            => $req->draw,
             'recordsTotal'    => $total,

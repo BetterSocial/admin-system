@@ -45,7 +45,7 @@ Route::group(['middleware' => 'auth'], function () {
         // $pageName = 'bootstrap_basic';
         return view('pages.topic.form_add_topics')->with($data);
     });
-    Route::POST('/topics/data', 'TopicController@getData')->name('masterTopics.data');
+    Route::POST('/topics/data', [TopicController::class, 'data'])->name('masterTopics.data');
     Route::POST('/add/topics', 'TopicController@addTopics')->name('add.topics');
     Route::POST('/show/topics', 'TopicController@showTopics')->name('add.topics');
 
