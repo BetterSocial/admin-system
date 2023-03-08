@@ -25,13 +25,14 @@ class UsersAppController extends Controller
         try {
             //code...
             $columns = array(
+                0 => 'username',
                 1 => 'user_id',
                 2 => 'username',
                 3 => 'country_code',
                 4 => 'created_at',
             );
-            file_put_contents('user.json', json_encode($columns[$req->order[0]['column']]));
-            $user = "SELECT user_id,username,country_code,created_at, is_banned FROM users WHERE true";
+            file_put_contents('user.json', json_encode($req->all()));
+            $user = "SELECT user_id, username, country_code, created_at, is_banned FROM users WHERE true";
             if ($req->username != null) {
                 $user .= " AND username ='" . $req->username . "'";
             }
