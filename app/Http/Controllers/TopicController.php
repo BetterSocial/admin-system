@@ -72,7 +72,7 @@ class TopicController extends Controller
             ]);
         } catch (\Throwable $th) {
             //throw $th;
-            file_put_contents('test.txt', $th->getMessage());
+            // file_put_contents('test.txt', $th->getMessage());
         }
     }
 
@@ -174,10 +174,9 @@ class TopicController extends Controller
             ]);
             $topic = Topics::find($request->topic_id);
             Topics::updateTopic($topic, $request->all());
-            return redirect()->back();
+            return $this->successResponseWithAlert('success update topic');
         } catch (\Throwable $th) {
-            //throw $th;
-            dd($th->getMessage());
+            return $this->errorResponseWithAlert('failed update topic');
         }
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class Controller extends BaseController
 {
@@ -30,5 +31,25 @@ class Controller extends BaseController
         ];
 
         return response()->json($body, $statusCode);
+    }
+
+
+    protected function successResponseWithAlert($message = 'success save data', $targetUrl = null)
+    {
+
+        Alert::success('success', $message);
+        if ($targetUrl == null) {
+            return redirect()->back();
+        }
+        return redirect(route($targetUrl));
+    }
+
+    protected function errorResponseWithAlert($message = 'success save data', $param = null, $targetUrl = null)
+    {
+        Alert::error('Error', $message);
+        if ($targetUrl == null) {
+            return redirect()->back();
+        }
+        return redirect(route($targetUrl, $param));
     }
 }
