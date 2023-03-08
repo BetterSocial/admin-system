@@ -38,10 +38,10 @@ class Controller extends BaseController
     {
 
         Alert::success('success', $message);
-        if ($targetUrl == null) {
-            return redirect()->back();
+        if ($targetUrl != null) {
+            return redirect(route($targetUrl));
         }
-        return redirect(route($targetUrl));
+        return redirect()->back();
     }
 
     protected function errorResponseWithAlert($message = 'success save data', $param = null, $targetUrl = null)

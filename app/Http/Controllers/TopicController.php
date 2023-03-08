@@ -38,7 +38,6 @@ class TopicController extends Controller
 
         try {
             //code...
-            file_put_contents('topic.json', json_encode($req->all()));
             $columns = array(
                 // datatable column index  => database column name
                 0 => 'topic_id',
