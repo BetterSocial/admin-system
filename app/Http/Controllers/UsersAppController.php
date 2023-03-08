@@ -31,7 +31,7 @@ class UsersAppController extends Controller
                 3 => 'country_code',
                 4 => 'created_at',
             );
-            file_put_contents('user.json', json_encode($req->all()));
+            // file_put_contents('user.json', json_encode($req->all()));
             $user = "SELECT user_id, username, country_code, created_at, is_banned FROM users WHERE true";
             if ($req->username != null) {
                 $user .= " AND username ='" . $req->username . "'";
@@ -62,7 +62,7 @@ class UsersAppController extends Controller
             ]);
         } catch (\Throwable $th) {
             //throw $th;
-            file_put_contents('test.txt', $th->getMessage());
+            // file_put_contents('test.txt', $th->getMessage());
             return response()->json([
                 'draw'            => 0,
                 'recordsTotal'    => 0,
