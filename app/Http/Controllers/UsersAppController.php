@@ -62,6 +62,12 @@ class UsersAppController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
             file_put_contents('test.txt', $th->getMessage());
+            return response()->json([
+                'draw'            => 0,
+                'recordsTotal'    => 0,
+                "recordsFiltered" => 0,
+                'data'            => [],
+            ]);
         }
     }
 
