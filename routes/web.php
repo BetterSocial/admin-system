@@ -49,6 +49,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::POST('/topics/data', [TopicController::class, 'getData'])->name('masterTopics.data');
     Route::POST('/add/topics', 'TopicController@addTopics')->name('add.topics');
     Route::POST('/show/topics', 'TopicController@showTopics')->name('add.topics');
+    Route::post('/topic/category', [TopicController::class, 'category'])->name('topic.category');
+    Route::post('topic', [TopicController::class, 'update'])->name('topic.update');
 
 
 

@@ -27,6 +27,7 @@ class TopicController extends Controller
             'page_name' => 'topics',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
+            'category' => $categories,
 
         ];
         return view('pages.topic.topics')->with($data);
@@ -149,6 +150,34 @@ class TopicController extends Controller
                 'success' => false,
                 'message' => $e->getMessage()
             ]);
+        }
+    }
+
+    public function category(Request $request)
+    {
+        try {
+            $categories = Topics::category()->get();
+            return $this->successResponse('success get category topic', $categories);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->errorResponse($th->getMessage());
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $request->validate([
+                'topic_id' => 'required',
+                'name' => 'required',
+                'categories' => 'required',
+            ]);
+            $topic = Topics::find($request->topic_id);
+            Topics::updateTopic($topic, $request->all());
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            //throw $th;
+            dd($th->getMessage());
         }
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Topics extends Model
 {
@@ -32,5 +33,21 @@ class Topics extends Model
             $query->where('categories', 'ILIKE', '%' . $request->categories . '%');
         }
         return $query;
+    }
+
+    public static function updateTopic($topic, $data)
+    {
+        try {
+            DB::beginTransaction();
+            $topicData = collect($data)->only([
+                'name',
+                'categories'
+            ]);
+            $topic->update($topicData->toArray());
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 }

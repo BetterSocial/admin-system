@@ -1,6 +1,60 @@
-var datatble;
+var dataTable;
+
+let categories = [];
+
+async function getCategory() {
+  try {
+    const response = await fetch("/topic/category", {
+      method: "POST",
+      headers: {
+        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+      },
+      // body: JSON.stringify(body),
+    });
+    let res = await response.json();
+    console.log(res.status);
+    if (res.status === "success") {
+      return res.data;
+    } else {
+      // Swal.fire("Error", res.message).then(() => {
+      //   location.reload();
+      // });
+    }
+  } catch (err) {
+    console.log(err);
+    // Swal.fire("Error", err).then(() => {
+    //   location.reload();
+    // });
+  }
+}
+
+function createItemSelectCategory(categories) {
+  let categorySelect = document.getElementById("categorySelect");
+
+  categories.map((item) => {
+    categorySelect.insertAdjacentHTML(
+      "beforeend",
+      `<option value="${item.categories}">${item.categories}</option>`
+    );
+  });
+}
+
+async function detailCategory(item) {
+  $("#topicName").val(item.name);
+  $("#topicId").val(item.topic_id);
+  createItemSelectCategory(categories);
+  $("#detailCategory").modal("show");
+}
 $(document).ready(function () {
-  datatble = $("#tableTopics").DataTable({
+  getCategory()
+    .then((data) => {
+      console.log(data[0]);
+      categories = data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  dataTable = $("#tableTopics").DataTable({
     searching: false,
     stateSave: true,
     language: {
@@ -31,8 +85,6 @@ $(document).ready(function () {
         data: "name",
         className: "menufilter textfilter",
         render: function (data, type, row) {
-          console.log(row);
-          // let item = JSON.parse(row);
           return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
                 `;
@@ -51,6 +103,17 @@ $(document).ready(function () {
       {
         data: "categories",
         className: "menufilter textfilter",
+        render: function (data, type, row) {
+          console.log("data", data);
+          let value = "";
+          let item = JSON.stringify(row);
+          value += `<button style="border: none; background: transparent" onclick='detailCategory(${item})' >`;
+          value += "<p>" + data + "</p>";
+
+          value += "</button>";
+          return value;
+          return data;
+        },
       },
       {
         data: "created_at",
@@ -89,7 +152,7 @@ $(document).ready(function () {
   });
 
   $("#search").on("submit", function (e) {
-    datatble.draw();
+    dataTable.draw();
     e.preventDefault();
   });
 });
@@ -111,9 +174,9 @@ function showTopic(topicId) {
     success: function (data) {
       console.log(data);
       if (data.success) {
-        datatble.ajax.reload(null, false);
+        dataTable.ajax.reload(null, false);
       } else {
-        datatble.ajax.reload(null, false);
+        dataTable.ajax.reload(null, false);
         return Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -123,7 +186,7 @@ function showTopic(topicId) {
     },
     error: function (data) {
       console.log(data);
-      datatble.ajax.reload(null, false);
+      dataTable.ajax.reload(null, false);
       return Swal.fire({
         icon: "error",
         title: "Oops...",
