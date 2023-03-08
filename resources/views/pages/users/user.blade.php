@@ -2,14 +2,14 @@
 
 @section('content')
     <div class="layout-px-spacing">
-                
+
         <div class="row layout-top-spacing">
-        
+
             <div class="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
-            <h2><b>Users</b></h2>
-                
+                <h2><b>Users</b></h2>
+
                 <div class="widget-content widget-content-area br-6">
-                    <div class ="row">
+                    <div class="row">
                         <div class=col-lg-10>
                             <form class="form-inline" method="POST" id="search">
                                 <div class="form-group">
@@ -17,19 +17,20 @@
                                     &nbsp;&nbsp;
                                     <input type="text" id="countryCode" class="form-control" placeholder="Country Code">
                                     &nbsp;&nbsp;
-                                    <button type="submit" class="btn btn-primary">Search</button>                              
+                                    <button type="submit" class="btn btn-primary">Search</button>
                                 </div>
                             </form>
                         </div>
                         <div class="col-lg-2">
                             @unlessrole('viewer')
-                            <!-- <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b style="color:white">Download CSV</b></button> -->
-                                <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b style="color:white">Download CSV</b></button>
+                                <!-- <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b style="color:white">Download CSV</b></button> -->
+                                <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b
+                                        style="color:white">Download CSV</b></button>
                             @endunlessrole
                         </div>
                     </div>
-                    
-                        
+
+
                     <div class="table-responsive mb-4 mt-4">
                         <table id="tableUsers" class="table table-hover" style="width:100%">
                             <thead>
