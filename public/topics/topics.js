@@ -33,6 +33,33 @@ $(document).ready(function () {
         data: "name",
         className: "menufilter textfilter",
       },
+      {
+        data: "icon_path",
+        className: "menufilter textfilter",
+      },
+      {
+        data: "categories",
+        className: "menufilter textfilter",
+      },
+      {
+        data: "created_at",
+        className: "menufilter textfilter",
+      },
+      {
+        data: "Action",
+        orderable: false,
+        render: function (data, type, row) {
+          var html =
+            "<a href='/user-detail-view?user_id=" +
+            row.user_id +
+            "'> <button type='button' class='btn btn-primary btn-sm'>Show Detail</button> </a>";
+          html +=
+            `<button type='button' onclick='bannedUser(this,\"` +
+            row.user_id +
+            "\")' class='btn btn-danger btn-sm'>Banned</button>";
+          return html;
+        },
+      },
     ],
   });
 
