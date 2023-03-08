@@ -2,15 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Topics;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TopicController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
 
 
     public function index(Request $request)
@@ -26,35 +32,37 @@ class TopicController extends Controller
         return view('pages.topic.topics')->with($data);
     }
 
-    public function data(Request $req)
+    public function getData(Request $req)
     {
 
         try {
             //code...
+            file_put_contents('topic.json', json_encode($req->all()));
             $columns = array(
                 // datatable column index  => database column name
                 0 => 'topic_id',
                 1 => 'name',
+                2 => 'icon_path',
+                3 => 'categories',
+                4 => 'created_at',
+                5 => 'followers',
+                6 => 'flg_show'
             );
-            $user = "SELECT topic_id,name FROM topics WHERE true";
-            // if ($req->username != null) {
-            //     $user .= " AND username ='" . $req->username . "'";
-            // }
-            // if ($req->countryCode != null) {
-            //     $user .= " AND country_code ='" . $req->countryCode . "'";
-            // }
+            $topic = "SELECT topic_id,name,icon_path,categories,created_at,'location',flg_show FROM topics WHERE true";
+            if ($req->name != null) {
+                $topic .= " AND name ILIKE '%$req->name%'";
+            }
+            if ($req->category != null) {
+                $topic .= " AND categories ILIKE '%$req->category%'";
+            }
 
 
-
-            $data = DB::SELECT($user);
+            $data = DB::SELECT($topic);
             $total = count($data);
 
+            $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
 
-            $user .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-
-
-            $dataLimit = DB::SELECT($user);
-            file_put_contents('topic.json', json_encode($dataLimit));
+            $dataLimit = DB::SELECT($topic);
             return response()->json([
                 'draw'            => $req->draw,
                 'recordsTotal'    => $total,
@@ -63,7 +71,7 @@ class TopicController extends Controller
             ]);
         } catch (\Throwable $th) {
             //throw $th;
-            file_put_contents('test.text', $th->getMessage());
+            file_put_contents('test.txt', $th->getMessage());
         }
     }
 

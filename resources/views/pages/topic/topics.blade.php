@@ -36,6 +36,11 @@
                                 <tr>
                                     <th>id</th>
                                     <th>Name</th>
+                                    <th>Icon</th>
+                                    <th>Categories</th>
+                                    <th>Created at</th>
+                                    <th class="no-content">Followers</th>
+                                    <th class="no-content">Action</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
