@@ -21,6 +21,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "ramsey/uuid": "^4.7",
+        "realrashid/sweet-alert": "^6.0",
         "spatie/laravel-permission": "^4.0",
         "yajra/laravel-datatables-oracle": "^9.15"
     },

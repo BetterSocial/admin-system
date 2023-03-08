@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\ShowPostListController;
 use App\Http\Controllers\UsersAppController;
 use App\Http\Controllers\ViewUserController;
 use App\Http\Controllers\TopicController;
@@ -45,9 +46,11 @@ Route::group(['middleware' => 'auth'], function () {
         // $pageName = 'bootstrap_basic';
         return view('pages.topic.form_add_topics')->with($data);
     });
-    Route::POST('/topics/data', 'TopicController@getData')->name('masterTopics.data');
+    Route::POST('/topics/data', [TopicController::class, 'getData'])->name('masterTopics.data');
     Route::POST('/add/topics', 'TopicController@addTopics')->name('add.topics');
     Route::POST('/show/topics', 'TopicController@showTopics')->name('add.topics');
+    Route::post('/topic/category', [TopicController::class, 'category'])->name('topic.category');
+    Route::post('topic', [TopicController::class, 'update'])->name('topic.update');
 
 
 
@@ -89,7 +92,7 @@ Route::group(['middleware' => 'auth'], function () {
      * Users
      */
     Route::get('/view-users', [ViewUserController::class, 'index']);
-    Route::POST('/users/data', 'UsersAppController@getData')->name('masterUsers.data');
+    Route::POST('/users/data', [UsersAppController::class, 'getData'])->name('masterUsers.data');
     Route::GET('/download-csv', 'UsersAppController@downloadCsv')->name('download');
 
 
@@ -115,8 +118,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::POST("/change-password", "Auth\ChangePasswordController@index")->name('change.password');
 
-    Route::GET("/user-show-post-list", "ShowPostListController@index");
-    Route::POST("/user-show-post-list/data", "ShowPostListController@getData");
+    Route::GET("/user-show-post-list", [ShowPostListController::class, 'index']);
+    Route::POST("/user-show-post-list/data", [ShowPostListController::class, 'getData']);
 
     Route::GET("/sample-getstream", "SampleGetStream@index");
 

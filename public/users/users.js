@@ -32,7 +32,7 @@ $(document).ready(function () {
             html +=
               `<button type='button' onclick='bannedUser(this,\"` +
               row.user_id +
-              "\")' class='btn btn-danger btn-sm'>Banned</button>";
+              "\")' class='btn btn-danger btn-sm'>Ban User</button>";
           }
           return html;
         },

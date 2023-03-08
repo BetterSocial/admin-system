@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserApps;
+use App\Services\FeedGetStreamService;
 use GetStream\Stream\Client;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class ShowPostListController extends Controller
     public function index(Request $req)
     {
 
-        $user = UserApps::where('user_id', "f19ce509-e8ae-405f-91cf-ed19ce1ed96e")->first();
+        $user = UserApps::where('user_id', $req->user_id)->first();
 
         $data = [
             'category_name' => 'user_post',
@@ -29,19 +30,15 @@ class ShowPostListController extends Controller
     public function getData(Request $req)
     {
 
-        $client = new Client(config('constant.get_stream_key'), config('constant.get_stream_secret'));
+        $feed = new FeedGetStreamService();
+        $feeds = $feed->getFeeds($req->user_id);
 
-        $feed = $client->feed('main_feed', $req->user_id);
-
-        $response = $feed->getActivities($req->start, $req->length);
-
-        $result =  $response["results"];
-
+        // file_put_contents('users.json', json_encode($req->user_id));
         return response()->json([
             'draw'            => $req->draw,
             'recordsTotal'    => 0,
             "recordsFiltered" => 0,
-            'data'            => $result,
+            'data'            => $feeds,
         ]);
     }
 }

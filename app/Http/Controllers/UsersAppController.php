@@ -22,37 +22,53 @@ class UsersAppController extends Controller
 
     public function getData(Request $req)
     {
-        $columns = array(
-            // datatable column index  => database column name
-            0 => 'user_id',
-            1 => 'username',
-            2 => 'country_code',
-            3 => 'created_at',
-        );
-        $user = "SELECT user_id,username,country_code,created_at, is_banned FROM users WHERE true";
-        if ($req->username != null) {
-            $user .= " AND username ='" . $req->username . "'";
+        try {
+            //code...
+            $columns = array(
+                1 => 'user_id',
+                2 => 'username',
+                3 => 'country_code',
+                4 => 'created_at',
+            );
+            file_put_contents('user.json', json_encode($columns[$req->order[0]['column']]));
+            $user = "SELECT user_id,username,country_code,created_at, is_banned FROM users WHERE true";
+            if ($req->username != null) {
+                $user .= " AND username ='" . $req->username . "'";
+            }
+            if ($req->countryCode != null) {
+                $user .= " AND country_code ='" . $req->countryCode . "'";
+            }
+
+            if ($req->created_at != null) {
+                $user .= " AND country_code ='" . $req->created_at . "'";
+            }
+
+
+
+            $data = DB::SELECT($user);
+            $total = count($data);
+
+
+            $user .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+
+
+            $dataLimit = DB::SELECT($user);
+            return response()->json([
+                'draw'            => $req->draw,
+                'recordsTotal'    => $total,
+                "recordsFiltered" => $total,
+                'data'            => $dataLimit,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            file_put_contents('test.txt', $th->getMessage());
+            return response()->json([
+                'draw'            => 0,
+                'recordsTotal'    => 0,
+                "recordsFiltered" => 0,
+                'data'            => [],
+            ]);
         }
-        if ($req->countryCode != null) {
-            $user .= " AND country_code ='" . $req->countryCode . "'";
-        }
-
-
-
-        $data = DB::SELECT($user);
-        $total = count($data);
-
-
-        $user .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-
-
-        $dataLimit = DB::SELECT($user);
-        return response()->json([
-            'draw'            => $req->draw,
-            'recordsTotal'    => $total,
-            "recordsFiltered" => $total,
-            'data'            => $dataLimit,
-        ]);
     }
 
     public function downloadCsv(Request $req)

@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Topics;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TopicController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
 
 
     public function index(Request $request)
     {
-        $data = Topics::select('categories')->groupBy('categories')->get();
+        $categories = Topics::category()->get();
         $data = [
             'category_name' => 'topics',
             'page_name' => 'topics',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
+            'category' => $categories,
 
         ];
         return view('pages.topic.topics')->with($data);
@@ -29,36 +36,43 @@ class TopicController extends Controller
     public function getData(Request $req)
     {
 
-        $columns = array(
-            // datatable column index  => database column name
-            0 => 'topic_id',
-            1 => 'name',
-            2 => 'icon_path',
-            3 => 'categories',
-            4 => 'created_at',
-            5 => 'flg_show'
-        );
-        $topic = "SELECT topic_id,name,icon_path,categories,created_at,'location',flg_show FROM topics WHERE true";
-        if ($req->name != null) {
-            $topic .= " AND name ILIKE '%$req->name%'";
+        try {
+            //code...
+            $columns = array(
+                // datatable column index  => database column name
+                0 => 'topic_id',
+                1 => 'name',
+                2 => 'icon_path',
+                3 => 'categories',
+                4 => 'created_at',
+                5 => 'followers',
+                6 => 'flg_show'
+            );
+            $topic = "SELECT topic_id,name,icon_path,categories,created_at,'location',flg_show FROM topics WHERE true";
+            if ($req->name != null) {
+                $topic .= " AND name ILIKE '%$req->name%'";
+            }
+            if ($req->category != null) {
+                $topic .= " AND categories ILIKE '%$req->category%'";
+            }
+
+
+            $data = DB::SELECT($topic);
+            $total = count($data);
+
+            $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+
+            $dataLimit = DB::SELECT($topic);
+            return response()->json([
+                'draw'            => $req->draw,
+                'recordsTotal'    => $total,
+                "recordsFiltered" => $total,
+                'data'            => $dataLimit,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            // file_put_contents('test.txt', $th->getMessage());
         }
-        if ($req->category != null) {
-            $topic .= " AND categories ILIKE '%$req->category%'";
-        }
-
-
-        $data = DB::SELECT($topic);
-        $total = count($data);
-
-        $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-
-        $dataLimit = DB::SELECT($topic);
-        return response()->json([
-            'draw'            => $req->draw,
-            'recordsTotal'    => $total,
-            "recordsFiltered" => $total,
-            'data'            => $dataLimit,
-        ]);
     }
 
     public function addTopics(Request $req)
@@ -135,6 +149,33 @@ class TopicController extends Controller
                 'success' => false,
                 'message' => $e->getMessage()
             ]);
+        }
+    }
+
+    public function category(Request $request)
+    {
+        try {
+            $categories = Topics::category()->get();
+            return $this->successResponse('success get category topic', $categories);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->errorResponse($th->getMessage());
+        }
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            $request->validate([
+                'topic_id' => 'required',
+                'name' => 'required',
+                'categories' => 'required',
+            ]);
+            $topic = Topics::find($request->topic_id);
+            Topics::updateTopic($topic, $request->all());
+            return $this->successResponseWithAlert('success update topic');
+        } catch (\Throwable $th) {
+            return $this->errorResponseWithAlert('failed update topic');
         }
     }
 }
