@@ -39,6 +39,7 @@
                                     <th>Icon</th>
                                     <th>Categories</th>
                                     <th>Created at</th>
+                                    <th>Sort</th>
                                     <th class="no-content">Followers</th>
                                     <th class="no-content">Action</th>
                                 </tr>

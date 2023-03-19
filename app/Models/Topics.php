@@ -12,7 +12,7 @@ class Topics extends Model
     protected $table    = 'topics';
     protected $primaryKey = 'topic_id';
     protected $fillable = [
-        'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic'
+        'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort'
     ];
     const CREATED_AT    = 'created_at';
     public $timestamps = false;
@@ -21,7 +21,7 @@ class Topics extends Model
     {
         return [
             'topic_id',
-            'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic'
+            'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort'
         ];
     }
 

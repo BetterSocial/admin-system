@@ -45,10 +45,11 @@ class TopicController extends Controller
                 2 => 'icon_path',
                 3 => 'categories',
                 4 => 'created_at',
-                5 => 'followers',
-                6 => 'flg_show'
+                5 => 'sort',
+                6 => 'followers',
+                7 => 'flg_show'
             );
-            $topic = "SELECT topic_id,name,icon_path,categories,created_at,'location',flg_show FROM topics WHERE true";
+            $topic = "SELECT topic_id,name,icon_path,categories,created_at,sort,'location',flg_show FROM topics WHERE true";
             if ($req->name != null) {
                 $topic .= " AND name ILIKE '%$req->name%'";
             }

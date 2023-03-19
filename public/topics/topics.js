@@ -127,6 +127,10 @@ $(document).ready(function () {
         className: "menufilter textfilter",
       },
       {
+        data: "sort",
+        className: "menufilter textfilter",
+      },
+      {
         data: "followers",
         render: function (data, type, row) {
           return (
