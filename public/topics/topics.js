@@ -231,8 +231,8 @@ $(document).ready(function () {
         console.log(xhr);
         return Swal.fire({
           icon: "error",
-          title: "Oops...",
-          text: data.message,
+          title: xhr.statusText,
+          text: xhr.responseJSON.message,
         });
       },
     });
