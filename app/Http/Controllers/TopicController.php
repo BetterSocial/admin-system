@@ -179,7 +179,7 @@ class TopicController extends Controller
             Topics::updateTopic($topic, $request->all());
             return $this->successResponse('success update topic');
         } catch (\Throwable $th) {
-            return $this->errorResponse('failed update topic');
+            return $this->errorResponse('failed update topic', 400);
         }
     }
 }
