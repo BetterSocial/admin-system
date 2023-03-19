@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CreateTopicController;
 use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ShowPostListController;
@@ -34,23 +35,12 @@ Route::group(['middleware' => 'auth'], function () {
      */
     Route::get('/topics/index', [TopicController::class, 'index']);
 
-    Route::get('/create-topics', function () {
-        // $category_name = '';
-        $data = [
-            'category_name' => 'forms',
-            'page_name' => 'create-topics',
-            'has_scrollspy' => 1,
-            'scrollspy_offset' => 100,
-
-        ];
-        // $pageName = 'bootstrap_basic';
-        return view('pages.topic.form_add_topics')->with($data);
-    });
+    Route::get('/create-topics', [CreateTopicController::class, 'index']);
     Route::POST('/topics/data', [TopicController::class, 'getData'])->name('masterTopics.data');
-    Route::POST('/add/topics', 'TopicController@addTopics')->name('add.topics');
+    Route::POST('/add/topics', [TopicController::class, 'addTopics'])->name('create.topics');
     Route::POST('/show/topics', 'TopicController@showTopics')->name('add.topics');
     Route::post('/topic/category', [TopicController::class, 'category'])->name('topic.category');
-    Route::post('topic', [TopicController::class, 'update'])->name('topic.update');
+    Route::put('/topic', [TopicController::class, 'update'])->name('topic.update');
 
 
 

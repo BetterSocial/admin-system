@@ -56,8 +56,7 @@
     <div class="modal fade" id="detailCategory" tabindex="1" aria-labelledby="detailModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('topic.update') }}" method="post">
-                    @csrf
+                <form action="{{ route('topic.update') }}" method="post" id="modal-category">
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailModalLabel">Change Category</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -75,18 +74,22 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="categorySelect">Category</label>
-                                    <select class="form-control" id="categorySelect" name="categories" required>
+                                    <select class="form-control" id="categorySelect" name="categories">
                                         <option value="">Select Category</option>
                                     </select>
                                 </div>
-
-
+                                <div class="form-group">
+                                    <label for="">Or</label><br>
+                                    <label for="topicCategory">New Category</label>
+                                    <input type="text" class="form-control" id="categoryInput" placeholder="Category"
+                                        name="category">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
                     </div>
                 </form>
             </div>
