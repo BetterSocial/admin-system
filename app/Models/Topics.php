@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class Topics extends Model
 {
@@ -17,6 +17,31 @@ class Topics extends Model
     const CREATED_AT    = 'created_at';
     public $timestamps = false;
 
+    public static function onlyFillAble()
+    {
+        return [
+            'topic_id',
+            'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic'
+        ];
+    }
+
+    public function setIsCustomTopic($value)
+    {
+        if ($value) {
+            $this->attributes['is_custom_topic'] = false;
+        } else {
+            $this->attributes['is_custom_topic'] = $value;
+        }
+    }
+
+    public function setFlgShow($value)
+    {
+        if ($value) {
+            $this->attributes['flg_show'] = 'N';
+        } else {
+            $this->attributes['flg_show'] = $value;
+        }
+    }
 
     public function scopeCategory($query)
     {
@@ -33,6 +58,20 @@ class Topics extends Model
             $query->where('categories', 'ILIKE', '%' . $request->categories . '%');
         }
         return $query;
+    }
+
+    public static function addTopic(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            Topics::create($request->only([]));
+
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
     }
 
     public static function updateTopic($topic, $data)

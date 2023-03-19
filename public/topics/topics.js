@@ -12,7 +12,6 @@ async function getCategory() {
       // body: JSON.stringify(body),
     });
     let res = await response.json();
-    console.log(res.status);
     if (res.status === "success") {
       return res.data;
     } else {
@@ -45,15 +44,24 @@ async function detailCategory(item) {
   createItemSelectCategory(categories);
   $("#detailCategory").modal("show");
 }
-$(document).ready(function () {
+function getNewCategory() {
   getCategory()
     .then((data) => {
-      console.log(data[0]);
       categories = data;
     })
     .catch((err) => {
       console.log(err);
     });
+}
+$(document).ready(function () {
+  getCategory()
+    .then((data) => {
+      categories = data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   dataTable = $("#tableTopics").DataTable({
     searching: false,
     stateSave: true,
@@ -104,7 +112,6 @@ $(document).ready(function () {
         data: "categories",
         className: "menufilter textfilter",
         render: function (data, type, row) {
-          console.log("data", data);
           let value = "";
           let item = JSON.stringify(row);
           value += `<button style="border: none; background: transparent" onclick='detailCategory(${item})' >`;
@@ -155,7 +162,90 @@ $(document).ready(function () {
     dataTable.draw();
     e.preventDefault();
   });
+
+  $("#modal-category").submit(function (e) {
+    e.preventDefault(); // prevent the form from submitting via the browser
+    var form = $(this);
+    var url = form.attr("action");
+    console.log(url);
+    let topicId = $("#topicId").val();
+    let topicName = $("#topicName").val();
+    let categorySelect = $("#categorySelect").val();
+    let categoryInput = $("#categoryInput").val();
+
+    let category = "";
+    if (categorySelect) {
+      category = categorySelect;
+    }
+
+    if (categoryInput) {
+      category = categoryInput;
+    }
+
+    let data = {
+      topic_id: topicId,
+      name: topicName,
+      categories: category,
+    };
+
+    console.log(data);
+
+    $.ajaxSetup({
+      headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+    });
+    $.ajax({
+      type: "PUT",
+      url: url,
+      // data: form.serialize(), // serializes the form's elements.
+      data: data,
+      success: function (data) {
+        // alert(data); // show response from the php script.
+        console.log(data);
+        if (data.status === "success") {
+          $("#detailCategory").modal("hide");
+          $("#detailCategory").on("hidden.bs.modal", function () {
+            $(this).find("input").val("");
+            $(this).find("select").prop("selectedIndex", 0);
+            $(this).find("textarea").val("");
+          });
+          // dataTable.draw();
+
+          getNewCategory();
+          dataTable.ajax.reload(null, false);
+          return Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Topic Updated",
+          });
+        } else {
+          return Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: " + error);
+        console.log("Status: " + status);
+        console.log(xhr);
+        return Swal.fire({
+          icon: "error",
+          title: xhr.statusText,
+          text: xhr.responseJSON.message,
+        });
+      },
+    });
+  });
 });
+
+// $("#modal-category").on("submit", function (e) {
+//   e.preventDefault();
+//   let topicId = $("#topicId").val();
+//   let topicName = $("#topicName").val();
+//   let categorySelect = $("#categorySelect").val();
+//   let categoryInput = $("#categoryInput").val();
+// });
 
 function showTopic(topicId) {
   var formData = new FormData();
@@ -172,7 +262,6 @@ function showTopic(topicId) {
     processData: false,
     url: "/show/topics",
     success: function (data) {
-      console.log(data);
       if (data.success) {
         dataTable.ajax.reload(null, false);
       } else {
