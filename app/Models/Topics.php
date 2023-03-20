@@ -78,10 +78,7 @@ class Topics extends Model
     {
         try {
             DB::beginTransaction();
-            $topicData = collect($data)->only([
-                'name',
-                'categories'
-            ]);
+            $topicData = collect($data)->only(Topics::onlyFillAble());
             $topic->update($topicData->toArray());
             DB::commit();
         } catch (\Throwable $th) {

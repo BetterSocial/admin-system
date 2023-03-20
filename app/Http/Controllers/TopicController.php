@@ -173,8 +173,6 @@ class TopicController extends Controller
         try {
             $request->validate([
                 'topic_id' => 'required',
-                'name' => 'required',
-                'categories' => 'required',
             ]);
             $topic = Topics::find($request->topic_id);
             Topics::updateTopic($topic, $request->all());

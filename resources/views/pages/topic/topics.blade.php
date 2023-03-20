@@ -96,4 +96,35 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalTopicSort" tabindex="1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('topic.update') }}" method="post" id="formTopicSort">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabel">Change Sort Topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="">
+                            <div id="cardCategory" class="">
+                                <input type="text" id="topicId" name="topic_id" hidden>
+                                <div class="form-group">
+                                    <label for="topicSort">Sort</label>
+                                    <input type="text" class="form-control" id="topicSort" placeholder="topic"
+                                        name="sort" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
