@@ -110,6 +110,8 @@ $(document).ready(function () {
         render: function (data, type, row) {
           if (data != "" || data != " " || data != null) {
             return '<img src="' + data + '" width="30" height="20" />';
+          } else {
+            return '<img src="" width="30" height="20">';
           }
         },
         defaultContent: "No Icon",

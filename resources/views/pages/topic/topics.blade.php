@@ -23,7 +23,8 @@
                         </div>
                         <div class="col-lg-2">
                             @unlessrole('viewer')
-                                <a href="/create-topics"> <button class="btn btn-primary"><b style="color:white">Create
+                                <a href="{{ route('topic.create') }}"> <button class="btn btn-primary"><b
+                                            style="color:white">Create
                                             Topics</b></button> </a>
                             @endunlessrole
                         </div>
