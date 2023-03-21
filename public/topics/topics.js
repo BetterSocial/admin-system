@@ -44,6 +44,12 @@ async function detailCategory(item) {
   createItemSelectCategory(categories);
   $("#detailCategory").modal("show");
 }
+
+async function showSortTopic(item) {
+  $("#topicSort").val(item.sort);
+  $("#topicId").val(item.topic_id);
+  $("#modalTopicSort").modal("show");
+}
 function getNewCategory() {
   getCategory()
     .then((data) => {
@@ -104,6 +110,8 @@ $(document).ready(function () {
         render: function (data, type, row) {
           if (data != "" || data != " " || data != null) {
             return '<img src="' + data + '" width="30" height="20" />';
+          } else {
+            return '<img src="" width="30" height="20">';
           }
         },
         defaultContent: "No Icon",
@@ -125,6 +133,19 @@ $(document).ready(function () {
       {
         data: "created_at",
         className: "menufilter textfilter",
+      },
+      {
+        data: "sort",
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          let value = "";
+          let item = JSON.stringify(row);
+          value += `<button style="border: none; background: transparent" onclick='showSortTopic(${item})' >`;
+          value += "<p>" + data + "</p>";
+
+          value += "</button>";
+          return value;
+        },
       },
       {
         data: "followers",
@@ -163,11 +184,80 @@ $(document).ready(function () {
     e.preventDefault();
   });
 
+  $("#formTopicSort").submit(function (e) {
+    e.preventDefault();
+    var form = $(this);
+    var url = form.attr("action");
+    let topicId = $("#topicId").val();
+    let topicSort = $("#topicSort").val();
+
+    let category = "";
+    if (categorySelect) {
+      category = categorySelect;
+    }
+
+    if (categoryInput) {
+      category = categoryInput;
+    }
+
+    let data = {
+      topic_id: topicId,
+      sort: topicSort,
+    };
+
+    console.log(data);
+
+    $.ajaxSetup({
+      headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+    });
+    $.ajax({
+      type: "PUT",
+      url: url,
+      // data: form.serialize(), // serializes the form's elements.
+      data: data,
+      success: function (data) {
+        // alert(data); // show response from the php script.
+        if (data.status === "success") {
+          $("#modalTopicSort").modal("hide");
+          $("#modalTopicSort").on("hidden.bs.modal", function () {
+            $(this).find("input").val("");
+            $(this).find("select").prop("selectedIndex", 0);
+            $(this).find("textarea").val("");
+          });
+          // dataTable.draw();
+
+          getNewCategory();
+          dataTable.ajax.reload(null, false);
+          return Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Topic Updated",
+          });
+        } else {
+          return Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: " + error);
+        console.log("Status: " + status);
+        console.log(xhr);
+        return Swal.fire({
+          icon: "error",
+          title: xhr.statusText,
+          text: xhr.responseJSON.message,
+        });
+      },
+    });
+  });
+
   $("#modal-category").submit(function (e) {
     e.preventDefault(); // prevent the form from submitting via the browser
     var form = $(this);
     var url = form.attr("action");
-    console.log(url);
     let topicId = $("#topicId").val();
     let topicName = $("#topicName").val();
     let categorySelect = $("#categorySelect").val();
@@ -238,14 +328,6 @@ $(document).ready(function () {
     });
   });
 });
-
-// $("#modal-category").on("submit", function (e) {
-//   e.preventDefault();
-//   let topicId = $("#topicId").val();
-//   let topicName = $("#topicName").val();
-//   let categorySelect = $("#categorySelect").val();
-//   let categoryInput = $("#categoryInput").val();
-// });
 
 function showTopic(topicId) {
   var formData = new FormData();

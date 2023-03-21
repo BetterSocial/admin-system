@@ -45,10 +45,11 @@ class TopicController extends Controller
                 2 => 'icon_path',
                 3 => 'categories',
                 4 => 'created_at',
-                5 => 'followers',
-                6 => 'flg_show'
+                5 => 'sort',
+                6 => 'followers',
+                7 => 'flg_show'
             );
-            $topic = "SELECT topic_id,name,icon_path,categories,created_at,'location',flg_show FROM topics WHERE true";
+            $topic = "SELECT topic_id,name,icon_path,categories,created_at,sort,'location',flg_show FROM topics WHERE true";
             if ($req->name != null) {
                 $topic .= " AND name ILIKE '%$req->name%'";
             }
@@ -81,41 +82,43 @@ class TopicController extends Controller
         try {
             // $file = $req->file('file');
 
-            // $this->validate($req, [
-            //     'file' => 'image|max:1024|dimensions:min_width=64,min_height=64',
+            $this->validate($req, [
+                // 'file' => 'image|max:1024|dimensions:min_width=64,min_height=64',
+                'sort' => 'required|integer'
 
-            // ]);
-            $name = ucfirst($req->name);
-            $category = ucfirst($req->category);
+            ]);
+            // $name = ucfirst($req->name);
+            // $category = ucfirst($req->category);
+            $name = $req->name;
+            $category = $req->category;
             $check = DB::table('topics')->where([['name', '=', $name], ['categories', '=', $category]])->count();
 
             if ($check > 0) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Data topic with name ' . $name . ' and category ' . $category . ' already exists'
-                ]);
+                return $this->errorResponse('Data topic with name ' . $name . ' and category ' . $category . ' already exists');
             }
 
-            if ($req->has('file')) {
+            if ($req->hasFile('file')) {
                 $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
                 $req->merge([
                     'icon_path' => $response
                 ]);
+            } else {
+                $req->merge([
+                    'icon_path' => 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                ]);
             }
 
+            DB::beginTransaction();
             Topics::create($req->merge([
                 'name' => $name,
                 'categories' => $category,
                 'created_at' => Carbon::now()
             ])->all());
-            return response()->json([
-                'success' => true,
-            ]);
+            DB::commit();
+            return $this->successResponse('success create new topic');
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ]);
+            DB::rollBack();
+            return $this->errorResponse($e->getMessage());
         }
     }
 
@@ -172,8 +175,6 @@ class TopicController extends Controller
         try {
             $request->validate([
                 'topic_id' => 'required',
-                'name' => 'required',
-                'categories' => 'required',
             ]);
             $topic = Topics::find($request->topic_id);
             Topics::updateTopic($topic, $request->all());

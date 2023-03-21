@@ -32,6 +32,15 @@
                                     <input type="text" id="category" class="form-control" placeholder="Category"
                                         aria-label="Category" required>
                                 </div>
+                                <div class="input-group mb-5">
+                                    <div class="col-md-2">
+                                        <label>Sort</label>
+                                    </div>
+                                    <input type="text" id="sort" class="form-control" placeholder="0"
+                                        aria-label="sort" required>
+                                    <span id="sort-error" style="color: red;"></span>
+                                </div>
+
 
                                 <div class="custom-file-container" data-upload-id="myFirstImage">
                                     <label>Icon <a href="javascript:void(0)" class="custom-file-container__image-clear"
