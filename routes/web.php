@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CreateTopicController;
+use App\Http\Controllers\LimitTopicController;
 use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ShowPostListController;
@@ -38,9 +39,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/create-topics', [CreateTopicController::class, 'index'])->name('topic.create');
     Route::POST('/topics/data', [TopicController::class, 'getData'])->name('masterTopics.data');
     Route::POST('/add/topics', [TopicController::class, 'addTopics'])->name('create.topics');
-    Route::POST('/show/topics', 'TopicController@showTopics')->name('add.topics');
+    Route::POST('/show/topics', [TopicController::class, 'showTopics'])->name('add.topics');
     Route::post('/topic/category', [TopicController::class, 'category'])->name('topic.category');
     Route::put('/topic', [TopicController::class, 'update'])->name('topic.update');
+    Route::get('/topic/limit', [LimitTopicController::class, 'getData'])->name('topic.limit');
+    Route::post('/topic/limit', [LimitTopicController::class, 'create'])->name('topic.limit.create');
 
 
 
