@@ -27,6 +27,11 @@
                                             style="color:white">Create
                                             Topics</b></button> </a>
                             @endunlessrole
+                            <div class="mt-2"></div>
+                            @unlessrole('viewer')
+                                <button class="btn btn-primary btn-limit-topic"><b style="color:white">Change Limit
+                                        Topic</b></button>
+                            @endunlessrole
                         </div>
                     </div>
 
@@ -115,6 +120,40 @@
                                 <div class="form-group">
                                     <label for="topicSort">Sort</label>
                                     <input type="text" class="form-control" id="topicSort" placeholder="topic"
+                                        name="sort" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalTopicLimit" tabindex="1" aria-labelledby="detailModalLabelLimit"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('topic.limit.create') }}" method="post" id="formTopicLimit">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabelLimit">Change Limit Topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="">Current limit</label>
+                            <input type="text" class="form-control current-limit-topic" value="2" disabled>
+                        </div>
+                        <div class="">
+                            <div id="cardCategory" class="">
+                                <div class="form-group">
+                                    <label for="topicSort">Limit Topic</label>
+                                    <input type="number" class="form-control" id="limitTopic" placeholder="0"
                                         name="sort" required>
                                 </div>
                             </div>

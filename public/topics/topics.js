@@ -2,6 +2,32 @@ var dataTable;
 
 let categories = [];
 
+let currentLimitTopic = 0;
+
+async function getCurrentLimitTopic() {
+  try {
+    const response = await fetch("/topic/limit", {
+      method: "GET",
+      headers: {
+        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+      },
+      // body: JSON.stringify(body),
+    });
+    let res = await response.json();
+    console.log(res);
+    if (res.status === "success") {
+      console.log(res.data);
+      currentLimitTopic = res.data.limit;
+    } else {
+      // Swal.fire("Error", res.message).then(() => {
+      //   location.reload();
+      // });
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
 async function getCategory() {
   try {
     const response = await fetch("/topic/category", {
@@ -50,6 +76,7 @@ async function showSortTopic(item) {
   $("#topicId").val(item.topic_id);
   $("#modalTopicSort").modal("show");
 }
+
 function getNewCategory() {
   getCategory()
     .then((data) => {
@@ -60,6 +87,13 @@ function getNewCategory() {
     });
 }
 $(document).ready(function () {
+  $(".btn-limit-topic").click(function () {
+    $(".current-limit-topic").val(currentLimitTopic);
+    $("#modalTopicLimit").modal("show");
+  });
+
+  getCurrentLimitTopic();
+
   getCategory()
     .then((data) => {
       categories = data;
@@ -306,6 +340,61 @@ $(document).ready(function () {
             icon: "success",
             title: "Success",
             text: "Topic Updated",
+          });
+        } else {
+          return Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+        }
+      },
+      error: function (xhr, status, error) {
+        console.log("Error: " + error);
+        console.log("Status: " + status);
+        console.log(xhr);
+        return Swal.fire({
+          icon: "error",
+          title: xhr.statusText,
+          text: xhr.responseJSON.message,
+        });
+      },
+    });
+  });
+
+  $("#formTopicLimit").submit(function (e) {
+    e.preventDefault();
+    const form = $(this);
+    const url = form.attr("action");
+    let limit = $("#limitTopic").val();
+    console.log("limit", limit);
+    let data = {
+      limit: limit,
+    };
+
+    $.ajaxSetup({
+      headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+    });
+    $.ajax({
+      type: "POST",
+      url: url,
+      // data: form.serialize(), // serializes the form's elements.
+      data: data,
+      success: function (data) {
+        // alert(data); // show response from the php script.
+        console.log(data);
+        if (data.status === "success") {
+          $("#modalTopicLimit").modal("hide");
+          $("#modalTopicLimit").on("hidden.bs.modal", function () {
+            $(this).find("input").val("");
+            $(this).find("select").prop("selectedIndex", 0);
+            $(this).find("textarea").val("");
+          });
+          getCurrentLimitTopic();
+          return Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: "Limit Topic Updated",
           });
         } else {
           return Swal.fire({
