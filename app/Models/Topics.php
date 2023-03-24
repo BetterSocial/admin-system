@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class Topics extends Model
 {
 
+    use SoftDeletes;
     protected $table    = 'topics';
     protected $primaryKey = 'topic_id';
     protected $fillable = [
