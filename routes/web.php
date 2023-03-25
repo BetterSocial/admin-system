@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::POST('/show/topics', [TopicController::class, 'showTopics'])->name('add.topics');
     Route::post('/topic/category', [TopicController::class, 'category'])->name('topic.category');
     Route::put('/topic', [TopicController::class, 'update'])->name('topic.update');
+    Route::delete('/topic/{id}', [TopicController::class, 'delete'])->name('topic.delete');
     Route::get('/topic/limit', [LimitTopicController::class, 'getData'])->name('topic.limit');
     Route::post('/topic/limit', [LimitTopicController::class, 'create'])->name('topic.limit.create');
 

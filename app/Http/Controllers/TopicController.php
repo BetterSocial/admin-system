@@ -49,14 +49,15 @@ class TopicController extends Controller
                 6 => 'followers',
                 7 => 'flg_show'
             );
-            $topic = "SELECT topic_id,name,icon_path,categories,created_at,sort,'location',flg_show FROM topics WHERE true";
+            $topic = "SELECT topic_id,name,icon_path,categories,created_at,sort,'location',flg_show FROM topics WHERE deleted_at IS NULL";
+
+            // $topic .= " ";
             if ($req->name != null) {
                 $topic .= " AND name ILIKE '%$req->name%'";
             }
             if ($req->category != null) {
                 $topic .= " AND categories ILIKE '%$req->category%'";
             }
-
 
             $data = DB::SELECT($topic);
             $total = count($data);
@@ -181,6 +182,20 @@ class TopicController extends Controller
             return $this->successResponse('success update topic');
         } catch (\Throwable $th) {
             return $this->errorResponse('failed update topic', 400);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            DB::beginTransaction();
+            $data = Topics::find($id);
+            $data->delete();
+            DB::commit();
+            return $this->successResponse('success delete topic');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->errorResponse($th->getMessage());
         }
     }
 }

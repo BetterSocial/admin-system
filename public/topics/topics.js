@@ -86,6 +86,65 @@ function getNewCategory() {
       console.log(err);
     });
 }
+
+function deleteTopic(topic) {
+  console.log(topic.topic_id);
+  Swal.fire({
+    title: "Are you sure?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Please Wait !",
+        showCancelButton: false, // There won't be any cancel button
+        showConfirmButton: false, // There won't be any confirm button
+        allowOutsideClick: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      $.ajaxSetup({
+        headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+      });
+
+      $.ajax({
+        type: "DELETE",
+        dataType: "JSON",
+        contentType: false,
+        processData: false,
+        url: `/topic/${topic.topic_id}`,
+        success: function (data) {
+          console.log(data);
+          if (data.status === "success") {
+            // $("#tableUsers").DataTable().ajax.reload();
+            Swal.close();
+            dataTable.ajax.reload(null, false);
+            return Swal.fire({
+              icon: "success",
+              title: "Success",
+              text: "Topic deleted",
+            });
+          }
+        },
+        error: function (data) {
+          console.log(data);
+          Swal.close();
+          return Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: data.message,
+          });
+        },
+      });
+    }
+  });
+}
 $(document).ready(function () {
   $(".btn-limit-topic").click(function () {
     $(".current-limit-topic").val(currentLimitTopic);
@@ -195,19 +254,8 @@ $(document).ready(function () {
         data: "flg_show",
         orderable: false,
         render: function (data, type, row) {
-          if (row.flg_show == "N") {
-            return (
-              "<input type='checkbox' class='new-control-input' style='zoom:1.5;' onChange='showTopic(" +
-              row.topic_id +
-              ")'>"
-            );
-          } else {
-            return (
-              "<input type='checkbox' checked class='new-control-input' style='zoom:1.5;' onChange='showTopic(" +
-              row.topic_id +
-              ")'>"
-            );
-          }
+          let item = JSON.stringify(row);
+          return `<button class="btn btn-danger btn-delete" onclick='deleteTopic(${item})'>Delete</button>`;
         },
       },
     ],
