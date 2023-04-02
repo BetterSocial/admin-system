@@ -12,7 +12,7 @@
                 <div class="widget-content widget-content-area br-6">
 
                     <div class="form-group">
-                        <a href="{{ route('post.template') }}"><button class="btn btn-info">Download
+                        <a href="{{ route('post.download-template') }}"><button class="btn btn-info">Download
                                 Template</button></a>
                     </div>
                     <div class="div">

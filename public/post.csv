@@ -1,2 +1,2 @@
-anonimity,duration_feed,feed_group,location,location_id,message,object,privacy,images_url,topics,verb
-FALSE,30,main_feed,Everywhere,,test create post from csv,,Public,,"HumanRights, Hispanics,TedCruz,Black,Military",tweet
+user_id,anonimity,duration_feed,feed_group,location,location_id,message,object,privacy,images_url,topics,verb
+57c7dd68-9836-4ac7-9b7a-38d10c7165ac,FALSE,30,main_feed,Everywhere,,test create post from csv,,Public,,"HumanRights, Hispanics,TedCruz,Black,Military",tweet

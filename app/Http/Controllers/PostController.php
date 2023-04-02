@@ -28,6 +28,7 @@ class PostController extends Controller
 
     public function upload(Request $request)
     {
+
         $request->validate([
             'csv_file' => 'required|mimes:csv,txt'
         ]);
@@ -37,11 +38,12 @@ class PostController extends Controller
             $csv = Reader::createFromPath($file, 'r');
             $csv->setHeaderOffset(0); // jika CSV file memiliki header, atur offsetnya
 
-            $post = [];
+            $data = [];
 
             foreach ($csv as $record) {
                 // lakukan sesuatu dengan setiap baris record di sini
                 // contoh: $record['column_name']
+                $userId = $record['user_id'];
                 $anonimity = $record['anonimity'];
                 $durationFeed = $record['duration_feed'];
                 $feedGroup = $record['feed_group'];
@@ -61,6 +63,7 @@ class PostController extends Controller
 
 
                 $post = [
+                    'userId' => $userId,
                     'anonimity' => $anonimity,
                     "duration_feed" => $durationFeed,
                     "feedGroup" => $feedGroup,
@@ -73,23 +76,26 @@ class PostController extends Controller
                     "topics" => $itemTopics,
                     "verb" => $verb
                 ];
+                $data[] = $post;
+            }
 
-                $response = Http::send('POST', 'http://127.0.0.1:3000/api/v1/bulk-post', [
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                    ],
-                    'json' => $post,
-                ]);
+            $url = config('constants.user_api');
+            $baseUrl = $url . '/api/v1/admin/bulk-post';
+            $response = Http::send('POST', $baseUrl, [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => $data,
+            ]);
 
-                if ($response->ok()) {
-                    // handling jika request berhasil
-                    $data = $response->json();
-                    return $this->successResponse('success', $data);
-                } else {
-                    // handling jika request gagal
-                    $status = $response->status();
-                    return $this->errorResponse($status);
-                }
+            if ($response->ok()) {
+                // handling jika request berhasil
+                $data = $response->json();
+                return $this->successResponseWithAlert('success', $data);
+            } else {
+                // handling jika request gagal
+                $status = $response->status();
+                return $this->errorResponseWithAlert($status);
             }
         }
     }
@@ -101,7 +107,7 @@ class PostController extends Controller
             'Content-Type' => 'text/csv',
         ];
 
-        return response()->download($file_path, 'post.csv', $headers);
+        return response()->download($file_path, time() . '.csv', $headers);
     }
 
     public function postHide(Request $request, $id)
