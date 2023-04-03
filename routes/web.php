@@ -45,6 +45,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/topic/{id}', [TopicController::class, 'delete'])->name('topic.delete');
     Route::get('/topic/limit', [LimitTopicController::class, 'getData'])->name('topic.limit');
     Route::post('/topic/limit', [LimitTopicController::class, 'create'])->name('topic.limit.create');
+    Route::get('/topics/export/', [TopicController::class, 'export'])->name('topic.export');
 
 
 
