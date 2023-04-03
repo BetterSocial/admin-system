@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TopicsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Topics;
@@ -9,6 +10,8 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Excel as ExcelExcel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TopicController extends Controller
 {
@@ -197,5 +200,10 @@ class TopicController extends Controller
             //throw $th;
             return $this->errorResponse($th->getMessage());
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new TopicsExport, 'topics.csv', ExcelExcel::CSV);
     }
 }
