@@ -65,6 +65,8 @@ class PostController extends Controller
                     // }
 
 
+                    // dd($itemTopics);
+                    $images = [];
                     $post = [
                         'userId' => $userId,
                         'anonimity' => $anonimity,
@@ -75,7 +77,7 @@ class PostController extends Controller
                         "message" => $message,
                         "object" => $object,
                         "privacy" => $privacy,
-                        "images_url" => $images_url,
+                        "images_url" => $images,
                         "topics" => $itemTopics,
                         "verb" => $verb
                     ];
@@ -108,12 +110,11 @@ class PostController extends Controller
                     // handling jika request gagal
                     $status = $response->status();
                     $data = $response->json();
-                    return $this->errorResponse('failed created post');
+                    return $this->errorResponseWithAlert('Failed Create post');
                 }
             }
         } catch (\Throwable $th) {
             //throw $th;
-            dd($th);
             return $this->errorResponseWithAlert($th->getMessage());
         }
     }
