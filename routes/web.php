@@ -175,6 +175,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::POST('/polling/data', 'PollingController@getData');
     Route::GET('/polling/detail', 'PollingController@pollingDetail');
 
+    // POST
+
+    Route::get('/post', [PostController::class, 'index'])->name('post');
+    Route::post('/post/upload-csv', [PostController::class, 'upload'])->name('post.upload');
+    Route::get('post/download-template', [PostController::class, 'downloadTemplate'])->name('post.download-template');
+
     Route::get('/post-blocks', 'PostBlockController@index')->name('post-block');
     Route::post('/post-blocks/data', 'PostBlockController@data')->name('post-block.data');
     Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
