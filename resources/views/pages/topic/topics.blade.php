@@ -32,6 +32,12 @@
                                 <button class="btn btn-primary btn-limit-topic"><b style="color:white">Change Limit
                                         Topic</b></button>
                             @endunlessrole
+                            <div class="mt-2"></div>
+                            @unlessrole('viewer')
+                                <a href="{{ route('topic.export') }}"> <button class="btn btn-primary"><b
+                                            style="color:white">Export
+                                            Topics</b></button> </a>
+                            @endunlessrole
                         </div>
                     </div>
 
