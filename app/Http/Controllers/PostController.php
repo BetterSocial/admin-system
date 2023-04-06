@@ -60,12 +60,7 @@ class PostController extends Controller
                     $topics = $record['topics'];
                     $itemTopics = explode(",", $topics);
 
-                    // foreach ($itemTopics as $item) {
-                    //     dd($item);
-                    // }
-
-
-                    // dd($itemTopics);
+                    $anonimity = filter_var($anonimity, FILTER_VALIDATE_BOOLEAN);;
                     $images = [];
                     $post = [
                         'userId' => $userId,
