@@ -52,7 +52,7 @@ class TopicController extends Controller
                 6 => 'followers',
                 7 => 'flg_show'
             );
-            $topic = "SELECT topic_id,name,icon_path,categories,created_at,sort,'location',flg_show FROM topics WHERE deleted_at IS NULL";
+            $topic = "SELECT topic_id,name,icon_path,categories,created_at,sort,'location',flg_show,sign FROM topics WHERE deleted_at IS NULL";
 
             // $topic .= " ";
             if ($req->name != null) {
@@ -76,7 +76,7 @@ class TopicController extends Controller
             ]);
         } catch (\Throwable $th) {
             //throw $th;
-            // file_put_contents('test.txt', $th->getMessage());
+            file_put_contents('test.txt', $th->getMessage());
         }
     }
 
@@ -205,5 +205,39 @@ class TopicController extends Controller
     public function export()
     {
         return Excel::download(new TopicsExport, 'topics.csv', ExcelExcel::CSV);
+    }
+
+    public function unSignCategory($id)
+    {
+        try {
+
+            DB::beginTransaction();
+            $data = Topics::find($id);
+            $data->update([
+                'sign' => false
+            ]);
+            DB::commit();
+            return $this->successResponse('success unSign Category');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->errorResponse($th->getMessage());
+        }
+    }
+
+    public function signCategory($id)
+    {
+        try {
+
+            DB::beginTransaction();
+            $data = Topics::find($id);
+            $data->update([
+                'sign' => true
+            ]);
+            DB::commit();
+            return $this->successResponse('success sign Category');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->errorResponse($th->getMessage());
+        }
     }
 }
