@@ -219,7 +219,6 @@ class TopicController extends Controller
             DB::commit();
             return $this->successResponse('success unSign Category');
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             return $this->errorResponse($th->getMessage());
         }
@@ -237,7 +236,6 @@ class TopicController extends Controller
             DB::commit();
             return $this->successResponse('success sign Category');
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             return $this->errorResponse($th->getMessage());
         }

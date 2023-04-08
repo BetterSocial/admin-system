@@ -87,7 +87,7 @@ function getNewCategory() {
     });
 }
 
-function signCategory(topic) {
+function signCategory(topic, sign) {
   console.log(topic.topic_id);
   Swal.fire({
     title: "Are you sure?",
@@ -118,7 +118,10 @@ function signCategory(topic) {
         dataType: "JSON",
         contentType: false,
         processData: false,
-        url: `/topics/sign/${topic.topic_id}`,
+        url:
+          sign == 1
+            ? `/topics/sign/${topic.topic_id}`
+            : `/topics/un-sign/${topic.topic_id}`,
         success: function (data) {
           console.log(data);
           if (data.status === "success") {
@@ -128,65 +131,8 @@ function signCategory(topic) {
             return Swal.fire({
               icon: "success",
               title: "Success",
-              text: "Topic Category Sign",
-            });
-          }
-        },
-        error: function (data) {
-          console.log(data);
-          Swal.close();
-          return Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: data.message,
-          });
-        },
-      });
-    }
-  });
-}
-function unSignCategory(topic) {
-  console.log(topic.topic_id);
-  Swal.fire({
-    title: "Are you sure?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      Swal.fire({
-        title: "Please Wait !",
-        showCancelButton: false, // There won't be any cancel button
-        showConfirmButton: false, // There won't be any confirm button
-        allowOutsideClick: false,
-        willOpen: () => {
-          Swal.showLoading();
-        },
-      });
-
-      $.ajaxSetup({
-        headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
-      });
-
-      $.ajax({
-        type: "PATCH",
-        dataType: "JSON",
-        contentType: false,
-        processData: false,
-        url: `/topics/un-sign/${topic.topic_id}`,
-        success: function (data) {
-          console.log(data);
-          if (data.status === "success") {
-            // $("#tableUsers").DataTable().ajax.reload();
-            Swal.close();
-            dataTable.ajax.reload(null, false);
-            return Swal.fire({
-              icon: "success",
-              title: "Success",
-              text: "Topic Category Un Sign",
+              text:
+                sign == 1 ? "Topic Category Sign" : "Topic Category Un Sign",
             });
           }
         },
@@ -382,9 +328,9 @@ $(document).ready(function () {
         render: function (data, type, row) {
           let item = JSON.stringify(row);
           if (row.sign) {
-            return `<button class="btn btn-danger btn-delete" onclick='unSignCategory(${item})'>Un-Sign</button>`;
+            return `<button class="btn btn-danger btn-delete" onclick='signCategory(${item}, 0)'>Un-Sign</button>`;
           } else {
-            return `<button class="btn btn-primary" onclick='signCategory(${item})'>Sign</button>`;
+            return `<button class="btn btn-primary" onclick='signCategory(${item}, 1)'>Sign</button>`;
           }
         },
       },
