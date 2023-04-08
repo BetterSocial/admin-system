@@ -14,7 +14,7 @@ class Topics extends Model
     protected $table    = 'topics';
     protected $primaryKey = 'topic_id';
     protected $fillable = [
-        'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort'
+        'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort', 'sign',
     ];
     const CREATED_AT    = 'created_at';
     public $timestamps = false;
