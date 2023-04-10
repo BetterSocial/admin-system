@@ -58,7 +58,12 @@ class PostController extends Controller
                     $images_url = $record['images_url'];
                     $verb = $record['verb'];
                     $topics = $record['topics'];
-                    $itemTopics = explode(",", $topics);
+                    if ($topics) {
+                        $itemTopics = explode(",", $topics);
+                    } else {
+                        $itemTopics = [];
+                    }
+
 
                     $anonimity = filter_var($anonimity, FILTER_VALIDATE_BOOLEAN);;
                     $images = [];
