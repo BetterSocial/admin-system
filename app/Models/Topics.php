@@ -17,7 +17,17 @@ class Topics extends Model
         'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort', 'sign',
     ];
     const CREATED_AT    = 'created_at';
+    public $incrementing = false;
+    protected $keyType = 'string';
     public $timestamps = false;
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($topic) {
+            $topic->topic_id = (string) (Topics::max('topic_id') + 1);
+        });
+    }
 
     public static function onlyFillAble()
     {
