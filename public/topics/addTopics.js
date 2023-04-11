@@ -73,19 +73,19 @@ $(document).ready(function () {
         } else {
           return Swal.fire({
             icon: "error",
-            title: "Oops...",
+            title: "error",
             text: data.message,
           });
         }
       },
       error: function (data, xhr, message) {
+        Swal.close();
         console.log(data);
         console.log(xhr);
         console.log(message);
-        Swal.close();
         return Swal.fire({
           icon: "error",
-          title: "Oops...",
+          title: "Internal Server Error",
           text: data.responseJSON.errors.file[0],
         });
       },
