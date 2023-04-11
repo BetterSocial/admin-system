@@ -13,7 +13,9 @@ $(document).ready(function () {
       sortInput.setCustomValidity("");
     }
   });
+
   $("#createTopic").on("submit", function (e) {
+    e.preventDefault();
     var name = $("#name").val();
     var category = $("#category").val();
     let sort = $("#sort").val();
@@ -43,7 +45,7 @@ $(document).ready(function () {
       showCancelButton: false, // There won't be any cancel button
       showConfirmButton: false, // There won't be any confirm button
       allowOutsideClick: false,
-      onBeforeOpen: () => {
+      didOpen: () => {
         Swal.showLoading();
       },
     });
@@ -59,17 +61,16 @@ $(document).ready(function () {
       url: "/add/topics",
       success: function (data) {
         console.log(data);
+        Swal.close();
         if (data.status == "success") {
           $("#createTopic")[0].reset();
           $("#myFirstImage").val("");
-          Swal.hideLoading();
           return Swal.fire({
             icon: "success",
             title: "Success",
             text: "Topic Created",
           });
         } else {
-          Swal.hideLoading();
           return Swal.fire({
             icon: "error",
             title: "Oops...",
@@ -81,7 +82,7 @@ $(document).ready(function () {
         console.log(data);
         console.log(xhr);
         console.log(message);
-        Swal.hideLoading();
+        Swal.close();
         return Swal.fire({
           icon: "error",
           title: "Oops...",

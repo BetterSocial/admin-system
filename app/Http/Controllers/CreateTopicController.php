@@ -18,7 +18,6 @@ class CreateTopicController extends Controller
             'scrollspy_offset' => 100,
 
         ];
-        // $pageName = 'bootstrap_basic';
         return view('pages.topic.form_add_topics')->with($data);
     }
 }
