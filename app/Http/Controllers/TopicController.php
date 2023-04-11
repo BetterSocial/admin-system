@@ -86,15 +86,17 @@ class TopicController extends Controller
 
         try {
             $this->validate($req, [
-                'sort' => 'required|integer'
+                'name' => 'required',
+                'sort' => 'required|integer',
+                'category' => 'required',
 
             ]);
-            $name = $req->name;
+            $name = strtolower($req->name);
             $category = $req->category;
             $check = DB::table('topics')->where([['name', '=', $name], ['categories', '=', $category]])->count();
 
             if ($check > 0) {
-                return $this->errorResponse('Data topic with name ' . $name . ' and category ' . $category . ' already exists');
+                return $this->errorResponse('Data topic with name ' . $name . ' and category ' . $category . ' already exists', 400);
             }
             $req->merge([
                 'icon_path' => 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
@@ -109,10 +111,10 @@ class TopicController extends Controller
             DB::commit();
             return $this->successResponse('success create new topic');
         } catch (Exception $e) {
+            DB::rollBack();
             LogErrorModel::create([
                 'message' => $e->getMessage(),
             ]);
-            DB::rollBack();
             return $this->errorResponse($e->getMessage());
         }
     }
