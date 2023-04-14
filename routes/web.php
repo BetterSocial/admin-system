@@ -47,7 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/topic/limit', [LimitTopicController::class, 'create'])->name('topic.limit.create');
     Route::get('/topics/export/', [TopicController::class, 'export'])->name('topic.export');
     Route::patch('topics/un-sign/{id}', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
-    Route::patch('topics/sign/{id}', [TopicController::class, 'signCategory'])->name('topic.category.sign');
+    Route::post('topics/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
 
 
 

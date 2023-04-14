@@ -217,20 +217,27 @@ class TopicController extends Controller
         }
     }
 
-    public function signCategory($id)
+    public function signCategory(Request $request)
     {
         try {
+            $request->validate([
+                'topic_id' => 'required|exists:topics,topic_id',
+            ], [
+                'topic_id.required' => 'Topic ID is required',
+                'topic_id.exists' => 'Topic ID not found',
+            ]);
 
+            $id = $request->topic_id;
             DB::beginTransaction();
             $data = Topics::find($id);
             $data->update([
                 'sign' => true
             ]);
             DB::commit();
-            return $this->successResponse('success sign Category');
+            return $this->successResponseWithAlert('Success Sign Category');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $this->errorResponse($th->getMessage());
+            return $this->errorResponseWithAlert($th->getMessage());
         }
     }
 }
