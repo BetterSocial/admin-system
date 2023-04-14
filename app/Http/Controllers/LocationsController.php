@@ -89,18 +89,13 @@ class LocationsController extends Controller
             ['neighborhood', '=', $neighborhood],
             ['zip', '=', $zip]
         ])->count();
-        //                ['location_level','=',$location_level]]
-
-        //TODO rappiin mesage
         if ($check > 0) {
             return response()->json([
                 'success' => false,
-                //                'message' => 'Data topic with name '.$name.' and category '.$category.' already exists'
                 'message' => 'Data location  already exists'
             ]);
         }
 
-        //        $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
 
         Locations::create([
             'country' => $country,

@@ -10,7 +10,8 @@
 
                 <div class="widget-content widget-content-area br-6">
                     <div class="table-responsive mb-4 mt-4">
-                        <table id="tableLog" class="table table-hover" style="width:100%">
+                        <p>List of Logs</p>
+                        <table id="tableLog" class="table table-hover" style="width:100%" aria-describedby="listLogs">
                             <thead>
                                 <tr>
                                     <th>No</th>
