@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CreateTopicController;
 use App\Http\Controllers\LimitTopicController;
+use App\Http\Controllers\LogController;
 use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ShowPostListController;
@@ -188,6 +189,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/post-blocks/data', 'PostBlockController@data')->name('post-block.data');
     Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
     Route::delete('/post/comment/{id}', [PostController::class, 'deleteComment'])->name('post.comment.delete');
+
+    /**
+     * logs
+     */
+    Route::get('logs', [LogController::class, 'data'])->name('logs');
 });
 
 Auth::routes();

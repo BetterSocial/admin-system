@@ -118,6 +118,14 @@
                                 </div>
                             </a>
                         </li>
+                        <li class="menu {{ $category_name === 'logs' ? 'active' : '' }}">
+                            <a href="{{ route('logs') }}" data-active="{{ $category_name === 'logs' ? 'true' : 'false' }}"
+                                aria-expanded="{{ $category_name === 'logs' ? 'true' : 'false' }}" class="dropdown-toggle">
+                                <div class="">
+                                    <span>Logs</span>
+                                </div>
+                            </a>
+                        </li>
                     @endhasanyrole
                 @else
                     <li class="menu {{ $category_name === 'starter_kits' ? 'active' : '' }}">

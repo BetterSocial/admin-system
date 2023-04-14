@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Mail\ResetPasswordMail;
+use App\Models\LogModel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Models\User;
@@ -20,28 +21,26 @@ class ResetPasswordController extends Controller
             $token = $request->_token;
 
             //Validation
-            $dataUser = User::where('email',$email)->first();
+            $dataUser = User::where('email', $email)->first();
 
-            if( $dataUser != null ) {
+            if ($dataUser != null) {
                 $send = Mail::to($email)->send(new ResetPasswordMail($token));
                 return Redirect::back();
-
             } else {
                 return Redirect::back()
-//                    ->with('status','Cannot find email')
+                    //                    ->with('status','Cannot find email')
                     ->withErrors(['email' => "We can't find a user with that email address."]);
             }
-
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return response()->json([
-                'success'=> false,
-                'message'=>$e->getMessage()
+                'success' => false,
+                'message' => $e->getMessage()
             ]);
         };
-
     }
 
-    public function resetPassword(Request $request) {
+    public function resetPassword(Request $request)
+    {
 
         try {
 
@@ -55,56 +54,40 @@ class ResetPasswordController extends Controller
                 'email.required'            => 'email tidak boleh kosong',
                 'password.required'         => 'password tidak boleh kosong',
                 'password.min'              => 'Password harus minimal 8 karakter',
-                'password.regex'            => 'Format password harus terdiri dari kombinasi huruf besar, angka dan karakter spesial (contoh:!@#$%^&*?><).',
-                'verify_password.required'  => 'Verify Password tidak boleh kosong',
-                'email.email'               => 'Format Email tidak valid',
-                'email.unique'              => 'Email yang anda masukkan telah digunakan',
-                'verify_password.same'      => 'Password tidak sama!',
+                'password.regex'            => 'Format password harus terdiri dari kombinasi huruf besar, angka dan karakter spesial (contoh:!@#$%^&*?>
+<).', 'verify_password.required' => 'Verify Password tidak boleh kosong',
+                'email.email' => 'Format Email tidak valid',
+                'email.unique' => 'Email yang anda masukkan telah digunakan',
+                'verify_password.same' => 'Password tidak sama!',
             ];
 
-            $this->validate($request,$rules,$messages);
+            $this->validate($request, $rules, $messages);
 
             $email = $request->email;
 
 
             //TODO validasi confirm password belum masuk
 
-            $dataUser = User::where('email',$email)->first();
+            $dataUser = User::where('email', $email)->first();
 
-            if( $dataUser != null ) {
+            if ($dataUser != null) {
 
                 $dataUser->password = bcrypt($request->password);
 
                 $dataUser->save();
-
-                return redirect('/login')->with('message','Password changed successfully');
-
+                LogModel::insertLog('reset-password', 'success reset password');
+                return redirect('/login')->with('message', 'Password changed successfully');
             } else {
                 return Redirect::back()
-//                    ->with('status','Cannot find email')
+                    // ->with('status','Cannot find email')
                     ->withErrors(['email' => "We can't find a user with that email address."]);
             }
-
-
-
-
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
+            LogModel::insertLog('reset-password', 'fail reset password ' . $e->getMessage());
             return response()->json([
-                'success'=> false,
-                'message'=>$e->getMessage()
+                'success' => false,
+                'message' => $e->getMessage()
             ]);
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

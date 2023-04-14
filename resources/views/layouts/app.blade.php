@@ -60,6 +60,7 @@
     <!-- END MAIN CONTAINER -->
 
     @include('inc.scripts')
+    @stack('js')
 
 </body>
 

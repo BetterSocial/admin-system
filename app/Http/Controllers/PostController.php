@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ApiKey;
+use App\Models\LogModel;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
 use Illuminate\Support\Facades\Http;
@@ -120,16 +121,19 @@ class PostController extends Controller
                 if ($response->ok()) {
                     // handling jika request berhasil
                     $data = $response->json();
+                    LogModel::insertLog('upload-csv', 'upload csv success');
                     return $this->successResponseWithAlert('success created post');
                 } else {
                     // handling jika request gagal
                     $status = $response->status();
                     $data = $response->json();
+                    LogModel::insertLog('upload-csv', 'upload csv fail');
                     return $this->errorResponseWithAlert('Failed Create post');
                 }
             }
         } catch (\Throwable $th) {
             //throw $th;
+            LogModel::insertLog('upload-csv', $th->getMessage());
             return $this->errorResponseWithAlert($th->getMessage());
         }
     }
@@ -141,6 +145,7 @@ class PostController extends Controller
             'Content-Type' => 'text/csv',
         ];
 
+        LogModel::insertLog('download', 'download template csv');
         return response()->download($file_path, time() . '.csv', $headers);
     }
 
@@ -154,6 +159,7 @@ class PostController extends Controller
             ]
         ];
         $status = $client->batchPartialActivityUpdate($payload);
+        LogModel::insertLog('post-hide', 'success post hide');
         return $status;
     }
 
@@ -162,6 +168,7 @@ class PostController extends Controller
         try {
             $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
             $client->reactions()->delete($id);
+            LogModel::insertLog('delete-comment', 'success delete comment');
             return $this->successResponse('success delete comment');
         } catch (\Throwable $th) {
             return $this->errorResponse('error delete comment ' . $th->getMessage());

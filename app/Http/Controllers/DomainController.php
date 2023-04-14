@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Domain;
+use App\Models\LogModel;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -80,11 +81,12 @@ class DomainController extends Controller
             $response =  $req->file->storeOnCloudinary('domain-image')->getSecurePath();
             $findDomain->logo = $response;
             $findDomain->save();
-
+            LogModel::insertLog('save-logo', 'success save logo');
             return response()->json([
                 'success' => true,
             ]);
         } catch (\Exception $e) {
+            LogModel::insertLog('save-logo', 'fail save logo ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()

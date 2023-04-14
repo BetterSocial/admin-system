@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LogModel;
 use App\Models\Polling;
 use App\Models\PollingOption;
 use App\Models\User;
@@ -103,6 +104,7 @@ class PostBlockController extends Controller
             ]
         ];
         $status = $client->batchPartialActivityUpdate($payload);
+        LogModel::insertLog('update-feed', 'success update feed');
         return $payload;
     }
 

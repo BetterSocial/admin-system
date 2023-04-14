@@ -6,6 +6,7 @@ use App\Exports\TopicsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\LogErrorModel;
+use App\Models\LogModel;
 use App\Models\Topics;
 use Carbon\Carbon;
 use Exception;
@@ -108,10 +109,12 @@ class TopicController extends Controller
                 'categories' => $category,
                 'created_at' => Carbon::now()
             ])->all());
+            LogModel::insertLog('add-topic', 'success add new topic');
             DB::commit();
             return $this->successResponse('success create new topic');
         } catch (Exception $e) {
             DB::rollBack();
+            LogModel::insertLog('add-topics', 'error add topic with error' . $e->getMessage());
             LogErrorModel::create([
                 'message' => $e->getMessage(),
             ]);
@@ -175,8 +178,10 @@ class TopicController extends Controller
             ]);
             $topic = Topics::find($request->topic_id);
             Topics::updateTopic($topic, $request->all());
+            LogModel::insertLog('update-topic', 'success update topic');
             return $this->successResponse('success update topic');
         } catch (\Throwable $th) {
+            LogModel::insertLog('update-topic', 'error update topic with error ' . $th->getMessage());
             return $this->errorResponse('failed update topic', 400);
         }
     }
@@ -187,16 +192,20 @@ class TopicController extends Controller
             DB::beginTransaction();
             $data = Topics::find($id);
             $data->delete();
+            LogModel::insertLog('delete-topic', 'success delete topic');
             DB::commit();
             return $this->successResponse('success delete topic');
         } catch (\Throwable $th) {
             //throw $th;
+            DB::rollBack();
+            LogModel::insertLog('delete-topic', 'error delete topic with error ' . $th->getMessage());
             return $this->errorResponse($th->getMessage());
         }
     }
 
     public function export()
     {
+        LogModel::insertLog('export-topic', 'success export topic');
         return Excel::download(new TopicsExport, 'topics.csv', ExcelExcel::CSV);
     }
 
@@ -215,10 +224,12 @@ class TopicController extends Controller
             $data->update([
                 'sign' => false
             ]);
+            LogModel::insertLog('un-sign-category-topic', 'success update unSign Category topic');
             DB::commit();
             return $this->successResponseWithAlert('success UnSign Category');
         } catch (\Throwable $th) {
             DB::rollBack();
+            LogModel::insertLog('un-sign-category-topic', 'fail update unSign Category topic');
             return $this->errorResponseWithAlert($th->getMessage());
         }
     }
@@ -239,10 +250,12 @@ class TopicController extends Controller
             $data->update([
                 'sign' => true
             ]);
+            LogModel::insertLog('sign-category-topic', 'success update Sign Category topic');
             DB::commit();
             return $this->successResponseWithAlert('Success Sign Category');
         } catch (\Throwable $th) {
             DB::rollBack();
+            LogModel::insertLog('sign-category-topic', 'fail update Sign Category topic with error ' . $th->getMessage());
             return $this->errorResponseWithAlert($th->getMessage());
         }
     }
