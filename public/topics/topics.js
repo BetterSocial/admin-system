@@ -88,8 +88,10 @@ function getNewCategory() {
 }
 
 function signCategory(topic, sign) {
+  console.log(topic);
   $(".topic-id-sign").val(topic.topic_id);
   $(".name-topic-sign").val(topic.name);
+  $(".category-topic-sign").val(topic.categories);
   if (sign == 1) {
     $("#modalTopicSign").modal("show");
   } else {

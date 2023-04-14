@@ -216,7 +216,7 @@ class TopicController extends Controller
                 'sign' => false
             ]);
             DB::commit();
-            return $this->successResponseWithAlert('success unSign Category');
+            return $this->successResponseWithAlert('success UnSign Category');
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->errorResponseWithAlert($th->getMessage());

@@ -190,20 +190,21 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <p>Show Topic in Onboarding</p>
+                            <p><b>Show Topic in Onboarding</b></p>
                         </div>
                         <div class="form-group">
                             <label for="">Topic ID</label>
                             <input type="text" class="form-control topic-id-sign" name="topic_id" readonly>
                         </div>
-                        <div class="">
-                            <div id="cardCategory" class="">
-                                <div class="form-group">
-                                    <label for="topicSort">Topic Name</label>
-                                    <input type="text" class="form-control name-topic-sign" placeholder=""
-                                        name="sort" disabled>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="topicSort">Topic Name</label>
+                            <input type="text" class="form-control name-topic-sign" placeholder="" name="sort"
+                                disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="topicSort">Category</label>
+                            <input type="text" class="form-control category-topic-sign" placeholder=""
+                                name="category" disabled>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -234,14 +235,15 @@
                             <label for="">Topic ID</label>
                             <input type="text" class="form-control topic-id-sign" name="topic_id" readonly>
                         </div>
-                        <div class="">
-                            <div id="cardCategory" class="">
-                                <div class="form-group">
-                                    <label for="topicSort">Topic Name</label>
-                                    <input type="text" class="form-control name-topic-sign" placeholder=""
-                                        name="sort" disabled>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="topicSort">Topic Name</label>
+                            <input type="text" class="form-control name-topic-sign" placeholder="" name="sort"
+                                disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="topicSort">Category</label>
+                            <input type="text" class="form-control category-topic-sign" placeholder=""
+                                name="category" disabled>
                         </div>
                     </div>
                     <div class="modal-footer">
