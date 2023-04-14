@@ -7,17 +7,19 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Locations;
-use DB;
+use App\Models\LogModel;
 use Illuminate\Support\Facades\Log;
 use phpDocumentor\Reflection\Location;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LocationsController extends Controller
 {
 
-    public function getData(Request $req){
+    public function getData(Request $req)
+    {
 
-        
+
         $columns = array(
             // datatable column index  => database column name
             0 => 'location_id',
@@ -32,17 +34,17 @@ class LocationsController extends Controller
         );
         $location = "SELECT location_id,zip,neighborhood,city,state,country,location_level,status,slug_name,created_at,location_level as location_icon,flg_show FROM location WHERE true";
 
-//        Log::debug($req->all());
-        if($req->neighborhood !=null){
+        //        Log::debug($req->all());
+        if ($req->neighborhood != null) {
             $location .= " AND neighborhood ILIKE '%$req->neighborhood%'";
         }
-        if($req->city !=null){
+        if ($req->city != null) {
             $location .= " AND city ILIKE '%$req->city%'";
         }
-        if($req->state !=null){
+        if ($req->state != null) {
             $location .= " AND state ILIKE '%$req->state%'";
         }
-        if($req->country !=null){
+        if ($req->country != null) {
             $location .= " AND country ILIKE '%$req->country%'";
         }
 
@@ -62,13 +64,14 @@ class LocationsController extends Controller
         ]);
     }
 
-    public function addLocations(Request $req){
-//        $file = $req->file('file');
+    public function addLocations(Request $req)
+    {
+        //        $file = $req->file('file');
 
-//        $this->validate($req, [
-//            'file' => 'image|max:1024|dimensions:min_width=64,min_height=64',
-//
-//        ]);
+        //        $this->validate($req, [
+        //            'file' => 'image|max:1024|dimensions:min_width=64,min_height=64',
+        //
+        //        ]);
         $country = ucfirst($req->country);
         $state = ucfirst($req->state);
         $city = ucfirst($req->city);
@@ -80,81 +83,73 @@ class LocationsController extends Controller
 
         //TODO benerin validasi
         $check = DB::table('location')->where([
-                ['country','=',$country],
-                ['state','=',$state],
-                ['city','=',$city],
-                ['neighborhood','=',$neighborhood],
-                ['zip','=',$zip]])->count();
-//                ['location_level','=',$location_level]]
-
-        //TODO rappiin mesage
-        if($check > 0){
+            ['country', '=', $country],
+            ['state', '=', $state],
+            ['city', '=', $city],
+            ['neighborhood', '=', $neighborhood],
+            ['zip', '=', $zip]
+        ])->count();
+        if ($check > 0) {
             return response()->json([
                 'success' => false,
-//                'message' => 'Data topic with name '.$name.' and category '.$category.' already exists'
                 'message' => 'Data location  already exists'
             ]);
         }
 
-//        $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
 
         Locations::create([
-            'country'=>$country,
-            'state'=>$state,
-            'city'=>$city,
-            'neighborhood'=>$neighborhood,
-            'zip'=>$zip,
-            'location_level'=>$location_level,
-            'slug_name'=>$slug_name,
-            'status'=>$status,
-            'created_at'=>Carbon::now(),
-            'updated_at'=>Carbon::now()
+            'country' => $country,
+            'state' => $state,
+            'city' => $city,
+            'neighborhood' => $neighborhood,
+            'zip' => $zip,
+            'location_level' => $location_level,
+            'slug_name' => $slug_name,
+            'status' => $status,
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
         ]);
+        LogModel::insertLog('add-location', 'success add new location');
         return response()->json([
             'success' => true,
         ]);
     }
 
 
-    public function showLocation(Request $req){
+    public function showLocation(Request $req)
+    {
         try {
             $user = Auth::user();
             $roles = $user->roles->pluck('name')->first();
-            if($roles == 'viewer'){
+            if ($roles == 'viewer') {
                 return response()->json([
-                    'success'=> false,
-                    'message'=> "You not have an access"
+                    'success' => false,
+                    'message' => "You not have an access"
                 ]);
-            }
-            else{
+            } else {
                 $data = Locations::find($req->location_id);
-                if($data !=null){
-                    if($data->flg_show == 'Y'){
+                if ($data != null) {
+                    if ($data->flg_show == 'Y') {
                         $data->flg_show = 'N';
-                    }
-                    else{
+                    } else {
                         $data->flg_show = 'Y';
-                        
                     }
                     $data->save();
                     return response()->json([
-                        'success'=> true,
+                        'success' => true,
                     ]);
-                }
-                else{
+                } else {
                     return response()->json([
-                        'success'=> false,
-                        'message'=> "Data Location Not Found"
+                        'success' => false,
+                        'message' => "Data Location Not Found"
                     ]);
                 }
             }
-            
         } catch (\Exception $e) {
             return response()->json([
-                'success'=> false,
-                'message'=>$e->getMessage()
+                'success' => false,
+                'message' => $e->getMessage()
             ]);
         }
-     }
-
+    }
 }
