@@ -200,20 +200,26 @@ class TopicController extends Controller
         return Excel::download(new TopicsExport, 'topics.csv', ExcelExcel::CSV);
     }
 
-    public function unSignCategory($id)
+    public function unSignCategory(Request $request)
     {
         try {
 
+            $request->validate([
+                'topic_id' => 'required|exists:topics,topic_id',
+            ], [
+                'topic_id.required' => 'Topic ID is required',
+                'topic_id.exists' => 'Topic ID not found',
+            ]);
             DB::beginTransaction();
-            $data = Topics::find($id);
+            $data = Topics::find($request->topic_id);
             $data->update([
                 'sign' => false
             ]);
             DB::commit();
-            return $this->successResponse('success unSign Category');
+            return $this->successResponseWithAlert('success unSign Category');
         } catch (\Throwable $th) {
             DB::rollBack();
-            return $this->errorResponse($th->getMessage());
+            return $this->errorResponseWithAlert($th->getMessage());
         }
     }
 
