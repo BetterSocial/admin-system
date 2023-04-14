@@ -255,7 +255,7 @@ class TopicController extends Controller
             return $this->successResponseWithAlert('Success Sign Category');
         } catch (\Throwable $th) {
             DB::rollBack();
-            LogModel::insertLog('sign-category-topic', 'fail update Sign Category topic with error ' . $th->getMessage());
+            LogModel::insertLog('sign-category-topic', 'fail with error ' . $th->getMessage());
             return $this->errorResponseWithAlert($th->getMessage());
         }
     }

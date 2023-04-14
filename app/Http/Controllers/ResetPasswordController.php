@@ -54,8 +54,8 @@ class ResetPasswordController extends Controller
                 'email.required'            => 'email tidak boleh kosong',
                 'password.required'         => 'password tidak boleh kosong',
                 'password.min'              => 'Password harus minimal 8 karakter',
-                'password.regex'            => 'Format password harus terdiri dari kombinasi huruf besar, angka dan karakter spesial (contoh:!@#$%^&*?>
-<).', 'verify_password.required' => 'Verify Password tidak boleh kosong',
+                'password.regex'            => 'Format password harus terdiri dari kombinasi huruf besar, angka dan karakter spesial',
+                'verify_password.required' => 'Verify Password tidak boleh kosong',
                 'email.email' => 'Format Email tidak valid',
                 'email.unique' => 'Email yang anda masukkan telah digunakan',
                 'verify_password.same' => 'Password tidak sama!',

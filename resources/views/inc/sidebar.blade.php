@@ -13,12 +13,9 @@
 
     <!--  BEGIN SIDEBAR  -->
     <div class="sidebar-wrapper sidebar-theme">
-
         <nav id="sidebar">
             <div class="shadow-bottom"></div>
-
             <ul class="list-unstyled menu-categories" id="accordionExample">
-
                 @if ($page_name != 'alt_menu' && $page_name != 'blank_page' && $page_name != 'boxed' && $page_name != 'breadcrumb')
                     @hasanyrole('editor|admin|viewer')
                         <li class="menu {{ $category_name === 'dashboard' ? 'active' : '' }}">
@@ -30,7 +27,6 @@
                                 </div>
                             </a>
                         </li>
-
                         <li class="menu {{ $category_name === 'domain' ? 'active' : '' }}">
                             <a href="#app" data-active="{{ $category_name === 'domain' ? 'true' : 'false' }}"
                                 data-toggle="collapse" aria-expanded="{{ $category_name === 'apps' ? 'true' : 'false' }}"
