@@ -13,6 +13,21 @@ class PostController extends Controller
 {
     //
 
+    function generateRandomString($length = 20)
+    {
+        $randomChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            // if ($i % 5 == 0 && $i > 0) {
+            //     $randomString .= '-';
+            // }
+            $randomString .= $randomChars[rand(0, strlen($randomChars) - 1)];
+        }
+
+        return $randomString;
+    }
+
     public function index(Request $request)
     {
 
