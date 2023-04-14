@@ -141,6 +141,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modalTopicLimit" tabindex="1" aria-labelledby="detailModalLabelLimit"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -165,6 +166,84 @@
                                         name="sort" required>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalTopicSign" tabindex="1" aria-labelledby="detailModalLabelTopicSign"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('topic.category.sign') }}" method="post" id="formTopicLimit">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabelTopicSign">Sign Topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <p><b>Show Topic in Onboarding</b></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Topic ID</label>
+                            <input type="text" class="form-control topic-id-sign" name="topic_id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="topicSort">Topic Name</label>
+                            <input type="text" class="form-control name-topic-sign" placeholder="" name="sort"
+                                disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="topicSort">Category</label>
+                            <input type="text" class="form-control category-topic-sign" placeholder=""
+                                name="category" disabled>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalTopicUnSign" tabindex="1" aria-labelledby="detailModalLabelTopicUnSign"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('topic.category.un-sign') }}" method="post" id="formTopicLimit">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabelTopicUnSign">Un-Sign Topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <p><b> Topic is disappear in onboarding</b></p>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Topic ID</label>
+                            <input type="text" class="form-control topic-id-sign" name="topic_id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="topicSort">Topic Name</label>
+                            <input type="text" class="form-control name-topic-sign" placeholder="" name="sort"
+                                disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="topicSort">Category</label>
+                            <input type="text" class="form-control category-topic-sign" placeholder=""
+                                name="category" disabled>
                         </div>
                     </div>
                     <div class="modal-footer">
