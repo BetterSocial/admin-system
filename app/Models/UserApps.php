@@ -19,4 +19,9 @@ class UserApps extends Model
     protected $fillable = [
         'is_banned'
     ];
+
+    public function userTopics()
+    {
+        return $this->hasMany(UserTopicModel::class, 'user_id', 'user_id');
+    }
 }

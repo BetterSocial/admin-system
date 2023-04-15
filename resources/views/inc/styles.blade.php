@@ -2,22 +2,25 @@
 <script src="{{ asset('assets/js/loader.js') }}"></script>
 
 <link rel="stylesheet" href="{{ asset('assets/css/chat.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 <!-- BEGIN GLOBAL MANDATORY STYLES -->
 <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
 <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
 
-@if ($page_name != 'coming_soon' &&
-    $page_name != 'contact_us' &&
-    $page_name != 'error404' &&
-    $page_name != 'error500' &&
-    $page_name != 'error503' &&
-    $page_name != 'faq' &&
-    $page_name != 'helpdesk' &&
-    $page_name != 'maintenence' &&
-    $page_name != 'privacy' &&
-    $page_name != 'auth_boxed' &&
-    $page_name != 'auth_default')
+@if (
+    $page_name != 'coming_soon' &&
+        $page_name != 'contact_us' &&
+        $page_name != 'error404' &&
+        $page_name != 'error500' &&
+        $page_name != 'error503' &&
+        $page_name != 'faq' &&
+        $page_name != 'helpdesk' &&
+        $page_name != 'maintenence' &&
+        $page_name != 'privacy' &&
+        $page_name != 'auth_boxed' &&
+        $page_name != 'auth_default')
     <link href="{{ asset('assets/css/plugins.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/css/scrollspyNav.css') }}" rel="stylesheet" type="text/css" />
 @endif
@@ -690,8 +693,8 @@
         {{-- Starter Kit ALt menu --}}
         <style>
             /*
-                            Just for demo purpose ---- Remove it.
-                        */
+                                            Just for demo purpose ---- Remove it.
+                                        */
             /*<starter kit design>*/
 
             .widget-one {}
@@ -716,8 +719,8 @@
         {{-- Starter Kit Boxed menu --}}
         <style>
             /*
-                            The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                        */
+                                            The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                        */
 
             body {
                 max-width: 1140px;
@@ -738,10 +741,10 @@
             }
 
             /*
-                            ====================
-                                IE Support
-                            ====================
-                        */
+                                            ====================
+                                                IE Support
+                                            ====================
+                                        */
 
             @media all and (-ms-high-contrast: none),
             (-ms-high-contrast: active) {
@@ -751,8 +754,8 @@
             }
 
             /*
-                            Just for demo purpose ---- Remove it.
-                        */
+                                            Just for demo purpose ---- Remove it.
+                                        */
             /*<starter kit design>*/
 
             .widget-one {}
@@ -775,8 +778,8 @@
         {{-- Starter Kit Breadcrumb --}}
         <style>
             /*
-                            The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                        */
+                                            The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                        */
             .page-title {
                 float: none;
                 margin-top: 0;
@@ -864,8 +867,8 @@
 
 
             /*
-                            Just for demo purpose ---- Remove it.
-                        */
+                                            Just for demo purpose ---- Remove it.
+                                        */
             /*<starter kit design>*/
 
             .widget-one {}

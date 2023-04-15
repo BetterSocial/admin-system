@@ -21,7 +21,7 @@ class Topics extends Model
     protected $keyType = 'string';
     public $timestamps = false;
 
-    public function topicUsers()
+    public function userTopics()
     {
         return $this->hasMany(UserTopicModel::class, 'topic_id', 'topic_id');
     }
@@ -64,9 +64,9 @@ class Topics extends Model
         }
     }
 
-    public function scopeWithTopicUsers($query)
+    public function scopeWithUserTopics($query)
     {
-        return $query->with('topicUsers');
+        return $query->with('userTopics');
     }
 
     public function scopeCategory($query)
@@ -158,7 +158,7 @@ class Topics extends Model
                 }, 'total_posts')
                 ->whereNull('topics.deleted_at');
 
-            $query->with('topicUsers');
+            $query->with('userTopics');
             if ($searchName !== null) {
                 $query->where('topics.name', 'ILIKE', '%' . $searchName . '%');
             }

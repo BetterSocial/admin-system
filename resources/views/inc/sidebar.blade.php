@@ -122,6 +122,14 @@
                                 </div>
                             </a>
                         </li>
+                        <li class="menu {{ $category_name === 'rss' ? 'active' : '' }}">
+                            <a href="{{ route('rss') }}" data-active="{{ $category_name === 'rss' ? 'true' : 'false' }}"
+                                aria-expanded="{{ $category_name === 'rss' ? 'true' : 'false' }}" class="dropdown-toggle">
+                                <div class="">
+                                    <span>Rss Link</span>
+                                </div>
+                            </a>
+                        </li>
                     @endhasanyrole
                 @else
                     <li class="menu {{ $category_name === 'starter_kits' ? 'active' : '' }}">
