@@ -107,11 +107,9 @@ class UsersAppController extends Controller
         //EMTER
         fputcsv($file, [], ";");
         fputcsv($file, ["Download Time :", Carbon::now()->toDateTimeString()], ";");
-        // fputcsv($file,[],"\t");
-        // fputcsv($file,["\t","Download by :",SessionUtil::getUsername()],"\t");
-        // fputcsv($file,["\t","Tanggal Download :",$this->formatDate(DateUtil::dateTimeNow(),'12')],"\t");
         fputcsv($file, [], ";");
         fputcsv($file, [
+            "User Id",
             "Username",
             "Real Name",
             "Country Code",
@@ -122,6 +120,7 @@ class UsersAppController extends Controller
 
         foreach ($data as $row => $value) {
             $body = [
+                $value->user_id,
                 $value->username,
                 $value->real_name,
                 $value->country_code,

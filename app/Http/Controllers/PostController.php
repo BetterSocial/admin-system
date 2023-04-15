@@ -2,17 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UploadRequest;
 use App\Models\ApiKey;
 use App\Models\LogModel;
+use App\Models\UserApps;
+use App\Services\ApiKeyService;
+use ErrorException;
+use Exception;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use League\Csv\Reader;
-
+use Throwable;
 
 class PostController extends Controller
 {
-    //
+    const CSV_MIMES = ['csv', 'txt'];
+
+    private $apiKeyService;
+
+    public function __construct(ApiKeyService $apiKeyService)
+    {
+        $this->apiKeyService = $apiKeyService;
+    }
 
     function generateRandomString($length = 20)
     {
@@ -45,94 +59,69 @@ class PostController extends Controller
 
     public function upload(Request $request)
     {
-
         try {
-            //code...
             $request->validate([
                 'csv_file' => 'required|mimes:csv,txt'
+            ], [
+                'csv_file' => 'required csv file'
             ]);
-            if ($request->hasFile('csv_file')) {
-                $file = $request->file('csv_file')->getRealPath();
+            $file = $request->file('csv_file')->getRealPath();
+            $csv = Reader::createFromPath($file, 'r');
+            $csv->setHeaderOffset(0);
 
-                $csv = Reader::createFromPath($file, 'r');
-                $csv->setHeaderOffset(0); // jika CSV file memiliki header, atur offsetnya
+            $posts = [];
+            foreach ($csv as $record) {
+                $this->validateRecord($record);
 
-                $data = [];
-
-                foreach ($csv as $record) {
-                    // lakukan sesuatu dengan setiap baris record di sini
-                    // contoh: $record['column_name']
-                    $userId = $record['user_id'];
-                    $anonimity = $record['anonimity'];
-                    $durationFeed = $record['duration_feed'];
-                    $feedGroup = $record['feed_group'];
-                    $location = $record['location'];
-                    $locationId = $record['location_id'];
-                    $message = $record['message'];
-                    $object = $record['object'];
-                    $privacy = $record['privacy'];
-                    $images_url = $record['images_url'];
-                    $verb = $record['verb'];
-                    $topics = $record['topics'];
-                    if ($topics) {
-                        $itemTopics = explode(",", $topics);
-                    } else {
-                        $itemTopics = [];
-                    }
-
-
-                    $anonimity = filter_var($anonimity, FILTER_VALIDATE_BOOLEAN);;
-                    $images = [];
-                    $post = [
-                        'userId' => $userId,
-                        'anonimity' => $anonimity,
-                        "duration_feed" => $durationFeed,
-                        "feedGroup" => $feedGroup,
-                        "location" => $location,
-                        "location_id" => $locationId,
-                        "message" => $message,
-                        "object" => $object,
-                        "privacy" => $privacy,
-                        "images_url" => $images,
-                        "topics" => $itemTopics,
-                        "verb" => $verb
-                    ];
-                    $data[] = $post;
+                $images = [];
+                $topics = [];
+                if ($record['images_url']) {
+                    $images = explode(",", $record['images_url']);
+                }
+                if ($record['topics']) {
+                    $topics = explode(",", $record['topics']);
                 }
 
-                $apiKey = ApiKey::latest()->first();
-
-                if (!$apiKey) {
-                    $apiKey = ApiKey::create([
-                        'key' => $this->generateApiKey()
-                    ]);
+                $userId = $record['user_id'];
+                $user = UserApps::find($userId);
+                if (!$user) {
+                    throw new \Exception('User not found');
                 }
+                $post = [
+                    'userId' => $userId,
+                    'anonimity' => filter_var($record['anonimity'], FILTER_VALIDATE_BOOLEAN),
+                    'duration_feed' => $record['duration_feed'],
+                    'feedGroup' => $record['feed_group'],
+                    'location' => $record['location'],
+                    'location_id' => $record['location_id'],
+                    'message' => $record['message'],
+                    'object' => $record['object'],
+                    'privacy' => $record['privacy'],
+                    'images_url' => $images,
+                    'topics' => $topics,
+                    'verb' => $record['verb'],
+                ];
 
-                $url = config('constants.user_api');
-                $baseUrl = $url . '/api/v1/admin/bulk-post';
-                $response = Http::send('POST', $baseUrl, [
-                    'headers' => [
-                        'Content-Type' => 'application/json',
-                        'api-key' => $apiKey->key,
-                    ],
-                    'json' => ['post' => $data],
-                ]);
-
-                if ($response->ok()) {
-                    // handling jika request berhasil
-                    $data = $response->json();
-                    LogModel::insertLog('upload-csv', 'upload csv success');
-                    return $this->successResponseWithAlert('success created post');
-                } else {
-                    // handling jika request gagal
-                    $status = $response->status();
-                    $data = $response->json();
-                    LogModel::insertLog('upload-csv', 'upload csv fail');
-                    return $this->errorResponseWithAlert('Failed Create post');
-                }
+                $posts[] = $post;
             }
-        } catch (\Throwable $th) {
-            //throw $th;
+
+            dd('ok');
+            $baseUrl = config('constants.user_api') . '/api/v1/admin/bulk-post';
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'api-key' => $this->apiKeyService->getKey(),
+            ])->post($baseUrl, [
+                'post' => $posts,
+            ]);
+
+            if ($response->ok()) {
+                LogModel::insertLog('upload-csv', 'upload csv success');
+                return $this->successResponseWithAlert('Success created post');
+            } else {
+                LogModel::insertLog('upload-csv', 'upload csv fail');
+                return $this->errorResponseWithAlert('Failed Create post');
+            }
+        } catch (Throwable $th) {
             LogModel::insertLog('upload-csv', $th->getMessage());
             return $this->errorResponseWithAlert($th->getMessage());
         }
@@ -175,14 +164,34 @@ class PostController extends Controller
         }
     }
 
-    private function generateApiKey()
+    private function validateRecord($record)
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $apiKey = '';
-        for ($i = 0; $i < 10; $i++) {
-            $apiKey .= $characters[rand(0, $charactersLength - 1)];
+        $rules = [
+            'user_id' => 'required',
+            'anonimity' => 'required',
+            'duration_feed' => 'required',
+            'feed_group' => 'required',
+            'location' => 'required',
+            'message' => 'required',
+            'privacy' => 'required',
+            'verb' => 'required',
+        ];
+
+        $messages = [
+            'user_id.required' => 'User ID is required',
+            'anonimity.required' => 'Anonimity is required',
+            'duration_feed.required' => 'Duration feed is required',
+            'feed_group.required' => 'Feed Group is required',
+            'location.required' => 'Location is required',
+            'message.required' => 'Message is required',
+            'privacy.required' => 'Message is required',
+            'verb.required' => 'Verb is required',
+        ];
+
+        $validator = Validator::make($record, $rules, $messages);
+
+        if ($validator->fails()) {
+            throw new Exception($validator->errors());
         }
-        return $apiKey;
     }
 }
