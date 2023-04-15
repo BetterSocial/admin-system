@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ApiKey;
 use App\Models\LogModel;
+use App\Models\UserApps;
+use ErrorException;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
 use Illuminate\Support\Facades\Http;
@@ -47,7 +49,6 @@ class PostController extends Controller
     {
 
         try {
-            //code...
             $request->validate([
                 'csv_file' => 'required|mimes:csv,txt'
             ]);
@@ -55,24 +56,36 @@ class PostController extends Controller
                 $file = $request->file('csv_file')->getRealPath();
 
                 $csv = Reader::createFromPath($file, 'r');
-                $csv->setHeaderOffset(0); // jika CSV file memiliki header, atur offsetnya
+                $csv->setHeaderOffset(0);
 
                 $data = [];
 
                 foreach ($csv as $record) {
-                    // lakukan sesuatu dengan setiap baris record di sini
-                    // contoh: $record['column_name']
                     $userId = $record['user_id'];
+                    if (!$userId) throw new ErrorException('user_id is required');
+                    // Check if user_id exists in the database
+                    $user = UserApps::find($userId);
+                    if (!$user) {
+                        throw new \Exception('User not found');
+                    }
+
                     $anonimity = $record['anonimity'];
+                    if (!$anonimity) throw new ErrorException('anonimity is required');
                     $durationFeed = $record['duration_feed'];
+                    if (!$durationFeed) throw new ErrorException('duration_feed is required');
                     $feedGroup = $record['feed_group'];
+                    if (!$feedGroup) throw new ErrorException('feed_group is required');
                     $location = $record['location'];
+                    if (!$location) throw new ErrorException('location is required');
                     $locationId = $record['location_id'];
                     $message = $record['message'];
+                    if (!$message) throw new ErrorException('message is required');
                     $object = $record['object'];
                     $privacy = $record['privacy'];
+                    if (!$privacy) throw new ErrorException('privacy is required');
                     $images_url = $record['images_url'];
                     $verb = $record['verb'];
+                    if (!$verb) throw new ErrorException('verb is required');
                     $topics = $record['topics'];
                     if ($topics) {
                         $itemTopics = explode(",", $topics);
@@ -119,12 +132,10 @@ class PostController extends Controller
                 ]);
 
                 if ($response->ok()) {
-                    // handling jika request berhasil
                     $data = $response->json();
                     LogModel::insertLog('upload-csv', 'upload csv success');
                     return $this->successResponseWithAlert('success created post');
                 } else {
-                    // handling jika request gagal
                     $status = $response->status();
                     $data = $response->json();
                     LogModel::insertLog('upload-csv', 'upload csv fail');
