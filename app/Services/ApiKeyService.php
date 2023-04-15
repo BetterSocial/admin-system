@@ -20,6 +20,7 @@ class ApiKeyService
                 'key' => $this->generateApiKey()
             ]);
         }
+        return $apiKey->key;
     }
 
 
