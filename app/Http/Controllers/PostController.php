@@ -105,7 +105,6 @@ class PostController extends Controller
                 $posts[] = $post;
             }
 
-            dd('ok');
             $baseUrl = config('constants.user_api') . '/api/v1/admin/bulk-post';
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
