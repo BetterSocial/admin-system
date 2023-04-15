@@ -50,70 +50,15 @@ class TopicController extends Controller
     public function getData(Request $req)
     {
         try {
-            $columns = array(
-                0 => 'topic_id',
-                1 => 'name',
-                2 => 'icon_path',
-                3 => 'categories',
-                4 => 'created_at',
-                5 => 'sort',
-                6 => 'followers',
-                7 => 'total_user_topics',
-                7 => 'flg_show',
-            );
-            $searchName = $req->input('name');
-            $searchCategory = $req->input('category');
-            $orderColumnIndex = (int) $req->input('order.0.column');
-            $orderDirection = $req->input('order.0.dir', 'asc');
-            $start = (int) $req->input('start', 0);
-            $length = (int) $req->input('length', 10);
-
-            $testData = [
-                'search_name' => $searchName,
-                'search_category' => $searchCategory,
-                'order_column_index' => $orderColumnIndex,
-                'order_direction' => $orderDirection,
-                'start' => $start,
-                'length' => $length,
-            ];
-
-            file_put_contents(time() . '.json', json_encode($testData));
-
-
-            $query = Topics::select('topics.topic_id', 'topics.name', 'topics.icon_path', 'topics.categories', 'topics.created_at', 'topics.sort', 'topics.flg_show', 'topics.sign')
-                ->whereNull('topics.deleted_at');
-
-            $query->withCount('topicUsers AS total_user_topics');
-
-            if ($searchName !== null) {
-                $query->where('topics.name', 'ILIKE', '%' . $searchName . '%');
-            }
-
-            if ($searchCategory !== null) {
-                $query->where('topics.categories', 'ILIKE', '%' . $searchCategory . '%');
-            }
-
-            $total = $query->count();
-
-            $query->orderBy($columns[$orderColumnIndex], $orderDirection)
-                ->offset($start)
-                ->limit($length);
-
-            $data = $query->get();
-
-            return response()->json([
-                'draw' => (int) $req->input('draw', 1),
-                'recordsTotal' => $total,
-                'recordsFiltered' => $total,
-                'data' => $data,
-            ]);
+            return Topics::getData($req);
         } catch (\Throwable $th) {
             file_put_contents('test.txt', $th->getMessage());
             return response()->json([
-                'error' => 'An error occurred while retrieving the data.',
+                'error' => $th->getMessage(),
             ], 500);
         }
     }
+
 
 
     public function addTopics(Request $req)

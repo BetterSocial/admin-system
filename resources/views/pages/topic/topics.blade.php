@@ -54,6 +54,7 @@
                                     <th>Sort</th>
                                     <th class="no-content">Followers</th>
                                     <th>Total Followers</th>
+                                    <th>Total Post</th>
                                     <th>Sign</th>
                                     <th class="no-content">Action</th>
                                 </tr>

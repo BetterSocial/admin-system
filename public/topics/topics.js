@@ -212,6 +212,13 @@ $(document).ready(function () {
         },
       },
       {
+        data: "total_posts",
+        render: function (data, type, row) {
+          let item = JSON.stringify(row);
+          return data;
+        },
+      },
+      {
         data: "sign",
         render: function (data, type, row) {
           let item = JSON.stringify(row);
