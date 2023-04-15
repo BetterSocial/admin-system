@@ -196,11 +196,19 @@ $(document).ready(function () {
       {
         data: "followers",
         render: function (data, type, row) {
+          console.log(row);
           return (
             " <a href='/follow-topics?topic_id=" +
             row.topic_id +
             "'> <button type='button' class='btn btn-primary'>#Followers</button> </a>"
           );
+        },
+      },
+      {
+        data: "total_user_topics",
+        render: function (data, type, row) {
+          let item = JSON.stringify(row);
+          return data;
         },
       },
       {

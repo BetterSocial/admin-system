@@ -21,6 +21,11 @@ class Topics extends Model
     protected $keyType = 'string';
     public $timestamps = false;
 
+    public function topicUsers()
+    {
+        return $this->hasMany(UserTopicModel::class, 'topic_id', 'topic_id');
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -53,6 +58,11 @@ class Topics extends Model
         } else {
             $this->attributes['flg_show'] = $value;
         }
+    }
+
+    public function scopeWithTopicUsers($query)
+    {
+        return $query->with('topicUsers');
     }
 
     public function scopeCategory($query)
