@@ -134,16 +134,6 @@ class Topics extends Model
             $orderDirection = $req->input('order.0.dir', 'asc');
             $start = (int) $req->input('start', 0);
             $length = (int) $req->input('length', 10);
-            $data1 = [
-                'search_name' => $searchName,
-                'search_category' => $searchCategory,
-                'order_column_index' => $orderColumnIndex,
-                'order_direction' => $orderDirection,
-                'start' => $start,
-                'length' => $length
-            ];
-
-            file_put_contents(time() . '.json', json_encode($data1));
             $query = Topics::select('topics.topic_id', 'topics.name', 'topics.icon_path', 'topics.categories', 'topics.created_at', 'topics.sort', 'topics.flg_show', 'topics.sign')
                 ->selectSub(function ($query) {
                     $query->selectRaw('count(*)')
