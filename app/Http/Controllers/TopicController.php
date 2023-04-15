@@ -40,47 +40,17 @@ class TopicController extends Controller
 
     public function getData(Request $req)
     {
-
         try {
-            //code...
-            $columns = array(
-                // datatable column index  => database column name
-                0 => 'topic_id',
-                1 => 'name',
-                2 => 'icon_path',
-                3 => 'categories',
-                4 => 'created_at',
-                5 => 'sort',
-                6 => 'followers',
-                7 => 'flg_show'
-            );
-            $topic = "SELECT topic_id,name,icon_path,categories,created_at,sort,'location',flg_show,sign FROM topics WHERE deleted_at IS NULL";
-
-            // $topic .= " ";
-            if ($req->name != null) {
-                $topic .= " AND name ILIKE '%$req->name%'";
-            }
-            if ($req->category != null) {
-                $topic .= " AND categories ILIKE '%$req->category%'";
-            }
-
-            $data = DB::SELECT($topic);
-            $total = count($data);
-
-            $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-
-            $dataLimit = DB::SELECT($topic);
-            return response()->json([
-                'draw'            => $req->draw,
-                'recordsTotal'    => $total,
-                "recordsFiltered" => $total,
-                'data'            => $dataLimit,
-            ]);
+            return Topics::getData($req);
         } catch (\Throwable $th) {
-            //throw $th;
             file_put_contents('test.txt', $th->getMessage());
+            return response()->json([
+                'error' => $th->getMessage(),
+            ], 500);
         }
     }
+
+
 
     public function addTopics(Request $req)
     {

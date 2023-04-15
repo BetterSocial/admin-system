@@ -204,6 +204,18 @@ $(document).ready(function () {
         },
       },
       {
+        data: "total_user_topics",
+        render: function (data, type, row) {
+          return data;
+        },
+      },
+      {
+        data: "total_posts",
+        render: function (data, type, row) {
+          return data;
+        },
+      },
+      {
         data: "sign",
         render: function (data, type, row) {
           let item = JSON.stringify(row);
