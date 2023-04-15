@@ -134,7 +134,16 @@ class Topics extends Model
             $orderDirection = $req->input('order.0.dir', 'asc');
             $start = (int) $req->input('start', 0);
             $length = (int) $req->input('length', 10);
-            $query = Topics::select('topics.topic_id', 'topics.name', 'topics.icon_path', 'topics.categories', 'topics.created_at', 'topics.sort', 'topics.flg_show', 'topics.sign')
+            $query = Topics::select(
+                'topics.topic_id',
+                'topics.name',
+                'topics.icon_path',
+                'topics.categories',
+                'topics.created_at',
+                'topics.sort',
+                'topics.flg_show',
+                'topics.sign'
+            )
                 ->selectSub(function ($query) {
                     $query->selectRaw('count(*)')
                         ->from('user_topics')

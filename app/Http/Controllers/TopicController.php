@@ -26,15 +26,6 @@ class TopicController extends Controller
 
     public function index(Request $request)
     {
-        // $request->merge([
-        //     'search_name' => null,
-        //     'search_category' => null,
-        //     'order_column_index' => 1,
-        //     'order_direction' => 'asc',
-        //     'start' => 0,
-        //     'length' => 50
-        // ]);
-        // return $this->getData($request);
         $categories = Topics::category()->get();
         $data = [
             'category_name' => 'topics',

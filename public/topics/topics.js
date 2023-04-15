@@ -196,7 +196,6 @@ $(document).ready(function () {
       {
         data: "followers",
         render: function (data, type, row) {
-          console.log(row);
           return (
             " <a href='/follow-topics?topic_id=" +
             row.topic_id +
@@ -207,14 +206,12 @@ $(document).ready(function () {
       {
         data: "total_user_topics",
         render: function (data, type, row) {
-          let item = JSON.stringify(row);
           return data;
         },
       },
       {
         data: "total_posts",
         render: function (data, type, row) {
-          let item = JSON.stringify(row);
           return data;
         },
       },
