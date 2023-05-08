@@ -300,6 +300,7 @@ $(document).ready(function () {
   dataTablePost = $("#tablePostBlock").DataTable({
     searching: false,
     stateSave: true,
+    processing: true,
     language: {
       processing: "Loading...",
       emptyTable: "No Data Post",
@@ -309,10 +310,9 @@ $(document).ready(function () {
       url: "/post-blocks/data",
       type: "POST",
       headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
-      // data: function (d) {
-      //   // d.name = $("#name").val();
-      //   // d.category = $("#category").val();
-      // },
+      data: function (d) {
+        d.total = $("#total").val();
+      },
     },
     error: function (xhr, error, thrown) {
       console.log("xhr", xhr);
@@ -359,25 +359,25 @@ $(document).ready(function () {
         render: function (data, type, row) {
           // comments tab;
           let value = "";
-          let { latest_reactions } = row;
-          if (latest_reactions) {
-            let { comment } = latest_reactions;
-            if (comment) {
-              let postInJson = JSON.stringify(row);
-              value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
-              comment.forEach((element) => {
-                let item =
-                  "<p>" +
-                  element.user.data.username +
-                  ": " +
-                  element.data.text +
-                  "</p>";
-                value = value + item;
-              });
+          // let { latest_reactions } = row;
+          // if (latest_reactions) {
+          //   let { comment } = latest_reactions;
+          //   if (comment) {
+          //     let postInJson = JSON.stringify(row);
+          //     value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
+          //     comment.forEach((element) => {
+          //       let item =
+          //         "<p>" +
+          //         element.user.data.username +
+          //         ": " +
+          //         element.data.text +
+          //         "</p>";
+          //       value = value + item;
+          //     });
 
-              value += "</button>";
-            }
-          }
+          //     value += "</button>";
+          //   }
+          // }
           return value;
         },
       },
@@ -413,16 +413,16 @@ $(document).ready(function () {
         render: function (data, type, row) {
           // poll options tab;
           let value = "";
-          if (data === "poll") {
-            value = value + "<ul>";
-            row.polling_options.forEach(renderProductList);
-            function renderProductList(element, index, arr) {
-              let item = "<li>" + element + "</li>";
-              value = value + item;
-            }
+          // if (data === "poll") {
+          //   value = value + "<ul>";
+          //   row.polling_options.forEach(renderProductList);
+          //   function renderProductList(element, index, arr) {
+          //     let item = "<li>" + element + "</li>";
+          //     value = value + item;
+          //   }
 
-            value = value + "</ul>";
-          }
+          //   value = value + "</ul>";
+          // }
           return value;
         },
       },
@@ -502,5 +502,9 @@ $(document).ready(function () {
     ],
   });
 
+  $("#search").on("submit", function (e) {
+    dataTablePost.draw();
+    e.preventDefault();
+  });
   /// end
 });

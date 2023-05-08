@@ -39,7 +39,7 @@ class PostBlockController extends Controller
     public function data(Request $req)
     {
         try {
-            $draw = $req->input('draw', 1);
+            $draw = (int) $req->input('draw', 1);
             $searchName = $req->input('name');
             $searchCategory = $req->input('category');
             $orderColumnIndex = (int) $req->input('order.0.column');
@@ -47,11 +47,10 @@ class PostBlockController extends Controller
             $start = (int) $req->input('start', 0);
             $length = (int) $req->input('length', 10);
             $data = $this->getFeeds($start, $length);
-            $total = 100;
             return response()->json([
-                'draw' => (int) $req->input('draw', 1),
-                'recordsTotal' => $total,
-                'recordsFiltered' => $total,
+                'draw' => $draw,
+                'recordsTotal' => $req->input('total', 100),
+                'recordsFiltered' => $req->input('total', 100),
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
