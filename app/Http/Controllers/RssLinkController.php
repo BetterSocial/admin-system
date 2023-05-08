@@ -74,8 +74,4 @@ class RssLinkController extends Controller
             return $this->errorResponseWithAlert($th->getMessage());
         }
     }
-
-    public function validate(Request $request, array $rules, array $messages = [], array $customAttributes = [])
-    {
-    }
 }
