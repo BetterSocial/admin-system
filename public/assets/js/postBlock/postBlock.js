@@ -329,6 +329,21 @@ $(document).ready(function () {
         data: "verb",
         orderable: false,
         className: "menufilter textfilter",
+        render: function (data, type, row) {
+          // console.log(row);
+          if (row.anonimity) {
+            return (
+              row.anon_user_info_color_name +
+              " " +
+              row.anon_user_info_emoji_name
+            );
+          } else {
+            if (row.actor.error) {
+              return row.actor.error;
+            }
+            return row.actor?.data?.username ?? "User not found";
+          }
+        },
       },
       {
         data: "message",
@@ -359,25 +374,25 @@ $(document).ready(function () {
         render: function (data, type, row) {
           // comments tab;
           let value = "";
-          // let { latest_reactions } = row;
-          // if (latest_reactions) {
-          //   let { comment } = latest_reactions;
-          //   if (comment) {
-          //     let postInJson = JSON.stringify(row);
-          //     value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
-          //     comment.forEach((element) => {
-          //       let item =
-          //         "<p>" +
-          //         element.user.data.username +
-          //         ": " +
-          //         element.data.text +
-          //         "</p>";
-          //       value = value + item;
-          //     });
+          let { latest_reactions } = row;
+          if (latest_reactions) {
+            let { comment } = latest_reactions;
+            if (comment) {
+              let postInJson = JSON.stringify(row);
+              value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
+              comment.forEach((element) => {
+                let item =
+                  "<p>" +
+                  element.user.data.username +
+                  ": " +
+                  element.data.text +
+                  "</p>";
+                value = value + item;
+              });
 
-          //     value += "</button>";
-          //   }
-          // }
+              value += "</button>";
+            }
+          }
           return value;
         },
       },
@@ -413,16 +428,16 @@ $(document).ready(function () {
         render: function (data, type, row) {
           // poll options tab;
           let value = "";
-          // if (data === "poll") {
-          //   value = value + "<ul>";
-          //   row.polling_options.forEach(renderProductList);
-          //   function renderProductList(element, index, arr) {
-          //     let item = "<li>" + element + "</li>";
-          //     value = value + item;
-          //   }
+          if (data === "poll") {
+            value = value + "<ul>";
+            row.polling_options.forEach(renderProductList);
+            function renderProductList(element, index, arr) {
+              let item = "<li>" + element + "</li>";
+              value = value + item;
+            }
 
-          //   value = value + "</ul>";
-          // }
+            value = value + "</ul>";
+          }
           return value;
         },
       },

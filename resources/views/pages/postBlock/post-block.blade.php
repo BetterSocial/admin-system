@@ -15,7 +15,7 @@
                             <form class="form-inline" method="POST" id="search">
                                 <div class="form-group">
                                     <input type="text" id="total" class="form-control mr-3" placeholder="total"
-                                        name="total" value="100">
+                                        name="total" value="50">
                                     <button type="submit" class="btn btn-primary">Filter Total Post</button>
                                 </div>
                             </form>

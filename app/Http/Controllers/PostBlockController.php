@@ -26,7 +26,7 @@ class PostBlockController extends Controller
     public function index(Request $request)
     {
         // $users = UserApps::all();
-        // return $this->getFeeds();
+        // return $this->getFeeds($request);
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
@@ -39,7 +39,7 @@ class PostBlockController extends Controller
     public function data(Request $req)
     {
         try {
-            $draw = (int) $req->input('draw', 1);
+            $draw = (int) $req->input('draw', 0);
             $searchName = $req->input('name');
             $searchCategory = $req->input('category');
             $orderColumnIndex = (int) $req->input('order.0.column');
@@ -78,7 +78,6 @@ class PostBlockController extends Controller
             $feed = $client->feed('user', "bettersocial");
             $response = $feed->getActivities($offset, $limit, $options, $enrich = true, $options);
             $data =  $response["results"];
-            return $data;
 
 
             $withSortDescData = [];
@@ -98,8 +97,9 @@ class PostBlockController extends Controller
             usort($withSortDescData, function ($a, $b) {
                 return $a['total_block'] < $b['total_block'];
             });
-            return $this->successResponse('success get data', $withSortDescData);
+            return $withSortDescData;
         } catch (\Throwable $th) {
+            // file_put_contents('error.txt', $th->getMessage());
             throw $th;
         }
     }
@@ -133,7 +133,7 @@ class PostBlockController extends Controller
     private function getPoll($pollingId): string
     {
         $polling =  Polling::where('polling_id', $pollingId)->first();
-        return $polling->question;
+        return $polling->question ?? '';
     }
 
     private function getPollOption($pollingId)
@@ -142,7 +142,7 @@ class PostBlockController extends Controller
         $pollingOptions = PollingOption::select('option')->where('polling_id', $pollingId)->get();
         $options = array();
         foreach ($pollingOptions as $key => $value) {
-            $options[] = $value->option;
+            $options[] = $value->option ?? '';
         }
         return $options;
     }
