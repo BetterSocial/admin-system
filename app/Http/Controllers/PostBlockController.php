@@ -27,7 +27,6 @@ class PostBlockController extends Controller
     {
         // $users = UserApps::all();
         // return $this->getFeeds();
-        // return $this->data($request);
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
@@ -37,24 +36,36 @@ class PostBlockController extends Controller
         ]);
     }
 
-    public function data(Request $request)
+    public function data(Request $req)
     {
         try {
-            $data = $this->getFeeds();
-            return $data;
+            $draw = $req->input('draw', 1);
+            $searchName = $req->input('name');
+            $searchCategory = $req->input('category');
+            $orderColumnIndex = (int) $req->input('order.0.column');
+            $orderDirection = $req->input('order.0.dir', 'asc');
+            $start = (int) $req->input('start', 0);
+            $length = (int) $req->input('length', 10);
+            $data = $this->getFeeds($start, $length);
+            $total = 100;
+            return response()->json([
+                'draw' => (int) $req->input('draw', 1),
+                'recordsTotal' => $total,
+                'recordsFiltered' => $total,
+                'data' => $data,
+            ]);
         } catch (\Throwable $th) {
-            throw $th->getMessage();
+            return $this->errorDataTableResponse();
         }
     }
 
 
-    private function getFeeds()
+    private function getFeeds($offset = 0, $limit = 10)
     {
 
         try {
 
             $this->posts =  $this->getPostsByBlockedUser();
-            $offset = 0;
             $data = [];
             $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
             $options = [
@@ -66,8 +77,9 @@ class PostBlockController extends Controller
                 // 'reactions.recent' => true
             ];
             $feed = $client->feed('user', "bettersocial");
-            $response = $feed->getActivities($offset, 15, $options, $enrich = true, $options);
+            $response = $feed->getActivities($offset, $limit, $options, $enrich = true, $options);
             $data =  $response["results"];
+            return $data;
 
 
             $withSortDescData = [];
@@ -89,8 +101,7 @@ class PostBlockController extends Controller
             });
             return $this->successResponse('success get data', $withSortDescData);
         } catch (\Throwable $th) {
-            //throw $th;
-            return $this->errorResponse('failed load data ' . $th->getMessage());
+            throw $th;
         }
     }
 

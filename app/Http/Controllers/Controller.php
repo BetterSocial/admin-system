@@ -52,4 +52,26 @@ class Controller extends BaseController
         }
         return redirect(route($targetUrl, $param));
     }
+
+
+    protected function successDataTableResponse($draw, $recordsTotal, $recordsFiltered, $data)
+    {
+        return response()->json([
+            'draw' => (int) $draw,
+            'recordsTotal' => $recordsTotal,
+            'recordsFiltered' => $recordsFiltered,
+            'data' => $data,
+        ], 200);
+    }
+
+
+    protected function errorDataTableResponse()
+    {
+        return response()->json([
+            'draw' => 0,
+            'recordsTotal' => 0,
+            'recordsFiltered' => 0,
+            'data' => null,
+        ], 200);
+    }
 }
