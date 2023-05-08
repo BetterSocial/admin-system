@@ -382,11 +382,8 @@ $(document).ready(function () {
               value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
               comment.forEach((element) => {
                 let item =
-                  "<p>" +
-                  element.user.data.username +
-                  ": " +
-                  element.data.text +
-                  "</p>";
+                  "<p>" + element.user?.data.username ??
+                  "username not found" + ": " + element.data.text + "</p>";
                 value = value + item;
               });
 
