@@ -21,7 +21,7 @@ class Topics extends Model
     protected $keyType = 'string';
     public $timestamps = false;
 
-    public function topicUsers()
+    public function userTopics()
     {
         return $this->hasMany(UserTopicModel::class, 'topic_id', 'topic_id');
     }
@@ -64,9 +64,9 @@ class Topics extends Model
         }
     }
 
-    public function scopeWithTopicUsers($query)
+    public function scopeWithUserTopics($query)
     {
-        return $query->with('topicUsers');
+        return $query->with('userTopics');
     }
 
     public function scopeCategory($query)
@@ -158,7 +158,7 @@ class Topics extends Model
                 }, 'total_posts')
                 ->whereNull('topics.deleted_at');
 
-            $query->with('topicUsers');
+            $query->with('userTopics');
             if ($searchName !== null) {
                 $query->where('topics.name', 'ILIKE', '%' . $searchName . '%');
             }
@@ -174,7 +174,6 @@ class Topics extends Model
                 ->limit($length);
 
             $data = $query->get();
-
             return response()->json([
                 'draw' => (int) $req->input('draw', 1),
                 'recordsTotal' => $total,
@@ -182,7 +181,6 @@ class Topics extends Model
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
-            file_put_contents('test.txt', $th->getMessage());
             return response()->json([
                 'error' => $th->getMessage(),
             ], 500);

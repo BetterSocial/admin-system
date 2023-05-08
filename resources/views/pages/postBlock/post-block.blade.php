@@ -10,40 +10,17 @@
 
 
                 <div class="widget-content widget-content-area br-6">
-                    {{-- <div class="row" hidden>
-                        <form class="form-inline" method="POST" id="search" action="/post/hide/1">
-                            @csrf
-                            <div class="widget-content widget-content-area">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="mr-3 ml-3">
-                                            <select name="main_feed" id="mainFeed" class="form-control">
-                                                <option value="">Select Feed group</option>
-                                                <option value="main_feed">Main Feed</option>
-                                                <option value="user">User</option>
-                                                <option value="topic">Topic</option>
-                                                <option value="timeline">Timeline</option>
-                                            </select>
-                                        </div>
-                                        <div class="input-group">
-                                            <select class="form-control select-2" name="user_id" id="userId">
-                                                <option value="">Select User</option>
-                                                @foreach ($users as $user)
-                                                    <option value="{{ $user->user_id }}">{{ $user->username }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-search">Search</button>
-                                    </div>
+                    <div class="row">
+                        <div class=col-lg-10>
+                            <form class="form-inline" method="POST" id="search">
+                                <div class="form-group">
+                                    <input type="text" id="total" class="form-control mr-3" placeholder="total"
+                                        name="total" value="50">
+                                    <button type="submit" class="btn btn-primary">Filter Total Post</button>
                                 </div>
-                            </div>
-                        </form>
-                        <div class="col-lg-2">
-
+                            </form>
                         </div>
-                    </div> --}}
-
-
+                    </div>
                     <div class="table-responsive mb-4 mt-4">
                         <table id="tablePostBlock" class="table table-hover" style="width:100%">
                             <thead>
@@ -102,32 +79,6 @@
                 <div class="modal-body">
                     <div class="">
                         <div id="cardBodyComment" class="">
-                            <!-- Single answer -->
-                            {{-- <div class="d-flex mb-3"> --}}
-                            <!-- item image -->
-                            {{-- <a href="">
-                                    <img src="https://mdbcdn.b-cdn.net/img/new/avatars/10.webp"
-                                        class="border rounded-circle me-2" alt="Avatar" style="height: 40px" />
-                                </a> --}}
-                            <!-- item image -->
-
-                            <!-- container content -->
-                            {{-- <div>
-                                    <div class="bg-light rounded-3 px-3 py-1">
-                                        <a href="" class="text-dark mb-0">
-                                            <strong>Hollie James</strong>
-                                        </a>
-                                        <a href="" class="text-muted d-block">
-                                            <small>Voluptatibus quaerat suscipit in nostrum
-                                                necessitatibus</small>
-                                        </a>
-                                    </div>
-                                </div> --}}
-
-                            <!-- container content -->
-                            {{-- </div> --}}
-
-
                         </div>
                     </div>
                 </div>

@@ -107,8 +107,7 @@
                         </li>
                         <li class="menu {{ $category_name === 'post' ? 'active' : '' }}">
                             <a href="{{ route('post') }}" data-active="{{ $category_name === 'post' ? 'true' : 'false' }}"
-                                aria-expanded="{{ $category_name === 'post-block' ? 'true' : 'false' }}"
-                                class="dropdown-toggle">
+                                aria-expanded="{{ $category_name === 'post' ? 'true' : 'false' }}" class="dropdown-toggle">
                                 <div class="">
                                     <span>Post</span>
                                 </div>
@@ -119,6 +118,14 @@
                                 aria-expanded="{{ $category_name === 'logs' ? 'true' : 'false' }}" class="dropdown-toggle">
                                 <div class="">
                                     <span>Logs</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="menu {{ $category_name === 'rss' ? 'active' : '' }}">
+                            <a href="{{ route('rss') }}" data-active="{{ $category_name === 'rss' ? 'true' : 'false' }}"
+                                aria-expanded="{{ $category_name === 'rss' ? 'true' : 'false' }}" class="dropdown-toggle">
+                                <div class="">
+                                    <span>Rss Link</span>
                                 </div>
                             </a>
                         </li>

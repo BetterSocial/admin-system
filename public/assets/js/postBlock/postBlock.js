@@ -1,4 +1,4 @@
-let dataTableLocations;
+let dataTablePost;
 const getFeeds = async (feedGroup, user_id) => {
   let body = {
     feed_group: feedGroup,
@@ -297,197 +297,229 @@ $(document).ready(function () {
     }
   });
 
-  getFeeds().then((data) => {
-    dataTableLocations = $("#tablePostBlock").DataTable({
-      //   searching: false,
-      //   stateSave: true,
-      //   processing: true,
-      language: {
-        loadingRecords: "</br></br></br></br>;",
-        processing:
-          "<span class='fa-stack fa-lg'>\n\
-        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-   </span>&emsp;Processing ...",
-        emptyTable: "No Data",
+  dataTablePost = $("#tablePostBlock").DataTable({
+    searching: false,
+    stateSave: true,
+    processing: true,
+    language: {
+      processing: "Loading...",
+      emptyTable: "No Data Post",
+    },
+    serverSide: true,
+    ajax: {
+      url: "/post-blocks/data",
+      type: "POST",
+      headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+      data: function (d) {
+        d.total = $("#total").val();
       },
-      order: [[5, "desc"]],
-      data: data,
-      deferLoading: 57,
-      columns: [
-        {
-          data: "id",
-          className: "menufilter textfilter",
+    },
+    error: function (xhr, error, thrown) {
+      console.log("xhr", xhr);
+      console.log("error", error);
+      console.log("thrown", thrown);
+    },
+    columns: [
+      {
+        data: "id",
+        orderable: false,
+        className: "menufilter textfilter",
+      },
+      {
+        data: "verb",
+        orderable: false,
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          // console.log(row);
+          if (row.anonimity) {
+            return (
+              row.anon_user_info_color_name +
+              " " +
+              row.anon_user_info_emoji_name
+            );
+          } else {
+            if (row.actor.error) {
+              return row.actor.error;
+            }
+            return row.actor?.data?.username ?? "User not found";
+          }
         },
-        {
-          data: "actor.data.username",
-          className: "menufilter textfilter",
-        },
-        {
-          data: "message",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            let { images_url } = row;
-            // message tab
-            if (row.post_type === 1) {
-              return `
+      },
+      {
+        data: "message",
+        orderable: false,
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          let { images_url } = row;
+          // message tab
+          if (row.post_type === 1) {
+            return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
                 `;
-            } else if (row.post_type === 2) {
-              return `
+          } else if (row.post_type === 2) {
+            return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
                 `;
-            } else {
-              return `
+          } else {
+            return `
               <div class="btn-detail"  data-item="${row}">${data}</div>
               `;
-            }
-          },
+          }
         },
-        {
-          data: "message",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            // comments tab;
-            let value = "";
-            let { latest_reactions } = row;
-            if (latest_reactions) {
-              let { comment } = latest_reactions;
-              if (comment) {
-                let postInJson = JSON.stringify(row);
-                value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
-                comment.forEach((element) => {
-                  let item =
-                    "<p>" +
-                    element.user.data.username +
-                    ": " +
-                    element.data.text +
-                    "</p>";
-                  value = value + item;
-                });
-
-                value += "</button>";
-              }
-            }
-            return value;
-          },
-        },
-        {
-          data: "message",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            let { images_url } = row;
-            // image tab
-            if (images_url.length > 1) {
-              let value = `<div class="btn-detail" style="100px"  data-item="${row}">`;
-              images_url.map((item) => {
-                value += `<a href="${item}" target="_blank"><img src="${item}" alt="${data}" class="rounded h-10" width="128" height="128"></a>`;
+      },
+      {
+        data: "message",
+        orderable: false,
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          // comments tab;
+          let value = "";
+          let { latest_reactions } = row;
+          if (latest_reactions) {
+            let { comment } = latest_reactions;
+            if (comment) {
+              let postInJson = JSON.stringify(row);
+              value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
+              comment.forEach((element) => {
+                let item =
+                  "<p>" +
+                  element.user.data.username +
+                  ": " +
+                  element.data.text +
+                  "</p>";
+                value = value + item;
               });
-              value += "</div>";
-              return value;
-            } else if (images_url.length == 1) {
-              return `
+
+              value += "</button>";
+            }
+          }
+          return value;
+        },
+      },
+      {
+        data: "message",
+        orderable: false,
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          let { images_url } = row;
+          // image tab
+          if (images_url.length > 1) {
+            let value = `<div class="btn-detail" style="100px"  data-item="${row}">`;
+            images_url.map((item) => {
+              value += `<a href="${item}" target="_blank"><img src="${item}" alt="${data}" class="rounded h-10" width="128" height="128"></a>`;
+            });
+            value += "</div>";
+            return value;
+          } else if (images_url.length == 1) {
+            return `
                     <div class="btn-detail" style="100px"  data-item="${row}"><a href="${images_url}" target="_blank"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></a></div>
                     `;
-            } else {
-              return `
+          } else {
+            return `
                 <div class="btn-detail"  data-item="${row}">-</div>
                 `;
-            }
-          },
+          }
         },
-        {
-          data: "verb",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            // poll options tab;
-            let value = "";
-            if (data === "poll") {
-              value = value + "<ul>";
-              row.polling_options.forEach(renderProductList);
-              function renderProductList(element, index, arr) {
-                let item = "<li>" + element + "</li>";
-                value = value + item;
-              }
-
-              value = value + "</ul>";
-            }
-            return value;
-          },
-        },
-        {
-          data: "id",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            // upvote
-            let { reaction_counts } = row;
-            return reaction_counts.upvotes || 0;
-          },
-        },
-        {
-          data: "anonimity",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            // downvote;
-            let { reaction_counts } = row;
-            return reaction_counts.downvotes || 0;
-          },
-        },
-        {
-          data: "total_block",
-          className: "menufilter textfilter",
-        },
-        {
-          data: "post_type",
-          className: "menufilter textfilter",
-          render: function (data, type, row) {
-            //status
-            let isHide = false;
-            if (row.is_hide) {
-              isHide = true;
-            }
-            let html = "";
-            if (isHide) {
-              html = `<p class="info">Hidden</p>`;
-            } else {
-              html = `<p>Show</p>`;
+      },
+      {
+        data: "verb",
+        orderable: false,
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          // poll options tab;
+          let value = "";
+          if (data === "poll") {
+            value = value + "<ul>";
+            row.polling_options.forEach(renderProductList);
+            function renderProductList(element, index, arr) {
+              let item = "<li>" + element + "</li>";
+              value = value + item;
             }
 
-            return html;
-            // status tab
-          },
+            value = value + "</ul>";
+          }
+          return value;
         },
-        {
-          data: "post_type",
-          orderable: false,
-          render: function (data, type, row) {
-            // action
-            let isHide = false;
-            let item = JSON.stringify(row);
-            if (row.is_hide) {
-              isHide = true;
-            }
-            let html = "";
-            if (isHide) {
-              html =
-                "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
-                row.id +
-                "\")' class='btn btn-info btn-sm'>Show</button>" +
-                "<br/>";
-              // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
-            } else {
-              html =
-                "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
-                row.id +
-                "\")' class='btn btn-danger btn-sm'>Hide</button>" +
-                " <br/>";
-              // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`;
-            }
-            // action tab
-            // test new file
-            return html;
-          },
+      },
+      {
+        data: "id",
+        orderable: false,
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          // upvote
+          let { reaction_counts } = row;
+          return reaction_counts.upvotes || 0;
         },
-      ],
-    });
+      },
+      {
+        data: "anonimity",
+        orderable: false,
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          // downvote;
+          let { reaction_counts } = row;
+          return reaction_counts.downvotes || 0;
+        },
+      },
+      {
+        data: "post_type",
+        orderable: false,
+        className: "menufilter textfilter",
+      },
+      {
+        data: "post_type",
+        orderable: false,
+        className: "menufilter textfilter",
+        render: function (data, type, row) {
+          //status
+          let isHide = false;
+          if (row.is_hide) {
+            isHide = true;
+          }
+          let html = "";
+          if (isHide) {
+            html = `<p class="info">Hidden</p>`;
+          } else {
+            html = `<p>Show</p>`;
+          }
+
+          return html;
+          // status tab
+        },
+      },
+      {
+        data: "post_type",
+        orderable: false,
+        render: function (data, type, row) {
+          // action
+          let isHide = false;
+          let item = JSON.stringify(row);
+          if (row.is_hide) {
+            isHide = true;
+          }
+          let html = "";
+          if (isHide) {
+            html =
+              "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
+              row.id +
+              "\")' class='btn btn-info btn-sm'>Show</button>" +
+              "<br/>";
+          } else {
+            html =
+              "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
+              row.id +
+              "\")' class='btn btn-danger btn-sm'>Hide</button>" +
+              " <br/>";
+          }
+          return html;
+        },
+      },
+    ],
   });
+
+  $("#search").on("submit", function (e) {
+    dataTablePost.draw();
+    e.preventDefault();
+  });
+  /// end
 });

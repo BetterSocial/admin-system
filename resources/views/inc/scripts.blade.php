@@ -1198,6 +1198,10 @@
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
     @break
 
+    @case('rss')
+        <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
+    @break
+
     @default
         <script>
             console.log('No custom script available.')

@@ -26,8 +26,7 @@ class PostBlockController extends Controller
     public function index(Request $request)
     {
         // $users = UserApps::all();
-        // return $this->getFeeds();
-        // return $this->data($request);
+        // return $this->getFeeds($request);
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
@@ -37,24 +36,35 @@ class PostBlockController extends Controller
         ]);
     }
 
-    public function data(Request $request)
+    public function data(Request $req)
     {
         try {
-            $data = $this->getFeeds();
-            return $data;
+            $draw = (int) $req->input('draw', 0);
+            $searchName = $req->input('name');
+            $searchCategory = $req->input('category');
+            $orderColumnIndex = (int) $req->input('order.0.column');
+            $orderDirection = $req->input('order.0.dir', 'asc');
+            $start = (int) $req->input('start', 0);
+            $length = (int) $req->input('length', 10);
+            $data = $this->getFeeds($start, $length);
+            return response()->json([
+                'draw' => $draw,
+                'recordsTotal' => $req->input('total', 100),
+                'recordsFiltered' => $req->input('total', 100),
+                'data' => $data,
+            ]);
         } catch (\Throwable $th) {
-            throw $th->getMessage();
+            return $this->errorDataTableResponse();
         }
     }
 
 
-    private function getFeeds()
+    private function getFeeds($offset = 0, $limit = 10)
     {
 
         try {
 
             $this->posts =  $this->getPostsByBlockedUser();
-            $offset = 0;
             $data = [];
             $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
             $options = [
@@ -66,7 +76,7 @@ class PostBlockController extends Controller
                 // 'reactions.recent' => true
             ];
             $feed = $client->feed('user', "bettersocial");
-            $response = $feed->getActivities($offset, 15, $options, $enrich = true, $options);
+            $response = $feed->getActivities($offset, $limit, $options, $enrich = true, $options);
             $data =  $response["results"];
 
 
@@ -87,10 +97,10 @@ class PostBlockController extends Controller
             usort($withSortDescData, function ($a, $b) {
                 return $a['total_block'] < $b['total_block'];
             });
-            return $this->successResponse('success get data', $withSortDescData);
+            return $withSortDescData;
         } catch (\Throwable $th) {
-            //throw $th;
-            return $this->errorResponse('failed load data ' . $th->getMessage());
+            // file_put_contents('error.txt', $th->getMessage());
+            throw $th;
         }
     }
 
@@ -123,7 +133,7 @@ class PostBlockController extends Controller
     private function getPoll($pollingId): string
     {
         $polling =  Polling::where('polling_id', $pollingId)->first();
-        return $polling->question;
+        return $polling->question ?? '';
     }
 
     private function getPollOption($pollingId)
@@ -132,7 +142,7 @@ class PostBlockController extends Controller
         $pollingOptions = PollingOption::select('option')->where('polling_id', $pollingId)->get();
         $options = array();
         foreach ($pollingOptions as $key => $value) {
-            $options[] = $value->option;
+            $options[] = $value->option ?? '';
         }
         return $options;
     }

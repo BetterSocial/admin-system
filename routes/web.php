@@ -5,6 +5,7 @@ use App\Http\Controllers\LimitTopicController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RssLinkController;
 use App\Http\Controllers\ShowPostListController;
 use App\Http\Controllers\UsersAppController;
 use App\Http\Controllers\ViewUserController;
@@ -185,8 +186,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/post/upload-csv', [PostController::class, 'upload'])->name('post.upload');
     Route::get('post/download-template', [PostController::class, 'downloadTemplate'])->name('post.download-template');
 
-    Route::get('/post-blocks', 'PostBlockController@index')->name('post-block');
-    Route::post('/post-blocks/data', 'PostBlockController@data')->name('post-block.data');
+    Route::get('/post-blocks', [PostBlockController::class, 'index'])->name('post-block');
+    Route::post('/post-blocks/data', [PostBlockController::class, 'data'])->name('post-block.data');
     Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
     Route::delete('/post/comment/{id}', [PostController::class, 'deleteComment'])->name('post.comment.delete');
 
@@ -194,6 +195,11 @@ Route::group(['middleware' => 'auth'], function () {
      * logs
      */
     Route::get('logs', [LogController::class, 'data'])->name('logs');
+
+    Route::get('rss', [RssLinkController::class, 'data'])->name('rss');
+    Route::post('rss', [RssLinkController::class, 'add'])->name('rss.add');
+    Route::put('rss', [RssLinkController::class, 'edit'])->name('rss.edit');
+    Route::delete('rss/{id}', [RssLinkController::class, 'remove'])->name('rss.remove');
 });
 
 Auth::routes();
