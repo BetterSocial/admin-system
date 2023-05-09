@@ -82,4 +82,25 @@ class FeedGetStreamService
             "username" => $userApp->username
         ]);
     }
+
+    public function upvote($activityId, $userId)
+    {
+        $this->client->reactions()->add('upvotes', $activityId, $userId, [
+            'count_upvote' => 1,
+            "text" => 'You have new upvote'
+        ]);
+    }
+
+    public function downvote($activityId, $userId)
+    {
+        $this->client->reactions()->add('downvotes', $activityId, $userId, [
+            'count_upvote' => 1,
+            "text" => 'You have new downvote'
+        ]);
+    }
+
+    public function removeUpvote($reactionId)
+    {
+        $this->client->reactions()->delete($reactionId);
+    }
 }

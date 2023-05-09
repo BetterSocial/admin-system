@@ -7,6 +7,7 @@ use App\Models\ApiKey;
 use App\Models\LogModel;
 use App\Models\UserApps;
 use App\Services\ApiKeyService;
+use App\Services\FeedGetStreamService;
 use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
@@ -191,6 +192,47 @@ class PostController extends Controller
 
         if ($validator->fails()) {
             throw new Exception($validator->errors());
+        }
+    }
+
+
+    public function upvote(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'activity_id' => 'required|string'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->errorResponse($validator->errors(), 400);
+            }
+            $activityId = $request->input('activity_id');
+            $feed = new FeedGetStreamService();
+            $feed->upvote($activityId, 'bettersocial');
+            return $this->successResponse('success upvote');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->errorResponse('error: ' . $th->getMessage());
+        }
+    }
+
+    public function downvote(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'activity_id' => 'required|string'
+            ]);
+
+            if ($validator->fails()) {
+                return $this->errorResponse($validator->errors(), 400);
+            }
+            $activityId = $request->input('activity_id');
+            $feed = new FeedGetStreamService();
+            $feed->downvote($activityId, 'bettersocial');
+            return $this->successResponse('success downvote');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return $this->errorResponse('error: ' . $th->getMessage());
         }
     }
 }

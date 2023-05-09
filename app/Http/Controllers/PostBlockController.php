@@ -8,10 +8,12 @@ use App\Models\PollingOption;
 use App\Models\User;
 use App\Models\UserApps;
 use App\Models\UserBlockedUser;
+use App\Services\FeedGetStreamService;
 use Illuminate\Http\Request;
 use FeedManager;
 use GetStream\Stream\Client;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use PHPUnit\Framework\Constraint\Count;
 
 class PostBlockController extends Controller
@@ -26,6 +28,7 @@ class PostBlockController extends Controller
     public function index(Request $request)
     {
         // $users = UserApps::all();
+
         // return $this->getFeeds($request);
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
