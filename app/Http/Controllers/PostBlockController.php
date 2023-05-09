@@ -27,9 +27,6 @@ class PostBlockController extends Controller
      */
     public function index(Request $request)
     {
-        // $users = UserApps::all();
-
-        // return $this->getFeeds($request);
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',

@@ -211,7 +211,6 @@ class PostController extends Controller
             $feed->upvote($activityId, 'bettersocial');
             return $this->successResponse('success upvote');
         } catch (\Throwable $th) {
-            //throw $th;
             return $this->errorResponse('error: ' . $th->getMessage());
         }
     }
@@ -231,7 +230,6 @@ class PostController extends Controller
             $feed->downvote($activityId, 'bettersocial');
             return $this->successResponse('success downvote');
         } catch (\Throwable $th) {
-            //throw $th;
             return $this->errorResponse('error: ' . $th->getMessage());
         }
     }

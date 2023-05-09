@@ -30,8 +30,8 @@ const getFeeds = async (feedGroup, user_id) => {
   }
 };
 
-const upvotePost = async (activityId) => {
-  console.log(activityId);
+const reactionPost = async (activityId, type) => {
+  let message = type === "upvote" ? "upvote" : "downvote";
   Swal.fire({
     title: "Are you sure?",
     text: "",
@@ -46,7 +46,8 @@ const upvotePost = async (activityId) => {
         const body = {
           activity_id: activityId,
         };
-        const response = await fetch(`/post/upvote`, {
+        let url = type === "upvote" ? "/post/upvote" : "/post/downvote";
+        const response = await fetch(url, {
           method: "POST",
           headers: {
             "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
@@ -56,60 +57,16 @@ const upvotePost = async (activityId) => {
         });
         let res = await response.json();
         if (res.status === "success") {
-          Swal.fire("Success", "Success upvote", "success").then(() => {
+          let message = type === "upvote" ? "upvote" : "downvote";
+          Swal.fire("Success", `success ${message}`, "success").then(() => {
             dataTablePost.draw();
           });
         } else {
-          Swal.fire("Error", "Error upvote", "error").then(() => {});
+          Swal.fire("Error", `Error ${message}`, "error").then(() => {});
         }
       } catch (error) {
         console.log(error);
-        Swal.fire("Error", "Error upvote", "error").then(() => {});
-      }
-    }
-  });
-};
-
-const downvotePost = async (activityId) => {
-  console.log(activityId);
-  Swal.fire({
-    title: "Are you sure?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, do it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const body = {
-          activity_id: activityId,
-        };
-        const response = await fetch(`/post/downvote`, {
-          method: "POST",
-          headers: {
-            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        });
-        let res = await response.json();
-        if (res.status === "success") {
-          Swal.fire("Success", "Success downvote", "success").then(() => {
-            // location.reload();
-            dataTablePost.draw();
-          });
-        } else {
-          Swal.fire("Error", "Error downvote", "error").then(() => {
-            // location.reload();
-          });
-        }
-      } catch (error) {
-        console.log(error);
-        Swal.fire("Error", "Error upvote", "error").then(() => {
-          // location.reload();
-        });
+        Swal.fire("Error", `Error ${message}`, "error").then(() => {});
       }
     }
   });
@@ -533,7 +490,7 @@ $(document).ready(function () {
           let upvote = reaction_counts.upvotes || 0;
           let activityId = row.id;
           let html = "";
-          html = `<button style="border: none; background: transparent" onclick='upvotePost("${activityId}")'> ${upvote} </button>`;
+          html = `<button style="border: none; background: transparent" onclick='reactionPost("${activityId}", "upvote")'> ${upvote} </button>`;
           return html;
         },
       },
@@ -547,7 +504,7 @@ $(document).ready(function () {
           let downvote = reaction_counts.downvotes || 0;
           let activityId = row.id;
           let html = "";
-          html = `<button style="border: none; background: transparent" onclick='downvotePost("${activityId}")'> ${downvote} </button>`;
+          html = `<button style="border: none; background: transparent" onclick='reactionPost("${activityId}", "downvote")'> ${downvote} </button>`;
           return html;
         },
       },
