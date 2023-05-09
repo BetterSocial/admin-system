@@ -30,6 +30,53 @@ const getFeeds = async (feedGroup, user_id) => {
   }
 };
 
+const reactionPost = async (activityId, type) => {
+  let message = "";
+  let url = "";
+  if (type === "upvote") {
+    message = "upvote";
+    url = "/post/upvote";
+  } else {
+    message = "downvote";
+    url = "/post/downvote";
+  }
+  Swal.fire({
+    title: "Are you sure?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, do it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const body = {
+          activity_id: activityId,
+        };
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+        let res = await response.json();
+        if (res.status === "success") {
+          Swal.fire("Success", `success ${message}`, "success").then(() => {
+            dataTablePost.draw();
+          });
+        } else {
+          Swal.fire("Error", `Error ${message}`, "error").then(() => {});
+        }
+      } catch (error) {
+        Swal.fire("Error", `Error ${message}`, "error").then(() => {});
+      }
+    }
+  });
+};
+
 const hideOrShowPost = async (id, isHide) => {
   try {
     const body = {
@@ -445,7 +492,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           // upvote
           let { reaction_counts } = row;
-          return reaction_counts.upvotes || 0;
+          let upvote = reaction_counts.upvotes || 0;
+          let activityId = row.id;
+          let html = "";
+          html = `<button style="border: none; background: transparent" onclick='reactionPost("${activityId}", "upvote")'> ${upvote} </button>`;
+          return html;
         },
       },
       {
@@ -455,7 +506,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           // downvote;
           let { reaction_counts } = row;
-          return reaction_counts.downvotes || 0;
+          let downvote = reaction_counts.downvotes || 0;
+          let activityId = row.id;
+          let html = "";
+          html = `<button style="border: none; background: transparent" onclick='reactionPost("${activityId}", "downvote")'> ${downvote} </button>`;
+          return html;
         },
       },
       {
