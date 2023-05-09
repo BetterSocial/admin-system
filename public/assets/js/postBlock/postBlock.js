@@ -31,7 +31,15 @@ const getFeeds = async (feedGroup, user_id) => {
 };
 
 const reactionPost = async (activityId, type) => {
-  let message = type === "upvote" ? "upvote" : "downvote";
+  let message = "";
+  let url = "";
+  if (type === "upvote") {
+    message = "upvote";
+    url = "/post/upvote";
+  } else {
+    message = "downvote";
+    url = "/post/downvote";
+  }
   Swal.fire({
     title: "Are you sure?",
     text: "",
@@ -46,7 +54,6 @@ const reactionPost = async (activityId, type) => {
         const body = {
           activity_id: activityId,
         };
-        let url = type === "upvote" ? "/post/upvote" : "/post/downvote";
         const response = await fetch(url, {
           method: "POST",
           headers: {
@@ -57,7 +64,6 @@ const reactionPost = async (activityId, type) => {
         });
         let res = await response.json();
         if (res.status === "success") {
-          let message = type === "upvote" ? "upvote" : "downvote";
           Swal.fire("Success", `success ${message}`, "success").then(() => {
             dataTablePost.draw();
           });
@@ -65,7 +71,6 @@ const reactionPost = async (activityId, type) => {
           Swal.fire("Error", `Error ${message}`, "error").then(() => {});
         }
       } catch (error) {
-        console.log(error);
         Swal.fire("Error", `Error ${message}`, "error").then(() => {});
       }
     }
