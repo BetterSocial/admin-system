@@ -200,7 +200,8 @@ class PostController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'activity_id' => 'required|string'
+                'activity_id' => 'required|string',
+                'total' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -208,7 +209,9 @@ class PostController extends Controller
             }
             $activityId = $request->input('activity_id');
             $feed = new FeedGetStreamService();
-            $feed->upvote($activityId, 'bettersocial');
+            for ($i = 0; $i < $request->input('total'); $i++) {
+                $feed->upvote($activityId, 'bettersocial');
+            }
             return $this->successResponse('success upvote');
         } catch (\Throwable $th) {
             return $this->errorResponse('error: ' . $th->getMessage());
@@ -219,7 +222,8 @@ class PostController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'activity_id' => 'required|string'
+                'activity_id' => 'required|string',
+                'total' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -227,7 +231,9 @@ class PostController extends Controller
             }
             $activityId = $request->input('activity_id');
             $feed = new FeedGetStreamService();
-            $feed->downvote($activityId, 'bettersocial');
+            for ($i = 0; $i < $request->input('total'); $i++) {
+                $feed->downvote($activityId, 'bettersocial');
+            }
             return $this->successResponse('success downvote');
         } catch (\Throwable $th) {
             return $this->errorResponse('error: ' . $th->getMessage());

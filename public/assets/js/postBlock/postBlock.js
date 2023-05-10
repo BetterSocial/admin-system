@@ -40,41 +40,59 @@ const reactionPost = async (activityId, type) => {
     message = "downvote";
     url = "/post/downvote";
   }
-  Swal.fire({
-    title: "Are you sure?",
-    text: "",
-    icon: "warning",
+  const { value } = await Swal.fire({
+    title: `Input total ${message}`,
+    input: "number",
+    inputLabel: "",
+    inputPlaceholder: `Enter number ${message}`,
     showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, do it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const body = {
-          activity_id: activityId,
-        };
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        });
-        let res = await response.json();
-        if (res.status === "success") {
-          Swal.fire("Success", `success ${message}`, "success").then(() => {
-            dataTablePost.draw();
-          });
-        } else {
-          Swal.fire("Error", `Error ${message}`, "error").then(() => {});
-        }
-      } catch (error) {
-        Swal.fire("Error", `Error ${message}`, "error").then(() => {});
-      }
-    }
   });
+
+  if (value) {
+    if (value < 1) {
+      Swal.fire(`Value must be greater than equal to one`);
+      return;
+    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, do it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          Swal.showLoading();
+          const body = {
+            activity_id: activityId,
+            total: value,
+          };
+          const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+          });
+          let res = await response.json();
+          if (res.status === "success") {
+            Swal.fire("Success", `success ${message}`, "success").then(() => {
+              dataTablePost.draw();
+            });
+          } else {
+            Swal.fire("Error", `Error ${message}`, "error").then(() => {});
+          }
+        } catch (error) {
+          Swal.fire("Error", `Error ${message}`, "error").then(() => {});
+        } finally {
+          Swal.hideLoading();
+        }
+      }
+    });
+  }
 };
 
 const hideOrShowPost = async (id, isHide) => {
