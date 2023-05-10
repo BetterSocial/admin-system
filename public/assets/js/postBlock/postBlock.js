@@ -30,7 +30,7 @@ const getFeeds = async (feedGroup, user_id) => {
   }
 };
 
-const reactionPost = async (activityId, type) => {
+const handleType = (type) => {
   let message = "";
   let url = "";
   if (type === "upvote") {
@@ -40,6 +40,10 @@ const reactionPost = async (activityId, type) => {
     message = "downvote";
     url = "/post/downvote";
   }
+  return { message, url };
+};
+
+const createInput = async (message) => {
   const { value } = await Swal.fire({
     title: `Input total ${message}`,
     input: "number",
@@ -47,12 +51,14 @@ const reactionPost = async (activityId, type) => {
     inputPlaceholder: `Enter number ${message}`,
     showCancelButton: true,
   });
+  return value;
+};
 
-  if (value) {
-    if (value < 1) {
-      Swal.fire(`Value must be greater than equal to one`);
-      return;
-    }
+const reactionPost = async (activityId, type) => {
+  let { message, url } = handleType(type);
+  let value = await createInput(message);
+  console.log(value);
+  if (value && value >= 1) {
     Swal.fire({
       title: "Are you sure?",
       text: "",
@@ -92,6 +98,8 @@ const reactionPost = async (activityId, type) => {
         }
       }
     });
+  } else {
+    Swal.fire(`Value must be greater than equal to one`);
   }
 };
 
