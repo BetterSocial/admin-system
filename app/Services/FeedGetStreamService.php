@@ -20,6 +20,14 @@ class FeedGetStreamService
         $this->client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
     }
 
+    public function getFeedByActivityId($activityId)
+    {
+
+        $response =  $this->client->getActivities([$activityId]);
+        $data =  $response["results"];
+        return $data[0];
+    }
+
     public function removeUser($userId)
     {
         $this->client->users()->delete($userId);

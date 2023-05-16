@@ -7,11 +7,13 @@ use App\Models\ApiKey;
 use App\Models\LogModel;
 use App\Models\UserApps;
 use App\Services\ApiKeyService;
+use App\Services\ChatGetStreamService;
 use App\Services\FeedGetStreamService;
 use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -237,6 +239,33 @@ class PostController extends Controller
             return $this->successResponse('success downvote');
         } catch (\Throwable $th) {
             return $this->errorResponse('error: ' . $th->getMessage());
+        }
+    }
+
+
+
+    public function bannedUserByPost(Request $request)
+    {
+        try {
+            $feed = new FeedGetStreamService();
+            $activityId = $request->input('activity_id');
+            $data = $feed->getFeedByActivityId($activityId);
+            return $this->successResponse('success', $data);
+            $userId = '';
+            $userApp = UserApps::find($userId);
+            if ($userApp) {
+                $userApp->status = "N";
+                $userApp->is_banned = true;
+                $userApp->save();
+                $streamChat = new ChatGetStreamService();
+                $streamChat->deActiveUser($userId);
+                $feed->updateExpireFeed($userId);
+                DB::commit();
+                return $this->successResponse('success banned user');
+            }
+            return $this->successResponse('success banned user');
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage());
         }
     }
 }
