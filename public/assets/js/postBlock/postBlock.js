@@ -295,6 +295,7 @@ function deleteComment(commentId) {
           method: "DELETE",
           headers: {
             "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "Content-Type": "application/json",
           },
         });
         let res = await response.json();
@@ -363,10 +364,6 @@ const detailComment = (post) => {
 };
 
 const bannedUserByPostId = (postId) => {
-  console.log("post id: ", postId);
-  let body = {
-    activity_id: postId,
-  };
   Swal.fire({
     title: "Are you sure?",
     text: "",
@@ -378,10 +375,14 @@ const bannedUserByPostId = (postId) => {
   }).then(async (result) => {
     if (result.isConfirmed) {
       try {
+        const body = {
+          activity_id: postId,
+        };
         const response = await fetch(`/post/banned-user`, {
           method: "POST",
           headers: {
             "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
         });

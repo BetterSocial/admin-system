@@ -29,7 +29,6 @@ class PostBlockController extends Controller
     public function index(Request $request)
     {
 
-        return $this->feedService->getFeedByActivityId('53c1f4f1-f09e-11ed-9ee3-0e0d34fb440f');
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',

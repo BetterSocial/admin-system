@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UploadRequest;
-use App\Models\ApiKey;
 use App\Models\LogModel;
 use App\Models\UserApps;
 use App\Services\ApiKeyService;
-use App\Services\ChatGetStreamService;
 use App\Services\FeedGetStreamService;
-use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use League\Csv\Reader;
 use Throwable;
 
@@ -247,25 +241,26 @@ class PostController extends Controller
     public function bannedUserByPost(Request $request)
     {
         try {
-            $feed = new FeedGetStreamService();
+            $request->validate([
+                'activity_id' => 'required',
+            ]);
             $activityId = $request->input('activity_id');
-            $data = $feed->getFeedByActivityId($activityId);
-            return $this->successResponse('success', $data);
-            $userId = '';
-            $userApp = UserApps::find($userId);
-            if ($userApp) {
-                $userApp->status = "N";
-                $userApp->is_banned = true;
-                $userApp->save();
-                $streamChat = new ChatGetStreamService();
-                $streamChat->deActiveUser($userId);
-                $feed->updateExpireFeed($userId);
-                DB::commit();
-                return $this->successResponse('success banned user');
+
+            $baseUrl = config('constants.user_api') . '/api/v1/admin/post/block/user';
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'api-key' => $this->apiKeyService->getKey(),
+            ])->post($baseUrl, [
+                'activity_id' => $activityId,
+            ]);
+
+            if ($response->ok()) {
+                return $this->successResponse('Success banned user');
+            } else {
+                return $this->errorResponse('Failed banned user ');
             }
-            return $this->successResponse('success banned user');
         } catch (\Throwable $th) {
-            return $this->errorResponse($th->getMessage());
+            return $this->errorResponse('Internal server error with message: ' . $th->getMessage());
         }
     }
 }
