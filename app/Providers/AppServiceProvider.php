@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\ApiKeyService;
+use App\Services\FeedGetStreamService;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,8 +16,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(ApiKeyService::class, function ($app) {
+        $this->app->singleton(ApiKeyService::class, function () {
             return new ApiKeyService();
+        });
+
+        $this->app->singleton(FeedGetStreamService::class, function () {
+            return new FeedGetStreamService();
         });
     }
 

@@ -57,7 +57,6 @@ $(document).ready(function () {
         data: "status",
         orderable: false,
         render: function (data, type, row) {
-          console.log(row.is_banned);
           if (row.is_banned) {
             return "<span class='badge badge-danger'>Banned</span>";
           } else {

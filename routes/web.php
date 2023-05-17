@@ -187,6 +187,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('post/download-template', [PostController::class, 'downloadTemplate'])->name('post.download-template');
     Route::post('/post/upvote', [PostController::class, 'upvote'])->name('post.upvote');
     Route::post('/post/downvote', [PostController::class, 'downvote'])->name('post.downvote');
+    Route::post('/post/banned-user', [PostController::class, 'bannedUserByPost'])->name('post.banned-user');
 
     Route::get('/post-blocks', [PostBlockController::class, 'index'])->name('post-block');
     Route::post('/post-blocks/data', [PostBlockController::class, 'data'])->name('post-block.data');

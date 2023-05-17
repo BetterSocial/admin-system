@@ -295,6 +295,7 @@ function deleteComment(commentId) {
           method: "DELETE",
           headers: {
             "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "Content-Type": "application/json",
           },
         });
         let res = await response.json();
@@ -359,6 +360,46 @@ const detailComment = (post) => {
     );
     let comment = makeComment(commentItem);
     container.append(comment);
+  });
+};
+
+const bannedUserByPostId = (postId) => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, do it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const body = {
+          activity_id: postId,
+        };
+        const response = await fetch(`/post/banned-user`, {
+          method: "POST",
+          headers: {
+            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+        let res = await response.json();
+        console.log(res);
+        if (res.status === "success") {
+          Swal.fire("Success", "Success banned user", "success").then(() => {
+            dataTablePost.draw();
+          });
+        } else {
+          Swal.fire("Error", res.message).then(() => {});
+        }
+      } catch (err) {
+        console.log(err);
+        Swal.fire("Error", err).then(() => {});
+      }
+    }
   });
 };
 
@@ -571,7 +612,6 @@ $(document).ready(function () {
         render: function (data, type, row) {
           // action
           let isHide = false;
-          let item = JSON.stringify(row);
           if (row.is_hide) {
             isHide = true;
           }
@@ -581,12 +621,22 @@ $(document).ready(function () {
               "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
               row.id +
               "\")' class='btn btn-info btn-sm'>Show</button>" +
-              "<br/>";
+              "<br/>" +
+              "<br/>" +
+              "<button  type='button' data-deleted='false' onclick='bannedUserByPostId(\"" +
+              row.id +
+              "\")' class='btn btn-danger btn-sm'>Ban</button>" +
+              " <br/>";
           } else {
             html =
               "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
               row.id +
               "\")' class='btn btn-danger btn-sm'>Hide</button>" +
+              " <br/>" +
+              " <br/>" +
+              "<button  data-deleted='true' type='button' onclick='bannedUserByPostId(\"" +
+              row.id +
+              "\")' class='btn btn-danger btn-sm'>Ban</button>" +
               " <br/>";
           }
           return html;

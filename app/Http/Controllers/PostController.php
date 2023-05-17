@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UploadRequest;
-use App\Models\ApiKey;
 use App\Models\LogModel;
 use App\Models\UserApps;
 use App\Services\ApiKeyService;
 use App\Services\FeedGetStreamService;
-use ErrorException;
 use Exception;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 use League\Csv\Reader;
 use Throwable;
 
@@ -237,6 +233,34 @@ class PostController extends Controller
             return $this->successResponse('success downvote');
         } catch (\Throwable $th) {
             return $this->errorResponse('error: ' . $th->getMessage());
+        }
+    }
+
+
+
+    public function bannedUserByPost(Request $request)
+    {
+        try {
+            $request->validate([
+                'activity_id' => 'required',
+            ]);
+            $activityId = $request->input('activity_id');
+
+            $baseUrl = config('constants.user_api') . '/api/v1/admin/post/block/user';
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'api-key' => $this->apiKeyService->getKey(),
+            ])->post($baseUrl, [
+                'activity_id' => $activityId,
+            ]);
+
+            if ($response->ok()) {
+                return $this->successResponse('Success banned user');
+            } else {
+                return $this->errorResponse('Failed banned user ');
+            }
+        } catch (\Throwable $th) {
+            return $this->errorResponse('Internal server error with message: ' . $th->getMessage());
         }
     }
 }
