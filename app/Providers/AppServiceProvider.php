@@ -16,11 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(ApiKeyService::class, function ($app) {
+        $this->app->singleton(ApiKeyService::class, function () {
             return new ApiKeyService();
         });
 
-        $this->app->singleton(FeedGetStreamService::class, function ($app) {
+        $this->app->singleton(FeedGetStreamService::class, function () {
             return new FeedGetStreamService();
         });
     }
