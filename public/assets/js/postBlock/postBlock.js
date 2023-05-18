@@ -620,23 +620,23 @@ $(document).ready(function () {
             html =
               "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
               row.id +
-              "\")' class='btn btn-info btn-sm'>Show</button>" +
+              "\")' class='btn btn-info btn-sm'>Show Post</button>" +
               "<br/>" +
               "<br/>" +
               "<button  type='button' data-deleted='false' onclick='bannedUserByPostId(\"" +
               row.id +
-              "\")' class='btn btn-danger btn-sm'>Ban</button>" +
+              "\")' class='btn btn-danger btn-sm'>Ban User</button>" +
               " <br/>";
           } else {
             html =
               "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
               row.id +
-              "\")' class='btn btn-danger btn-sm'>Hide</button>" +
+              "\")' class='btn btn-danger btn-sm'>Hide Post</button>" +
               " <br/>" +
               " <br/>" +
               "<button  data-deleted='true' type='button' onclick='bannedUserByPostId(\"" +
               row.id +
-              "\")' class='btn btn-danger btn-sm'>Ban</button>" +
+              "\")' class='btn btn-danger btn-sm'>Ban User</button>" +
               " <br/>";
           }
           return html;
