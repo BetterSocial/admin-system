@@ -14,8 +14,8 @@ class AddColumnToUserTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('allowAnonDm')->default(true);
-            $table->boolean('onlyReceivedAnonDmFromUserFollowing')->default(false);
+            $table->boolean('allow_anon_dm')->default(true);
+            $table->boolean('only_received_anon_dm_from_user_following')->default(false);
         });
     }
 
@@ -27,8 +27,8 @@ class AddColumnToUserTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('allowAnonDm');
-            $table->dropColumn('onlyReceivedAnonDmFromUserFollowing');
+            $table->dropColumn('allow_anon_dm');
+            $table->dropColumn('only_received_anon_dm_from_user_following');
         });
     }
 }

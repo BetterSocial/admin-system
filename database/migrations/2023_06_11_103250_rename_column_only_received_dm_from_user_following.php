@@ -14,7 +14,7 @@ class RenameColumnOnlyReceivedDmFromUserFollowing extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->renameColumn('onlyReceivedAnonDmFromUserFollowing', 'onlyReceivedDmFromUserFollowing');
+            $table->renameColumn('only_received_anon_dm_from_user_following', 'only_received_dm_from_user_following');
         });
     }
 
@@ -26,7 +26,7 @@ class RenameColumnOnlyReceivedDmFromUserFollowing extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->renameColumn('onlyReceivedDmFromUserFollowing', 'onlyReceivedAnonDmFromUserFollowing');
+            $table->renameColumn('only_received_dm_from_user_following', 'only_received_anon_dm_from_user_following');
         });
     }
 }
