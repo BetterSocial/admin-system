@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToUserTable extends Migration
+class RenameColumnOnlyReceivedDmFromUserFollowing extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddColumnToUserTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('allow_anon_dm')->default(true);
-            $table->boolean('only_received_anon_dm_from_user_following')->default(false);
+            $table->renameColumn('only_received_anon_dm_from_user_following', 'only_received_dm_from_user_following');
         });
     }
 
@@ -27,8 +26,7 @@ class AddColumnToUserTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('allow_anon_dm');
-            $table->dropColumn('only_received_anon_dm_from_user_following');
+            $table->renameColumn('only_received_dm_from_user_following', 'only_received_anon_dm_from_user_following');
         });
     }
 }

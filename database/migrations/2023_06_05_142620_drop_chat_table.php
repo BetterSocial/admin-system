@@ -26,7 +26,7 @@ class DropChatTable extends Migration
         Schema::create('chat', function (Blueprint $table) {
             $table->uuid('chat_id');
             $table->uuid('user_id');
-            $table->string('channelId');
+            $table->string('channel_id');
             $table->text('message');
             $table->timestamps();
         });

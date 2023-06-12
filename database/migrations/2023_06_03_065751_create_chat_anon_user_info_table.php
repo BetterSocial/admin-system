@@ -13,11 +13,11 @@ class CreateChatAnonUserInfoTable extends Migration
      */
     public function up()
     {
-        Schema::create('chatAnonUserInfo', function (Blueprint $table) {
+        Schema::create('chat_anon_user_info', function (Blueprint $table) {
             $table->uuid('chat_id');
-            $table->string('channelId');
-            $table->uuid('targetUserId');
-            $table->uuid('myAnonUserId');
+            $table->string('channel_id');
+            $table->uuid('target_user_id');
+            $table->uuid('my_anon_user_id');
             $table->string('anon_user_info_color_name');
             $table->string('anon_user_info_color_code');
             $table->string('anon_user_info_emoji_name');
@@ -33,6 +33,6 @@ class CreateChatAnonUserInfoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('chatAnonUserInfo');
+        Schema::dropIfExists('chat_anon_user_info');
     }
 }
