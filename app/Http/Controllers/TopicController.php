@@ -143,16 +143,21 @@ class TopicController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
-                'topic_id' => 'required',
-            ]);
+            $request->validate(
+                [
+                    'topic_id' => 'required',
+                ],
+                [
+                    'topic_id' => 'Topic Id is Required'
+                ]
+            );
             $topic = Topics::find($request->topic_id);
-            Topics::updateTopic($topic, $request->all());
+            Topics::updateTopic($topic, $request);
             LogModel::insertLog('update-topic', 'success update topic');
             return $this->successResponse('success update topic');
         } catch (\Throwable $th) {
             LogModel::insertLog('update-topic', 'error update topic with error ' . $th->getMessage());
-            return $this->errorResponse('failed update topic', 400);
+            return $this->errorResponse($th->getMessage(), 400);
         }
     }
 
@@ -200,7 +205,7 @@ class TopicController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             LogModel::insertLog('un-sign-category-topic', 'fail update unSign Category topic');
-            return $this->errorResponseWithAlert($th->getMessage());
+            return $this->errorResponseWithAlert('Fail Un Sign Topic');
         }
     }
 
@@ -226,7 +231,7 @@ class TopicController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             LogModel::insertLog('sign-category-topic', 'fail with error ' . $th->getMessage());
-            return $this->errorResponseWithAlert($th->getMessage());
+            return $this->errorResponseWithAlert('Fail Update Topic');
         }
     }
 }

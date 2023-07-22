@@ -169,7 +169,7 @@ $(document).ready(function () {
         render: function (data, type, row) {
           let value = "";
           let item = JSON.stringify(row);
-          value += `<button style="border: none; background: transparent" onclick='detailCategory(${item})' >`;
+          value += `<button style="border: none; background: transparent; width: 100%; height: 100%" onclick='detailCategory(${item})' >`;
           value += "<p>" + data + "</p>";
 
           value += "</button>";
