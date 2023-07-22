@@ -83,7 +83,7 @@
                     <div class="modal-body">
                         <div class="">
                             <div id="cardCategory" class="">
-                                <input type="text" id="topicId" name="topic_id" hidden>
+                                <input type="text" id="topicId" name="topic_id">
                                 <div class="form-group">
                                     <label for="topicName">Topic</label>
                                     <input type="text" class="form-control" id="topicName" placeholder="topic"

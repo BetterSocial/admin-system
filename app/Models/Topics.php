@@ -42,7 +42,13 @@ class Topics extends Model
     {
         return [
             'topic_id',
-            'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort'
+            'name',
+            'icon_path',
+            'categories',
+            'created_at',
+            'flg_show',
+            'is_custom_topic',
+            'sort'
         ];
     }
 
@@ -100,12 +106,19 @@ class Topics extends Model
         }
     }
 
-    public static function updateTopic($topic, $data)
+    public static function updateTopic($topic, Request $request)
     {
         try {
             DB::beginTransaction();
-            $topicData = collect($data)->only(Topics::onlyFillAble());
-            $topic->update($topicData->toArray());
+            if ($request->input('categories') == null) {
+                if ($request->has('category') && $request->input('category') != null) {
+                    $request->merge(['categories' => $request->input('category')]);
+                } else {
+                    $topic->update(['categories' => ""]);
+                }
+            }
+            $data = array_filter($request->all());
+            $topic->update($data);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
