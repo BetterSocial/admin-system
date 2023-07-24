@@ -29,4 +29,13 @@ class LogModel extends Model
             'created_by' => $user->name
         ]);
     }
+
+    public static function createLog($title, $description)
+    {
+        LogModel::create([
+            'title' => $title,
+            'description' => $description,
+            'created_by' => 'admin'
+        ]);
+    }
 }
