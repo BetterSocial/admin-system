@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\PostEntityBuilder;
+use App\Jobs\CreatePostJob;
 use App\Models\LogModel;
 use App\Models\UserApps;
 use App\Services\ApiKeyService;
@@ -66,7 +68,8 @@ class PostController extends Controller
             $csv = Reader::createFromPath($file, 'r');
             $csv->setHeaderOffset(0);
 
-            $posts = [];
+            $apiKey = $this->apiKeyService->getKey();
+
             foreach ($csv as $record) {
                 $this->validateRecord($record);
 
@@ -84,39 +87,25 @@ class PostController extends Controller
                 if (!$user) {
                     throw new \Exception('User not found');
                 }
-                $post = [
-                    'userId' => $userId,
-                    'anonimity' => filter_var($record['anonimity'], FILTER_VALIDATE_BOOLEAN),
-                    'duration_feed' => $record['duration_feed'],
-                    'feedGroup' => $record['feed_group'],
-                    'location' => $record['location'],
-                    'location_id' => $record['location_id'],
-                    'message' => $record['message'],
-                    'object' => $record['object'],
-                    'privacy' => $record['privacy'],
-                    'images_url' => $images,
-                    'topics' => $topics,
-                    'verb' => $record['verb'],
-                ];
 
-                $posts[] = $post;
+                $post = (new PostEntityBuilder())
+                    ->setUserId($userId)
+                    ->setAnonimity(filter_var($record['anonimity'], FILTER_VALIDATE_BOOLEAN))
+                    ->setDurationFeed($record['duration_feed'])
+                    ->setFeedGroup($record['feed_group'])
+                    ->setLocation($record['location'])
+                    ->setLocationId($record['location_id'])
+                    ->setMessage($record['message'])
+                    ->setObject($record['object'])
+                    ->setPrivacy($record['privacy'])
+                    ->setImagesUrl($images)
+                    ->setTopics($topics)
+                    ->setVerb($record['verb'])
+                    ->build();
+                CreatePostJob::dispatch($post, $apiKey)->delay(now()->addMinutes($record['delay_execution_time_in_minute']));
             }
 
-            $baseUrl = config('constants.user_api') . '/api/v1/admin/bulk-post';
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'api-key' => $this->apiKeyService->getKey(),
-            ])->post($baseUrl, [
-                'post' => $posts,
-            ]);
-
-            if ($response->ok()) {
-                LogModel::insertLog('upload-csv', 'upload csv success');
-                return $this->successResponseWithAlert('Success created post');
-            } else {
-                LogModel::insertLog('upload-csv', 'upload csv fail');
-                return $this->errorResponseWithAlert('Failed Create post');
-            }
+            return $this->successResponseWithAlert('Created Post in progres');
         } catch (Throwable $th) {
             LogModel::insertLog('upload-csv', $th->getMessage());
             return $this->errorResponseWithAlert($th->getMessage());

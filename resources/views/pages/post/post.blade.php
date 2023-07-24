@@ -12,8 +12,11 @@
                 <div class="widget-content widget-content-area br-6">
 
                     <div class="form-group">
-                        <a href="{{ route('post.download-template') }}"><button class="btn btn-info">Download
-                                Template</button></a>
+                        <form action="{{ route('post.download-template') }}" method="post">
+                            @csrf
+                            <button class="btn btn-info" type="submit">Download
+                                Template</button>
+                        </form>
                     </div>
                     <div class="div">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadCsv">Upload

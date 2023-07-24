@@ -1,3 +1,3 @@
-user_id,anonimity,duration_feed,feed_group,location,location_id,message,object,privacy,images_url,topics,verb
-4ff1bd33-fa32-468e-a9da-83a1d19b5ed4,false,30,main_feed,Everywhere,,test create post from csv 06:56,,Public,,"HumanRights,Hispanics,TedCruz,Black,Military",tweet
-4ff1bd33-fa32-468e-a9da-83a1d19b5ed4,true,30,main_feed,Everywhere,,test create line 2 post from csv 06:56,,Public,,"HumanRights,Hispanics,TedCruz,Black,Military",tweet
+user_id,anonimity,duration_feed,feed_group,location,location_id,message,object,privacy,images_url,topics,verb,delay_execution_time_in_minute
+4ff1bd33-fa32-468e-a9da-83a1d19b5ed4,false,30,main_feed,Everywhere,,test create post from csv 21:42,,Public,,"HumanRights,Hispanics,TedCruz,Black,Military",tweet,1
+4ff1bd33-fa32-468e-a9da-83a1d19b5ed4,true,30,main_feed,Everywhere,,test create line 2 post from csv 21:44,,Public,,"HumanRights,Hispanics,TedCruz,Black,Military",tweet,3
