@@ -25,8 +25,6 @@ class UsersAppController extends Controller
         try {
             return UserApps::getData($req);
         } catch (\Throwable $th) {
-            //throw $th;
-            // file_put_contents('test.txt', $th->getMessage());
             return response()->json([
                 'draw'            => 0,
                 'recordsTotal'    => 0,

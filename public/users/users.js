@@ -1,4 +1,43 @@
 $(document).ready(function () {
+  const formattedDate = (data) => {
+    // Mengubah menjadi objek Date
+    const date = new Date(data);
+
+    // Daftar nama hari
+    const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    // Daftar nama bulan
+    const monthsOfYear = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    // Mendapatkan nama hari dari indeks hari dalam objek Date
+    const dayName = daysOfWeek[date.getDay()];
+
+    // Mendapatkan tanggal dari objek Date
+    const dayOfMonth = date.getDate();
+
+    // Mendapatkan nama bulan dari indeks bulan dalam objek Date
+    const monthName = monthsOfYear[date.getMonth()];
+
+    // Mendapatkan tahun dari objek Date
+    const year = date.getFullYear();
+
+    // Format akhir yang diinginkan
+    const formattedDate = `${dayName}, ${dayOfMonth}-${monthName}-${year}`;
+    return formattedDate;
+  };
   var datatble = $("#tableUsers").DataTable({
     searching: false,
     stateSave: true,
@@ -52,6 +91,9 @@ $(document).ready(function () {
       {
         data: "created_at",
         orderable: true,
+        render: function (data, type, row) {
+          return formattedDate(data);
+        },
       },
       {
         data: "status",
