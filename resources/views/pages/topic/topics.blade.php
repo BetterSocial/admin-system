@@ -185,7 +185,7 @@
                 <form action="{{ route('topic.category.sign') }}" method="post" id="formTopicLimit">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabelTopicSign">Sign Topic</h5>
+                        <h5 class="modal-title" id="detailModalLabelTopicSign">Add Topic to OB</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -224,7 +224,7 @@
                 <form action="{{ route('topic.category.un-sign') }}" method="post" id="formTopicLimit">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabelTopicUnSign">Un-Sign Topic</h5>
+                        <h5 class="modal-title" id="detailModalLabelTopicUnSign">Remove from OB</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>

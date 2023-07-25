@@ -201,11 +201,11 @@ class TopicController extends Controller
             ]);
             LogModel::insertLog('un-sign-category-topic', 'success update unSign Category topic');
             DB::commit();
-            return $this->successResponseWithAlert('success UnSign Category');
+            return $this->successResponseWithAlert('Success Remove Topic from OB');
         } catch (\Throwable $th) {
             DB::rollBack();
             LogModel::insertLog('un-sign-category-topic', 'fail update unSign Category topic');
-            return $this->errorResponseWithAlert('Fail Un Sign Topic');
+            return $this->errorResponseWithAlert('Fail Remove Topic from OB');
         }
     }
 
@@ -227,11 +227,11 @@ class TopicController extends Controller
             ]);
             LogModel::insertLog('sign-category-topic', 'success update Sign Category topic');
             DB::commit();
-            return $this->successResponseWithAlert('Success Sign Category');
+            return $this->successResponseWithAlert('Success Add Topic to OB');
         } catch (\Throwable $th) {
             DB::rollBack();
             LogModel::insertLog('sign-category-topic', 'fail with error ' . $th->getMessage());
-            return $this->errorResponseWithAlert('Fail Update Topic');
+            return $this->errorResponseWithAlert('Fail Add Topic to OB');
         }
     }
 }

@@ -220,9 +220,9 @@ $(document).ready(function () {
         render: function (data, type, row) {
           let item = JSON.stringify(row);
           if (row.sign) {
-            return `<button class="btn btn-danger btn-delete" onclick='signCategory(${item}, 0)'>Un-Sign</button>`;
+            return `<button class="btn btn-danger btn-delete" onclick='signCategory(${item}, 0)'>Remove from OB</button>`;
           } else {
-            return `<button class="btn btn-primary" onclick='signCategory(${item}, 1)'>Sign</button>`;
+            return `<button class="btn btn-primary" onclick='signCategory(${item}, 1)'>Add to OB</button>`;
           }
         },
       },
