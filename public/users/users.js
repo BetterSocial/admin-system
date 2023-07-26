@@ -111,22 +111,29 @@ $(document).ready(function () {
         data: "followers",
         orderable: false,
         render: function (data, type, row) {
+          // pengikut kita
+          let followers = [];
+          followers = row.followeds;
+          let total = followers.length;
+
           //return "<a href='/user-follow/FOLLOWERS/"+row.user_id +"'> <button type='button' class='btn btn-primary btn-sm'>#Followers</button> </a>";
-          return (
-            "<a href='/user-follow-detail?type=FOLLOWERS&user_id=" +
-            row.user_id +
-            "'> <button type='button' class='btn btn-primary  btn-sm'>#Followers</button> </a>"
-          );
+          return `<a href="/user-follow-detail?type=FOLLOWERS&user_id=${row.user_id}"> <button type='button' class='btn btn-primary  btn-sm'>#Followers ${total}</button> </a>`;
         },
       },
       {
         data: "following",
         orderable: false,
         render: function (data, type, row) {
+          // total yang kita ikuti
+          let followeds = [];
+          followeds = row.followers;
+          let total = followeds.length;
           return (
             "<a href='/user-follow-detail?type=FOLLOWING&user_id=" +
             row.user_id +
-            "'> <button type='button' class='btn btn-primary btn-sm'>#Following</button> </a>"
+            "'> <button type='button' class='btn btn-primary btn-sm'>#Following " +
+            total +
+            "</button> </a>"
           );
         },
       },

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserApps;
+use App\Models\UserFollowUserModel;
 use App\Services\FeedGetStreamService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
