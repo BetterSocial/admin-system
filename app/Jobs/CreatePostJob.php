@@ -47,7 +47,8 @@ class CreatePostJob implements ShouldQueue
             ]);
 
             if ($response->ok()) {
-                LogModel::createLog('upload-csv', 'upload success');
+                $body = $response->json();
+                LogModel::createLog('upload-csv', json_encode($body));
             } else {
                 LogModel::createLog('upload-csv', 'upload csv fail ' . $response);
             }

@@ -8,6 +8,7 @@ use App\Models\LogModel;
 use App\Models\UserApps;
 use App\Services\ApiKeyService;
 use App\Services\FeedGetStreamService;
+use App\Services\ImageService;
 use Exception;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
@@ -81,7 +82,6 @@ class PostController extends Controller
                 if ($record['topics']) {
                     $topics = explode(",", $record['topics']);
                 }
-
                 $userId = $record['user_id'];
                 $user = UserApps::find($userId);
                 if (!$user) {
@@ -102,7 +102,7 @@ class PostController extends Controller
                     ->setTopics($topics)
                     ->setVerb($record['verb'])
                     ->build();
-                CreatePostJob::dispatch($post, $apiKey)->delay(now()->addMinutes($record['delay_execution_time_in_minute']));
+                CreatePostJob::dispatch($post, $apiKey)->delay(now()->seconds($record['delay_execution_time_in_minute']));
             }
 
             return $this->successResponseWithAlert('Created Post in progres');
@@ -250,6 +250,21 @@ class PostController extends Controller
             }
         } catch (\Throwable $th) {
             return $this->errorResponse('Internal server error with message: ' . $th->getMessage());
+        }
+    }
+
+    public function uploadImage(Request $request, ImageService $imageService)
+    {
+        try {
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:512',
+            ]);
+            if (!$request->hasFile('image')) return $this->errorResponseWithAlert('File Not found');
+
+            $url =  $imageService->uploadImage($request);
+            return $this->successResponseWithAlert($url);
+        } catch (\Throwable $th) {
+            return $this->errorResponseWithAlert($th->getMessage());
         }
     }
 }

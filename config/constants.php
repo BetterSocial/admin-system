@@ -72,5 +72,8 @@ return [
     'weight_follower_quality' => env('W_Y', 1),
     'block_per_post_impression' => env('BPIMPR_GLOBAL', 0.005333333333),
     'user_api' => env('USER_API'),
+    'cloud_name_cloudinary' => env('CLOUD_NAME_CLOUDINARY'),
+    'api_key_cloudinary' => env('API_KEY_CLOUDINARY'),
+    'api_secret_cloudinary' => env('API_SERCRET_CLOUDINARY')
 
 ];

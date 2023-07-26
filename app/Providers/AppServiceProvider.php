@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\ApiKeyService;
 use App\Services\FeedGetStreamService;
+use App\Services\ImageService;
+use App\Services\ImageServiceImpl;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(FeedGetStreamService::class, function () {
             return new FeedGetStreamService();
         });
+
+        $this->app->singleton(ImageService::class, ImageServiceImpl::class);
     }
 
     /**

@@ -182,6 +182,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // POST
 
+    Route::post('/upload-image', [PostController::class, 'uploadImage'])->name('upload.image');
+
     Route::get('/post', [PostController::class, 'index'])->name('post');
     Route::post('/post/upload-csv', [PostController::class, 'upload'])->name('post.upload');
     Route::post('/post/download-template', [PostController::class, 'downloadTemplate'])->name('post.download-template');

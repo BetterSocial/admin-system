@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         GetStream\StreamLaravel\StreamLaravelServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
+        CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
 
     ],
 
@@ -230,6 +231,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'FeedManager' => GetStream\StreamLaravel\Facades\FeedManager::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class,
 
     ],
 
