@@ -21,6 +21,16 @@ class UserApps extends Model
         'is_banned'
     ];
 
+    public function followers()
+    {
+        return $this->hasMany(UserFollowUserModel::class, 'user_id_follower', 'user_id');
+    }
+
+    public function followeds()
+    {
+        return $this->hasMany(UserFollowUserModel::class, 'user_id_followed', 'user_id');
+    }
+
     public function userTopics()
     {
         return $this->hasMany(UserTopicModel::class, 'user_id', 'user_id');
@@ -50,6 +60,7 @@ class UserApps extends Model
                 'created_at'
             );
 
+            $query->with('followers', 'followeds');
             if ($searchName !== null) {
                 $query->where('username', 'ILIKE', '%' . $searchName . '%');
             }
