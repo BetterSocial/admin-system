@@ -105,7 +105,7 @@ class PostController extends Controller
                 CreatePostJob::dispatch($post, $apiKey)->delay(now()->minutes($record['delay_execution_time_in_minute']));
             }
 
-            return $this->successResponseWithAlert('Created Post in progres');
+            return $this->successResponseWithAlert('Created Post is in progres');
         } catch (Throwable $th) {
             LogModel::insertLog('upload-csv', $th->getMessage());
             return $this->errorResponseWithAlert($th->getMessage());
