@@ -35,8 +35,6 @@ class CreatePostJob implements ShouldQueue
     {
 
         try {
-            //code...
-
             $posts[] = $this->postEntity->getPost();
             $baseUrl = config('constants.user_api') . '/api/v1/admin/bulk-post';
             $response = Http::withHeaders([
@@ -47,13 +45,13 @@ class CreatePostJob implements ShouldQueue
             ]);
 
             if ($response->ok()) {
-                LogModel::createLog('upload-csv', 'upload success');
+                $body = $response->json();
+                LogModel::createLog('upload-csv', json_encode($body));
             } else {
                 LogModel::createLog('upload-csv', 'upload csv fail ' . $response);
             }
         } catch (\Throwable $th) {
             LogModel::createLog('upload-csv', $th->getMessage());
-            //throw $th;
         }
     }
 }
