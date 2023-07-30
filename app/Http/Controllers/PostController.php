@@ -157,7 +157,7 @@ class PostController extends Controller
             'duration_feed' => 'required',
             'feed_group' => 'required',
             'location' => 'required',
-            'message' => 'required',
+            'message' => '',
             'privacy' => 'required',
             'verb' => 'required',
         ];
@@ -168,7 +168,6 @@ class PostController extends Controller
             'duration_feed.required' => 'Duration feed is required',
             'feed_group.required' => 'Feed Group is required',
             'location.required' => 'Location is required',
-            'message.required' => 'Message is required',
             'privacy.required' => 'Message is required',
             'verb.required' => 'Verb is required',
         ];
