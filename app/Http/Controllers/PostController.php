@@ -252,19 +252,4 @@ class PostController extends Controller
             return $this->errorResponse('Internal server error with message: ' . $th->getMessage());
         }
     }
-
-    public function uploadImage(Request $request, ImageService $imageService)
-    {
-        try {
-            $request->validate([
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:512',
-            ]);
-            if (!$request->hasFile('image')) return $this->errorResponseWithAlert('File Not found');
-
-            $url =  $imageService->uploadImage($request);
-            return $this->successResponseWithAlert($url);
-        } catch (\Throwable $th) {
-            return $this->errorResponseWithAlert($th->getMessage());
-        }
-    }
 }
