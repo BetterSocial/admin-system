@@ -27,8 +27,6 @@ class ImageModel extends Model
                 1 => 'name',
                 2 => 'url',
             );
-            $searchName = $req->input('name');
-            $searchCategory = $req->input('category');
             $orderColumnIndex = (int) $req->input('order.0.column');
             $orderDirection = $req->input('order.0.dir', 'desc');
             $start = (int) $req->input('start', 0);
@@ -38,14 +36,6 @@ class ImageModel extends Model
                 'name',
                 'url',
             );
-            if ($searchName !== null) {
-                $query->where('name', 'ILIKE', '%' . $searchName . '%');
-            }
-
-            if ($searchCategory !== null) {
-                $query->where('categories', 'ILIKE', '%' . $searchCategory . '%');
-            }
-
             $total = $query->count();
 
             $query->orderBy($columns[$orderColumnIndex], $orderDirection)

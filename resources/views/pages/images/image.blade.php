@@ -12,8 +12,8 @@
                 <div class="widget-content widget-content-area br-6">
 
                     <div class="div mb-3">
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#uploadImage">Upload
-                            Images</button>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#uploadImage">
+                            Upload Images</button>
                     </div>
                 </div>
 
