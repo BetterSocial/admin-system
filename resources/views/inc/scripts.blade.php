@@ -1194,6 +1194,11 @@
         <script src="{{ asset('assets/js/postBlock/postBlock.js') }}"></script>
     @break
 
+    @case('Images')
+        <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
+        <script src="{{ asset('images/image.js') }}"></script>
+    @break
+
     @case('logs')
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
     @break
