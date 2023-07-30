@@ -129,6 +129,16 @@
                                 </div>
                             </a>
                         </li>
+                        <li class="menu {{ $category_name === 'images' ? 'active' : '' }}">
+                            <a href="{{ route('images') }}"
+                                data-active="{{ $category_name === 'images' ? 'true' : 'false' }}"
+                                aria-expanded="{{ $category_name === 'images' ? 'true' : 'false' }}"
+                                class="dropdown-toggle">
+                                <div class="">
+                                    <span>Images</span>
+                                </div>
+                            </a>
+                        </li>
                     @endhasanyrole
                 @else
                     <li class="menu {{ $category_name === 'starter_kits' ? 'active' : '' }}">

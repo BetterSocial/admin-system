@@ -7,5 +7,5 @@ use Illuminate\Http\Request;
 interface ImageService
 {
 
-    public function uploadImage(Request $request);
+    public function uploadImage($realPath);
 }

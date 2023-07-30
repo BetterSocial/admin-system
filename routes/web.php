@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CreateTopicController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LimitTopicController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PostBlockController;
@@ -205,6 +206,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('rss', [RssLinkController::class, 'add'])->name('rss.add');
     Route::put('rss', [RssLinkController::class, 'edit'])->name('rss.edit');
     Route::delete('rss/{id}', [RssLinkController::class, 'remove'])->name('rss.remove');
+
+    Route::get('/image', [ImageController::class, 'index'])->name('images');
+    Route::post('/image/upload', [ImageController::class, 'uploadImage'])->name('images.upload');
+    Route::post('/image/data', [ImageController::class, 'data'])->name('images.data');
 });
 
 Auth::routes();

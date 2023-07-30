@@ -12,15 +12,17 @@ class ImageServiceImpl implements ImageService
     {
     }
 
-    public function uploadImage(Request $request): string
+    public function uploadImage($realPath): string
     {
-        $imagePath = $request->file('image')->getRealPath();
+        try {
+            // Upload gambar ke Cloudinary
+            $uploadResult = Cloudinary::upload($realPath);
 
-        // Upload gambar ke Cloudinary
-        $uploadResult = Cloudinary::upload($imagePath);
-
-        // Ambil URL gambar yang diunggah dari respons Cloudinary
-        $imageUrl = $uploadResult->getSecurePath();
-        return $imageUrl;
+            // Ambil URL gambar yang diunggah dari respons Cloudinary
+            $imageUrl = $uploadResult->getSecurePath();
+            return $imageUrl;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

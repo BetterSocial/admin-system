@@ -43,7 +43,6 @@ class TopicController extends Controller
         try {
             return Topics::getData($req);
         } catch (\Throwable $th) {
-            file_put_contents('test.txt', $th->getMessage());
             return response()->json([
                 'error' => $th->getMessage(),
             ], 500);
