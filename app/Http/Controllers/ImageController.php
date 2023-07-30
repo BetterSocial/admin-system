@@ -40,25 +40,16 @@ class ImageController extends Controller
             $request->validate([
                 'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2000',
             ]);
-            if (!$request->hasFile('images')) return $this->errorResponseWithAlert('File Not found');
-            // Dapatkan objek UploadedFile dari request
+            if (!$request->hasFile('images')) {
+                return $this->errorResponseWithAlert('File Not found');
+            }
 
             DB::beginTransaction();
             foreach ($request->file('images') as $uploadedFile) {
-
-                // Dapatkan nama file asli
                 $originalName = $uploadedFile->getClientOriginalName();
-
-
-                //code...
                 $realPath = $uploadedFile->getRealPath();
-
                 $url =  $imageService->uploadImage($realPath);
-
-                // Dapatkan nama file asli
                 $originalName = $uploadedFile->getClientOriginalName();
-
-                // Dapatkan ekstensi filed
                 ImageModel::create([
                     'name' => $originalName,
                     'url' => $url,

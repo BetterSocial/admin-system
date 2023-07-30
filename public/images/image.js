@@ -57,9 +57,4 @@ $(document).ready(function () {
       },
     ],
   });
-
-  //   $("#search").on("submit", function (e) {
-  //     dataTable.draw();
-  //     e.preventDefault();
-  //   });
 });
