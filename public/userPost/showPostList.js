@@ -1,6 +1,5 @@
 var dataPost;
 $(document).ready(function () {
-  console.log("MASUUKKK JS POST LIST");
   dataPost = $("#tableShowPostList").DataTable({
     searching: false,
     stateSave: true,
@@ -28,13 +27,17 @@ $(document).ready(function () {
       {
         data: "message",
         render: function (data, type, row) {
-          console.log("kabeh sa row");
-
-          console.log(data);
-          console.log(type);
           console.log(row);
-          console.log("_________________________");
-
+          return `
+          <div class="profile-container">
+        <img src="path/to/avatar.jpg" alt="Avatar" class="avatar">
+        <div class="user-details">
+            <div class="user-name">John Doe</div>
+            <div class="user-date">June 19, 2023</div>
+        </div>
+    </div>
+          `;
+          console.log(row);
           let itemPosList = "";
 
           var images_url = row.images_url;
@@ -66,7 +69,7 @@ $(document).ready(function () {
 
           if (object.profile_pic_path == null)
             profile_picture_item +=
-              '  <img src="https://res.cloudinary.com/hpjivutj2/image/upload/v1618554083/icons/no-profile_mvjney.jpg" width="50" height="50">  ';
+              '  <img src="https://res.cloudinary.com/hpjivutj2/image/upload/v1618554083/icons/no-profile_mvjney.jpg" width="50" height="50" style="border-radius: 50%;">  ';
           else
             profile_picture_item +=
               '  <img src="' +
