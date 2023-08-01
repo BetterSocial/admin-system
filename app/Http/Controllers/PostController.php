@@ -109,7 +109,7 @@ class PostController extends Controller
                     ->delay(now()->addMinutes($record['delay_execution_time_in_minute']));
             }
 
-            return $this->successResponseWithAlert('Created Post is in progres');
+            return $this->progressResponseWithAlert('The upload Post is in process.');
         } catch (Throwable $th) {
             LogModel::insertLog('upload-csv', $th->getMessage());
             return $this->errorResponseWithAlert($th->getMessage());

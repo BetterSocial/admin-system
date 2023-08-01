@@ -44,6 +44,16 @@ class Controller extends BaseController
         return redirect()->back();
     }
 
+    protected function progressResponseWithAlert($message = 'In progress', $targetUrl = null)
+    {
+
+        Alert::info('Info', $message);
+        if ($targetUrl != null) {
+            return redirect(route($targetUrl));
+        }
+        return redirect()->back();
+    }
+
     protected function errorResponseWithAlert($message = 'success save data', $param = null, $targetUrl = null)
     {
         Alert::error('Error', $message);
