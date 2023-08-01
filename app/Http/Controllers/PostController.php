@@ -82,6 +82,9 @@ class PostController extends Controller
                 if ($record['topics']) {
                     $topics = explode(",", $record['topics']);
                 }
+                $images = array_map(function ($str) {
+                    return str_replace('"', '', $str);
+                }, $images);
                 $userId = $record['user_id'];
                 $user = UserApps::find($userId);
                 if (!$user) {
@@ -102,7 +105,8 @@ class PostController extends Controller
                     ->setTopics($topics)
                     ->setVerb($record['verb'])
                     ->build();
-                CreatePostJob::dispatch($post, $apiKey)->delay(now()->minutes($record['delay_execution_time_in_minute']));
+                CreatePostJob::dispatch($post, $apiKey)
+                    ->delay(now()->addMinutes($record['delay_execution_time_in_minute']));
             }
 
             return $this->successResponseWithAlert('Created Post is in progres');
