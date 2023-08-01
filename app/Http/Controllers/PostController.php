@@ -105,7 +105,8 @@ class PostController extends Controller
                     ->setTopics($topics)
                     ->setVerb($record['verb'])
                     ->build();
-                CreatePostJob::dispatch($post, $apiKey)->delay(now()->addMinutes($record['delay_execution_time_in_minute']));
+                CreatePostJob::dispatch($post, $apiKey)
+                    ->delay(now()->addMinutes($record['delay_execution_time_in_minute']));
             }
 
             return $this->successResponseWithAlert('Created Post is in progres');
