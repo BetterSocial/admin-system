@@ -28,17 +28,20 @@ $(document).ready(function () {
         data: "message",
         render: function (data, type, row) {
           console.log(row);
-          return `
-          <div class="profile-container">
-        <img src="path/to/avatar.jpg" alt="Avatar" class="avatar">
-        <div class="user-details">
-            <div class="user-name">John Doe</div>
-            <div class="user-date">June 19, 2023</div>
-        </div>
-    </div>
-          `;
-          console.log(row);
-          let itemPosList = "";
+          let profile_pic_url = row.actor.data.profile_pic_url;
+          let totalUpvote = 0;
+          let totalDownvote = 0;
+          if (row.hasOwnProperty("latest_reactions")) {
+            let latestReactions = row.latest_reactions;
+            if (latestReactions.hasOwnProperty("upvotes")) {
+              let upvotes = latestReactions.upvotes;
+              totalUpvote = upvotes.length;
+            }
+            if (latestReactions.hasOwnProperty("downvotes")) {
+              let downvotes = latestReactions.downvotes;
+              totalDownvote = downvotes.length;
+            }
+          }
 
           var images_url = row.images_url;
           var images_url_length = images_url.length;
@@ -58,7 +61,7 @@ $(document).ready(function () {
 
           var object = JSON.parse(row.object);
 
-          let user_id = row.actor.substring(3);
+          let user_id = row.actor.id;
 
           let timestamp = new Date(Date.parse(row.time))
             .toString()
@@ -69,12 +72,12 @@ $(document).ready(function () {
 
           if (object.profile_pic_path == null)
             profile_picture_item +=
-              '  <img src="https://res.cloudinary.com/hpjivutj2/image/upload/v1618554083/icons/no-profile_mvjney.jpg" width="50" height="50" style="border-radius: 50%;">  ';
+              '  <img src="https://res.cloudinary.com/hpjivutj2/image/upload/v1618554083/icons/no-profile_mvjney.jpg" width="50" height="50" style="border-radius: 50%;" class="avatar">  ';
           else
             profile_picture_item +=
               '  <img src="' +
-              object.profile_pic_path +
-              '" width="60" height="60">  ';
+              profile_pic_url +
+              '" width="60" height="60" class="avatar">  ';
           profile_picture_item += " </a> ";
 
           let username_item =
@@ -86,9 +89,9 @@ $(document).ready(function () {
 
           let post_item = " <p> " + row.message + " </p>";
 
-          let upvote_item = row.count_upvote + " Upvote ";
+          let upvote_item = totalUpvote + " Upvote ";
 
-          let downvote_item = row.count_downvote + " Downvote ";
+          let downvote_item = totalDownvote + " Downvote ";
 
           return (
             " " +
@@ -97,7 +100,7 @@ $(document).ready(function () {
             '            <div class="w-img">\n' +
             profile_picture_item +
             "            </div>\n" +
-            '            <div class="media-body">\n' +
+            '            <div class="media-body ml-3">\n' +
             username_item +
             '                <p class="meta-date-time">' +
             timestamp +
