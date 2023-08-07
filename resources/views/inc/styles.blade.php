@@ -693,8 +693,8 @@
         {{-- Starter Kit ALt menu --}}
         <style>
             /*
-                                            Just for demo purpose ---- Remove it.
-                                        */
+                                                                    Just for demo purpose ---- Remove it.
+                                                                */
             /*<starter kit design>*/
 
             .widget-one {}
@@ -719,8 +719,8 @@
         {{-- Starter Kit Boxed menu --}}
         <style>
             /*
-                                            The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                        */
+                                                                    The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                                                */
 
             body {
                 max-width: 1140px;
@@ -741,10 +741,10 @@
             }
 
             /*
-                                            ====================
-                                                IE Support
-                                            ====================
-                                        */
+                                                                    ====================
+                                                                        IE Support
+                                                                    ====================
+                                                                */
 
             @media all and (-ms-high-contrast: none),
             (-ms-high-contrast: active) {
@@ -754,8 +754,8 @@
             }
 
             /*
-                                            Just for demo purpose ---- Remove it.
-                                        */
+                                                                    Just for demo purpose ---- Remove it.
+                                                                */
             /*<starter kit design>*/
 
             .widget-one {}
@@ -778,8 +778,8 @@
         {{-- Starter Kit Breadcrumb --}}
         <style>
             /*
-                                            The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                        */
+                                                                    The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                                                */
             .page-title {
                 float: none;
                 margin-top: 0;
@@ -867,8 +867,8 @@
 
 
             /*
-                                            Just for demo purpose ---- Remove it.
-                                        */
+                                                                    Just for demo purpose ---- Remove it.
+                                                                */
             /*<starter kit design>*/
 
             .widget-one {}
@@ -1180,6 +1180,10 @@
     @case('polling-list')
         <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
+    @break
+
+    @case('show_post_list')
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/pages/user-post/userPost.css') }}">
     @break
 
     @default

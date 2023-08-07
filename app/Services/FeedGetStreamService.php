@@ -37,7 +37,15 @@ class FeedGetStreamService
     {
         $feed = $this->client->feed('user_excl', $userId);
 
-        $response = $feed->getActivities(0, 30);
+        $options = [
+            'own' => true,
+            'recent' => true,
+            'counts' => true,
+            'counts',
+            'kinds',
+            'reactions.recent' => true
+        ];
+        $response = $feed->getActivities(0, 30, $options, false, $options);
 
         $result =  $response["results"];
         return $result;

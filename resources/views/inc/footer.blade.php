@@ -1,4 +1,15 @@
-@if ($page_name != 'coming_soon' && $page_name != 'contact_us' && $page_name != 'error404' && $page_name != 'error500' && $page_name != 'error503' && $page_name != 'faq' && $page_name != 'helpdesk' && $page_name != 'maintenence' && $page_name != 'privacy' && $page_name != 'auth_boxed' && $page_name != 'auth_default')
+@if (
+    $page_name != 'coming_soon' &&
+        $page_name != 'contact_us' &&
+        $page_name != 'error404' &&
+        $page_name != 'error500' &&
+        $page_name != 'error503' &&
+        $page_name != 'faq' &&
+        $page_name != 'helpdesk' &&
+        $page_name != 'maintenence' &&
+        $page_name != 'privacy' &&
+        $page_name != 'auth_boxed' &&
+        $page_name != 'auth_default')
     <!--  BEGIN SIDEBAR  -->
     {{-- <div class="sidebar-wrapper sidebar-theme">
                 
@@ -16,7 +27,7 @@
             </ul>
 
             <ul class="list-unstyled menu-categories" id="accordionExample">
-                @if ($page_name != 'alt_menu' && $page_name != 'blank_page' && $page_name != 'boxed' && $page_name != 'breadcrumb' )
+                @if ($page_name != 'alt_menu' && $page_name != 'blank_page' && $page_name != 'boxed' && $page_name != 'breadcrumb')
 
                     <li class="menu {{ ($category_name === 'dashboard') ? 'active' : '' }}">
                         <a href="#dashboard" data-toggle="collapse" aria-expanded="{{ ($category_name === 'dashboard') ? 'true' : 'false' }}" class="dropdown-toggle">
@@ -670,9 +681,8 @@
     <!--  BEGIN FOOTER  -->
     <div class="footer-wrapper">
         <div class="footer-section f-section-1">
-            <p class="">Copyright © 2021 Better Social, All rights reserved.</p>
+            <p class="">Copyright © {{ date('Y') }} Better Social, All rights reserved.</p>
         </div>
     </div>
     <!--  END FOOTER  -->
-
 @endif
