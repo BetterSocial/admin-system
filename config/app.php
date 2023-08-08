@@ -177,6 +177,7 @@ return [
         GetStream\StreamLaravel\StreamLaravelServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         CloudinaryLabs\CloudinaryLaravel\CloudinaryServiceProvider::class,
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
 
     ],
 

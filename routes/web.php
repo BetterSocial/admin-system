@@ -259,7 +259,7 @@ Route::get('/reset-password/{token}', function ($token) {
 
     return view('auth.passwords.reset')->with($data);
     //    return view('auth.passwords.reset', ['token' => $token], ['page_name' => 'test']);
-})->name('password.reset');
+})->name('password.resett');
 
 Route::post('/reset-password', 'ResetPasswordController@resetPassword')->name('reset.password.update');
 

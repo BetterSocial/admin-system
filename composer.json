@@ -17,6 +17,7 @@
         "get-stream/stream-chat": "^3.2",
         "get-stream/stream-laravel": "^2.4",
         "guzzlehttp/guzzle": "^7.0.1",
+        "jenssegers/mongodb": "^3.8",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
