@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PostScoreModel;
 use App\Models\UserApps;
 use App\Models\UserFollowUserModel;
+use App\Models\UserPostScoreModel;
+use App\Models\UserScoreModel;
 use App\Services\FeedGetStreamService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,6 +28,10 @@ class ViewUserController extends Controller
      */
     public function index(Request $request)
     {
+        $data =  UserPostScoreModel::get();
+        return $this->successResponse('success', $data);
+        // $userScores = UserScoreModel::all();
+        // return $userScores;
         $data = [
             'category_name' => 'viewUsers',
             'page_name' => 'view Users',

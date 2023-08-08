@@ -159,7 +159,13 @@ $(document).ready(function () {
         data: "user_score",
         orderable: false,
         render: function (data, type, row) {
-          return "<p> user score </p>";
+          let userScore = 0;
+          if (row.hasOwnProperty("user_score")) {
+            if (row.user_score.hasOwnProperty("age_score")) {
+              userScore = row.user_score.age_score;
+            }
+          }
+          return `<p> ${userScore} </p>`;
         },
       },
     ],

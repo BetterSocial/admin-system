@@ -36,6 +36,12 @@ class UserApps extends Model
         return $this->hasMany(UserTopicModel::class, 'user_id', 'user_id');
     }
 
+    public function userScore()
+    {
+        return $this->hasOne(UserScoreModel::class, 'user_id', '_id'); // Check the foreign and local keys
+    }
+
+
     public static function getData(Request $req)
     {
         try {
@@ -60,7 +66,7 @@ class UserApps extends Model
                 'created_at'
             );
 
-            $query->with('followers', 'followeds');
+            $query->with('followers', 'followeds', 'userScore');
             if ($searchName !== null) {
                 $query->where('username', 'ILIKE', '%' . $searchName . '%');
             }
