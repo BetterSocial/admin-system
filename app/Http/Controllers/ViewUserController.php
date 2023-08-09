@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PostScoreModel;
 use App\Models\UserApps;
 use App\Models\UserFollowUserModel;
+use App\Models\UserScoreModel;
 use App\Services\FeedGetStreamService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -32,7 +34,6 @@ class ViewUserController extends Controller
             'scrollspy_offset' => '',
 
         ];
-        // $pageName = 'widgets';
         return view('pages.users.user')->with($data);
     }
 

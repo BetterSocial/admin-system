@@ -159,7 +159,14 @@ $(document).ready(function () {
         data: "user_score",
         orderable: false,
         render: function (data, type, row) {
-          return "<p> user score </p>";
+          let userScore = 0;
+          if (row.user_score !== null && row.hasOwnProperty("user_score")) {
+            let user_score = row.user_score;
+            if (user_score.hasOwnProperty("u1_score")) {
+              userScore = row.user_score.u1_score;
+            }
+          }
+          return `<p> ${userScore} </p>`;
         },
       },
     ],
@@ -170,43 +177,6 @@ $(document).ready(function () {
     e.preventDefault();
   });
 });
-
-//   function downloadCsv(){
-//     var formData = new FormData();
-//     formData.append('username', $('#username').val());
-//     formData.append('countryCode', $('#countryCode').val());
-//     Swal.fire({
-//         title: 'Please Wait !',
-//         html: 'data uploading',
-//         showCancelButton: false, // There won't be any cancel button
-//         showConfirmButton: false,// There won't be any confirm button
-//         allowOutsideClick: false,
-//         onBeforeOpen: () => {
-//             Swal.showLoading()
-//         },
-//     });
-//     $.ajaxSetup({
-//         headers: { "X-CSRF-Token" : $("meta[name=csrf-token]").attr("content") }
-//     });
-
-//     $.ajax({
-//         type: 'POST',
-//         data:formData,
-//         contentType: false,
-//         processData: false,
-//         url: '/download-csv',
-//         success: function(data,status,filename){
-//             console.log(filename);
-//             console.log(data);
-//             //window.location = 'download.php';
-//         },
-//         error:function(data){
-//             console.log("INI ERROR");
-//             console.log(data);
-//         }
-
-//     });
-// }
 
 function downloadCsv(e) {
   var username = $("#username").val();
