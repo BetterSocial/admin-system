@@ -159,12 +159,10 @@ $(document).ready(function () {
         data: "user_score",
         orderable: false,
         render: function (data, type, row) {
-          console.log(row);
           let userScore = 0;
           if (row.user_score !== null && row.hasOwnProperty("user_score")) {
             let user_score = row.user_score;
             if (user_score.hasOwnProperty("u1_score")) {
-              console.log(row);
               userScore = row.user_score.u1_score;
             }
           }
