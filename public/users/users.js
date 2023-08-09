@@ -163,7 +163,12 @@ $(document).ready(function () {
           if (row.user_score !== null && row.hasOwnProperty("user_score")) {
             let user_score = row.user_score;
             if (user_score.hasOwnProperty("u1_score")) {
-              userScore = row.user_score.u1_score;
+              let u1_score = user_score.u1_score;
+              if (u1_score != 0) {
+                let numericScore = parseFloat(u1_score); // Konversi ke angka
+                let formattedScore = numericScore.toFixed(3);
+                userScore = formattedScore;
+              }
             }
           }
           return `<p> ${userScore} </p>`;
