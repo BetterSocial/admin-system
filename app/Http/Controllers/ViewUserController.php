@@ -27,6 +27,52 @@ class ViewUserController extends Controller
      */
     public function index(Request $request)
     {
+        // $query = UserApps::select(
+        //     'username',
+        //     'user_id',
+        //     'username',
+        //     'country_code',
+        //     'created_at'
+        // );
+
+        // $users = $query->get();
+        // $userIds = $users->pluck('user_id')->toArray();
+        // $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
+
+        // foreach ($userScores as  $userScore) {
+        //     foreach ($users as $user) {
+        //         if ($user->user_id = $userScore->_id) {
+        //             $user->user_score = $userScore;
+        //         }
+        //     }
+        // }
+
+        // $query = UserApps::select(
+        //     'username',
+        //     'user_id',
+        //     'country_code',
+        //     'created_at'
+        // );
+
+
+        // $users = $query->get();
+        // $userIds = $users->pluck('user_id')->toArray();
+        // $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
+
+        // $userScoreMap = []; // Array associative untuk menyimpan user_score berdasarkan user_id
+
+        // foreach ($userScores as $userScore) {
+        //     $userScoreMap[$userScore->_id] = $userScore;
+        // }
+
+        // foreach ($users as $user) {
+        //     if (isset($userScoreMap[$user->user_id])) {
+        //         $userScore = $userScoreMap[$user->user_id];
+        //         $user->user_score = $userScore;
+        //     }
+        // }
+
+        // return $this->successResponse('success', $users);
         $data = [
             'category_name' => 'viewUsers',
             'page_name' => 'view Users',

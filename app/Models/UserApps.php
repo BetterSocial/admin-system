@@ -38,7 +38,7 @@ class UserApps extends Model
 
     public function userScore()
     {
-        return $this->hasOne(UserScoreModel::class, 'user_id', '_id'); // Check the foreign and local keys
+        return $this->hasOne(UserScoreModel::class, 'user_id'); // Check the foreign and local keys
     }
 
 
@@ -66,7 +66,7 @@ class UserApps extends Model
                 'created_at'
             );
 
-            $query->with('followers', 'followeds', 'userScore');
+            $query->with('followers', 'followeds');
             if ($searchName !== null) {
                 $query->where('username', 'ILIKE', '%' . $searchName . '%');
             }
@@ -81,12 +81,27 @@ class UserApps extends Model
                 ->offset($start)
                 ->limit($length);
 
-            $data = $query->get();
+            $users = $query->get();
+            $userIds = $users->pluck('user_id')->toArray();
+            $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
+
+            $userScoreMap = []; // Array associative untuk menyimpan user_score berdasarkan user_id
+
+            foreach ($userScores as $userScore) {
+                $userScoreMap[$userScore->_id] = $userScore;
+            }
+
+            foreach ($users as $user) {
+                if (isset($userScoreMap[$user->user_id])) {
+                    $userScore = $userScoreMap[$user->user_id];
+                    $user->user_score = $userScore;
+                }
+            }
             return response()->json([
                 'draw' => (int) $req->input('draw', 1),
                 'recordsTotal' => $total,
                 'recordsFiltered' => $total,
-                'data' => $data,
+                'data' => $users,
             ]);
         } catch (\Throwable $th) {
             throw $th;

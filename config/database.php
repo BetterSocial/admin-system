@@ -93,14 +93,8 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'host' => env('MONGODB_HOST', 'localhost'),
-            'port' => env('MONGODB_PORT', 27017),
-            'database' => env('MONGODB_DATABASE'),
-            'username' => env('MONGODB_USERNAME'),
-            'password' => env('MONGODB_PASSWORD'),
-            'options' => [
-                'database' => 'admin'
-            ]
+            'dsn' => env('MONGODB_DB_DSN'),
+            'database' => env('MONGODB_DATABASE', 'homestead'),
         ],
 
     ],
