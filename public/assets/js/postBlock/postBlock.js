@@ -23,7 +23,6 @@ const getFeeds = async (feedGroup, user_id) => {
       });
     }
   } catch (err) {
-    console.log(err);
     Swal.fire("Error", err).then(() => {
       location.reload();
     });
@@ -320,7 +319,6 @@ function deleteComment(commentId) {
 }
 
 function makeBtnDelete(commentId) {
-  // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`
   let btn = document.createElement("button");
   btn.classList.add("btn", "btn-danger");
   btn.innerText = "X";
@@ -346,20 +344,69 @@ function makeComment(comment) {
 }
 
 const detailComment = (post) => {
-  console.log(post);
   let { latest_reactions } = post;
+  if (latest_reactions !== null) {
+    console.log(post);
+  }
 
   $("#detailCommentModal").modal("show");
   let container = $("#cardBodyComment");
   latest_reactions.comment.map((item) => {
-    let commentItem = generateCommentObject(
-      item.id,
-      item.data.text,
-      item.user.data.profile_pic_url,
-      item.user.data.username
-    );
-    let comment = makeComment(commentItem);
-    container.append(comment);
+    let { children_counts } = item;
+    if (children_counts.comment >= 1) {
+      let parent = document.createElement("div");
+      let commentItem = generateCommentObject(
+        item.id,
+        item.data.text,
+        "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
+        item.user.data.username
+      );
+      let comment = makeComment(commentItem);
+      parent.append(comment);
+      let containerCommentLevelTwo = document.createElement("div");
+      containerCommentLevelTwo.style.marginLeft = "16px";
+      item.latest_children.comment.map((level2) => {
+        let commentItem2 = generateCommentObject(
+          level2.id,
+          level2.data.text,
+          "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
+          level2.user.data.username
+        );
+        let comment2 = makeComment(commentItem2);
+        containerCommentLevelTwo.append(comment2);
+        parent.append(containerCommentLevelTwo);
+        if (level2.children_counts.comment >= 1) {
+          let containerCommentLevel3 = document.createElement("div");
+          containerCommentLevel3.style.marginLeft = "32px";
+          level2.latest_children.comment.map((level3) => {
+            let commentItem3 = generateCommentObject(
+              level3.id,
+              level3.data.text,
+              "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
+              level3.user.data.username
+            );
+            let comment3 = makeComment(commentItem3);
+            containerCommentLevel3.append(comment3);
+            parent.append(containerCommentLevel3);
+          });
+        }
+      });
+      container.append(parent);
+    } else {
+      let commentItem = generateCommentObject(
+        item.id,
+        item.data.text,
+        "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
+        item.user.data.username
+      );
+      let comment = makeComment(commentItem);
+      container.append(comment);
+    }
+    let separator = document.createElement("div");
+    separator.style.margin = "20px 0";
+    separator.style.border = "none";
+    separator.style.borderTop = "1px solid #ccc";
+    container.append(separator);
   });
 };
 
