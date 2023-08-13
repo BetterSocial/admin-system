@@ -210,6 +210,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/image', [ImageController::class, 'index'])->name('images');
     Route::post('/image/upload', [ImageController::class, 'uploadImage'])->name('images.upload');
     Route::post('/image/data', [ImageController::class, 'data'])->name('images.data');
+
+    Route::post('user-name-by-anonymous-id', [UsersAppController::class, 'getNameByAnonymousId']);
 });
 
 Auth::routes();

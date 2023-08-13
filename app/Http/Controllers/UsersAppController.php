@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserApps;
 use App\Services\ChatGetStreamService;
 use App\Services\FeedGetStreamService;
+use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use GetStream\Stream\Client;
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\DB;
 
 class UsersAppController extends Controller
 {
+
+    public function __construct(private UserService $userService)
+    {
+    }
+
     /**
      * Create a new controller instance.
      *
@@ -181,6 +187,21 @@ class UsersAppController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             return $this->errorResponse($th->getMessage());
+        }
+    }
+
+    public function getNameByAnonymousId(Request $request)
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required'
+            ]);
+            $user = $this->userService->getUserByAnonymousId($request->input('user_id'));
+            return $this->successResponse('success get data', [
+                'username' => $user->username
+            ]);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage(), 400);
         }
     }
 }

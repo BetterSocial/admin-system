@@ -1,4 +1,30 @@
 let dataTablePost;
+
+const getUsernameByAnonymousId = async (userId) => {
+  let body = {
+    user_id: userId,
+  };
+  try {
+    const response = await fetch("/user-name-by-anonymous-id", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Set header untuk JSON
+        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+      },
+      body: JSON.stringify(body), // Mengubah objek menjadi JSON string
+    });
+    let res = await response.json();
+    if (res.status === "success") {
+      return res.data.username;
+    } else {
+      return "-";
+    }
+  } catch (err) {
+    console.log("-", err);
+    return "err";
+  }
+};
+
 const getFeeds = async (feedGroup, user_id) => {
   let body = {
     feed_group: feedGroup,
@@ -343,15 +369,19 @@ function makeComment(comment) {
   return container;
 }
 
-const detailComment = (post) => {
+const detailComment = async (post) => {
   let { latest_reactions } = post;
-  if (latest_reactions !== null) {
-    console.log(post);
-  }
+  // if (latest_reactions !== null) {
+  //   console.log(post);
+  // }
 
   $("#detailCommentModal").modal("show");
   let container = $("#cardBodyComment");
-  latest_reactions.comment.map((item) => {
+  latest_reactions.comment.map(async (item) => {
+    let username = item.user.data.username;
+    if (item.data.is_anonymous) {
+      username = await getUsernameByAnonymousId(item.user_id);
+    }
     let { children_counts } = item;
     if (children_counts.comment >= 1) {
       let parent = document.createElement("div");
@@ -366,6 +396,7 @@ const detailComment = (post) => {
       let containerCommentLevelTwo = document.createElement("div");
       containerCommentLevelTwo.style.marginLeft = "16px";
       item.latest_children.comment.map((level2) => {
+        console.log("level 2: ", level2);
         let commentItem2 = generateCommentObject(
           level2.id,
           level2.data.text,
@@ -397,7 +428,7 @@ const detailComment = (post) => {
         item.id,
         item.data.text,
         "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
-        item.user.data.username
+        username
       );
       let comment = makeComment(commentItem);
       container.append(comment);
