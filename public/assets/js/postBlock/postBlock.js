@@ -377,10 +377,14 @@ const detailComment = async (post) => {
 
   $("#detailCommentModal").modal("show");
   let container = $("#cardBodyComment");
-  latest_reactions.comment.map(async (item) => {
-    let username = item.user.data.username;
+
+  for (let index = 0; index < latest_reactions.comment.length; index++) {
+    const item = latest_reactions.comment[index];
+    let username = "";
     if (item.data.is_anonymous) {
-      username = await getUsernameByAnonymousId(item.user_id);
+      username = item.user_id;
+    } else {
+      username = item.user.data.username;
     }
     let { children_counts } = item;
     if (children_counts.comment >= 1) {
@@ -389,19 +393,24 @@ const detailComment = async (post) => {
         item.id,
         item.data.text,
         "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
-        item.user.data.username
+        username
       );
       let comment = makeComment(commentItem);
       parent.append(comment);
       let containerCommentLevelTwo = document.createElement("div");
       containerCommentLevelTwo.style.marginLeft = "16px";
       item.latest_children.comment.map((level2) => {
-        console.log("level 2: ", level2);
+        let username2 = "";
+        if (level2.data.is_anonymous) {
+          username2 = level2.user_id;
+        } else {
+          username2 = level2.user.data.username;
+        }
         let commentItem2 = generateCommentObject(
           level2.id,
           level2.data.text,
           "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
-          level2.user.data.username
+          username2
         );
         let comment2 = makeComment(commentItem2);
         containerCommentLevelTwo.append(comment2);
@@ -410,11 +419,17 @@ const detailComment = async (post) => {
           let containerCommentLevel3 = document.createElement("div");
           containerCommentLevel3.style.marginLeft = "32px";
           level2.latest_children.comment.map((level3) => {
+            let username3 = "";
+            if (level2.data.is_anonymous) {
+              username3 = level2.user_id;
+            } else {
+              username3 = level2.user.data.username;
+            }
             let commentItem3 = generateCommentObject(
               level3.id,
               level3.data.text,
               "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
-              level3.user.data.username
+              username3
             );
             let comment3 = makeComment(commentItem3);
             containerCommentLevel3.append(comment3);
@@ -438,7 +453,7 @@ const detailComment = async (post) => {
     separator.style.border = "none";
     separator.style.borderTop = "1px solid #ccc";
     container.append(separator);
-  });
+  }
 };
 
 const bannedUserByPostId = (postId) => {
