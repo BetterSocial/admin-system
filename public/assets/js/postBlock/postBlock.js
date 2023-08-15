@@ -254,19 +254,34 @@ const detail = (data) => {
   //   $("#detailModal").modal("show");
   getFeeds;
 };
-const generateCommentObject = (id, text, avatar, username) => ({
+
+const generateCommentObject = (
   id,
   text,
   avatar,
   username,
+  isAnonymous,
+  emojiCode
+) => ({
+  id,
+  text,
+  avatar,
+  username,
+  isAnonymous,
+  emojiCode,
 });
-
-const createImageElement = (avatar) => {
-  const image = document.createElement("img");
-  image.classList.add("border", "rounded-circle", "me-2");
-  image.setAttribute("src", avatar);
-  image.style.height = "40px";
-  return image;
+const createImageElement = (avatar, isAnonymous, emojiCode) => {
+  const element = isAnonymous
+    ? document.createElement("span")
+    : document.createElement("img");
+  if (isAnonymous) {
+    element.innerText = emojiCode;
+  } else {
+    element.classList.add("border", "rounded-circle", "me-2");
+    element.setAttribute("src", avatar);
+    element.style.height = "40px";
+  }
+  return element;
 };
 
 const createProfileLink = (username) => {
@@ -322,7 +337,6 @@ const deleteComment = async (commentId) => {
       location.reload();
     });
   } catch (err) {
-    console.error(err);
     Swal.fire("Error", err).then(() => {
       location.reload();
     });
@@ -340,12 +354,12 @@ const createDeleteButton = (commentId) => {
 };
 
 const createComment = (comment) => {
-  const { id, text, avatar, username } = comment;
+  const { id, text, avatar, username, isAnonymous, emojiCode } = comment;
 
   const container = document.createElement("div");
   container.classList.add("d-flex", "mb-3");
 
-  const image = createImageElement(avatar);
+  const image = createImageElement(avatar, isAnonymous, emojiCode);
   container.append(image);
 
   const content = createContentElement(text, username);
@@ -371,7 +385,9 @@ const detailComment = async (post) => {
       item.id,
       item.data.text,
       item.user.data.profile_pic_url,
-      username
+      username,
+      item.data.is_anonymous,
+      item.data.is_anonymous ? item.data.anon_user_info_emoji_code : ""
     );
 
     const comment = createComment(commentItem);
@@ -386,7 +402,9 @@ const detailComment = async (post) => {
           child.id,
           child.data.text,
           child.user.data.profile_pic_url,
-          childUsername
+          childUsername,
+          child.data.is_anonymous,
+          child.data.is_anonymous ? item.data.anon_user_info_emoji_code : ""
         );
 
         const childComment = createComment(childCommentItem);
@@ -402,7 +420,11 @@ const detailComment = async (post) => {
               grandchild.id,
               grandchild.data.text,
               grandchild.user.data.profile_pic_url,
-              grandchildUsername
+              grandchildUsername,
+              grandchild.data.is_anonymous,
+              grandchild.data.is_anonymous
+                ? item.data.anon_user_info_emoji_code
+                : ""
             );
 
             const grandchildComment = createComment(grandchildCommentItem);
