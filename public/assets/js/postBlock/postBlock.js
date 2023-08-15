@@ -254,206 +254,171 @@ const detail = (data) => {
   //   $("#detailModal").modal("show");
   getFeeds;
 };
+const generateCommentObject = (id, text, avatar, username) => ({
+  id,
+  text,
+  avatar,
+  username,
+});
 
-const generateCommentObject = (id, text, avatar, username) => {
-  return {
-    id,
-    text,
-    avatar,
-    username,
-  };
-};
-
-function makeImage(avatar) {
+const createImageElement = (avatar) => {
   const image = document.createElement("img");
   image.classList.add("border", "rounded-circle", "me-2");
   image.setAttribute("src", avatar);
   image.style.height = "40px";
   return image;
-}
+};
 
-function makeProfile(username) {
-  let container = document.createElement("a");
-  container.classList.add("text-dark", "mb-0");
-  let item = document.createElement("strong");
-  item.innerText = username;
-  container.append(item);
-  return container;
-}
+const createProfileLink = (username) => {
+  const link = document.createElement("a");
+  link.classList.add("text-dark", "mb-0");
+  const strong = document.createElement("strong");
+  strong.innerText = username;
+  link.appendChild(strong);
+  return link;
+};
 
-function makeItemComment(text) {
-  let container = document.createElement("a");
-  container.classList.add("text-muted", "d-block");
-  let item = document.createElement("strong");
-  item.innerText = text;
-  container.append(item);
-  return container;
-}
+const createCommentLink = (text) => {
+  const link = document.createElement("a");
+  link.classList.add("text-muted", "d-block");
+  const strong = document.createElement("strong");
+  strong.innerText = text;
+  link.appendChild(strong);
+  return link;
+};
 
-function makeContent(text, username) {
-  let container = document.createElement("div");
+const createContentElement = (text, username) => {
+  const container = document.createElement("div");
   container.classList.add("ml-3", "w-75");
-  let containerContent = document.createElement("div");
-  containerContent.classList.add("bg-light", "rounded-3", "px-3", "py-1");
-  let profile = makeProfile(username);
-  containerContent.append(profile);
-  let itemComment = makeItemComment(text);
-  containerContent.append(itemComment);
-  container.append(containerContent);
+
+  const content = document.createElement("div");
+  content.classList.add("bg-light", "rounded-3", "px-3", "py-1");
+
+  const profile = createProfileLink(username);
+  content.appendChild(profile);
+
+  const commentLink = createCommentLink(text);
+  content.appendChild(commentLink);
+
+  container.appendChild(content);
   return container;
-}
+};
 
-function deleteComment(commentId) {
-  console.log(commentId);
-  Swal.fire({
-    title: "Are you sure?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const response = await fetch(`/post/comment/${commentId}`, {
-          method: "DELETE",
-          headers: {
-            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-            "Content-Type": "application/json",
-          },
-        });
-        let res = await response.json();
-        console.log(res);
-        if (res.status === "success") {
-          Swal.fire("Success", "Success delete comment", "success").then(() => {
-            location.reload();
-          });
-        } else {
-          Swal.fire("Error", res.message).then(() => {
-            location.reload();
-          });
-        }
-      } catch (err) {
-        console.log(err);
-        Swal.fire("Error", err).then(() => {
-          location.reload();
-        });
-      }
-    }
-  });
-}
+const deleteComment = async (commentId) => {
+  try {
+    const response = await fetch(`/post/comment/${commentId}`, {
+      method: "DELETE",
+      headers: {
+        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+        "Content-Type": "application/json",
+      },
+    });
 
-function makeBtnDelete(commentId) {
-  let btn = document.createElement("button");
-  btn.classList.add("btn", "btn-danger");
-  btn.innerText = "X";
-  btn.addEventListener("click", function () {
+    const res = await response.json();
+    const message =
+      res.status === "success" ? "Success delete comment" : res.message;
+
+    Swal.fire(res.status, message, "success").then(() => {
+      location.reload();
+    });
+  } catch (err) {
+    console.error(err);
+    Swal.fire("Error", err).then(() => {
+      location.reload();
+    });
+  }
+};
+
+const createDeleteButton = (commentId) => {
+  const button = document.createElement("button");
+  button.classList.add("btn", "btn-danger");
+  button.innerText = "X";
+  button.addEventListener("click", () => {
     deleteComment(commentId);
   });
-  return btn;
-}
+  return button;
+};
 
-function makeComment(comment) {
-  let { id, text, avatar, username } = comment;
+const createComment = (comment) => {
+  const { id, text, avatar, username } = comment;
+
   const container = document.createElement("div");
   container.classList.add("d-flex", "mb-3");
 
-  let image = makeImage(avatar);
+  const image = createImageElement(avatar);
   container.append(image);
 
-  let content = makeContent(text, username);
+  const content = createContentElement(text, username);
   container.append(content);
-  let btnDelete = makeBtnDelete(id);
+
+  const btnDelete = createDeleteButton(id);
   container.append(btnDelete);
+
   return container;
-}
+};
 
 const detailComment = async (post) => {
-  let { latest_reactions } = post;
-  // if (latest_reactions !== null) {
-  //   console.log(post);
-  // }
-
+  const { latest_reactions } = post;
   $("#detailCommentModal").modal("show");
-  let container = $("#cardBodyComment");
+  const container = document.getElementById("cardBodyComment");
 
-  for (let index = 0; index < latest_reactions.comment.length; index++) {
-    const item = latest_reactions.comment[index];
-    let username = "";
-    if (item.data.is_anonymous) {
-      username = item.user_id;
-    } else {
-      username = item.user.data.username;
-    }
-    let { children_counts } = item;
-    if (children_counts.comment >= 1) {
-      let parent = document.createElement("div");
-      let commentItem = generateCommentObject(
-        item.id,
-        item.data.text,
-        "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
-        username
-      );
-      let comment = makeComment(commentItem);
-      parent.append(comment);
-      let containerCommentLevelTwo = document.createElement("div");
-      containerCommentLevelTwo.style.marginLeft = "16px";
-      item.latest_children.comment.map((level2) => {
-        let username2 = "";
-        if (level2.data.is_anonymous) {
-          username2 = level2.user_id;
-        } else {
-          username2 = level2.user.data.username;
-        }
-        let commentItem2 = generateCommentObject(
-          level2.id,
-          level2.data.text,
-          "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
-          username2
+  latest_reactions.comment.forEach((item) => {
+    console.log(item);
+    const username = item.data.is_anonymous
+      ? item.user_id
+      : item.user.data.username;
+    const commentItem = generateCommentObject(
+      item.id,
+      item.data.text,
+      item.user.data.profile_pic_url,
+      username
+    );
+
+    const comment = createComment(commentItem);
+    container.append(comment);
+
+    if (item.children_counts.comment >= 1) {
+      item.latest_children.comment.forEach((child) => {
+        const childUsername = child.data.is_anonymous
+          ? child.user_id
+          : child.user.data.username;
+        const childCommentItem = generateCommentObject(
+          child.id,
+          child.data.text,
+          child.user.data.profile_pic_url,
+          childUsername
         );
-        let comment2 = makeComment(commentItem2);
-        containerCommentLevelTwo.append(comment2);
-        parent.append(containerCommentLevelTwo);
-        if (level2.children_counts.comment >= 1) {
-          let containerCommentLevel3 = document.createElement("div");
-          containerCommentLevel3.style.marginLeft = "32px";
-          level2.latest_children.comment.map((level3) => {
-            let username3 = "";
-            if (level2.data.is_anonymous) {
-              username3 = level2.user_id;
-            } else {
-              username3 = level2.user.data.username;
-            }
-            let commentItem3 = generateCommentObject(
-              level3.id,
-              level3.data.text,
-              "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
-              username3
+
+        const childComment = createComment(childCommentItem);
+        childComment.style.marginLeft = "16px";
+        container.append(childComment);
+
+        if (child.children_counts.comment >= 1) {
+          child.latest_children.comment.forEach((grandchild) => {
+            const grandchildUsername = grandchild.data.is_anonymous
+              ? grandchild.user_id
+              : grandchild.user.data.username;
+            const grandchildCommentItem = generateCommentObject(
+              grandchild.id,
+              grandchild.data.text,
+              grandchild.user.data.profile_pic_url,
+              grandchildUsername
             );
-            let comment3 = makeComment(commentItem3);
-            containerCommentLevel3.append(comment3);
-            parent.append(containerCommentLevel3);
+
+            const grandchildComment = createComment(grandchildCommentItem);
+            grandchildComment.style.marginLeft = "36px";
+            container.append(grandchildComment);
           });
         }
       });
-      container.append(parent);
-    } else {
-      let commentItem = generateCommentObject(
-        item.id,
-        item.data.text,
-        "https://res.cloudinary.com/hpjivutj2/image/upload/v1691083748/uiaz7kmrfp6y2dpkvqal.jpg",
-        username
-      );
-      let comment = makeComment(commentItem);
-      container.append(comment);
     }
-    let separator = document.createElement("div");
+
+    const separator = document.createElement("div");
     separator.style.margin = "20px 0";
     separator.style.border = "none";
     separator.style.borderTop = "1px solid #ccc";
     container.append(separator);
-  }
+  });
 };
 
 const bannedUserByPostId = (postId) => {
