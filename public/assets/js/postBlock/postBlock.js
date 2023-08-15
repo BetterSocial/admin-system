@@ -340,19 +340,28 @@ const deleteComment = async (commentId) => {
         let res = await response.json();
         console.log(res);
         if (res.status === "success") {
-          Swal.fire("Success", "Success delete comment", "success").then(() => {
+          Swal.fire(
+            "Success",
+            "Successfully deleted the comment",
+            "success"
+          ).then(() => {
             location.reload();
           });
         } else {
-          Swal.fire("Error", res.message).then(() => {
+          Swal.fire(
+            "Error",
+            "An error occurred while deleting the comment"
+          ).then(() => {
             location.reload();
           });
         }
       } catch (err) {
         console.log(err);
-        Swal.fire("Error", err).then(() => {
-          location.reload();
-        });
+        Swal.fire("Error", "An error occurred while deleting the comment").then(
+          () => {
+            location.reload();
+          }
+        );
       }
     }
   });
