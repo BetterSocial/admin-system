@@ -320,27 +320,42 @@ const createContentElement = (text, username) => {
 };
 
 const deleteComment = async (commentId) => {
-  try {
-    const response = await fetch(`/post/comment/${commentId}`, {
-      method: "DELETE",
-      headers: {
-        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-        "Content-Type": "application/json",
-      },
-    });
-
-    const res = await response.json();
-    const message =
-      res.status === "success" ? "Success delete comment" : res.message;
-
-    Swal.fire(res.status, message, "success").then(() => {
-      location.reload();
-    });
-  } catch (err) {
-    Swal.fire("Error", err).then(() => {
-      location.reload();
-    });
-  }
+  Swal.fire({
+    title: "Are you sure?",
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`/post/comment/${commentId}`, {
+          method: "DELETE",
+          headers: {
+            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+          },
+        });
+        let res = await response.json();
+        console.log(res);
+        if (res.status === "success") {
+          Swal.fire("Success", "Success delete comment", "success").then(() => {
+            location.reload();
+          });
+        } else {
+          Swal.fire("Error", res.message).then(() => {
+            location.reload();
+          });
+        }
+      } catch (err) {
+        console.log(err);
+        Swal.fire("Error", err).then(() => {
+          location.reload();
+        });
+      }
+    }
+  });
 };
 
 const createDeleteButton = (commentId) => {
@@ -376,8 +391,7 @@ const detailComment = async (post) => {
   $("#detailCommentModal").modal("show");
   const container = document.getElementById("cardBodyComment");
 
-  latest_reactions.comment.forEach((item) => {
-    console.log(item);
+  const createCommentLevel = (item) => {
     const username = item.data.is_anonymous
       ? item.user_id
       : item.user.data.username;
@@ -389,45 +403,24 @@ const detailComment = async (post) => {
       item.data.is_anonymous,
       item.data.is_anonymous ? item.data.anon_user_info_emoji_code : ""
     );
+    return commentItem;
+  };
 
-    const comment = createComment(commentItem);
+  latest_reactions.comment.forEach((item) => {
+    const comment = createComment(createCommentLevel(item));
     container.append(comment);
 
     if (item.children_counts.comment >= 1) {
       item.latest_children.comment.forEach((child) => {
-        const childUsername = child.data.is_anonymous
-          ? child.user_id
-          : child.user.data.username;
-        const childCommentItem = generateCommentObject(
-          child.id,
-          child.data.text,
-          child.user.data.profile_pic_url,
-          childUsername,
-          child.data.is_anonymous,
-          child.data.is_anonymous ? item.data.anon_user_info_emoji_code : ""
-        );
-
-        const childComment = createComment(childCommentItem);
+        const childComment = createComment(createCommentLevel(child));
         childComment.style.marginLeft = "16px";
         container.append(childComment);
 
         if (child.children_counts.comment >= 1) {
           child.latest_children.comment.forEach((grandchild) => {
-            const grandchildUsername = grandchild.data.is_anonymous
-              ? grandchild.user_id
-              : grandchild.user.data.username;
-            const grandchildCommentItem = generateCommentObject(
-              grandchild.id,
-              grandchild.data.text,
-              grandchild.user.data.profile_pic_url,
-              grandchildUsername,
-              grandchild.data.is_anonymous,
-              grandchild.data.is_anonymous
-                ? item.data.anon_user_info_emoji_code
-                : ""
+            const grandchildComment = createComment(
+              createCommentLevel(grandchild)
             );
-
-            const grandchildComment = createComment(grandchildCommentItem);
             grandchildComment.style.marginLeft = "36px";
             container.append(grandchildComment);
           });
