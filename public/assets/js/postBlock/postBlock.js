@@ -1,4 +1,30 @@
 let dataTablePost;
+
+const getUsernameByAnonymousId = async (userId) => {
+  let body = {
+    user_id: userId,
+  };
+  try {
+    const response = await fetch("/user-name-by-anonymous-id", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Set header untuk JSON
+        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+      },
+      body: JSON.stringify(body), // Mengubah objek menjadi JSON string
+    });
+    let res = await response.json();
+    if (res.status === "success") {
+      return res.data.username;
+    } else {
+      return "-";
+    }
+  } catch (err) {
+    console.log("-", err);
+    return "err";
+  }
+};
+
 const getFeeds = async (feedGroup, user_id) => {
   let body = {
     feed_group: feedGroup,
@@ -23,7 +49,6 @@ const getFeeds = async (feedGroup, user_id) => {
       });
     }
   } catch (err) {
-    console.log(err);
     Swal.fire("Error", err).then(() => {
       location.reload();
     });
@@ -230,56 +255,71 @@ const detail = (data) => {
   getFeeds;
 };
 
-const generateCommentObject = (id, text, avatar, username) => {
-  return {
-    id,
-    text,
-    avatar,
-    username,
-  };
+const generateCommentObject = (
+  id,
+  text,
+  avatar,
+  username,
+  isAnonymous,
+  emojiCode
+) => ({
+  id,
+  text,
+  avatar,
+  username,
+  isAnonymous,
+  emojiCode,
+});
+const createImageElement = (avatar, isAnonymous, emojiCode) => {
+  const element = isAnonymous
+    ? document.createElement("span")
+    : document.createElement("img");
+  if (isAnonymous) {
+    element.innerText = emojiCode;
+  } else {
+    element.classList.add("border", "rounded-circle", "me-2");
+    element.setAttribute("src", avatar);
+    element.style.height = "40px";
+  }
+  return element;
 };
 
-function makeImage(avatar) {
-  const image = document.createElement("img");
-  image.classList.add("border", "rounded-circle", "me-2");
-  image.setAttribute("src", avatar);
-  image.style.height = "40px";
-  return image;
-}
+const createProfileLink = (username) => {
+  const link = document.createElement("a");
+  link.classList.add("text-dark", "mb-0");
+  const strong = document.createElement("strong");
+  strong.innerText = username;
+  link.appendChild(strong);
+  return link;
+};
 
-function makeProfile(username) {
-  let container = document.createElement("a");
-  container.classList.add("text-dark", "mb-0");
-  let item = document.createElement("strong");
-  item.innerText = username;
-  container.append(item);
-  return container;
-}
+const createCommentLink = (text) => {
+  const link = document.createElement("a");
+  link.classList.add("text-muted", "d-block");
+  const strong = document.createElement("strong");
+  strong.innerText = text;
+  link.appendChild(strong);
+  return link;
+};
 
-function makeItemComment(text) {
-  let container = document.createElement("a");
-  container.classList.add("text-muted", "d-block");
-  let item = document.createElement("strong");
-  item.innerText = text;
-  container.append(item);
-  return container;
-}
-
-function makeContent(text, username) {
-  let container = document.createElement("div");
+const createContentElement = (text, username) => {
+  const container = document.createElement("div");
   container.classList.add("ml-3", "w-75");
-  let containerContent = document.createElement("div");
-  containerContent.classList.add("bg-light", "rounded-3", "px-3", "py-1");
-  let profile = makeProfile(username);
-  containerContent.append(profile);
-  let itemComment = makeItemComment(text);
-  containerContent.append(itemComment);
-  container.append(containerContent);
-  return container;
-}
 
-function deleteComment(commentId) {
-  console.log(commentId);
+  const content = document.createElement("div");
+  content.classList.add("bg-light", "rounded-3", "px-3", "py-1");
+
+  const profile = createProfileLink(username);
+  content.appendChild(profile);
+
+  const commentLink = createCommentLink(text);
+  content.appendChild(commentLink);
+
+  container.appendChild(content);
+  return container;
+};
+
+const deleteComment = async (commentId) => {
   Swal.fire({
     title: "Are you sure?",
     text: "",
@@ -295,71 +335,113 @@ function deleteComment(commentId) {
           method: "DELETE",
           headers: {
             "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-            "Content-Type": "application/json",
           },
         });
         let res = await response.json();
         console.log(res);
         if (res.status === "success") {
-          Swal.fire("Success", "Success delete comment", "success").then(() => {
+          Swal.fire(
+            "Success",
+            "Successfully deleted the comment",
+            "success"
+          ).then(() => {
             location.reload();
           });
         } else {
-          Swal.fire("Error", res.message).then(() => {
+          Swal.fire(
+            "Error",
+            "An error occurred while deleting the comment"
+          ).then(() => {
             location.reload();
           });
         }
       } catch (err) {
         console.log(err);
-        Swal.fire("Error", err).then(() => {
-          location.reload();
-        });
+        Swal.fire("Error", "An error occurred while deleting the comment").then(
+          () => {
+            location.reload();
+          }
+        );
       }
     }
   });
-}
+};
 
-function makeBtnDelete(commentId) {
-  // `<button class="btn btn-info mt-2" onclick='detail(${item})'>Detail</button`
-  let btn = document.createElement("button");
-  btn.classList.add("btn", "btn-danger");
-  btn.innerText = "X";
-  btn.addEventListener("click", function () {
+const createDeleteButton = (commentId) => {
+  const button = document.createElement("button");
+  button.classList.add("btn", "btn-danger");
+  button.innerText = "X";
+  button.addEventListener("click", () => {
     deleteComment(commentId);
   });
-  return btn;
-}
+  return button;
+};
 
-function makeComment(comment) {
-  let { id, text, avatar, username } = comment;
+const createComment = (comment) => {
+  const { id, text, avatar, username, isAnonymous, emojiCode } = comment;
+
   const container = document.createElement("div");
   container.classList.add("d-flex", "mb-3");
 
-  let image = makeImage(avatar);
+  const image = createImageElement(avatar, isAnonymous, emojiCode);
   container.append(image);
 
-  let content = makeContent(text, username);
+  const content = createContentElement(text, username);
   container.append(content);
-  let btnDelete = makeBtnDelete(id);
+
+  const btnDelete = createDeleteButton(id);
   container.append(btnDelete);
+
   return container;
-}
+};
 
-const detailComment = (post) => {
-  console.log(post);
-  let { latest_reactions } = post;
-
+const detailComment = async (post) => {
+  const { latest_reactions } = post;
   $("#detailCommentModal").modal("show");
-  let container = $("#cardBodyComment");
-  latest_reactions.comment.map((item) => {
-    let commentItem = generateCommentObject(
+  const container = document.getElementById("cardBodyComment");
+
+  const createCommentLevel = (item) => {
+    const username = item.data.is_anonymous
+      ? item.user_id
+      : item.user.data.username;
+    const commentItem = generateCommentObject(
       item.id,
       item.data.text,
       item.user.data.profile_pic_url,
-      item.user.data.username
+      username,
+      item.data.is_anonymous,
+      item.data.is_anonymous ? item.data.anon_user_info_emoji_code : ""
     );
-    let comment = makeComment(commentItem);
+    return commentItem;
+  };
+
+  latest_reactions.comment.forEach((item) => {
+    const comment = createComment(createCommentLevel(item));
     container.append(comment);
+
+    if (item.children_counts.comment >= 1) {
+      item.latest_children.comment.forEach((child) => {
+        const childComment = createComment(createCommentLevel(child));
+        childComment.style.marginLeft = "16px";
+        container.append(childComment);
+
+        if (child.children_counts.comment >= 1) {
+          child.latest_children.comment.forEach((grandchild) => {
+            const grandchildComment = createComment(
+              createCommentLevel(grandchild)
+            );
+            grandchildComment.style.marginLeft = "36px";
+            container.append(grandchildComment);
+          });
+        }
+      });
+    }
+
+    const separator = document.createElement("div");
+    separator.style.margin = "20px 0";
+    separator.style.border = "none";
+    separator.style.borderTop = "1px solid #ccc";
+    container.append(separator);
   });
 };
 
