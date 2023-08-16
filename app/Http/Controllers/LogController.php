@@ -12,7 +12,7 @@ class LogController extends Controller
 
     public function data(Request $request)
     {
-        $logs = LogModel::all();
+        $logs = LogModel::orderBy('id', 'desc')->get();
         $data = [
             'category_name' => 'logs',
             'page_name' => 'logs',
