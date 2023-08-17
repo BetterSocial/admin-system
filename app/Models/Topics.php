@@ -209,7 +209,9 @@ class Topics extends Model
                 ->groupBy('name')
                 ->havingRaw('COUNT(*) > 1')
                 ->get();
-
+            if (count($topicsWithSameName) < 1) {
+                return false;
+            }
             foreach ($topicsWithSameName as $topicWithSameName) {
                 $query = Topics::where('name', $topicWithSameName->name);
 
@@ -226,6 +228,7 @@ class Topics extends Model
             }
 
             DB::commit();
+            return true;
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;

@@ -289,9 +289,13 @@
                             </div>
                         </div>
                         <div>
-                            <p>"If you choose the latest one, all the latest topics will be deleted, leaving only the oldest
-                                topic. On the other hand, if you choose the oldest one, all the oldest topics will be
-                                deleted, leaving only the newest topic."</p>
+                            <p>"If you choose the latest one,
+                                all the latest topics will be deleted,
+                                leaving only the oldest
+                                topic. On the other hand, if you choose the oldest one,
+                                all the oldest topics will be
+                                deleted, leaving only the newest topic."
+                            </p>
                         </div>
                     </div>
                     <div class="modal-footer">
