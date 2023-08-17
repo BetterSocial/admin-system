@@ -34,7 +34,6 @@ class PostBlockController extends Controller
             'page_name' => 'Post Block',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
-            // 'users' => $users,
         ]);
     }
 
@@ -75,7 +74,7 @@ class PostBlockController extends Controller
                 'counts' => true,
                 'counts',
                 'kinds',
-                // 'reactions.recent' => true
+                'reactions.recent' => true
             ];
             $feed = $client->feed('user', "bettersocial");
             $response = $feed->getActivities($offset, $limit, $options, $enrich = true, $options);
