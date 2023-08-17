@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -231,6 +232,22 @@ class TopicController extends Controller
             DB::rollBack();
             LogModel::insertLog('sign-category-topic', 'fail with error ' . $th->getMessage());
             return $this->errorResponseWithAlert('Fail Add Topic to OB');
+        }
+    }
+
+    public function removeDuplicate(Request $request)
+    {
+        try {
+            $request->validate([
+                'option' => 'required'
+            ]);
+            Topics::removeDuplicateTopicName($request->input('option'));
+            return $this->successResponseWithAlert('Successfully deleted the same topic');
+        } catch (\Throwable $th) {
+            if ($th instanceof ValidationException) {
+                return $this->errorResponseWithAlert('Option is required');
+            }
+            return $this->errorResponseWithAlert('Failed to delete the same topic.');
         }
     }
 }

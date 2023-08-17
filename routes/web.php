@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/topics/export/', [TopicController::class, 'export'])->name('topic.export');
     Route::post('topics/un-sign', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
     Route::post('topics/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
+    Route::post('/topic/remove-duplicate', [TopicController::class, 'removeDuplicate'])->name('topic.remove-duplicate');
 
 
 

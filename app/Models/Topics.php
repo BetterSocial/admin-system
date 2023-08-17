@@ -199,4 +199,39 @@ class Topics extends Model
             ], 500);
         }
     }
+
+    public static function removeDuplicateTopicName($option)
+    {
+        try {
+            DB::beginTransaction();
+
+            $topicsWithSameName = self::select('name')
+                ->groupBy('name')
+                ->havingRaw('COUNT(*) > 1')
+                ->get();
+            if (count($topicsWithSameName) < 1) {
+                return false;
+            }
+            foreach ($topicsWithSameName as $topicWithSameName) {
+                $query = Topics::where('name', $topicWithSameName->name);
+
+                if ($option == 'latest') {
+                    $query->orderBy('created_at');
+                } else {
+                    $query->orderByDesc('created_at');
+                }
+
+                $duplicateTopics = $query->skip(1)->get();
+
+                // Hapus duplicate topics
+                $duplicateTopics->each->delete();
+            }
+
+            DB::commit();
+            return true;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+    }
 }
