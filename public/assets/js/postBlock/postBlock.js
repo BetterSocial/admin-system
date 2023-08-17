@@ -508,6 +508,7 @@ $(document).ready(function () {
       headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
       data: function (d) {
         d.total = $("#total").val();
+        console.log(d);
       },
     },
     error: function (xhr, error, thrown) {
@@ -636,7 +637,7 @@ $(document).ready(function () {
       },
       {
         data: "id",
-        orderable: false,
+        orderable: true,
         className: "menufilter textfilter",
         render: function (data, type, row) {
           // upvote
@@ -650,7 +651,7 @@ $(document).ready(function () {
       },
       {
         data: "anonimity",
-        orderable: false,
+        orderable: true,
         className: "menufilter textfilter",
         render: function (data, type, row) {
           // downvote;
