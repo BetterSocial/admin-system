@@ -38,6 +38,12 @@
                                             style="color:white">Export
                                             Topics</b></button> </a>
                             @endunlessrole
+                            <div class="mt-2"></div>
+                            @unlessrole('viewer')
+                                <button class="btn btn-primary " data-toggle="modal" data-target="#modalSameTopic"><b
+                                        style="color:white">Remove the same topic
+                                    </b></button>
+                            @endunlessrole
                         </div>
                     </div>
 
@@ -251,6 +257,47 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalSameTopic" tabindex="1" aria-labelledby="detailModalLabelLimit"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('topic.remove-duplicate') }}" method="post" id="formSameTopic">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabelLimit">Remove the same topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="">
+                            <div id="cardCategory" class="">
+                                <div class="form-group">
+                                    <label for="topicSort">Which one will be deleted?</label>
+                                    <select class="form-control" name="option" id="" required>
+                                        <option value="">Select Option</option>
+                                        <option value="latest">The latest one</option>
+                                        <option value="oldest">The oldest one</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <p>"If you choose the latest one, all the latest topics will be deleted, leaving only the oldest
+                                topic. On the other hand, if you choose the oldest one, all the oldest topics will be
+                                deleted, leaving only the newest topic."</p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category"
+                            onclick="confirm('Are You sure?')">Submit</button>
                     </div>
                 </form>
             </div>
