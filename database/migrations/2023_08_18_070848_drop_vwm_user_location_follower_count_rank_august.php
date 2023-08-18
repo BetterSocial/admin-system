@@ -38,11 +38,11 @@ class DropVwmUserLocationFollowerCountRankAugust extends Migration
                         ORDER BY A.follower_count DESC
                     ) as follower_rank,
                     C.*
-                FROM 
+                FROM
                     vwm_user_follower_count A
                 INNER JOIN
                     user_location B
-                ON 
+                ON
                     A.user_id_followed = B.user_id
                 INNER JOIN
                     users C
