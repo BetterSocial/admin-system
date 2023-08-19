@@ -38,12 +38,6 @@
                                             style="color:white">Export
                                             Topics</b></button> </a>
                             @endunlessrole
-                            <div class="mt-2"></div>
-                            @unlessrole('viewer')
-                                <button class="btn btn-primary " data-toggle="modal" data-target="#modalSameTopic"><b
-                                        style="color:white">Remove the same topic
-                                    </b></button>
-                            @endunlessrole
                         </div>
                     </div>
 
