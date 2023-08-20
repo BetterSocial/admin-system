@@ -64,10 +64,10 @@ class TopicController extends Controller
             ]);
             $name = strtolower($req->name);
             $category = $req->category;
-            $check = DB::table('topics')->where([['name', '=', $name], ['categories', '=', $category]])->count();
+            $check = DB::table('topics')->where([['name', '=', $name]])->count();
 
             if ($check > 0) {
-                return $this->errorResponse('Data topic with name ' . $name . ' and category ' . $category . ' already exists', 400);
+                return $this->errorResponseWithAlert("A topic with the name '$name' already exists.");
             }
             $req->merge([
                 'icon_path' => 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
@@ -81,14 +81,14 @@ class TopicController extends Controller
             ])->all());
             LogModel::insertLog('add-topic', 'success add new topic');
             DB::commit();
-            return $this->successResponse('success create new topic');
+            return $this->successResponseWithAlert('Successfully added the topic.');
         } catch (Exception $e) {
             DB::rollBack();
             LogModel::insertLog('add-topics', 'error add topic with error' . $e->getMessage());
             LogErrorModel::create([
                 'message' => $e->getMessage(),
             ]);
-            return $this->errorResponse($e->getMessage());
+            return $this->errorResponseWithAlert('Failed to add the topic.');
         }
     }
 
