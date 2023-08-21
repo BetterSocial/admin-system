@@ -247,21 +247,12 @@ $(document).ready(function () {
     var url = form.attr("action");
     let topicId = $("#topicId").val();
     let topicSort = $("#topicSort").val();
-
-    let category = "";
-    if (categorySelect) {
-      category = categorySelect;
-    }
-
-    if (categoryInput) {
-      category = categoryInput;
-    }
-
     let data = {
       topic_id: topicId,
       sort: topicSort,
     };
 
+    console.log(url);
     console.log(data);
 
     $.ajaxSetup({
@@ -270,7 +261,6 @@ $(document).ready(function () {
     $.ajax({
       type: "PUT",
       url: url,
-      // data: form.serialize(), // serializes the form's elements.
       data: data,
       success: function (data) {
         // alert(data); // show response from the php script.
@@ -283,7 +273,7 @@ $(document).ready(function () {
           });
           // dataTable.draw();
 
-          getNewCategory();
+          // getNewCategory();
           dataTable.ajax.reload(null, false);
           return Swal.fire({
             icon: "success",

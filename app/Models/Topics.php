@@ -112,8 +112,6 @@ class Topics extends Model
             if ($request->input('categories') == null) {
                 if ($request->has('category') && $request->input('category') != null) {
                     $request->merge(['categories' => $request->input('category')]);
-                } else {
-                    $topic->update(['categories' => ""]);
                 }
             }
             $data = array_filter($request->all());
