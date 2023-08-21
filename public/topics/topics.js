@@ -14,9 +14,7 @@ async function getCurrentLimitTopic() {
       // body: JSON.stringify(body),
     });
     let res = await response.json();
-    console.log(res);
     if (res.status === "success") {
-      console.log(res.data);
       currentLimitTopic = res.data.limit;
     } else {
       // Swal.fire("Error", res.message).then(() => {
@@ -46,7 +44,7 @@ async function getCategory() {
       // });
     }
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     // Swal.fire("Error", err).then(() => {
     //   location.reload();
     // });
@@ -83,12 +81,11 @@ function getNewCategory() {
       categories = data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 }
 
 function signCategory(topic, sign) {
-  console.log(topic);
   $(".topic-id-sign").val(topic.topic_id);
   $(".name-topic-sign").val(topic.name);
   $(".category-topic-sign").val(topic.categories);
@@ -112,7 +109,7 @@ $(document).ready(function () {
       categories = data;
     })
     .catch((err) => {
-      console.log(err);
+      // console.log(err);
     });
 
   dataTable = $("#tableTopics").DataTable({
@@ -132,11 +129,7 @@ $(document).ready(function () {
         d.category = $("#category").val();
       },
     },
-    error: function (xhr, error, thrown) {
-      console.log("xhr", xhr);
-      console.log("error", error);
-      console.log("thrown", thrown);
-    },
+    error: function (xhr, error, thrown) {},
     columns: [
       {
         data: "topic_id",
@@ -252,9 +245,6 @@ $(document).ready(function () {
       sort: topicSort,
     };
 
-    console.log(url);
-    console.log(data);
-
     $.ajaxSetup({
       headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
     });
@@ -273,7 +263,7 @@ $(document).ready(function () {
           });
           // dataTable.draw();
 
-          // getNewCategory();
+          getNewCategory();
           dataTable.ajax.reload(null, false);
           return Swal.fire({
             icon: "success",
@@ -289,9 +279,6 @@ $(document).ready(function () {
         }
       },
       error: function (xhr, status, error) {
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.log(xhr);
         return Swal.fire({
           icon: "error",
           title: xhr.statusText,
@@ -325,19 +312,14 @@ $(document).ready(function () {
       categories: category,
     };
 
-    console.log(data);
-
     $.ajaxSetup({
       headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
     });
     $.ajax({
       type: "PUT",
       url: url,
-      // data: form.serialize(), // serializes the form's elements.
       data: data,
       success: function (data) {
-        // alert(data); // show response from the php script.
-        console.log(data);
         if (data.status === "success") {
           $("#detailCategory").modal("hide");
           $("#detailCategory").on("hidden.bs.modal", function () {
@@ -363,9 +345,6 @@ $(document).ready(function () {
         }
       },
       error: function (xhr, status, error) {
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.log(xhr);
         return Swal.fire({
           icon: "error",
           title: xhr.statusText,
@@ -458,7 +437,6 @@ function showTopic(topicId) {
       }
     },
     error: function (data) {
-      console.log(data);
       dataTable.ajax.reload(null, false);
       return Swal.fire({
         icon: "error",
