@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
     /*
      *  topics
      */
-    Route::get('/topics/index', [TopicController::class, 'index']);
+    Route::get('/topics/index', [TopicController::class, 'index'])->name('topic');
 
     Route::get('/create-topics', [CreateTopicController::class, 'index'])->name('topic.create');
     Route::POST('/topics/data', [TopicController::class, 'getData'])->name('masterTopics.data');

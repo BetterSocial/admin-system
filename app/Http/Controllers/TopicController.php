@@ -59,7 +59,7 @@ class TopicController extends Controller
             $this->validate($req, [
                 'name' => 'required',
                 'sort' => 'required|integer',
-                'category' => 'required',
+                'category' => '',
 
             ]);
             $name = strtolower($req->name);
@@ -76,12 +76,12 @@ class TopicController extends Controller
             DB::beginTransaction();
             Topics::create($req->merge([
                 'name' => $name,
-                'categories' => $category,
+                'categories' => $category ?? '',
                 'created_at' => Carbon::now()
             ])->all());
             LogModel::insertLog('add-topic', 'success add new topic');
             DB::commit();
-            return $this->successResponseWithAlert('Successfully added the topic.');
+            return $this->successResponseWithAlert('Successfully added the topic.', 'topic');
         } catch (Exception $e) {
             DB::rollBack();
             LogModel::insertLog('add-topics', 'error add topic with error' . $e->getMessage());
