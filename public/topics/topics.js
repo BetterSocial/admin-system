@@ -11,15 +11,10 @@ async function getCurrentLimitTopic() {
       headers: {
         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
       },
-      // body: JSON.stringify(body),
     });
     let res = await response.json();
     if (res.status === "success") {
       currentLimitTopic = res.data.limit;
-    } else {
-      // Swal.fire("Error", res.message).then(() => {
-      //   location.reload();
-      // });
     }
   } catch (error) {
     console.log("error", error);
@@ -33,22 +28,12 @@ async function getCategory() {
       headers: {
         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
       },
-      // body: JSON.stringify(body),
     });
     let res = await response.json();
     if (res.status === "success") {
       return res.data;
-    } else {
-      // Swal.fire("Error", res.message).then(() => {
-      //   location.reload();
-      // });
     }
-  } catch (err) {
-    // console.log(err);
-    // Swal.fire("Error", err).then(() => {
-    //   location.reload();
-    // });
-  }
+  } catch (err) {}
 }
 
 function createItemSelectCategory(categories) {
@@ -80,9 +65,7 @@ function getNewCategory() {
     .then((data) => {
       categories = data;
     })
-    .catch((err) => {
-      // console.log(err);
-    });
+    .catch((err) => {});
 }
 
 function signCategory(topic, sign) {
@@ -108,9 +91,7 @@ $(document).ready(function () {
     .then((data) => {
       categories = data;
     })
-    .catch((err) => {
-      // console.log(err);
-    });
+    .catch((err) => {});
 
   dataTable = $("#tableTopics").DataTable({
     searching: false,
@@ -253,7 +234,6 @@ $(document).ready(function () {
       url: url,
       data: data,
       success: function (data) {
-        // alert(data); // show response from the php script.
         if (data.status === "success") {
           $("#modalTopicSort").modal("hide");
           $("#modalTopicSort").on("hidden.bs.modal", function () {
@@ -261,7 +241,6 @@ $(document).ready(function () {
             $(this).find("select").prop("selectedIndex", 0);
             $(this).find("textarea").val("");
           });
-          // dataTable.draw();
 
           getNewCategory();
           dataTable.ajax.reload(null, false);
@@ -289,7 +268,7 @@ $(document).ready(function () {
   });
 
   $("#modal-category").submit(function (e) {
-    e.preventDefault(); // prevent the form from submitting via the browser
+    e.preventDefault();
     var form = $(this);
     var url = form.attr("action");
     let topicId = $("#topicId").val();
@@ -327,7 +306,6 @@ $(document).ready(function () {
             $(this).find("select").prop("selectedIndex", 0);
             $(this).find("textarea").val("");
           });
-          // dataTable.draw();
 
           getNewCategory();
           dataTable.ajax.reload(null, false);
@@ -370,11 +348,8 @@ $(document).ready(function () {
     $.ajax({
       type: "POST",
       url: url,
-      // data: form.serialize(), // serializes the form's elements.
       data: data,
       success: function (data) {
-        // alert(data); // show response from the php script.
-        console.log(data);
         if (data.status === "success") {
           $("#modalTopicLimit").modal("hide");
           $("#modalTopicLimit").on("hidden.bs.modal", function () {
