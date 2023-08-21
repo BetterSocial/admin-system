@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 class Topics extends Model
 {
 
-    use SoftDeletes;
     protected $table    = 'topics';
     protected $primaryKey = 'topic_id';
     protected $fillable = [
