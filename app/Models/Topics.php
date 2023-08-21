@@ -109,13 +109,14 @@ class Topics extends Model
     {
         try {
             DB::beginTransaction();
-            if ($request->input('categories') == null) {
-                if ($request->has('category') && $request->input('category') != null) {
-                    $request->merge(['categories' => $request->input('category')]);
-                } else {
-                    $topic->update(['categories' => ""]);
-                }
+            if (
+                $request->input('categories') == null &&
+                $request->has('category') &&
+                $request->input('category') != null
+            ) {
+                $request->merge(['categories' => $request->input('category')]);
             }
+
             $data = array_filter($request->all());
             $topic->update($data);
             DB::commit();
