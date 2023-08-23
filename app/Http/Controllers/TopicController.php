@@ -57,10 +57,15 @@ class TopicController extends Controller
 
         try {
             $this->validate($req, [
-                'name' => 'required',
+                'name' => [
+                    'required',
+                    'not_regex:/[&\s]/',
+                ],
                 'sort' => 'required|integer',
                 'category' => '',
 
+            ], [
+                'name.not_regex' => 'Name field should not contain spaces or & characters.',
             ]);
             $name = strtolower($req->name);
             $category = $req->category;
@@ -88,7 +93,7 @@ class TopicController extends Controller
             LogErrorModel::create([
                 'message' => $e->getMessage(),
             ]);
-            return $this->errorResponseWithAlert('Failed to add the topic.');
+            return $this->errorResponseWithAlert($e->getMessage());
         }
     }
 
@@ -146,6 +151,10 @@ class TopicController extends Controller
             $request->validate(
                 [
                     'topic_id' => 'required',
+                    'name' => [
+                        'required',
+                        'not_regex:/[&\s]/',
+                    ],
                 ],
                 [
                     'topic_id' => 'Topic Id is Required'
