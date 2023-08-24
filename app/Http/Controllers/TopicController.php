@@ -152,7 +152,7 @@ class TopicController extends Controller
                 [
                     'topic_id' => 'required',
                     'name' => [
-                        'required',
+                        'nullable',
                         'not_regex:/[&\s]/',
                     ],
                 ],
