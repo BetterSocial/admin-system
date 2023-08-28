@@ -12,6 +12,7 @@ use App\Services\ImageService;
 use Exception;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use League\Csv\Reader;
@@ -70,7 +71,7 @@ class PostController extends Controller
             $csv->setHeaderOffset(0);
 
             $apiKey = $this->apiKeyService->getKey();
-
+            DB::beginTransaction();
             foreach ($csv as $record) {
                 $this->validateRecord($record);
 
@@ -108,9 +109,10 @@ class PostController extends Controller
                 CreatePostJob::dispatch($post, $apiKey)
                     ->delay(now()->addMinutes($record['delay_execution_time_in_minute']));
             }
-
+            DB::commit();
             return $this->progressResponseWithAlert('The upload Post is in process.');
         } catch (Throwable $th) {
+            DB::rollBack();
             LogModel::insertLog('upload-csv', $th->getMessage());
             return $this->errorResponseWithAlert($th->getMessage());
         }
