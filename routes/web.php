@@ -8,6 +8,7 @@ use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RssLinkController;
 use App\Http\Controllers\ShowPostListController;
+use App\Http\Controllers\StatusHealthController;
 use App\Http\Controllers\UsersAppController;
 use App\Http\Controllers\ViewUserController;
 use App\Http\Controllers\TopicController;
@@ -29,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+Route::get('/status-health/live', [StatusHealthController::class, 'live']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::delete('/post/comment/{commentId}', [PostController::class, 'deleteComment']);
