@@ -21,6 +21,16 @@ class UserApps extends Model
         'is_banned'
     ];
 
+    public function follower()
+    {
+        return $this->hasMany(UserFollowUserModel::class, 'user_id_follower', 'user_id');
+    }
+
+    public function Following()
+    {
+        return $this->hasMany(UserFollowUserModel::class, 'user_id_followed', 'user_id');
+    }
+
     public function followers()
     {
         return $this->hasMany(UserFollowUserModel::class, 'user_id_follower', 'user_id');
@@ -51,6 +61,12 @@ class UserApps extends Model
                 2 => 'username',
                 3 => 'country_code',
                 4 => 'created_at',
+                5 => '',
+                6 => "followers",
+                7 => 'following',
+                8 => '',
+                9 => '',
+                10 => '',
             );
             $searchName = $req->input('username');
             $searchCountryCode = $req->input('countryCode');
@@ -104,6 +120,7 @@ class UserApps extends Model
                 'data' => $users,
             ]);
         } catch (\Throwable $th) {
+            file_put_contents('test.txt', $th->getMessage());
             throw $th;
         }
     }
