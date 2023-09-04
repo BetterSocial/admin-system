@@ -18,7 +18,8 @@ $(document).ready(function () {
       type: "POST",
       headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
       data: function (d) {
-        (d.user_id = id), (d.type = type);
+        d.user_id = id;
+        d.type = type;
       },
     },
     columns: [
