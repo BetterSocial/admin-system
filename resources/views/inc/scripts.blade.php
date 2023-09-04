@@ -1137,7 +1137,7 @@
         <script src="{{ asset('userFollow/userFollowTopic.js') }}"></script>
     @break
 
-    @case('User Follow user ')
+    @case('User Follow user')
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
         <script src="{{ asset('userFollow/userFollowUser.js') }}"></script>
     @break

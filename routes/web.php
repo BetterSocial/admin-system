@@ -11,6 +11,7 @@ use App\Http\Controllers\ShowPostListController;
 use App\Http\Controllers\UsersAppController;
 use App\Http\Controllers\ViewUserController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\UserFollowController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -112,8 +113,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-    Route::GET("/user-follow-detail", "UserFollowController@userFollowDetail");
-    Route::POST("/user/follow/list", "UserFollowController@getUserFollowList");
+    Route::GET("/user-follow-detail", [UserFollowController::class, 'userFollowDetail']);
+    Route::POST("/user/follow/list", [UserFollowController::class, 'getUserFollowList']);
 
     Route::GET("/change-password", "HomeController@changePasswordIndex");
 
