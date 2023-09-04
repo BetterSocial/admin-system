@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -24,9 +25,9 @@ class Topics extends Model
     {
         return $this->hasMany(UserTopicModel::class, 'topic_id', 'topic_id');
     }
-    public function posts()
+    public function posts(): BelongsToMany
     {
-        return $this->hasMany(PostModel::class, 'topic_id', 'topic_id');
+        return $this->belongsToMany(PostModel::class, 'post_topics', 'topic_id', 'post_id');
     }
 
     protected static function boot()

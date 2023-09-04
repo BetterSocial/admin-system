@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class PostModel extends Model
 {
@@ -19,8 +20,11 @@ class PostModel extends Model
         'audience_id',
         'duration',
         'visibility_location_id',
-        'topic_id',
         'post_content',
-
     ];
+
+    public function topics(): BelongsToMany
+    {
+        return $this->belongsToMany(Topics::class, 'post_topics', 'post_id', 'topic_id');
+    }
 }
