@@ -46,6 +46,7 @@
                                     <th>Posts</th>
                                     <th>Sessions</th>
                                     <th>User Score</th>
+                                    <th>Blocked by</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

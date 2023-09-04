@@ -51,6 +51,11 @@ class UserApps extends Model
         return $this->hasOne(UserScoreModel::class, 'user_id'); // Check the foreign and local keys
     }
 
+    public function blocked()
+    {
+        return $this->hasMany(UserBlockedUser::class, 'user_id_blocked', 'user_id');
+    }
+
 
     public static function getData(Request $req)
     {
@@ -67,6 +72,7 @@ class UserApps extends Model
                 8 => '',
                 9 => '',
                 10 => '',
+                11 => '',
             );
             $searchName = $req->input('username');
             $searchCountryCode = $req->input('countryCode');
@@ -82,7 +88,7 @@ class UserApps extends Model
                 'created_at'
             );
 
-            $query->with('followers', 'followeds');
+            $query->with('followers', 'followeds', 'blocked');
             if ($searchName !== null) {
                 $query->where('username', 'ILIKE', '%' . $searchName . '%');
             }
@@ -101,7 +107,7 @@ class UserApps extends Model
             $userIds = $users->pluck('user_id')->toArray();
             $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
 
-            $userScoreMap = []; // Array associative untuk menyimpan user_score berdasarkan user_id
+            $userScoreMap = [];
 
             foreach ($userScores as $userScore) {
                 $userScoreMap[$userScore->_id] = $userScore;
@@ -120,7 +126,6 @@ class UserApps extends Model
                 'data' => $users,
             ]);
         } catch (\Throwable $th) {
-            file_put_contents('test.txt', $th->getMessage());
             throw $th;
         }
     }

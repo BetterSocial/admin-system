@@ -174,6 +174,18 @@ $(document).ready(function () {
           return `<p> ${userScore} </p>`;
         },
       },
+      {
+        data: "user_score",
+        orderable: false,
+        render: function (data, type, row) {
+          let total = 0;
+          if (row.blocked.length >= 1) {
+            console.log(row.blocked.length);
+            total = row.blocked.length;
+          }
+          return `<p> ${total} </p>`;
+        },
+      },
     ],
   });
 
