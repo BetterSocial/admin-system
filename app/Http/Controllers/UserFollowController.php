@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Topics;
 use App\Models\UserApps;
-use DB;
 use Carbon\Carbon;
 use App\Models\UserTopics;
+use Illuminate\Support\Facades\DB;
 
 class UserFollowController extends Controller
 {
@@ -21,7 +21,7 @@ class UserFollowController extends Controller
             'category_name' => 'user_follow',
             'page_name' => 'User Follow Topic',
             'has_scrollspy' => 0,
-            'scrollspy_offset' =>'',
+            'scrollspy_offset' => '',
             'data'   => $topic,
         ]);
     }
@@ -45,9 +45,9 @@ class UserFollowController extends Controller
 
         $data = DB::SELECT($userTopic);
         $total = count($data);
-       
+
         $userTopic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-        
+
         $dataLimit = DB::SELECT($userTopic);
         return response()->json([
             'draw'            => $req->draw,
@@ -87,12 +87,11 @@ class UserFollowController extends Controller
         } else {
             $type = "FOLLOWING";
             $title = "User Following";
-
         }
 
         return view('pages.userFollow.user_follow_user', [
             'category_name' => 'user_follow',
-            'page_name' => 'User Follow user ',
+            'page_name' => 'User Follow user',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
             'type' => $type,
@@ -101,41 +100,53 @@ class UserFollowController extends Controller
         ]);
     }
 
+
     public function getUserFollowList(Request $req)
     {
         $columns = array(
-            // datatable column index  => database column name
             0 => 'user_id',
             1 => 'username',
             2 => 'real_name',
             3 => 'country_code',
         );
 
+        $userFollow = DB::table('user_follow_user')
+            ->select('B.user_id', 'B.username', 'B.real_name', 'B.country_code')
+            ->join('users as B', function ($join) use ($req) {
+                if ($req->type == 'FOLLOWERS') {
+                    $join->on('user_follow_user.user_id_follower', '=', 'B.user_id');
+                } else {
+                    $join->on('user_follow_user.user_id_followed', '=', 'B.user_id');
+                }
+            });
 
+        // Menambahkan kondisi WHERE
         if ($req->type == 'FOLLOWERS') {
-            $userFollow = "SELECT B.user_id,B.username,B.real_name,B.country_code FROM user_follow_user A
-            JOIN users B ON A.user_id_followed = B.user_id
-            where user_id_follower = '" . $req->user_id . "'  
-            GROUP BY B.user_id,B.username,B.real_name,B.country_code";
+            $userFollow->where('user_follow_user.user_id_followed', $req->user_id);
         } else {
-            $userFollow = "SELECT B.user_id,B.username,B.real_name,B.country_code FROM user_follow_user A
-            JOIN users B ON A.user_id_follower = B.user_id
-            where user_id_followed = '" . $req->user_id . "'  
-            GROUP BY B.user_id,B.username,B.real_name,B.country_code";
+            $userFollow->where('user_follow_user.user_id_follower', $req->user_id);
         }
 
+        // Menghitung total data tanpa paginasi
+        $total = $userFollow->count();
 
-        $data = DB::SELECT($userFollow);
-        $total = count($data);
-        
-        $userFollow .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-        
-        $dataLimit = DB::SELECT($userFollow);
+        // Handle sorting and pagination
+        $columnIdx = $req->order[0]['column'];
+        $columnName = $columns[$columnIdx];
+        $columnDir = $req->order[0]['dir'];
+
+        $userFollow = $userFollow
+            ->groupBy('B.user_id', 'B.username', 'B.real_name', 'B.country_code')
+            ->orderBy($columnName, $columnDir)
+            ->skip($req->start)
+            ->take($req->length)
+            ->get();
+
         return response()->json([
             'draw'            => $req->draw,
             'recordsTotal'    => $total,
             "recordsFiltered" => $total,
-            'data'            => $dataLimit,
+            'data'            => $userFollow,
         ]);
     }
 }
