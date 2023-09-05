@@ -108,6 +108,7 @@ $(document).ready(function () {
       data: function (d) {
         d.name = $("#name").val();
         d.category = $("#category").val();
+        console.log(d);
       },
     },
     error: function (xhr, error, thrown) {},
@@ -184,9 +185,14 @@ $(document).ready(function () {
         },
       },
       {
-        data: "total_posts",
+        data: "sign",
         render: function (data, type, row) {
-          return data;
+          console.log(row);
+          let total = 0;
+          if (row.posts.length >= 1) {
+            total = row.posts.length;
+          }
+          return total;
         },
       },
       {
