@@ -46,7 +46,7 @@
                                     <th>Posts</th>
                                     <th>Sessions</th>
                                     <th>User Score</th>
-                                    <th>Blocked by</th>
+                                    <th>Blocked (signed:2/anon:1)</th>
                                     <th>Topics</th>
                                 </tr>
                             </thead>
