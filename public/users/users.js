@@ -180,10 +180,27 @@ $(document).ready(function () {
         render: function (data, type, row) {
           let total = 0;
           if (row.blocked.length >= 1) {
-            console.log(row.blocked.length);
             total = row.blocked.length;
           }
           return `<p> ${total} </p>`;
+        },
+      },
+      {
+        data: "user_topics",
+        orderable: false,
+        render: function (data, type, row) {
+          let text = "";
+          if (row.user_topics.length >= 1) {
+            console.log(data);
+            let item = "";
+            for (let index = 0; index < row.user_topics.length; index++) {
+              const element = row.user_topics[index];
+              item += "<li>" + element.topic_name + "</li>";
+            }
+            text = "<ul>" + item + "</ul>";
+          }
+
+          return `<p> ${text} </p>`;
         },
       },
     ],
