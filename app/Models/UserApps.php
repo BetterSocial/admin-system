@@ -18,7 +18,22 @@ class UserApps extends Model
     const UPDATED_AT    = 'updated_at';
 
     protected $fillable = [
-        'is_banned'
+        'human_id',
+        'country_code',
+        'is_banned',
+        'username',
+        'real_name',
+        'last_active_at',
+        'status',
+        'profile_pic_path',
+        'profile_pic_asset_id',
+        'profile_pic_public_id',
+        'bio',
+        'is_anonymous',
+        'encrypted',
+        'allow_anon_dm',
+        'only_received_dm_from_user_following',
+        'is_backdoor_user',
     ];
 
     public function follower()
