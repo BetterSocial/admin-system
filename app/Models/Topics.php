@@ -166,9 +166,9 @@ class Topics extends Model
                 }, 'total_user_topics')
                 ->selectSub(function ($query) {
                     $query->selectRaw('count(*)')
-                        ->from('post_topics') // Ganti sesuai nama tabel pivot yang digunakan
-                        ->whereRaw('post_topics.topic_id = topics.topic_id') // Sesuaikan nama kolom yang digunakan sebagai kunci asing
-                        ->groupBy('post_topics.topic_id'); // Sesuaikan nama kolom yang digunakan sebagai kunci asing
+                        ->from('post_topics')
+                        ->whereRaw('post_topics.topic_id = topics.topic_id')
+                        ->groupBy('post_topics.topic_id');
                 }, 'total_posts')
                 ->whereNull('topics.deleted_at');
 
