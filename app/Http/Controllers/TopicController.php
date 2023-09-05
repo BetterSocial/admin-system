@@ -63,6 +63,7 @@ class TopicController extends Controller
                 ],
                 'sort' => 'required|integer',
                 'category' => '',
+                'file' => 'nullable',
 
             ], [
                 'name.not_regex' => 'Name field should not contain spaces or & characters.',
@@ -74,9 +75,16 @@ class TopicController extends Controller
             if ($check > 0) {
                 return $this->errorResponseWithAlert("A topic with the name '$name' already exists.");
             }
-            $req->merge([
-                'icon_path' => 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-            ]);
+            if ($req->hasFile('file')) {
+                $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
+                $req->merge([
+                    'icon_path' => $response
+                ]);
+            } else {
+                $req->merge([
+                    'icon_path' => 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
+                ]);
+            }
 
             DB::beginTransaction();
             Topics::create($req->merge([
