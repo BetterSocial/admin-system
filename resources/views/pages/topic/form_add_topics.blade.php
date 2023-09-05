@@ -55,7 +55,7 @@
                                     <label class="custom-file-container__custom-file">
                                         <input id=file type="file"
                                             class="custom-file-container__custom-file__custom-file-input"
-                                            accept="image/x-png">
+                                            accept="image/x-png" name="file">
                                         <input type="hidden" name="MAX_FILE_SIZE" value="1024" />
                                         <span class="custom-file-container__custom-file__custom-file-control"></span>
                                     </label>
