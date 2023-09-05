@@ -47,6 +47,7 @@
                                     <th>Sessions</th>
                                     <th>User Score</th>
                                     <th>Blocked by</th>
+                                    <th>Topics</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

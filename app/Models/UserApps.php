@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 
 class UserApps extends Model
@@ -58,7 +59,7 @@ class UserApps extends Model
 
     public function userTopics()
     {
-        return $this->hasMany(UserTopicModel::class, 'user_id', 'user_id');
+        return $this->hasMany(UserTopicModel::class,  'user_id', 'user_id');
     }
 
     public function userScore()
@@ -103,7 +104,16 @@ class UserApps extends Model
                 'created_at'
             );
 
-            $query->with('followers', 'followeds', 'blocked');
+            $query->with([
+                'followers',
+                'followeds',
+                'blocked',
+                'userTopics' => function ($query) {
+                    $query->join('topics', 'user_topics.topic_id', '=', 'topics.topic_id')
+                        ->select('topics.name as topic_name', 'user_topics.*');
+                }
+            ]);
+
             if ($searchName !== null) {
                 $query->where('username', 'ILIKE', '%' . $searchName . '%');
             }
