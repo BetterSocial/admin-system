@@ -23,7 +23,6 @@
                         </div>
                         <div class="col-lg-2">
                             @unlessrole('viewer')
-                                <!-- <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b style="color:white">Download CSV</b></button> -->
                                 <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b
                                         style="color:white">Download CSV</b></button>
                             @endunlessrole
