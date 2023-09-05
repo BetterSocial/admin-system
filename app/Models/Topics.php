@@ -183,7 +183,8 @@ class Topics extends Model
 
             $total = $query->count();
 
-            $query->orderBy($columns[$orderColumnIndex], $orderDirection)
+            $query
+                ->orderBy($columns[$orderColumnIndex], $orderDirection)
                 ->offset($start)
                 ->limit($length);
 
