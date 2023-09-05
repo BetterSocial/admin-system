@@ -166,13 +166,13 @@ class Topics extends Model
                 }, 'total_user_topics')
                 ->selectSub(function ($query) {
                     $query->selectRaw('count(*)')
-                        ->from('posts')
-                        ->whereRaw('posts.topic_id = topics.topic_id')
-                        ->groupBy('posts.topic_id');
+                        ->from('post_topics') // Ganti sesuai nama tabel pivot yang digunakan
+                        ->whereRaw('post_topics.topic_id = topics.topic_id') // Sesuaikan nama kolom yang digunakan sebagai kunci asing
+                        ->groupBy('post_topics.topic_id'); // Sesuaikan nama kolom yang digunakan sebagai kunci asing
                 }, 'total_posts')
                 ->whereNull('topics.deleted_at');
 
-            $query->with('userTopics');
+            $query->with('userTopics', 'posts');
             if ($searchName !== null) {
                 $query->where('topics.name', 'ILIKE', '%' . $searchName . '%');
             }
