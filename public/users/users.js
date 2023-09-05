@@ -191,15 +191,11 @@ $(document).ready(function () {
         render: function (data, type, row) {
           let text = "";
           if (row.user_topics.length >= 1) {
-            console.log(data);
-            let item = "";
             for (let index = 0; index < row.user_topics.length; index++) {
               const element = row.user_topics[index];
-              item += "<li>" + element.topic_name + "</li>";
+              text += element.topic_name + ", ";
             }
-            text = "<ul>" + item + "</ul>";
           }
-
           return `<p> ${text} </p>`;
         },
       },
