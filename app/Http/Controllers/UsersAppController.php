@@ -106,7 +106,6 @@ class UsersAppController extends Controller
     public function userDetailView(Request $req)
     {
         $user = UserApps::find($req->user_id);
-
         return view('pages.users.userDetail', [
             'category_name' => 'view_users',
             'page_name' => 'User Detail ',
