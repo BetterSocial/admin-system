@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\UserApps;
+use App\Models\UserScoreModel;
 use App\Services\ChatGetStreamService;
 use App\Services\FeedGetStreamService;
 use App\Services\UserService;
@@ -105,10 +106,11 @@ class UsersAppController extends Controller
 
     public function userDetailView(Request $req)
     {
-        $user = UserApps::find($req->user_id);
+        $userId = $req->user_id;
+        $user = UserApps::getUserDetail($userId);
         return view('pages.users.userDetail', [
             'category_name' => 'view_users',
-            'page_name' => 'User Detail ',
+            'page_name' => 'User Detail',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
             'data'   => $user,

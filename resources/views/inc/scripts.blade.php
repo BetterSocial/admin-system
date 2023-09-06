@@ -1207,6 +1207,16 @@
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
     @break
 
+    @case('User Detail')
+        <script src=https://cdn.jsdelivr.net/npm/pretty-print-json@2.0/dist/pretty-print-json.min.js></script>
+        <script src="{{ asset('users/user-detail.js') }}"></script>
+        <script>
+            const userData = @json($data);
+            const elem = document.getElementById("account");
+            elem.innerHTML = prettyPrintJson.toHtml(userData);
+        </script>
+    @break
+
     @default
         <script>
             console.log('No custom script available.')

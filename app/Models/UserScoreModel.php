@@ -11,6 +11,7 @@ class UserScoreModel extends Eloquent
     protected $primaryKey = '_id';
 
     protected $fillable = [
+        '_id',
         'user_score',
     ];
 }

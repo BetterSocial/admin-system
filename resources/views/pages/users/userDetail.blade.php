@@ -27,13 +27,6 @@
                         </div>
                         <div class="input-group mb-5">
                             <div class="col-md-2">
-                                <label>Real Name</label>
-                            </div>
-                            <input type="text" id="realName" class="form-control" value="{{ $data->real_name }}"
-                                disabled>
-                        </div>
-                        <div class="input-group mb-5">
-                            <div class="col-md-2">
                                 <label>Country Code</label>
                             </div>
                             <input type="text" id="countryCode" class="form-control" value="{{ $data->country_code }}"
@@ -139,6 +132,12 @@
                                 <input type="text" id="" class="form-control" value="false" disabled>
                             @endif
                         </div>
+
+                        @if ($data->user_score)
+                            <div class="input-group mb-5 mr-6 ml-6 row">
+                                <pre id=account class=json-container></pre>
+                            </div>
+                        @endif
                     </form>
                 </div>
             </div>
