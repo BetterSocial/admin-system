@@ -64,7 +64,7 @@ class UserApps extends Model
 
     public function userScore()
     {
-        return $this->hasOne(UserScoreModel::class, 'user_id'); // Check the foreign and local keys
+        return $this->hasOne(UserScoreModel::class, '_id'); // Check the foreign and local keys
     }
 
     public function blocked()
@@ -152,6 +152,19 @@ class UserApps extends Model
             ]);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public static function getUserDetail($userId)
+    {
+        try {
+
+            $user = UserApps::where('user_id', $userId)->first();
+            $userScores = UserScoreModel::find($userId);
+            $user->user_score = $userScores;
+            return $user;
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 }
