@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\TopicsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserAddTopicRequest;
 use App\Models\LogErrorModel;
 use App\Models\LogModel;
 use App\Models\Topics;
@@ -12,6 +13,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Maatwebsite\Excel\Facades\Excel;
@@ -56,23 +58,36 @@ class TopicController extends Controller
     {
 
         try {
-            $this->validate($req, [
-                'name' => [
-                    'required',
-                    'not_regex:/[&\s]/',
+            $validator = Validator::make(
+                $req->all(),
+                [
+                    'name' => [
+                        'required',
+                        'not_regex:/[&\s]/',
+                    ],
+                    'sort' => 'required|integer',
+                    'category' => '',
+                    'file' => [
+                        'nullable',
+                        'image',
+                        'dimensions:ratio=1/1,min_width=400,min_height=400,max_width=1500,max_height=1500',
+                    ],
+                    [
+                        'name.required' => 'Topic title cannot be empty.',
+                        'name.not_regex' => 'Topic title cannot contain & and space characters.',
+                        'sort.required' => 'Topic sort cannot be empty.',
+                        'sort.integer' => 'Topic sort must be an integer.',
+                        'file.nullable' => 'Image file cannot be empty.',
+                        'file.image' => 'Uploaded file must be an image.',
+                        'file.dimensions' => 'Image resolution must be between 400x400 and 1500x1500 pixels.',
+                    ]
                 ],
-                'sort' => 'required|integer',
-                'category' => '',
-                'file' => [
-                    'nullable',
-                    'image',
-                    'dimensions:ratio=1/1,min_width=400,min_height=400,max_width=1500,max_height=1500',
-                ],
+            );
 
-
-            ], [
-                'name.not_regex' => 'Name field should not contain spaces or & characters.',
-            ]);
+            if ($validator->fails()) {
+                $errors = $validator->errors()->messages();
+                return $this->errorResponseWithAlert(json_encode($errors, JSON_PRETTY_PRINT));
+            }
 
             $name = strtolower($req->name);
             $category = $req->category;
