@@ -63,11 +63,17 @@ class TopicController extends Controller
                 ],
                 'sort' => 'required|integer',
                 'category' => '',
-                'file' => 'nullable',
+                'file' => [
+                    'nullable',
+                    'image',
+                    'dimensions:ratio=1/1,min_width=400,min_height=400,max_width=1500,max_height=1500',
+                ],
+
 
             ], [
                 'name.not_regex' => 'Name field should not contain spaces or & characters.',
             ]);
+
             $name = strtolower($req->name);
             $category = $req->category;
             $check = DB::table('topics')->where([['name', '=', $name]])->count();
