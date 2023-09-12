@@ -72,21 +72,11 @@ class TopicController extends Controller
                         'image',
                         'dimensions:ratio=1/1,min_width=400,min_height=400,max_width=1500,max_height=1500',
                     ],
-                    [
-                        'name.required' => 'Topic title cannot be empty.',
-                        'name.not_regex' => 'Topic title cannot contain & and space characters.',
-                        'sort.required' => 'Topic sort cannot be empty.',
-                        'sort.integer' => 'Topic sort must be an integer.',
-                        'file.nullable' => 'Image file cannot be empty.',
-                        'file.image' => 'Uploaded file must be an image.',
-                        'file.dimensions' => 'Image resolution must be between 400x400 and 1500x1500 pixels.',
-                    ]
                 ],
             );
 
             if ($validator->fails()) {
-                $errors = $validator->errors()->messages();
-                return $this->errorResponseWithAlert(json_encode($errors, JSON_PRETTY_PRINT));
+                throw new ValidationException($validator);
             }
 
             $name = strtolower($req->name);
@@ -118,11 +108,17 @@ class TopicController extends Controller
             return $this->successResponseWithAlert('Successfully added the topic.', 'topic');
         } catch (Exception $e) {
             DB::rollBack();
+            $message = $e->getMessage();
+            if ($e  instanceof ValidationException) {
+
+                $errors = $validator->errors()->messages();
+                $message = json_encode($errors, JSON_PRETTY_PRINT);
+            }
             LogModel::insertLog('add-topics', 'error add topic with error' . $e->getMessage());
             LogErrorModel::create([
                 'message' => $e->getMessage(),
             ]);
-            return $this->errorResponseWithAlert($e->getMessage());
+            return $this->errorResponseWithAlert($message);
         }
     }
 
