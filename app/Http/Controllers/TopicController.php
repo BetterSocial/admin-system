@@ -93,10 +93,6 @@ class TopicController extends Controller
                 $req->merge([
                     'icon_path' => $response
                 ]);
-            } else {
-                $req->merge([
-                    'icon_path' => 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-                ]);
             }
 
             DB::beginTransaction();
