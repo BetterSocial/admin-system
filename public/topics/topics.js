@@ -150,8 +150,7 @@ $(document).ready(function() {
           if (icon != "" && icon != " " && icon != null) {
             img = '<img src="' + icon + '" width="30" height="20" />';
           } else {
-            img =
-              '<img src="https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png" width="30" height="20">';
+            img = "No Icon";
           }
           return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${item})'>${img}</button>`;
         },
