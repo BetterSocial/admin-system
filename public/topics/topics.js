@@ -4,6 +4,18 @@ let categories = [];
 
 let currentLimitTopic = 0;
 
+function cleanCode() {
+  $(this)
+    .find("input")
+    .val("");
+  $(this)
+    .find("select")
+    .prop("selectedIndex", 0);
+  $(this)
+    .find("textarea")
+    .val("");
+}
+
 async function getCurrentLimitTopic() {
   try {
     const response = await fetch("/topic/limit", {
@@ -78,7 +90,6 @@ function signCategory(topic, sign) {
 }
 
 function updateImage(item) {
-  console.log(item);
   $(".topic-id").val(item.topic_id);
   $("#modalChangeIcon").modal("show");
 }
@@ -250,15 +261,7 @@ $(document).ready(function() {
         if (data.status === "success") {
           $("#modalTopicSort").modal("hide");
           $("#modalTopicSort").on("hidden.bs.modal", function() {
-            $(this)
-              .find("input")
-              .val("");
-            $(this)
-              .find("select")
-              .prop("selectedIndex", 0);
-            $(this)
-              .find("textarea")
-              .val("");
+            cleanCode();
           });
 
           getNewCategory();
@@ -321,15 +324,7 @@ $(document).ready(function() {
         if (data.status === "success") {
           $("#detailCategory").modal("hide");
           $("#detailCategory").on("hidden.bs.modal", function() {
-            $(this)
-              .find("input")
-              .val("");
-            $(this)
-              .find("select")
-              .prop("selectedIndex", 0);
-            $(this)
-              .find("textarea")
-              .val("");
+            cleanCode();
           });
 
           getNewCategory();
@@ -377,15 +372,7 @@ $(document).ready(function() {
         if (data.status === "success") {
           $("#modalTopicLimit").modal("hide");
           $("#modalTopicLimit").on("hidden.bs.modal", function() {
-            $(this)
-              .find("input")
-              .val("");
-            $(this)
-              .find("select")
-              .prop("selectedIndex", 0);
-            $(this)
-              .find("textarea")
-              .val("");
+            cleanCode();
           });
           getCurrentLimitTopic();
           return Swal.fire({
