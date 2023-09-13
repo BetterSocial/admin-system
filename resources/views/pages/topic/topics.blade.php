@@ -327,7 +327,7 @@
                             </label>
                             <div class="custom-file-container__image-preview"></div>
                         </div>
-                        <input type="text" class="topic-id" name="id">
+                        <input type="text" class="topic-id" name="id" hidden>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
