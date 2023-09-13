@@ -26,6 +26,8 @@ class TopicController extends Controller
      * @return void
      */
 
+    private $validationId = 'required|exists:topics,topic_id';
+
 
     public function index(Request $request)
     {
@@ -223,7 +225,7 @@ class TopicController extends Controller
         try {
 
             $request->validate([
-                'topic_id' => 'required|exists:topics,topic_id',
+                'topic_id' => $this->validationId,
             ], [
                 'topic_id.required' => 'Topic ID is required',
                 'topic_id.exists' => 'Topic ID not found',
@@ -247,7 +249,7 @@ class TopicController extends Controller
     {
         try {
             $request->validate([
-                'topic_id' => 'required|exists:topics,topic_id',
+                'topic_id' => $this->validationId,
             ], [
                 'topic_id.required' => 'Topic ID is required',
                 'topic_id.exists' => 'Topic ID not found',
@@ -291,7 +293,7 @@ class TopicController extends Controller
             $validator = Validator::make(
                 $request->all(),
                 [
-                    'id' => 'required|exists:topics,topic_id',
+                    'id' => $this->validationId,
                     'file' => [
                         'required',
                         'image',
