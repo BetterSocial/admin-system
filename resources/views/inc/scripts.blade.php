@@ -1109,6 +1109,10 @@
 
     @case('topics')
         {{-- Table Datatable topics --}}
+        <script src="{{ asset('plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
+        <script>
+            var firstUpload = new FileUploadWithPreview('myFirstImage')
+        </script>
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
         <script src="{{ asset('topics/topics.js') }}"></script>
     @break

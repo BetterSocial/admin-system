@@ -301,4 +301,41 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalChangeIcon" tabindex="1" aria-labelledby="detailModalLabelLimit"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('topic.update-image') }}" method="POST" id="formSameTopic"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabelLimit">Changing the icon in the topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="custom-file-container" data-upload-id="myFirstImage">
+                            <label>Icon <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                    title="Clear Image">x</a></label>
+                            <label class="custom-file-container__custom-file">
+                                <input id=file type="file"
+                                    class="custom-file-container__custom-file__custom-file-input" accept="image/x-png"
+                                    name="file">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="1024" />
+                                <span class="custom-file-container__custom-file__custom-file-control"></span>
+                            </label>
+                            <div class="custom-file-container__image-preview"></div>
+                        </div>
+                        <input type="text" class="topic-id" name="id">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category"
+                            onclick="confirm('Are You sure?')">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

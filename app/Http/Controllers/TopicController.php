@@ -284,4 +284,54 @@ class TopicController extends Controller
             return $this->errorResponseWithAlert('Failed to delete the same topic.');
         }
     }
+
+    public function updateImage(Request $request)
+    {
+        try {
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'id' => 'required|exists:topics,topic_id',
+                    'file' => [
+                        'required',
+                        'image',
+                        'dimensions:ratio=1/1,min_width=400,min_height=400,max_width=1500,max_height=1500',
+                    ],
+                ],
+            );
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
+            if ($request->hasFile('file')) {
+                $response =  $request->file->storeOnCloudinary('icons')->getSecurePath();
+                $request->merge([
+                    'icon_path' => $response
+                ]);
+            }
+
+            DB::beginTransaction();
+            $topic = Topics::find($request->input('id'));
+            $topic->update([
+                'icon_path' => $response
+            ]);
+            LogModel::insertLog('edit-topic', 'success changed icon topic');
+            DB::commit();
+            return $this->successResponseWithAlert('Successfully changed the icon in the topic.', 'topic');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            $message = $e->getMessage();
+            if ($e  instanceof ValidationException) {
+
+                $errors = $validator->errors()->messages();
+                $message = json_encode($errors, JSON_PRETTY_PRINT);
+            }
+            LogModel::insertLog('add-topics', 'error add topic with error' . $e->getMessage());
+            LogErrorModel::create([
+                'message' => $e->getMessage(),
+            ]);
+            return $this->errorResponseWithAlert($message);
+        }
+    }
 }

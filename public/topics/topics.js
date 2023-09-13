@@ -16,9 +16,7 @@ async function getCurrentLimitTopic() {
     if (res.status === "success") {
       currentLimitTopic = res.data.limit;
     }
-  } catch (error) {
-    console.log("error", error);
-  }
+  } catch (error) {}
 }
 
 async function getCategory() {
@@ -79,8 +77,14 @@ function signCategory(topic, sign) {
   }
 }
 
-$(document).ready(function () {
-  $(".btn-limit-topic").click(function () {
+function updateImage(item) {
+  console.log(item);
+  $(".topic-id").val(item.topic_id);
+  $("#modalChangeIcon").modal("show");
+}
+
+$(document).ready(function() {
+  $(".btn-limit-topic").click(function() {
     $(".current-limit-topic").val(currentLimitTopic);
     $("#modalTopicLimit").modal("show");
   });
@@ -105,13 +109,12 @@ $(document).ready(function () {
       url: "/topics/data",
       type: "POST",
       headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
-      data: function (d) {
+      data: function(d) {
         d.name = $("#name").val();
         d.category = $("#category").val();
-        console.log(d);
       },
     },
-    error: function (xhr, error, thrown) {},
+    error: function(xhr, error, thrown) {},
     columns: [
       {
         data: "topic_id",
@@ -120,7 +123,7 @@ $(document).ready(function () {
       {
         data: "name",
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
                 `;
@@ -129,19 +132,24 @@ $(document).ready(function () {
       {
         data: "icon_path",
         orderable: false,
-        render: function (data, type, row) {
-          if (data != "" || data != " " || data != null) {
-            return '<img src="' + data + '" width="30" height="20" />';
+        render: function(data, type, row) {
+          let icon = row.icon_path;
+          let img = "";
+          let item = JSON.stringify(row);
+          if (icon != "" && icon != " " && icon != null) {
+            img = '<img src="' + icon + '" width="30" height="20" />';
           } else {
-            return '<img src="" width="30" height="20">';
+            img =
+              '<img src="https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png" width="30" height="20">';
           }
+          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${item})'>${img}</button>`;
         },
         defaultContent: "No Icon",
       },
       {
         data: "categories",
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           let value = "";
           let item = JSON.stringify(row);
           value += `<button style="border: none; background: transparent; width: 100%; height: 100%" onclick='detailCategory(${item})' >`;
@@ -158,7 +166,7 @@ $(document).ready(function () {
       {
         data: "sort",
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           let value = "";
           let item = JSON.stringify(row);
           value += `<button style="border: none; background: transparent" onclick='showSortTopic(${item})' >`;
@@ -170,7 +178,7 @@ $(document).ready(function () {
       },
       {
         data: "followers",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           return (
             " <a href='/follow-topics?topic_id=" +
             row.topic_id +
@@ -180,14 +188,13 @@ $(document).ready(function () {
       },
       {
         data: "total_user_topics",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           return data;
         },
       },
       {
         data: "sign",
-        render: function (data, type, row) {
-          console.log(row);
+        render: function(data, type, row) {
           let total = 0;
           if (row.posts.length >= 1) {
             total = row.posts.length;
@@ -197,7 +204,7 @@ $(document).ready(function () {
       },
       {
         data: "sign",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           let item = JSON.stringify(row);
           if (row.sign) {
             return `<button class="btn btn-danger btn-delete" onclick='signCategory(${item}, 0)'>Remove from OB</button>`;
@@ -209,19 +216,19 @@ $(document).ready(function () {
       {
         data: "flg_show",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           return "<div></div>";
         },
       },
     ],
   });
 
-  $("#search").on("submit", function (e) {
+  $("#search").on("submit", function(e) {
     dataTable.draw();
     e.preventDefault();
   });
 
-  $("#formTopicSort").submit(function (e) {
+  $("#formTopicSort").submit(function(e) {
     e.preventDefault();
     var form = $(this);
     var url = form.attr("action");
@@ -239,13 +246,19 @@ $(document).ready(function () {
       type: "PUT",
       url: url,
       data: data,
-      success: function (data) {
+      success: function(data) {
         if (data.status === "success") {
           $("#modalTopicSort").modal("hide");
-          $("#modalTopicSort").on("hidden.bs.modal", function () {
-            $(this).find("input").val("");
-            $(this).find("select").prop("selectedIndex", 0);
-            $(this).find("textarea").val("");
+          $("#modalTopicSort").on("hidden.bs.modal", function() {
+            $(this)
+              .find("input")
+              .val("");
+            $(this)
+              .find("select")
+              .prop("selectedIndex", 0);
+            $(this)
+              .find("textarea")
+              .val("");
           });
 
           getNewCategory();
@@ -263,7 +276,7 @@ $(document).ready(function () {
           });
         }
       },
-      error: function (xhr, status, error) {
+      error: function(xhr, status, error) {
         return Swal.fire({
           icon: "error",
           title: xhr.statusText,
@@ -273,7 +286,7 @@ $(document).ready(function () {
     });
   });
 
-  $("#modal-category").submit(function (e) {
+  $("#modal-category").submit(function(e) {
     e.preventDefault();
     var form = $(this);
     var url = form.attr("action");
@@ -304,13 +317,19 @@ $(document).ready(function () {
       type: "PUT",
       url: url,
       data: data,
-      success: function (data) {
+      success: function(data) {
         if (data.status === "success") {
           $("#detailCategory").modal("hide");
-          $("#detailCategory").on("hidden.bs.modal", function () {
-            $(this).find("input").val("");
-            $(this).find("select").prop("selectedIndex", 0);
-            $(this).find("textarea").val("");
+          $("#detailCategory").on("hidden.bs.modal", function() {
+            $(this)
+              .find("input")
+              .val("");
+            $(this)
+              .find("select")
+              .prop("selectedIndex", 0);
+            $(this)
+              .find("textarea")
+              .val("");
           });
 
           getNewCategory();
@@ -328,7 +347,7 @@ $(document).ready(function () {
           });
         }
       },
-      error: function (xhr, status, error) {
+      error: function(xhr, status, error) {
         return Swal.fire({
           icon: "error",
           title: xhr.statusText,
@@ -338,12 +357,11 @@ $(document).ready(function () {
     });
   });
 
-  $("#formTopicLimit").submit(function (e) {
+  $("#formTopicLimit").submit(function(e) {
     e.preventDefault();
     const form = $(this);
     const url = form.attr("action");
     let limit = $("#limitTopic").val();
-    console.log("limit", limit);
     let data = {
       limit: limit,
     };
@@ -355,13 +373,19 @@ $(document).ready(function () {
       type: "POST",
       url: url,
       data: data,
-      success: function (data) {
+      success: function(data) {
         if (data.status === "success") {
           $("#modalTopicLimit").modal("hide");
-          $("#modalTopicLimit").on("hidden.bs.modal", function () {
-            $(this).find("input").val("");
-            $(this).find("select").prop("selectedIndex", 0);
-            $(this).find("textarea").val("");
+          $("#modalTopicLimit").on("hidden.bs.modal", function() {
+            $(this)
+              .find("input")
+              .val("");
+            $(this)
+              .find("select")
+              .prop("selectedIndex", 0);
+            $(this)
+              .find("textarea")
+              .val("");
           });
           getCurrentLimitTopic();
           return Swal.fire({
@@ -377,10 +401,7 @@ $(document).ready(function () {
           });
         }
       },
-      error: function (xhr, status, error) {
-        console.log("Error: " + error);
-        console.log("Status: " + status);
-        console.log(xhr);
+      error: function(xhr, status, error) {
         return Swal.fire({
           icon: "error",
           title: xhr.statusText,
@@ -405,7 +426,7 @@ function showTopic(topicId) {
     contentType: false,
     processData: false,
     url: "/show/topics",
-    success: function (data) {
+    success: function(data) {
       if (data.success) {
         dataTable.ajax.reload(null, false);
       } else {
@@ -417,7 +438,7 @@ function showTopic(topicId) {
         });
       }
     },
-    error: function (data) {
+    error: function(data) {
       dataTable.ajax.reload(null, false);
       return Swal.fire({
         icon: "error",
