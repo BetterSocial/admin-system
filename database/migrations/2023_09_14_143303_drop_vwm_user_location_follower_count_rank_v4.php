@@ -12,6 +12,7 @@ class DropVwmUserLocationFollowerCountRankV4 extends Migration
      * @return void
      */
     public function up()
+    // Drop materialized view v4
     {
         DB::statement('DROP MATERIALIZED VIEW IF EXISTS vwm_user_location_follower_count');
     }
@@ -22,6 +23,7 @@ class DropVwmUserLocationFollowerCountRankV4 extends Migration
      * @return void
      */
     public function down()
+    // Create materialized view v4 again
     {
         DB::statement("
         CREATE MATERIALIZED VIEW vwm_user_location_follower_count

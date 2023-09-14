@@ -12,6 +12,7 @@ class CreateVwmUserLocationFollowerCountV5 extends Migration
      * @return void
      */
     public function up()
+    // Create materialized view v5
     {
         DB::statement("
         CREATE MATERIALIZED VIEW vwm_user_location_follower_count
