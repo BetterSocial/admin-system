@@ -20,6 +20,15 @@
                                 </div>
                             </form>
                         </div>
+                        <div class="col-lg-10 mt-4">
+                            <form class="form-inline" method="POST" id="searchMessage">
+                                <div class="form-group">
+                                    <input type="text" id="message" class="form-control" placeholder="Search" required>
+                                    &nbsp;&nbsp;
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div class="table-responsive mb-4 mt-4">
                         <table id="tablePostBlock" class="table table-hover" style="width:100%">
