@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMaterializedViewUserFollowerCount extends Migration
+class DropVwmUserFollowerCountV1 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,6 +14,17 @@ class CreateMaterializedViewUserFollowerCount extends Migration
      */
     public function up()
     {
+        DB::statement("DROP MATERIALIZED VIEW IF EXISTS vwm_user_follower_count");
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        // Create materialized view v1
         DB::statement("
             CREATE MATERIALIZED VIEW vwm_user_follower_count
             AS 
@@ -24,15 +35,5 @@ class CreateMaterializedViewUserFollowerCount extends Migration
             GROUP BY A.user_id_followed
             WITH DATA
         ");
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        DB::statement("DROP MATERIALIZED VIEW IF EXISTS vwm_user_follower_count");
     }
 }
