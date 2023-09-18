@@ -485,8 +485,8 @@ const bannedUserByPostId = (postId) => {
   });
 };
 
-$(document).ready(function () {
-  $("#detailCommentModal").on("hide.bs.modal", function (e) {
+$(document).ready(function() {
+  $("#detailCommentModal").on("hide.bs.modal", function(e) {
     let container = document.getElementById("cardBodyComment");
     while (container.firstChild) {
       container.removeChild(container.lastChild);
@@ -506,12 +506,13 @@ $(document).ready(function () {
       url: "/post-blocks/data",
       type: "POST",
       headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
-      data: function (d) {
+      data: function(d) {
         d.total = $("#total").val();
+        d.message = $("#message").val();
         console.log(d);
       },
     },
-    error: function (xhr, error, thrown) {
+    error: function(xhr, error, thrown) {
       console.log("xhr", xhr);
       console.log("error", error);
       console.log("thrown", thrown);
@@ -526,7 +527,7 @@ $(document).ready(function () {
         data: "verb",
         orderable: false,
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           // console.log(row);
           if (row.anonimity) {
             return (
@@ -546,7 +547,7 @@ $(document).ready(function () {
         data: "message",
         orderable: false,
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           let { images_url } = row;
           // message tab
           if (row.post_type === 1) {
@@ -568,7 +569,7 @@ $(document).ready(function () {
         data: "message",
         orderable: false,
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           // comments tab;
           let value = "";
           let { latest_reactions } = row;
@@ -594,7 +595,7 @@ $(document).ready(function () {
         data: "message",
         orderable: false,
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           let { images_url } = row;
           // image tab
           if (images_url.length > 1) {
@@ -619,7 +620,7 @@ $(document).ready(function () {
         data: "verb",
         orderable: false,
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           // poll options tab;
           let value = "";
           if (data === "poll") {
@@ -639,7 +640,7 @@ $(document).ready(function () {
         data: "id",
         orderable: true,
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           // upvote
           let { reaction_counts } = row;
           let upvote = reaction_counts.upvotes || 0;
@@ -653,7 +654,7 @@ $(document).ready(function () {
         data: "anonimity",
         orderable: true,
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           // downvote;
           let { reaction_counts } = row;
           let downvote = reaction_counts.downvotes || 0;
@@ -672,7 +673,7 @@ $(document).ready(function () {
         data: "post_type",
         orderable: false,
         className: "menufilter textfilter",
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           //status
           let isHide = false;
           if (row.is_hide) {
@@ -692,7 +693,7 @@ $(document).ready(function () {
       {
         data: "post_type",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           // action
           let isHide = false;
           if (row.is_hide) {
@@ -728,7 +729,13 @@ $(document).ready(function () {
     ],
   });
 
-  $("#search").on("submit", function (e) {
+  $("#searchMessage").on("submit", function(e) {
+    e.preventDefault();
+    dataTablePost.draw();
+    e.preventDefault();
+  });
+
+  $("#search").on("submit", function(e) {
     dataTablePost.draw();
     e.preventDefault();
   });

@@ -21,6 +21,7 @@ class PostModel extends Model
         'duration',
         'visibility_location_id',
         'post_content',
+        'getstream_activity_id',
     ];
 
     public function topics(): BelongsToMany

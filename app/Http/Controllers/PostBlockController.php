@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LogModel;
 use App\Models\Polling;
 use App\Models\PollingOption;
+use App\Models\PostModel;
 use App\Services\FeedGetStreamService;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
@@ -28,7 +29,6 @@ class PostBlockController extends Controller
      */
     public function index(Request $request)
     {
-
         return view('pages.postBlock.post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
@@ -45,6 +45,9 @@ class PostBlockController extends Controller
             $searchCategory = $req->input('category');
             $orderColumnIndex = (int) $req->input('order.0.column');
             $orderDirection = $req->input('order.0.dir', 'asc');
+            $message = $req->input('message');
+            $posts = PostModel::where('post_content', 'like', '%' . $message . '%')->whereNotNull('getstream_activity_id')->get();
+            $activityIds = $posts->pluck('getstream_activity_id')->toArray();
             $start = (int) $req->input('start', 0);
             $length = (int) $req->input('length', 10);
             $data = $this->getFeeds($start, $length);
