@@ -23,7 +23,6 @@
                         </div>
                         <div class="col-lg-2">
                             @unlessrole('viewer')
-                                <!-- <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b style="color:white">Download CSV</b></button> -->
                                 <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b
                                         style="color:white">Download CSV</b></button>
                             @endunlessrole
@@ -46,6 +45,8 @@
                                     <th>Posts</th>
                                     <th>Sessions</th>
                                     <th>User Score</th>
+                                    <th>Blocked (signed:2/anon:1)</th>
+                                    <th>Topics</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>

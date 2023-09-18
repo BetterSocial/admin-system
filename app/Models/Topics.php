@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -10,7 +11,6 @@ use Illuminate\Http\Request;
 class Topics extends Model
 {
 
-    use SoftDeletes;
     protected $table    = 'topics';
     protected $primaryKey = 'topic_id';
     protected $fillable = [
@@ -25,9 +25,9 @@ class Topics extends Model
     {
         return $this->hasMany(UserTopicModel::class, 'topic_id', 'topic_id');
     }
-    public function posts()
+    public function posts(): BelongsToMany
     {
-        return $this->hasMany(PostModel::class, 'topic_id', 'topic_id');
+        return $this->belongsToMany(PostModel::class, 'post_topics', 'topic_id', 'post_id');
     }
 
     protected static function boot()
@@ -110,13 +110,14 @@ class Topics extends Model
     {
         try {
             DB::beginTransaction();
-            if ($request->input('categories') == null) {
-                if ($request->has('category') && $request->input('category') != null) {
-                    $request->merge(['categories' => $request->input('category')]);
-                } else {
-                    $topic->update(['categories' => ""]);
-                }
+            if (
+                $request->input('categories') == null &&
+                $request->has('category') &&
+                $request->input('category') != null
+            ) {
+                $request->merge(['categories' => $request->input('category')]);
             }
+
             $data = array_filter($request->all());
             $topic->update($data);
             DB::commit();
@@ -165,13 +166,13 @@ class Topics extends Model
                 }, 'total_user_topics')
                 ->selectSub(function ($query) {
                     $query->selectRaw('count(*)')
-                        ->from('posts')
-                        ->whereRaw('posts.topic_id = topics.topic_id')
-                        ->groupBy('posts.topic_id');
+                        ->from('post_topics')
+                        ->whereRaw('post_topics.topic_id = topics.topic_id')
+                        ->groupBy('post_topics.topic_id');
                 }, 'total_posts')
                 ->whereNull('topics.deleted_at');
 
-            $query->with('userTopics');
+            $query->with('userTopics', 'posts');
             if ($searchName !== null) {
                 $query->where('topics.name', 'ILIKE', '%' . $searchName . '%');
             }
@@ -182,7 +183,8 @@ class Topics extends Model
 
             $total = $query->count();
 
-            $query->orderBy($columns[$orderColumnIndex], $orderDirection)
+            $query
+                ->orderBy($columns[$orderColumnIndex], $orderDirection)
                 ->offset($start)
                 ->limit($length);
 
@@ -197,6 +199,41 @@ class Topics extends Model
             return response()->json([
                 'error' => $th->getMessage(),
             ], 500);
+        }
+    }
+
+    public static function removeDuplicateTopicName($option)
+    {
+        try {
+            DB::beginTransaction();
+
+            $topicsWithSameName = self::select('name')
+                ->groupBy('name')
+                ->havingRaw('COUNT(*) > 1')
+                ->get();
+            if (count($topicsWithSameName) < 1) {
+                return false;
+            }
+            foreach ($topicsWithSameName as $topicWithSameName) {
+                $query = Topics::where('name', $topicWithSameName->name);
+
+                if ($option == 'latest') {
+                    $query->orderBy('created_at');
+                } else {
+                    $query->orderByDesc('created_at');
+                }
+
+                $duplicateTopics = $query->skip(1)->get();
+
+                // Hapus duplicate topics
+                $duplicateTopics->each->delete();
+            }
+
+            DB::commit();
+            return true;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
         }
     }
 }

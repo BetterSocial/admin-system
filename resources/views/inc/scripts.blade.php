@@ -1109,6 +1109,10 @@
 
     @case('topics')
         {{-- Table Datatable topics --}}
+        <script src="{{ asset('plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
+        <script>
+            var firstUpload = new FileUploadWithPreview('myFirstImage')
+        </script>
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
         <script src="{{ asset('topics/topics.js') }}"></script>
     @break
@@ -1137,7 +1141,7 @@
         <script src="{{ asset('userFollow/userFollowTopic.js') }}"></script>
     @break
 
-    @case('User Follow user ')
+    @case('User Follow user')
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
         <script src="{{ asset('userFollow/userFollowUser.js') }}"></script>
     @break
@@ -1205,6 +1209,16 @@
 
     @case('rss')
         <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
+    @break
+
+    @case('User Detail')
+        <script src=https://cdn.jsdelivr.net/npm/pretty-print-json@2.0/dist/pretty-print-json.min.js></script>
+        <script src="{{ asset('users/user-detail.js') }}"></script>
+        <script>
+            const userData = @json($data);
+            const elem = document.getElementById("account");
+            elem.innerHTML = prettyPrintJson.toHtml(userData);
+        </script>
     @break
 
     @default

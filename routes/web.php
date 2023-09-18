@@ -8,9 +8,11 @@ use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RssLinkController;
 use App\Http\Controllers\ShowPostListController;
+use App\Http\Controllers\StatusHealthController;
 use App\Http\Controllers\UsersAppController;
 use App\Http\Controllers\ViewUserController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\UserFollowController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +31,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
+Route::get('/status-health/live', [StatusHealthController::class, 'live']);
 
 Route::group(['middleware' => 'auth'], function () {
     Route::delete('/post/comment/{commentId}', [PostController::class, 'deleteComment']);
@@ -37,7 +40,8 @@ Route::group(['middleware' => 'auth'], function () {
     /*
      *  topics
      */
-    Route::get('/topics/index', [TopicController::class, 'index']);
+    Route::get('/topics/index', [TopicController::class, 'index'])->name('topic');
+    Route::post('/topics/image', [TopicController::class, 'updateImage'])->name('topic.update-image');
 
     Route::get('/create-topics', [CreateTopicController::class, 'index'])->name('topic.create');
     Route::POST('/topics/data', [TopicController::class, 'getData'])->name('masterTopics.data');
@@ -51,6 +55,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/topics/export/', [TopicController::class, 'export'])->name('topic.export');
     Route::post('topics/un-sign', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
     Route::post('topics/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
+    Route::post('/topic/remove-duplicate', [TopicController::class, 'removeDuplicate'])->name('topic.remove-duplicate');
 
 
 
@@ -100,7 +105,7 @@ Route::group(['middleware' => 'auth'], function () {
      *  Users Detail
      */
     Route::GET('/user-detail', 'UsersAppController@userDetail');
-    Route::GET('/user-detail-view', 'UsersAppController@userDetailView');
+    Route::GET('/user-detail-view', [UsersAppController::class, 'userDetailView']);
     Route::POST('/users/banned/{id}',  [UsersAppController::class, 'bannedUser']);
 
     //User Follow Data Topic
@@ -111,8 +116,8 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 
-    Route::GET("/user-follow-detail", "UserFollowController@userFollowDetail");
-    Route::POST("/user/follow/list", "UserFollowController@getUserFollowList");
+    Route::GET("/user-follow-detail", [UserFollowController::class, 'userFollowDetail']);
+    Route::POST("/user/follow/list", [UserFollowController::class, 'getUserFollowList']);
 
     Route::GET("/change-password", "HomeController@changePasswordIndex");
 

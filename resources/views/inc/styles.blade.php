@@ -693,8 +693,8 @@
         {{-- Starter Kit ALt menu --}}
         <style>
             /*
-                                                                    Just for demo purpose ---- Remove it.
-                                                                */
+                                       Just for demo purpose ---- Remove it.
+                                   */
             /*<starter kit design>*/
 
             .widget-one {}
@@ -719,8 +719,8 @@
         {{-- Starter Kit Boxed menu --}}
         <style>
             /*
-                                                                    The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                                                */
+                                       The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                   */
 
             body {
                 max-width: 1140px;
@@ -741,10 +741,10 @@
             }
 
             /*
-                                                                    ====================
-                                                                        IE Support
-                                                                    ====================
-                                                                */
+                                       ====================
+                                           IE Support
+                                       ====================
+                                   */
 
             @media all and (-ms-high-contrast: none),
             (-ms-high-contrast: active) {
@@ -754,8 +754,8 @@
             }
 
             /*
-                                                                    Just for demo purpose ---- Remove it.
-                                                                */
+                                       Just for demo purpose ---- Remove it.
+                                   */
             /*<starter kit design>*/
 
             .widget-one {}
@@ -775,11 +775,7 @@
     @break
 
     @case('breadcrumb')
-        {{-- Starter Kit Breadcrumb --}}
         <style>
-            /*
-                                                                    The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                                                */
             .page-title {
                 float: none;
                 margin-top: 0;
@@ -843,15 +839,6 @@
                 padding: 0px;
             }
 
-            .breadcrumb-one .breadcrumb-item+.breadcrumb-item::before {
-                color: #515365;
-                font-size: 0;
-                content: url('data:image/svg+xml, <svg xmlns="http://www.w3.org/2000/svg" width="15" height="16" viewBox="0 0 24 24" fill="none" stroke="%23555" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"></polyline></svg>');
-                vertical-align: text-top;
-                padding: 0 6px;
-            }
-
-
             @media(max-width: 575px) {
                 .page-header {
                     display: block;
@@ -864,12 +851,6 @@
                     margin-right: 0;
                 }
             }
-
-
-            /*
-                                                                    Just for demo purpose ---- Remove it.
-                                                                */
-            /*<starter kit design>*/
 
             .widget-one {}
 
@@ -1152,6 +1133,8 @@
     @break
 
     @case('topics')
+        <link href="{{ asset('plugins/file-upload/file-upload-with-preview.min.css') }}" rel="stylesheet"
+            type="text/css" />
         <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
     @break
@@ -1184,6 +1167,10 @@
 
     @case('show_post_list')
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/pages/user-post/userPost.css') }}">
+    @break
+
+    @case('User Detail')
+        <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@2.0/dist/css/pretty-print-json.css>
     @break
 
     @default

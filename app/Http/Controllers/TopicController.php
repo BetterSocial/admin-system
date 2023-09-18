@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\TopicsExport;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserAddTopicRequest;
 use App\Models\LogErrorModel;
 use App\Models\LogModel;
 use App\Models\Topics;
@@ -12,6 +13,8 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -22,6 +25,8 @@ class TopicController extends Controller
      *
      * @return void
      */
+
+    private $validationId = 'required|exists:topics,topic_id';
 
 
     public function index(Request $request)
@@ -55,39 +60,63 @@ class TopicController extends Controller
     {
 
         try {
-            $this->validate($req, [
-                'name' => 'required',
-                'sort' => 'required|integer',
-                'category' => 'required',
+            $validator = Validator::make(
+                $req->all(),
+                [
+                    'name' => [
+                        'required',
+                        'not_regex:/[&\s]/',
+                    ],
+                    'sort' => 'required|integer',
+                    'category' => '',
+                    'file' => [
+                        'nullable',
+                        'image',
+                        'dimensions:ratio=1/1,min_width=150,min_height=150,max_width=1500,max_height=1500',
+                    ],
+                ],
+            );
 
-            ]);
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
             $name = strtolower($req->name);
             $category = $req->category;
-            $check = DB::table('topics')->where([['name', '=', $name], ['categories', '=', $category]])->count();
+            $check = DB::table('topics')->where([['name', '=', $name]])->count();
 
             if ($check > 0) {
-                return $this->errorResponse('Data topic with name ' . $name . ' and category ' . $category . ' already exists', 400);
+                return $this->errorResponseWithAlert("A topic with the name '$name' already exists.");
             }
-            $req->merge([
-                'icon_path' => 'https://res.cloudinary.com/hpjivutj2/image/upload/v1617245336/Frame_66_1_xgvszh.png'
-            ]);
+            if ($req->hasFile('file')) {
+                $response =  $req->file->storeOnCloudinary('icons')->getSecurePath();
+                $req->merge([
+                    'icon_path' => $response
+                ]);
+            }
 
             DB::beginTransaction();
             Topics::create($req->merge([
                 'name' => $name,
-                'categories' => $category,
+                'categories' => $category ?? '',
                 'created_at' => Carbon::now()
             ])->all());
             LogModel::insertLog('add-topic', 'success add new topic');
             DB::commit();
-            return $this->successResponse('success create new topic');
+            return $this->successResponseWithAlert('Successfully added the topic.', 'topic');
         } catch (Exception $e) {
             DB::rollBack();
+            $message = $e->getMessage();
+            if ($e  instanceof ValidationException) {
+
+                $errors = $validator->errors()->messages();
+                $message = json_encode($errors, JSON_PRETTY_PRINT);
+            }
             LogModel::insertLog('add-topics', 'error add topic with error' . $e->getMessage());
             LogErrorModel::create([
                 'message' => $e->getMessage(),
             ]);
-            return $this->errorResponse($e->getMessage());
+            return $this->errorResponseWithAlert($message);
         }
     }
 
@@ -145,6 +174,10 @@ class TopicController extends Controller
             $request->validate(
                 [
                     'topic_id' => 'required',
+                    'name' => [
+                        'nullable',
+                        'not_regex:/[&\s]/',
+                    ],
                 ],
                 [
                     'topic_id' => 'Topic Id is Required'
@@ -188,7 +221,7 @@ class TopicController extends Controller
         try {
 
             $request->validate([
-                'topic_id' => 'required|exists:topics,topic_id',
+                'topic_id' => $this->validationId,
             ], [
                 'topic_id.required' => 'Topic ID is required',
                 'topic_id.exists' => 'Topic ID not found',
@@ -212,7 +245,7 @@ class TopicController extends Controller
     {
         try {
             $request->validate([
-                'topic_id' => 'required|exists:topics,topic_id',
+                'topic_id' => $this->validationId,
             ], [
                 'topic_id.required' => 'Topic ID is required',
                 'topic_id.exists' => 'Topic ID not found',
@@ -231,6 +264,72 @@ class TopicController extends Controller
             DB::rollBack();
             LogModel::insertLog('sign-category-topic', 'fail with error ' . $th->getMessage());
             return $this->errorResponseWithAlert('Fail Add Topic to OB');
+        }
+    }
+
+    public function removeDuplicate(Request $request)
+    {
+        try {
+            $request->validate([
+                'option' => 'required'
+            ]);
+            Topics::removeDuplicateTopicName($request->input('option'));
+            return $this->successResponseWithAlert('Successfully deleted the same topic');
+        } catch (\Throwable $th) {
+            if ($th instanceof ValidationException) {
+                return $this->errorResponseWithAlert('Option is required');
+            }
+            return $this->errorResponseWithAlert('Failed to delete the same topic.');
+        }
+    }
+
+    public function updateImage(Request $request)
+    {
+        try {
+            $validator = Validator::make(
+                $request->all(),
+                [
+                    'id' => $this->validationId,
+                    'file' => [
+                        'required',
+                        'image',
+                        'dimensions:ratio=1/1,min_width=150,min_height=150,max_width=1500,max_height=1500',
+                    ],
+                ],
+            );
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+
+            if ($request->hasFile('file')) {
+                $response =  $request->file->storeOnCloudinary('icons')->getSecurePath();
+                $request->merge([
+                    'icon_path' => $response
+                ]);
+            }
+
+            DB::beginTransaction();
+            $topic = Topics::find($request->input('id'));
+            $topic->update([
+                'icon_path' => $response
+            ]);
+            LogModel::insertLog('edit-topic', 'success changed icon topic');
+            DB::commit();
+            return $this->successResponseWithAlert('Successfully changed the icon in the topic.', 'topic');
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            $message = $e->getMessage();
+            if ($e  instanceof ValidationException) {
+
+                $errors = $validator->errors()->messages();
+                $message = json_encode($errors, JSON_PRETTY_PRINT);
+            }
+            LogModel::insertLog('add-topics', 'error add topic with error' . $e->getMessage());
+            LogErrorModel::create([
+                'message' => $e->getMessage(),
+            ]);
+            return $this->errorResponseWithAlert($message);
         }
     }
 }

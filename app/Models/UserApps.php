@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 
 class UserApps extends Model
@@ -18,8 +19,33 @@ class UserApps extends Model
     const UPDATED_AT    = 'updated_at';
 
     protected $fillable = [
-        'is_banned'
+        'human_id',
+        'country_code',
+        'is_banned',
+        'username',
+        'real_name',
+        'last_active_at',
+        'status',
+        'profile_pic_path',
+        'profile_pic_asset_id',
+        'profile_pic_public_id',
+        'bio',
+        'is_anonymous',
+        'encrypted',
+        'allow_anon_dm',
+        'only_received_dm_from_user_following',
+        'is_backdoor_user',
     ];
+
+    public function follower()
+    {
+        return $this->hasMany(UserFollowUserModel::class, 'user_id_follower', 'user_id');
+    }
+
+    public function Following()
+    {
+        return $this->hasMany(UserFollowUserModel::class, 'user_id_followed', 'user_id');
+    }
 
     public function followers()
     {
@@ -33,12 +59,17 @@ class UserApps extends Model
 
     public function userTopics()
     {
-        return $this->hasMany(UserTopicModel::class, 'user_id', 'user_id');
+        return $this->hasMany(UserTopicModel::class,  'user_id', 'user_id');
     }
 
     public function userScore()
     {
-        return $this->hasOne(UserScoreModel::class, 'user_id'); // Check the foreign and local keys
+        return $this->hasOne(UserScoreModel::class, '_id'); // Check the foreign and local keys
+    }
+
+    public function blocked()
+    {
+        return $this->hasMany(UserBlockedUser::class, 'user_id_blocked', 'user_id');
     }
 
 
@@ -51,6 +82,13 @@ class UserApps extends Model
                 2 => 'username',
                 3 => 'country_code',
                 4 => 'created_at',
+                5 => '',
+                6 => "followers",
+                7 => 'following',
+                8 => '',
+                9 => '',
+                10 => '',
+                11 => '',
             );
             $searchName = $req->input('username');
             $searchCountryCode = $req->input('countryCode');
@@ -66,7 +104,16 @@ class UserApps extends Model
                 'created_at'
             );
 
-            $query->with('followers', 'followeds');
+            $query->with([
+                'followers',
+                'followeds',
+                'blocked',
+                'userTopics' => function ($query) {
+                    $query->join('topics', 'user_topics.topic_id', '=', 'topics.topic_id')
+                        ->select('topics.name as topic_name', 'user_topics.*');
+                }
+            ]);
+
             if ($searchName !== null) {
                 $query->where('username', 'ILIKE', '%' . $searchName . '%');
             }
@@ -85,7 +132,7 @@ class UserApps extends Model
             $userIds = $users->pluck('user_id')->toArray();
             $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
 
-            $userScoreMap = []; // Array associative untuk menyimpan user_score berdasarkan user_id
+            $userScoreMap = [];
 
             foreach ($userScores as $userScore) {
                 $userScoreMap[$userScore->_id] = $userScore;
@@ -105,6 +152,19 @@ class UserApps extends Model
             ]);
         } catch (\Throwable $th) {
             throw $th;
+        }
+    }
+
+    public static function getUserDetail($userId)
+    {
+        try {
+
+            $user = UserApps::where('user_id', $userId)->first();
+            $userScores = UserScoreModel::find($userId);
+            $user->user_score = $userScores;
+            return $user;
+        } catch (\Throwable $th) {
+            //throw $th;
         }
     }
 }

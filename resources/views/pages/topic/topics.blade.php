@@ -256,4 +256,86 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalSameTopic" tabindex="1" aria-labelledby="detailModalLabelLimit"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('topic.remove-duplicate') }}" method="post" id="formSameTopic">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabelLimit">Remove the same topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="">
+                            <div id="cardCategory" class="">
+                                <div class="form-group">
+                                    <label for="topicSort">Which one will be deleted?</label>
+                                    <select class="form-control" name="option" id="" required>
+                                        <option value="">Select Option</option>
+                                        <option value="latest">The latest one</option>
+                                        <option value="oldest">The oldest one</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <p>"If you choose the latest one,
+                                all the latest topics will be deleted,
+                                leaving only the oldest
+                                topic. On the other hand, if you choose the oldest one,
+                                all the oldest topics will be
+                                deleted, leaving only the newest topic."
+                            </p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category"
+                            onclick="confirm('Are You sure?')">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalChangeIcon" tabindex="1" aria-labelledby="detailModalLabelLimit"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('topic.update-image') }}" method="POST" id="formSameTopic"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabelLimit">Changing the icon in the topic</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="custom-file-container" data-upload-id="myFirstImage">
+                            <label>Icon <a href="javascript:void(0)" class="custom-file-container__image-clear"
+                                    title="Clear Image">x</a></label>
+                            <label class="custom-file-container__custom-file">
+                                <input id=file type="file"
+                                    class="custom-file-container__custom-file__custom-file-input" accept="image/x-png"
+                                    name="file">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="1024" />
+                                <span class="custom-file-container__custom-file__custom-file-control"></span>
+                            </label>
+                            <div class="custom-file-container__image-preview"></div>
+                        </div>
+                        <input type="text" class="topic-id" name="id" hidden>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category"
+                            onclick="confirm('Are You sure?')">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
