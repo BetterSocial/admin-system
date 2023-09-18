@@ -23,7 +23,7 @@ class CreateVwmUserFollowerCountV2 extends Migration
             FROM user_follow_user A
             RIGHT OUTER JOIN users B 
             ON A.user_id_followed = B.user_id
-            WHERE B.encrypted IS NULL
+            WHERE B.is_anonymous = false
             GROUP BY A.user_id_followed, B.user_id
             WITH DATA
         ");
