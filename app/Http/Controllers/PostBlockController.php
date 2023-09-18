@@ -45,16 +45,19 @@ class PostBlockController extends Controller
             $searchCategory = $req->input('category');
             $orderColumnIndex = (int) $req->input('order.0.column');
             $orderDirection = $req->input('order.0.dir', 'asc');
-            $message = $req->input('message');
-            $posts = PostModel::where('post_content', 'like', '%' . $message . '%')->whereNotNull('getstream_activity_id')->get();
-            $activityIds = $posts->pluck('getstream_activity_id')->toArray();
+            $message = $req->input('message', null);
+            $activityIds = [];
+            if ($message) {
+                $posts = PostModel::where('post_content', 'like', '%' . $message . '%')->whereNotNull('getstream_activity_id')->get();
+                $activityIds = $posts->pluck('getstream_activity_id')->toArray();
+            }
             $start = (int) $req->input('start', 0);
             $length = (int) $req->input('length', 10);
-            $data = $this->getFeeds($start, $length);
+            $data = $this->getFeeds($start, $length, $activityIds);
             return response()->json([
                 'draw' => $draw,
-                'recordsTotal' => $req->input('total', 100),
-                'recordsFiltered' => $req->input('total', 100),
+                'recordsTotal' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
+                'recordsFiltered' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
                 'data' => $data,
             ]);
         } catch (\Throwable $th) {
@@ -63,26 +66,40 @@ class PostBlockController extends Controller
     }
 
 
-    private function getFeeds($offset = 0, $limit = 10)
+    private function getFeeds($offset = 0, $limit = 10, $searchId = [],)
     {
 
         try {
-
             $this->posts =  $this->getPostsByBlockedUser();
-            $data = [];
             $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
-            $options = [
-                'own' => true,
-                'recent' => true,
-                'counts' => true,
-                'counts',
-                'kinds',
-                'reactions.recent' => true
-            ];
             $feed = $client->feed('user', "bettersocial");
-            $response = $feed->getActivities($offset, $limit, $options, $enrich = true, $options);
-            $data =  $response["results"];
-
+            $data = [];
+            if (count($searchId) >= 1) {
+                foreach ($searchId as $key => $value) {
+                    $options = [
+                        'id_lte' => $value,
+                        'own' => true,
+                        'recent' => true,
+                        'counts' => true,
+                        'counts',
+                        'kinds',
+                        'reactions.recent' => true
+                    ];
+                    $response = $feed->getActivities(0, 1, $options, $enrich = true, $options);
+                    $data[] =  $response["results"][0];
+                }
+            } else {
+                $options = [
+                    'own' => true,
+                    'recent' => true,
+                    'counts' => true,
+                    'counts',
+                    'kinds',
+                    'reactions.recent' => true
+                ];
+                $response = $feed->getActivities($offset, $limit, $options, $enrich = true, $options);
+                $data =  $response["results"];
+            }
 
             $withSortDescData = [];
             foreach ($data as  $value) {
@@ -103,7 +120,6 @@ class PostBlockController extends Controller
             });
             return $withSortDescData;
         } catch (\Throwable $th) {
-            // file_put_contents('error.txt', $th->getMessage());
             throw $th;
         }
     }
