@@ -23,7 +23,7 @@
                         <div class="col-lg-10 mt-4">
                             <form class="form-inline" method="POST" id="searchMessage">
                                 <div class="form-group">
-                                    <input type="text" id="message" class="form-control" placeholder="Search" required>
+                                    <input type="text" id="message" class="form-control" placeholder="Search">
                                     &nbsp;&nbsp;
                                     <button type="submit" class="btn btn-primary">Search</button>
                                 </div>
