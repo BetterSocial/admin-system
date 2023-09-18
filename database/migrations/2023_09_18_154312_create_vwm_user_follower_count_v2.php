@@ -18,10 +18,12 @@ class CreateVwmUserFollowerCountV2 extends Migration
             CREATE MATERIALIZED VIEW vwm_user_follower_count
             AS 
             SELECT
-                A.user_id_followed,
+                B.user_id as user_id_followed,
                 COUNT(A.user_id_follower) as follower_count
             FROM user_follow_user A
-            GROUP BY A.user_id_followed
+            FULL OUTER JOIN users B 
+            ON A.user_id_followed = B.user_id
+            GROUP BY A.user_id_followed, B.user_id
             WITH DATA
         ");
     }
