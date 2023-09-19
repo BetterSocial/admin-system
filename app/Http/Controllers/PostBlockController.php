@@ -48,7 +48,9 @@ class PostBlockController extends Controller
             $message = $req->input('message', null);
             $activityIds = [];
             if ($message) {
-                $posts = PostModel::where('post_content', 'like', '%' . $message . '%')->whereNotNull('getstream_activity_id')->get();
+                $posts = PostModel::where('post_content', 'like', '%' . $message . '%')
+                    ->whereNotNull('getstream_activity_id')
+                    ->get();
                 $activityIds = $posts->pluck('getstream_activity_id')->toArray();
             }
             $start = (int) $req->input('start', 0);
@@ -75,7 +77,7 @@ class PostBlockController extends Controller
             $feed = $client->feed('user', "bettersocial");
             $data = [];
             if (count($searchId) >= 1) {
-                foreach ($searchId as $key => $value) {
+                foreach ($searchId as  $value) {
                     $options = [
                         'id_lte' => $value,
                         'own' => true,
@@ -85,7 +87,7 @@ class PostBlockController extends Controller
                         'kinds',
                         'reactions.recent' => true
                     ];
-                    $response = $feed->getActivities(0, 1, $options, $enrich = true, $options);
+                    $response = $feed->getActivities(0, 1, $options, true, $options);
                     $data[] =  $response["results"][0];
                 }
             } else {
@@ -97,7 +99,7 @@ class PostBlockController extends Controller
                     'kinds',
                     'reactions.recent' => true
                 ];
-                $response = $feed->getActivities($offset, $limit, $options, $enrich = true, $options);
+                $response = $feed->getActivities($offset, $limit, $options, true, $options);
                 $data =  $response["results"];
             }
 
