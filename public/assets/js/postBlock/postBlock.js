@@ -693,6 +693,43 @@ $(document).ready(function() {
       {
         data: "post_type",
         orderable: false,
+        className: "menufilter textfilter",
+        render: function(data, type, row) {
+          const tanggal = new Date(row.time);
+          const namaBulan = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ];
+
+          const tanggalFormatted =
+            tanggal.getDate() +
+            " " +
+            namaBulan[tanggal.getMonth()] +
+            " " +
+            tanggal.getFullYear() +
+            " " +
+            ("0" + tanggal.getHours()).slice(-2) +
+            ":" +
+            ("0" + tanggal.getMinutes()).slice(-2) +
+            ":" +
+            ("0" + tanggal.getSeconds()).slice(-2);
+
+          return tanggalFormatted;
+        },
+      },
+      {
+        data: "post_type",
+        orderable: false,
         render: function(data, type, row) {
           // action
           let isHide = false;
