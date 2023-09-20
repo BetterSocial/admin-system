@@ -20,31 +20,32 @@ class CreateVwmUserTopicFollowerCountV2 extends Migration
         SELECT
             *
         FROM (
-            SELECT 
-                A.topic_id, 
+            SELECT
+                A.topic_id,
                 C.follower_count as follower_count,
                 ROW_NUMBER() OVER(
                     PARTITION BY A.topic_id
                     ORDER BY C.follower_count DESC
                 ) AS topic_follower_rank,
                 B.*
-            FROM 
+            FROM
                 vwm_user_follower_count C
-            INNER JOIN 
+            INNER JOIN
                 users B
             ON C.user_id_followed = B.user_id
             INNER JOIN
                 user_topics A
-            ON 
+            ON
                 C.user_id_followed = A.user_id
+						WHERE B.profile_pic_path NOT LIKE '%default-profile-picture%'
             GROUP BY
                 A.topic_id,
                 B.user_id,
                 C.follower_count
             ) AS user_topic_by_follower_count
-        WHERE 
-            user_topic_by_follower_count.topic_follower_rank <= 5
-        ORDER BY 
+        WHERE
+            user_topic_by_follower_count.topic_follower_rank <= 11
+        ORDER BY
             user_topic_by_follower_count.topic_id ASC,
             user_topic_by_follower_count.topic_follower_rank ASC
         WITH DATA
