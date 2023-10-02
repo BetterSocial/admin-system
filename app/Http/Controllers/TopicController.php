@@ -332,4 +332,18 @@ class TopicController extends Controller
             return $this->errorResponseWithAlert($message);
         }
     }
+
+    public function getDetail(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required'
+            ]);
+            $id = $request->input('id');
+            $topic = Topics::getDetail($id);
+            return $this->successResponse('success get detail topic', $topic);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage());
+        }
+    }
 }

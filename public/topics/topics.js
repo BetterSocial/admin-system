@@ -46,22 +46,40 @@ async function getCategory() {
   } catch (err) {}
 }
 
-function createItemSelectCategory(categories) {
+function createItemSelectCategory(categories, category) {
   let categorySelect = document.getElementById("categorySelect");
-
   categories.map((item) => {
     categorySelect.insertAdjacentHTML(
       "beforeend",
       `<option value="${item.categories}">${item.categories}</option>`
     );
   });
+  $("#categorySelect").val(category);
 }
 
-async function detailCategory(item) {
-  $("#topicName").val(item.name);
-  $("#topicId").val(item.topic_id);
-  createItemSelectCategory(categories);
-  $("#detailCategory").modal("show");
+async function getDetailTopic(id) {
+  let topic = null;
+  const response = await fetch(`/topics/detail?id=${id}`, {
+    method: "GET",
+    headers: {
+      "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+    },
+  });
+  let res = await response.json();
+  if (res.status === "success") {
+    topic = res.data;
+  }
+  return topic;
+}
+
+async function showDetailCategory(id) {
+  let topic = await getDetailTopic(id);
+  if (topic) {
+    await $("#topicName").val(topic.name);
+    $("#topicId").val(id);
+    createItemSelectCategory(categories, topic.categories);
+    $("#detailCategory").modal("show");
+  }
 }
 
 async function showSortTopic(item) {
@@ -162,7 +180,7 @@ $(document).ready(function() {
         render: function(data, type, row) {
           let value = "";
           let item = JSON.stringify(row);
-          value += `<button style="border: none; background: transparent; width: 100%; height: 100%" onclick='detailCategory(${item})' >`;
+          value += `<button style="border: none; background: transparent; width: 100%; height: 100%" onclick='showDetailCategory(${row.topic_id})' >`;
           value += "<p>" + data + "</p>";
 
           value += "</button>";
