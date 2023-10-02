@@ -236,4 +236,36 @@ class Topics extends Model
             throw $th;
         }
     }
+
+    public static function getDetail($id)
+    {
+
+        $query = Topics::select(
+            'topics.topic_id',
+            'topics.name',
+            'topics.icon_path',
+            'topics.categories',
+            'topics.created_at',
+            'topics.sort',
+            'topics.flg_show',
+            'topics.sign'
+        )
+            ->selectSub(function ($query) {
+                $query->selectRaw('count(*)')
+                    ->from('user_topics')
+                    ->whereRaw('user_topics.topic_id = topics.topic_id')
+                    ->groupBy('user_topics.topic_id');
+            }, 'total_user_topics')
+            ->selectSub(function ($query) {
+                $query->selectRaw('count(*)')
+                    ->from('post_topics')
+                    ->whereRaw('post_topics.topic_id = topics.topic_id')
+                    ->groupBy('post_topics.topic_id');
+            }, 'total_posts')
+            ->whereNull('topics.deleted_at');
+
+        $query->with('userTopics', 'posts');
+        $query->where('topic_id', $id);
+        return $query->first();
+    }
 }

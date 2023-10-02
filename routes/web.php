@@ -42,6 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
      */
     Route::get('/topics/index', [TopicController::class, 'index'])->name('topic');
     Route::post('/topics/image', [TopicController::class, 'updateImage'])->name('topic.update-image');
+    Route::get('/topics/detail', [TopicController::class, 'getDetail'])->name('topic.detail');
 
     Route::get('/create-topics', [CreateTopicController::class, 'index'])->name('topic.create');
     Route::POST('/topics/data', [TopicController::class, 'getData'])->name('masterTopics.data');
