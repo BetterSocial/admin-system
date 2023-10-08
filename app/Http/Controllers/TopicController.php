@@ -93,6 +93,10 @@ class TopicController extends Controller
                 $req->merge([
                     'icon_path' => $response
                 ]);
+            } else {
+                $req->merge([
+                    'icon_path' => ''
+                ]);
             }
 
             DB::beginTransaction();
