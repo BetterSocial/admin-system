@@ -14,9 +14,10 @@
                             <form class="form-inline" method="POST" id="search">
                                 <div class="form-group">
                                     <input type="text" id="username" class="form-control" placeholder="Username">
-                                    &nbsp;&nbsp;
-                                    <input type="text" id="countryCode" class="form-control" placeholder="Country Code">
-                                    &nbsp;&nbsp;
+                                    <input type="text" id="countryCode" class="form-control mx-3"
+                                        placeholder="Country Code">
+                                    <input type="text" name="topic" id="topic" class="form-control mr-3"
+                                        placeholder="Topic">
                                     <button type="submit" class="btn btn-primary">Search</button>
                                 </div>
                             </form>
