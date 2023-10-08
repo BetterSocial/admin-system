@@ -27,8 +27,6 @@ class ViewUserController extends Controller
      */
     public function index(Request $request)
     {
-
-        // return UserApps::getData($request);
         $data = [
             'category_name' => 'viewUsers',
             'page_name' => 'view Users',
