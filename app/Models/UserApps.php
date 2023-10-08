@@ -92,10 +92,11 @@ class UserApps extends Model
             );
             $searchName = $req->input('username');
             $searchCountryCode = $req->input('countryCode');
+            $searchTopic = $req->input('topic');
             $orderColumnIndex = (int) $req->input('order.0.column');
             $orderDirection = $req->input('order.0.dir', 'asc');
             $start = (int) $req->input('start', 0);
-            $length = (int) $req->input('length', 10);
+            $length = (int) $req->input('length', 100);
             $query = UserApps::select(
                 'username',
                 'user_id',
@@ -108,11 +109,10 @@ class UserApps extends Model
                 'followers',
                 'followeds',
                 'blocked',
-                'userTopics' => function ($query) {
-                    $query->join('topics', 'user_topics.topic_id', '=', 'topics.topic_id')
-                        ->select('topics.name as topic_name', 'user_topics.*');
-                }
+                'userTopics.topic',
             ]);
+
+
 
             if ($searchName !== null) {
                 $query->where('username', 'ILIKE', '%' . $searchName . '%');
@@ -121,6 +121,14 @@ class UserApps extends Model
             if ($searchCountryCode !== null) {
                 $query->where('country_code', 'ILIKE', '%' . $searchCountryCode . '%');
             }
+
+            if ($searchTopic) {
+                $query->whereHas('userTopics.topic', function ($query) use ($searchTopic) {
+                    $query->where('name', 'like', "%$searchTopic%");
+                });
+            }
+
+
 
             $total = $query->count();
 
@@ -135,15 +143,16 @@ class UserApps extends Model
             $userScoreMap = [];
 
             foreach ($userScores as $userScore) {
+                $userScore->u1_score = is_numeric($userScore->u1_score) ? $userScore->u1_score : 0;
                 $userScoreMap[$userScore->_id] = $userScore;
             }
-
             foreach ($users as $user) {
                 if (isset($userScoreMap[$user->user_id])) {
-                    $userScore = $userScoreMap[$user->user_id];
+                    $userScore = $userScoreMap[$user->user_id]->u1_score;
                     $user->user_score = $userScore;
                 }
             }
+
             return response()->json([
                 'draw' => (int) $req->input('draw', 1),
                 'recordsTotal' => $total,
