@@ -48,7 +48,7 @@ class PostBlockController extends Controller
             $message = $req->input('message', null);
             $activityIds = [];
             if ($message) {
-                $posts = PostModel::where('post_content', 'like', '%' . $message . '%')
+                $posts = PostModel::where('post_content', 'ilike', '%' . $message . '%')
                     ->whereNotNull('getstream_activity_id')
                     ->get();
                 $activityIds = $posts->pluck('getstream_activity_id')->toArray();
