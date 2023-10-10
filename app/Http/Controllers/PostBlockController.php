@@ -52,6 +52,9 @@ class PostBlockController extends Controller
                     ->whereNotNull('getstream_activity_id')
                     ->get();
                 $activityIds = $posts->pluck('getstream_activity_id')->toArray();
+                if (count($activityIds) == 0) {
+                    return $this->errorDataTableResponse();
+                }
             }
             $start = (int) $req->input('start', 0);
             $length = (int) $req->input('length', 10);
@@ -60,7 +63,7 @@ class PostBlockController extends Controller
                 'draw' => $draw,
                 'recordsTotal' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
                 'recordsFiltered' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
-                'data' => $data,
+                'data' => $data ?? 0,
             ]);
         } catch (\Throwable $th) {
             return $this->errorDataTableResponse();
