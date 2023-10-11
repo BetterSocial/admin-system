@@ -34,11 +34,8 @@ class ImageModel extends Model
             );
             $total = $query->count();
 
-            $dataTable = dataTableRequestHandle($req);
 
-            $query->orderBy($columns[$dataTable['column']], $dataTable['direction'])
-                ->offset($dataTable['start'])
-                ->limit($dataTable['length']);
+            $query = limitOrderQuery($req, $query, $columns);
 
             $data = $query->get();
             return response()->json([

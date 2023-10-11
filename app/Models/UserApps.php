@@ -127,16 +127,12 @@ class UserApps extends Model
                 10 => '',
                 11 => '',
             );
-            $dataTable = dataTableRequestHandle($req);
 
             $query = UserApps::userQuery($req);
 
             $total = $query->count();
 
-            $query->orderBy($columns[$dataTable['column']], $dataTable['direction'])
-                ->offset($dataTable['start'])
-                ->limit($dataTable['length']);
-
+            $query = limitOrderQuery($req, $query, $columns);
             $users = $query->get();
             $userIds = $users->pluck('user_id')->toArray();
             $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
