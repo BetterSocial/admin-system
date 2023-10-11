@@ -20,3 +20,18 @@ if (!function_exists('dataTableRequestHandle')) {
         ];
     }
 }
+
+
+if (!function_exists('limitOrderQuery')) {
+
+    function limitOrderQuery(Request $request, $query, $columns)
+    {
+
+        $dataTable = dataTableRequestHandle($request);
+        $query->orderBy($columns[$dataTable['column']], $dataTable['direction'])
+            ->offset($dataTable['start'])
+            ->limit($dataTable['length']);
+
+        return $query;
+    }
+}

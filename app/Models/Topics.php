@@ -145,8 +145,6 @@ class Topics extends Model
             $searchName = $req->input('name');
             $searchCategory = $req->input('category');
 
-            $dataTable = dataTableRequestHandle($req);
-
             $query = Topics::select(
                 'topics.topic_id',
                 'topics.name',
@@ -182,9 +180,8 @@ class Topics extends Model
 
             $total = $query->count();
 
-            $query->orderBy($columns[$dataTable['column']], $dataTable['direction'])
-                ->offset($dataTable['start'])
-                ->limit($dataTable['length']);
+
+            $query = limitOrderQuery($req, $query, $columns);
 
             $data = $query->get();
             return response()->json([
