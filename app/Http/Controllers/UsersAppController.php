@@ -41,20 +41,43 @@ class UsersAppController extends Controller
         }
     }
 
+
+
+
     public function downloadCsv(Request $req)
     {
+        $query = UserApps::select(
+            'username',
+            'user_id',
+            'username',
+            'country_code',
+            'created_at',
+            'status',
+        );
+        $searchName = $req->input('username');
+        $searchCountryCode = $req->input('countryCode');
+        $searchTopic = $req->input('topic');
 
-        $user = "SELECT user_id,username,real_name,last_active_at,status,country_code,created_at FROM users WHERE true";
-        if ($req->username != null) {
-            $user .= " AND username ILIKE '%$req->username%'";
+        $query->with([
+            'followers',
+            'followeds',
+            'blocked',
+            'userTopics.topic',
+        ]);
+        if ($searchName !== null) {
+            $query->where('username', 'ILIKE', '%' . $searchName . '%');
         }
-        if ($req->countryCode != null) {
-            $user .= " AND country_code ILIKE '%$req->countryCode%'";
+
+        if ($searchCountryCode !== null) {
+            $query->where('country_code', 'ILIKE', '%' . $searchCountryCode . '%');
         }
 
-
-
-        $data = DB::SELECT($user);
+        if ($searchTopic) {
+            $query->whereHas('userTopics.topic', function ($query) use ($searchTopic) {
+                $query->where('name', 'like', "%$searchTopic%");
+            });
+        }
+        $users = $query->get();
 
         $filename = "Data User List-" . md5(date("Y-m-d H:i:s")) . '.csv';
         $path = Storage::path($filename);
@@ -80,22 +103,30 @@ class UsersAppController extends Controller
         fputcsv($file, [
             "User Id",
             "Username",
-            "Real Name",
             "Country Code",
             "Registered At",
             "Last Active",
+            "Topics",
             "Status"
         ], ";");
-
-        foreach ($data as $row => $value) {
+        foreach ($users as $row => $user) {
+            $topics = '';
+            if ($user->userTopics) {
+                if (count($user->userTopics) >= 1) {
+                    foreach ($user->userTopics as $key => $topic) {
+                        $name = $topic->topic->name ?? '';
+                        $topics = $topics . $name . ',';
+                    }
+                }
+            }
             $body = [
-                $value->user_id,
-                $value->username,
-                $value->real_name,
-                $value->country_code,
-                Carbon::parse($value->created_at),
-                Carbon::parse($value->last_active_at),
-                $value->status,
+                $user->user_id,
+                $user->username,
+                $user->country_code,
+                Carbon::parse($user->created_at),
+                Carbon::parse($user->last_active_at),
+                $topics,
+                $user->status,
             ];
             fputcsv($file, $body, ";");
         }
