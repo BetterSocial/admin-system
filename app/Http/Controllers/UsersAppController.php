@@ -46,37 +46,7 @@ class UsersAppController extends Controller
 
     public function downloadCsv(Request $req)
     {
-        $query = UserApps::select(
-            'username',
-            'user_id',
-            'username',
-            'country_code',
-            'created_at',
-            'status',
-        );
-        $searchName = $req->input('username');
-        $searchCountryCode = $req->input('countryCode');
-        $searchTopic = $req->input('topic');
-
-        $query->with([
-            'followers',
-            'followeds',
-            'blocked',
-            'userTopics.topic',
-        ]);
-        if ($searchName !== null) {
-            $query->where('username', 'ILIKE', '%' . $searchName . '%');
-        }
-
-        if ($searchCountryCode !== null) {
-            $query->where('country_code', 'ILIKE', '%' . $searchCountryCode . '%');
-        }
-
-        if ($searchTopic) {
-            $query->whereHas('userTopics.topic', function ($query) use ($searchTopic) {
-                $query->where('name', 'like', "%$searchTopic%");
-            });
-        }
+        $query = UserApps::userQuery($req);
         $users = $query->get();
 
         $filename = "Data User List-" . md5(date("Y-m-d H:i:s")) . '.csv';
@@ -96,7 +66,6 @@ class UsersAppController extends Controller
             ],
             ";"
         );
-        //EMTER
         fputcsv($file, [], ";");
         fputcsv($file, ["Download Time :", Carbon::now()->toDateTimeString()], ";");
         fputcsv($file, [], ";");
@@ -109,14 +78,12 @@ class UsersAppController extends Controller
             "Topics",
             "Status"
         ], ";");
-        foreach ($users as $row => $user) {
+        foreach ($users as $user) {
             $topics = '';
-            if ($user->userTopics) {
-                if (count($user->userTopics) >= 1) {
-                    foreach ($user->userTopics as $key => $topic) {
-                        $name = $topic->topic->name ?? '';
-                        $topics = $topics . $name . ',';
-                    }
+            if (count($user->userTopics) >= 1) {
+                foreach ($user->userTopics as $topic) {
+                    $name = $topic->topic->name ?? '';
+                    $topics = $topics . $name . ',';
                 }
             }
             $body = [

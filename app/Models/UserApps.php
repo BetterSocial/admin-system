@@ -72,6 +72,43 @@ class UserApps extends Model
         return $this->hasMany(UserBlockedUser::class, 'user_id_blocked', 'user_id');
     }
 
+    public static function userQuery(Request $req)
+    {
+        $searchName = $req->input('username');
+        $searchCountryCode = $req->input('countryCode');
+        $searchTopic = $req->input('topic');
+        $query = UserApps::select(
+            'username',
+            'user_id',
+            'username',
+            'country_code',
+            'created_at'
+        );
+
+        $query->with([
+            'followers',
+            'followeds',
+            'blocked',
+            'userTopics.topic',
+        ]);
+
+
+
+        if ($searchName !== null) {
+            $query->where('username', 'ILIKE', '%' . $searchName . '%');
+        }
+
+        if ($searchCountryCode !== null) {
+            $query->where('country_code', 'ILIKE', '%' . $searchCountryCode . '%');
+        }
+
+        if ($searchTopic) {
+            $query->whereHas('userTopics.topic', function ($query) use ($searchTopic) {
+                $query->where('name', 'like', "%$searchTopic%");
+            });
+        }
+        return $query;
+    }
 
     public static function getData(Request $req)
     {
@@ -90,45 +127,13 @@ class UserApps extends Model
                 10 => '',
                 11 => '',
             );
-            $searchName = $req->input('username');
-            $searchCountryCode = $req->input('countryCode');
-            $searchTopic = $req->input('topic');
+
             $orderColumnIndex = (int) $req->input('order.0.column');
             $orderDirection = $req->input('order.0.dir', 'asc');
             $start = (int) $req->input('start', 0);
             $length = (int) $req->input('length', 100);
-            $query = UserApps::select(
-                'username',
-                'user_id',
-                'username',
-                'country_code',
-                'created_at'
-            );
 
-            $query->with([
-                'followers',
-                'followeds',
-                'blocked',
-                'userTopics.topic',
-            ]);
-
-
-
-            if ($searchName !== null) {
-                $query->where('username', 'ILIKE', '%' . $searchName . '%');
-            }
-
-            if ($searchCountryCode !== null) {
-                $query->where('country_code', 'ILIKE', '%' . $searchCountryCode . '%');
-            }
-
-            if ($searchTopic) {
-                $query->whereHas('userTopics.topic', function ($query) use ($searchTopic) {
-                    $query->where('name', 'like', "%$searchTopic%");
-                });
-            }
-
-
+            $query = UserApps::userQuery($req);
 
             $total = $query->count();
 
