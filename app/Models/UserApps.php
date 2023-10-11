@@ -127,19 +127,15 @@ class UserApps extends Model
                 10 => '',
                 11 => '',
             );
-
-            $orderColumnIndex = (int) $req->input('order.0.column');
-            $orderDirection = $req->input('order.0.dir', 'asc');
-            $start = (int) $req->input('start', 0);
-            $length = (int) $req->input('length', 100);
+            $dataTable = dataTableRequestHandle($req);
 
             $query = UserApps::userQuery($req);
 
             $total = $query->count();
 
-            $query->orderBy($columns[$orderColumnIndex], $orderDirection)
-                ->offset($start)
-                ->limit($length);
+            $query->orderBy($columns[$dataTable['column']], $dataTable['direction'])
+                ->offset($dataTable['start'])
+                ->limit($dataTable['length']);
 
             $users = $query->get();
             $userIds = $users->pluck('user_id')->toArray();

@@ -42,9 +42,6 @@ class PostBlockController extends Controller
         try {
             $draw = (int) $req->input('draw', 0);
             $searchName = $req->input('name');
-            $searchCategory = $req->input('category');
-            $orderColumnIndex = (int) $req->input('order.0.column');
-            $orderDirection = $req->input('order.0.dir', 'asc');
             $message = $req->input('message', null);
             $activityIds = [];
             if ($message) {
@@ -56,9 +53,9 @@ class PostBlockController extends Controller
                     return $this->errorDataTableResponse();
                 }
             }
-            $start = (int) $req->input('start', 0);
-            $length = (int) $req->input('length', 10);
-            $data = $this->getFeeds($start, $length, $activityIds);
+
+            $dataTable = dataTableRequestHandle($req);
+            $data = $this->getFeeds($dataTable['start'], $dataTable['length'], $activityIds);
             return response()->json([
                 'draw' => $draw,
                 'recordsTotal' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),

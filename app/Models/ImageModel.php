@@ -27,10 +27,6 @@ class ImageModel extends Model
                 1 => 'name',
                 2 => 'url',
             );
-            $orderColumnIndex = (int) $req->input('order.0.column');
-            $orderDirection = $req->input('order.0.dir', 'desc');
-            $start = (int) $req->input('start', 0);
-            $length = (int) $req->input('length', 10);
             $query = self::select(
                 'id',
                 'name',
@@ -38,9 +34,11 @@ class ImageModel extends Model
             );
             $total = $query->count();
 
-            $query->orderBy($columns[$orderColumnIndex], $orderDirection)
-                ->offset($start)
-                ->limit($length);
+            $dataTable = dataTableRequestHandle($req);
+
+            $query->orderBy($columns[$dataTable['column']], $dataTable['direction'])
+                ->offset($dataTable['start'])
+                ->limit($dataTable['length']);
 
             $data = $query->get();
             return response()->json([
