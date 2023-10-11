@@ -41,7 +41,6 @@ class PostBlockController extends Controller
     {
         try {
             $draw = (int) $req->input('draw', 0);
-            $searchName = $req->input('name');
             $message = $req->input('message', null);
             $activityIds = [];
             if ($message) {
