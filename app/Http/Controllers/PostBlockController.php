@@ -47,8 +47,13 @@ class PostBlockController extends Controller
             if ($message) {
                 $posts = PostModel::where('post_content', 'ilike', '%' . $message . '%')
                     ->whereNotNull('getstream_activity_id')
-                    ->get();
-                $activityIds = $posts->pluck('getstream_activity_id')->toArray();
+                    ->get()
+                    ->pluck('getstream_activity_id');
+                $comments = UserPostComment::where('comment', 'ilike', '%' . $message . '%')
+                    ->get()
+                    ->pluck('post_id');
+
+                $activityIds = $posts->concat($comments)->unique()->values();
                 if (count($activityIds) == 0) {
                     return $this->errorDataTableResponse();
                 }
@@ -63,6 +68,7 @@ class PostBlockController extends Controller
                 'data' => $data ?? 0,
             ]);
         } catch (\Throwable $th) {
+            file_put_contents('test.json', $th->getMessage());
             return $this->errorDataTableResponse();
         }
     }
@@ -88,7 +94,9 @@ class PostBlockController extends Controller
                         'reactions.recent' => true
                     ];
                     $response = $feed->getActivities(0, 1, $options, true, $options);
-                    $data[] =  $response["results"][0];
+                    if (count($response["results"]) >= 1) {
+                        $data[] =  $response["results"][0];
+                    }
                 }
             } else {
                 $options = [
