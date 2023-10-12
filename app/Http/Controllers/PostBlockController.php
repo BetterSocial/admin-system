@@ -6,6 +6,7 @@ use App\Models\LogModel;
 use App\Models\Polling;
 use App\Models\PollingOption;
 use App\Models\PostModel;
+use App\Models\UserPostComment;
 use App\Services\FeedGetStreamService;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;

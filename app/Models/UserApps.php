@@ -72,6 +72,11 @@ class UserApps extends Model
         return $this->hasMany(UserBlockedUser::class, 'user_id_blocked', 'user_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(UserPostComment::class, 'author_user_id', 'user_id');
+    }
+
     public static function userQuery(Request $req)
     {
         $searchName = $req->input('username');
