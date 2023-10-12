@@ -82,31 +82,24 @@ class PostBlockController extends Controller
             $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
             $feed = $client->feed('user', "bettersocial");
             $data = [];
+
+            $options = [
+                'own' => true,
+                'recent' => true,
+                'counts' => true,
+                'counts',
+                'kinds',
+                'reactions.recent' => true
+            ];
             if (count($searchId) >= 1) {
                 foreach ($searchId as  $value) {
-                    $options = [
-                        'id_lte' => $value,
-                        'own' => true,
-                        'recent' => true,
-                        'counts' => true,
-                        'counts',
-                        'kinds',
-                        'reactions.recent' => true
-                    ];
+                    $options['id_lte'] = $value;
                     $response = $feed->getActivities(0, 1, $options, true, $options);
                     if (count($response["results"]) >= 1) {
                         $data[] =  $response["results"][0];
                     }
                 }
             } else {
-                $options = [
-                    'own' => true,
-                    'recent' => true,
-                    'counts' => true,
-                    'counts',
-                    'kinds',
-                    'reactions.recent' => true
-                ];
                 $response = $feed->getActivities($offset, $limit, $options, true, $options);
                 $data =  $response["results"];
             }
