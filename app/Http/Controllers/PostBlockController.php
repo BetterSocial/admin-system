@@ -22,7 +22,6 @@ class PostBlockController extends Controller
     public function __construct(FeedGetStreamService $feedService)
     {
         $this->feedService = $feedService;
-        $this->feed = $this->initializeFeed();;
     }
 
 
@@ -81,7 +80,7 @@ class PostBlockController extends Controller
     {
         try {
             $this->posts = $this->getPostsByBlockedUser();
-            $feed = $this->initializeFeed();
+            $this->feed =  $this->initializeFeed();
             $data = $this->fetchDataFromFeed($searchId, $offset, $limit);
 
             return $this->handlePoll($data);
@@ -129,45 +128,6 @@ class PostBlockController extends Controller
     {
         return $this->feed->getActivities($offset, $limit, $options, true, $options);
     }
-
-
-
-    // private function getFeeds($offset = 0, $limit = 10, $searchId = [])
-    // {
-
-    //     try {
-    //         $this->posts =  $this->getPostsByBlockedUser();
-    //         $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
-    //         $feed = $client->feed('user', "bettersocial");
-    //         $data = [];
-    //         $isSearch = count($searchId) >= 1 ? true : false;
-
-    //         $options = [
-    //             'own' => true,
-    //             'recent' => true,
-    //             'counts' => true,
-    //             'counts',
-    //             'kinds',
-    //             'reactions.recent' => true
-    //         ];
-    //         if ($isSearch) {
-    //             foreach ($searchId as  $value) {
-    //                 $options['id_lte'] = $value;
-    //                 $response = $feed->getActivities(0, 1, $options, true, $options);
-    //                 if (count($response["results"]) >= 1) {
-    //                     $data[] =  $response["results"][0];
-    //                 }
-    //             }
-    //         } else {
-    //             $response = $feed->getActivities($offset, $limit, $options, true, $options);
-    //             $data =  $response["results"];
-    //         }
-
-    //         return $this->handlePoll($data);
-    //     } catch (\Throwable $th) {
-    //         throw $th;
-    //     }
-    // }
 
     private function handlePoll($data)
     {
