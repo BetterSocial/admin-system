@@ -71,7 +71,6 @@ class PostBlockController extends Controller
                 'data' => $data ?? 0,
             ]);
         } catch (\Throwable $th) {
-            file_put_contents('test.json', $th->getMessage());
             return $this->errorDataTableResponse();
         }
     }
