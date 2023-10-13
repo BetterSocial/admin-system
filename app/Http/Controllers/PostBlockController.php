@@ -74,7 +74,7 @@ class PostBlockController extends Controller
     }
 
 
-    private function getFeeds($offset = 0, $limit = 10, $searchId = [],)
+    private function getFeeds($offset = 0, $limit = 10, $searchId = [])
     {
 
         try {
@@ -82,6 +82,7 @@ class PostBlockController extends Controller
             $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
             $feed = $client->feed('user', "bettersocial");
             $data = [];
+            $isSearch = count($searchId) >= 1 ? true : false;
 
             $options = [
                 'own' => true,
@@ -91,7 +92,7 @@ class PostBlockController extends Controller
                 'kinds',
                 'reactions.recent' => true
             ];
-            if (count($searchId) >= 1) {
+            if ($isSearch) {
                 foreach ($searchId as  $value) {
                     $options['id_lte'] = $value;
                     $response = $feed->getActivities(0, 1, $options, true, $options);
@@ -104,27 +105,33 @@ class PostBlockController extends Controller
                 $data =  $response["results"];
             }
 
-            $withSortDescData = [];
-            foreach ($data as  $value) {
-                if ($value['verb'] == 'poll') {
-                    $value['poll'] = $this->getPoll($value['polling_id']);
-                    $value['polling_options'] = $this->getPollOption($value['polling_id']);
-                }
-                $value['total_block'] = 0;
-                foreach ($this->posts as $post) {
-                    if ($post->post_id == $value['id']) {
-                        $value['total_block'] = $post->total_block;
-                    }
-                }
-                $withSortDescData[] = $value;
-            }
-            usort($withSortDescData, function ($a, $b) {
-                return $a['total_block'] < $b['total_block'];
-            });
-            return $withSortDescData;
+            return $this->handlePoll($data);
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    private function handlePoll($data)
+    {
+
+        $withSortDescData = [];
+        foreach ($data as  $value) {
+            if ($value['verb'] == 'poll') {
+                $value['poll'] = $this->getPoll($value['polling_id']);
+                $value['polling_options'] = $this->getPollOption($value['polling_id']);
+            }
+            $value['total_block'] = 0;
+            foreach ($this->posts as $post) {
+                if ($post->post_id == $value['id']) {
+                    $value['total_block'] = $post->total_block;
+                }
+            }
+            $withSortDescData[] = $value;
+        }
+        usort($withSortDescData, function ($a, $b) {
+            return $a['total_block'] < $b['total_block'];
+        });
+        return $withSortDescData;
     }
 
     public function updateFeed(Request $request, $id)
