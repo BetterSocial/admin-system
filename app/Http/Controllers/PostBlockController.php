@@ -90,20 +90,12 @@ class PostBlockController extends Controller
 
     private function handleSort($data, $dataTable)
     {
-        // Pastikan data yang diterima adalah array
-        if (!is_array($data) || empty($dataTable)) {
+        $column = $this->columns[$dataTable['column']];
+        if (!$column) {
             return $data;
         }
-
-        // Dapatkan kolom dan arah pengurutan dari $dataTable
-        $column = $this->columns[$dataTable['column']];
-        // dd($column);
-        if (!$column) return $data;
-        $direction =  $dataTable['direction'] ?? 'asc'; // Default pengurutan adalah ASC jika tidak ada arah yang diberikan
-
-        // Pastikan kolom yang digunakan untuk pengurutan adalah valid
+        $direction =  $dataTable['direction'] ?? 'asc';
         if ($column && in_array($column, $this->columns)) {
-            // Fungsi pengurutan berdasarkan kolom yang dipilih
             usort($data, function ($a, $b) use ($column, $direction) {
                 if ($a[$column] == $b[$column]) {
                     return 0;
