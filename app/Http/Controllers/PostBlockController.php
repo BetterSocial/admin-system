@@ -100,7 +100,8 @@ class PostBlockController extends Controller
                 if ($a[$column] == $b[$column]) {
                     return 0;
                 }
-                return ($direction == 'asc' ? ($a[$column] < $b[$column] ? -1 : 1) : ($a[$column] > $b[$column] ? -1 : 1));
+                ($direction == 'asc' ? ($a[$column] < $b[$column] ? -1 : 1)
+                    : ($a[$column] > $b[$column] ? -1 : 1));
             });
         }
 
