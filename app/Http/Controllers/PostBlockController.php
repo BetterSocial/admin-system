@@ -88,22 +88,39 @@ class PostBlockController extends Controller
         }
     }
 
-    private function handleSort($data, $dataTable)
+
+    private function handleSort($data, $sortingData)
     {
-        $column = $this->columns[$dataTable['column']];
-        if (!$column) return $data;
-        $direction =  $dataTable['direction'] ?? 'asc';
-        if ($column && in_array($column, $this->columns)) {
-            usort($data, function ($a, $b) use ($column, $direction) {
-                if ($a[$column] == $b[$column]) {
-                    return 0;
-                }
-                return ($direction == 'asc' ? ($a[$column] < $b[$column] ? -1 : 1)
-                    : ($a[$column] > $b[$column] ? -1 : 1));
-            });
+        $sortBy = $this->columns[$sortingData['column']] ?? null;
+        $sortDirection = $sortingData['direction'] ?? 'asc';
+
+        // Pastikan kolom yang digunakan untuk pengurutan adalah valid
+        if (!$sortBy || !in_array($sortBy, $this->columns)) {
+            return $data;
         }
+
+        usort($data, function ($a, $b) use ($sortBy, $sortDirection) {
+            if ($a[$sortBy] == $b[$sortBy]) {
+                return 0;
+            }
+            return ($sortDirection == 'asc' ?
+                $this->sortAsc($a, $b, $sortBy)
+                : $this->sortDesc($a, $b, $sortBy));
+        });
+
         return $data;
     }
+
+    private function sortAsc($a, $b, $sortBy)
+    {
+        return ($a[$sortBy] < $b[$sortBy] ? -1 : 1);
+    }
+
+    private function sortDesc($a, $b, $sortBy)
+    {
+        return ($a[$sortBy] > $b[$sortBy] ? -1 : 1);
+    }
+
 
 
     private function getFeeds($offset = 0, $limit = 10, $searchId = [])
