@@ -39,7 +39,7 @@ class PostBlockController extends Controller
         7 => 'count_downvotes',
         8 => 'total_block',
         9 => '',
-        10 => 'post_date',
+        10 => 'time',
         11 => '',
     );
 

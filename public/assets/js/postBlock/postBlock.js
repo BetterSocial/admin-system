@@ -670,7 +670,7 @@ $(document).ready(function() {
         className: "menufilter textfilter",
         render: function(data, type, row) {
           // total block
-          return data;
+          return row.total_block;
         },
       },
       {
@@ -696,7 +696,7 @@ $(document).ready(function() {
       },
       {
         data: "post_type",
-        orderable: false,
+        orderable: true,
         className: "menufilter textfilter",
         render: function(data, type, row) {
           const tanggal = new Date(row.time);
