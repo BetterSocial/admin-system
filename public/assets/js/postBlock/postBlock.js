@@ -666,8 +666,12 @@ $(document).ready(function() {
       },
       {
         data: "post_type",
-        orderable: false,
+        orderable: true,
         className: "menufilter textfilter",
+        render: function(data, type, row) {
+          // total block
+          return data;
+        },
       },
       {
         data: "post_type",
