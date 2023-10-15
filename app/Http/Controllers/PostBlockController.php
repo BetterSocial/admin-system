@@ -103,9 +103,9 @@ class PostBlockController extends Controller
             if ($a[$sortBy] == $b[$sortBy]) {
                 return 0;
             }
-            return ($sortDirection == 'asc' ?
+            return $sortDirection == 'asc' ?
                 $this->sortAsc($a, $b, $sortBy)
-                : $this->sortDesc($a, $b, $sortBy));
+                : $this->sortDesc($a, $b, $sortBy);
         });
 
         return $data;
@@ -113,12 +113,12 @@ class PostBlockController extends Controller
 
     private function sortAsc($a, $b, $sortBy)
     {
-        return ($a[$sortBy] < $b[$sortBy] ? -1 : 1);
+        return $a[$sortBy] < $b[$sortBy] ? -1 : 1;
     }
 
     private function sortDesc($a, $b, $sortBy)
     {
-        return ($a[$sortBy] > $b[$sortBy] ? -1 : 1);
+        return $a[$sortBy] > $b[$sortBy] ? -1 : 1;
     }
 
 
