@@ -26,11 +26,23 @@ class PostBlockController extends Controller
 
 
     private $posts;
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
+    private $columns = array(
+        0 => '',
+        1 => '',
+        2 => '',
+        3 => '',
+        4 => '',
+        5 => '',
+        6 => "count_upvotes",
+        7 => 'count_downvotes',
+        8 => 'total_block',
+        9 => '',
+        10 => 'post_date',
+        11 => '',
+    );
+
     public function index(Request $request)
     {
         return view('pages.postBlock.post-block', [
@@ -64,6 +76,7 @@ class PostBlockController extends Controller
 
             $dataTable = dataTableRequestHandle($req);
             $data = $this->getFeeds($dataTable['start'], $dataTable['length'], $activityIds);
+            $data = $this->handleSort($data, $dataTable);
             return response()->json([
                 'draw' => $draw,
                 'recordsTotal' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
@@ -74,6 +87,34 @@ class PostBlockController extends Controller
             return $this->errorDataTableResponse();
         }
     }
+
+    private function handleSort($data, $dataTable)
+    {
+        // Pastikan data yang diterima adalah array
+        if (!is_array($data) || empty($dataTable)) {
+            return $data;
+        }
+
+        // Dapatkan kolom dan arah pengurutan dari $dataTable
+        $column = $this->columns[$dataTable['column']];
+        // dd($column);
+        if (!$column) return $data;
+        $direction =  $dataTable['direction'] ?? 'asc'; // Default pengurutan adalah ASC jika tidak ada arah yang diberikan
+
+        // Pastikan kolom yang digunakan untuk pengurutan adalah valid
+        if ($column && in_array($column, $this->columns)) {
+            // Fungsi pengurutan berdasarkan kolom yang dipilih
+            usort($data, function ($a, $b) use ($column, $direction) {
+                if ($a[$column] == $b[$column]) {
+                    return 0;
+                }
+                return ($direction == 'asc' ? ($a[$column] < $b[$column] ? -1 : 1) : ($a[$column] > $b[$column] ? -1 : 1));
+            });
+        }
+
+        return $data;
+    }
+
 
     private function getFeeds($offset = 0, $limit = 10, $searchId = [])
     {
@@ -143,6 +184,21 @@ class PostBlockController extends Controller
                     $value['total_block'] = $post->total_block;
                 }
             }
+            $latestReactions = $value['latest_reactions'];
+
+            if (isset($latestReactions['upvotes'])) {
+                $upvotesCount = count($latestReactions['upvotes']);
+                $value['count_upvotes'] = $upvotesCount;
+            } else {
+                $value['count_upvotes'] = 0;
+            }
+            if (isset($latestReactions['downvotes'])) {
+                $downvotesCount = count($latestReactions['downvotes']);
+                $value['count_downvotes'] = $downvotesCount;
+            } else {
+                $value['count_downvotes'] = 0;
+            }
+
             $withSortDescData[] = $value;
         }
         usort($withSortDescData, function ($a, $b) {
