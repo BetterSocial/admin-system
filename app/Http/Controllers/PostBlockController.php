@@ -91,20 +91,17 @@ class PostBlockController extends Controller
     private function handleSort($data, $dataTable)
     {
         $column = $this->columns[$dataTable['column']];
-        if (!$column) {
-            return $data;
-        }
+        if (!$column) return $data;
         $direction =  $dataTable['direction'] ?? 'asc';
         if ($column && in_array($column, $this->columns)) {
             usort($data, function ($a, $b) use ($column, $direction) {
                 if ($a[$column] == $b[$column]) {
                     return 0;
                 }
-                ($direction == 'asc' ? ($a[$column] < $b[$column] ? -1 : 1)
+                return ($direction == 'asc' ? ($a[$column] < $b[$column] ? -1 : 1)
                     : ($a[$column] > $b[$column] ? -1 : 1));
             });
         }
-
         return $data;
     }
 
