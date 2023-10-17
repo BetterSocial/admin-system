@@ -72,6 +72,48 @@ class UserApps extends Model
         return $this->hasMany(UserBlockedUser::class, 'user_id_blocked', 'user_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(UserPostComment::class, 'author_user_id', 'user_id');
+    }
+
+    public static function userQuery(Request $req)
+    {
+        $searchName = $req->input('username');
+        $searchCountryCode = $req->input('countryCode');
+        $searchTopic = $req->input('topic');
+        $query = UserApps::select(
+            'username',
+            'user_id',
+            'username',
+            'country_code',
+            'created_at'
+        );
+
+        $query->with([
+            'followers',
+            'followeds',
+            'blocked',
+            'userTopics.topic',
+        ]);
+
+
+
+        if ($searchName !== null) {
+            $query->where('username', 'ILIKE', '%' . $searchName . '%');
+        }
+
+        if ($searchCountryCode !== null) {
+            $query->where('country_code', 'ILIKE', '%' . $searchCountryCode . '%');
+        }
+
+        if ($searchTopic) {
+            $query->whereHas('userTopics.topic', function ($query) use ($searchTopic) {
+                $query->where('name', 'like', "%$searchTopic%");
+            });
+        }
+        return $query;
+    }
 
     public static function getData(Request $req)
     {
@@ -90,44 +132,12 @@ class UserApps extends Model
                 10 => '',
                 11 => '',
             );
-            $searchName = $req->input('username');
-            $searchCountryCode = $req->input('countryCode');
-            $orderColumnIndex = (int) $req->input('order.0.column');
-            $orderDirection = $req->input('order.0.dir', 'asc');
-            $start = (int) $req->input('start', 0);
-            $length = (int) $req->input('length', 10);
-            $query = UserApps::select(
-                'username',
-                'user_id',
-                'username',
-                'country_code',
-                'created_at'
-            );
 
-            $query->with([
-                'followers',
-                'followeds',
-                'blocked',
-                'userTopics' => function ($query) {
-                    $query->join('topics', 'user_topics.topic_id', '=', 'topics.topic_id')
-                        ->select('topics.name as topic_name', 'user_topics.*');
-                }
-            ]);
-
-            if ($searchName !== null) {
-                $query->where('username', 'ILIKE', '%' . $searchName . '%');
-            }
-
-            if ($searchCountryCode !== null) {
-                $query->where('country_code', 'ILIKE', '%' . $searchCountryCode . '%');
-            }
+            $query = UserApps::userQuery($req);
 
             $total = $query->count();
 
-            $query->orderBy($columns[$orderColumnIndex], $orderDirection)
-                ->offset($start)
-                ->limit($length);
-
+            $query = limitOrderQuery($req, $query, $columns);
             $users = $query->get();
             $userIds = $users->pluck('user_id')->toArray();
             $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
@@ -135,15 +145,16 @@ class UserApps extends Model
             $userScoreMap = [];
 
             foreach ($userScores as $userScore) {
+                $userScore->u1_score = is_numeric($userScore->u1_score) ? $userScore->u1_score : 0;
                 $userScoreMap[$userScore->_id] = $userScore;
             }
-
             foreach ($users as $user) {
                 if (isset($userScoreMap[$user->user_id])) {
-                    $userScore = $userScoreMap[$user->user_id];
+                    $userScore = $userScoreMap[$user->user_id]->u1_score;
                     $user->user_score = $userScore;
                 }
             }
+
             return response()->json([
                 'draw' => (int) $req->input('draw', 1),
                 'recordsTotal' => $total,

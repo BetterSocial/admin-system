@@ -19,4 +19,9 @@ class UserTopicModel extends Model
     {
         return $this->belongsTo(UserApps::class, 'user_id', 'user_id');
     }
+
+    public function topic()
+    {
+        return $this->belongsTo(Topics::class, 'topic_id', 'topic_id');
+    }
 }

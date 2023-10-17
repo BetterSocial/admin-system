@@ -93,6 +93,10 @@ class TopicController extends Controller
                 $req->merge([
                     'icon_path' => $response
                 ]);
+            } else {
+                $req->merge([
+                    'icon_path' => ''
+                ]);
             }
 
             DB::beginTransaction();
@@ -330,6 +334,20 @@ class TopicController extends Controller
                 'message' => $e->getMessage(),
             ]);
             return $this->errorResponseWithAlert($message);
+        }
+    }
+
+    public function getDetail(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required'
+            ]);
+            $id = $request->input('id');
+            $topic = Topics::getDetail($id);
+            return $this->successResponse('success get detail topic', $topic);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage());
         }
     }
 }

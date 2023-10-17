@@ -13,5 +13,14 @@ class UserScoreModel extends Eloquent
     protected $fillable = [
         '_id',
         'user_score',
+        'u1_score',
     ];
+
+
+    public function getU1ScoreAttribute()
+    {
+        $value = $this->attributes['u1_score'];
+
+        return is_numeric($value) ? $value : 0;
+    }
 }

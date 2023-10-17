@@ -666,8 +666,12 @@ $(document).ready(function() {
       },
       {
         data: "post_type",
-        orderable: false,
+        orderable: true,
         className: "menufilter textfilter",
+        render: function(data, type, row) {
+          // total block
+          return row.total_block;
+        },
       },
       {
         data: "post_type",
@@ -688,6 +692,43 @@ $(document).ready(function() {
 
           return html;
           // status tab
+        },
+      },
+      {
+        data: "post_type",
+        orderable: true,
+        className: "menufilter textfilter",
+        render: function(data, type, row) {
+          const tanggal = new Date(row.time);
+          const namaBulan = [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+          ];
+
+          const tanggalFormatted =
+            tanggal.getDate() +
+            " " +
+            namaBulan[tanggal.getMonth()] +
+            " " +
+            tanggal.getFullYear() +
+            " " +
+            ("0" + tanggal.getHours()).slice(-2) +
+            ":" +
+            ("0" + tanggal.getMinutes()).slice(-2) +
+            ":" +
+            ("0" + tanggal.getSeconds()).slice(-2);
+
+          return tanggalFormatted;
         },
       },
       {

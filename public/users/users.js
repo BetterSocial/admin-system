@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
   const formattedDate = (data) => {
     // Mengubah menjadi objek Date
     const date = new Date(data);
@@ -53,16 +53,18 @@ $(document).ready(function () {
       url: "/users/data",
       type: "POST",
       headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
-      data: function (d) {
+      data: function(d) {
         d.username = $("#username").val();
         d.countryCode = $("#countryCode").val();
+        d.topic = $("#topic").val();
+        console.log(d);
       },
     },
     columns: [
       {
         data: "Action",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           var html =
             "<a href='/user-detail-view?user_id=" +
             row.user_id +
@@ -91,14 +93,14 @@ $(document).ready(function () {
       {
         data: "created_at",
         orderable: true,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           return formattedDate(data);
         },
       },
       {
         data: "status",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           if (row.is_banned) {
             return "<span class='badge badge-danger'>Banned</span>";
           } else {
@@ -110,20 +112,18 @@ $(document).ready(function () {
       {
         data: "followers",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           // pengikut kita
           let followers = [];
           followers = row.followeds;
           let total = followers.length;
-
-          //return "<a href='/user-follow/FOLLOWERS/"+row.user_id +"'> <button type='button' class='btn btn-primary btn-sm'>#Followers</button> </a>";
           return `<a href="/user-follow-detail?type=FOLLOWERS&user_id=${row.user_id}"> <button type='button' class='btn btn-primary  btn-sm'>#Followers ${total}</button> </a>`;
         },
       },
       {
         data: "following",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           // total yang kita ikuti
           let followeds = [];
           followeds = row.followers;
@@ -140,7 +140,7 @@ $(document).ready(function () {
       {
         data: "posts",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           return (
             " <a href='/user-show-post-list?user_id=" +
             row.user_id +
@@ -151,14 +151,14 @@ $(document).ready(function () {
       {
         data: "session",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           return " <a href='http://www.facebook.com'> <button type='button' class='btn btn-primary btn-sm'>#session</button> </a>";
         },
       },
       {
         data: "user_score",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           let userScore = 0;
           if (row.user_score !== null && row.hasOwnProperty("user_score")) {
             let user_score = row.user_score;
@@ -177,7 +177,7 @@ $(document).ready(function () {
       {
         data: "user_score",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           let total = 0;
           if (row.blocked.length >= 1) {
             total = row.blocked.length;
@@ -188,12 +188,18 @@ $(document).ready(function () {
       {
         data: "user_topics",
         orderable: false,
-        render: function (data, type, row) {
+        render: function(data, type, row) {
           let text = "";
           if (row.user_topics.length >= 1) {
             for (let index = 0; index < row.user_topics.length; index++) {
-              const element = row.user_topics[index];
-              text += element.topic_name + ", ";
+              let userTopic = row.user_topics[index];
+              console.log(userTopic);
+              let topic = userTopic.topic;
+              if (topic) {
+                if (topic.name != null) {
+                  text += topic.name + ", ";
+                }
+              }
             }
           }
           return `<p> ${text} </p>`;
@@ -202,7 +208,7 @@ $(document).ready(function () {
     ],
   });
 
-  $("#search").on("submit", function (e) {
+  $("#search").on("submit", function(e) {
     datatble.draw();
     e.preventDefault();
   });
@@ -251,12 +257,14 @@ function bannedUser(status, userId) {
         contentType: false,
         processData: false,
         url: `/users/banned/${userId}`,
-        success: function (data) {
+        success: function(data) {
           console.log(data);
-          $("#tableUsers").DataTable().ajax.reload();
+          $("#tableUsers")
+            .DataTable()
+            .ajax.reload();
           Swal.close();
         },
-        error: function (data) {
+        error: function(data) {
           Swal.close();
           return Swal.fire({
             icon: "error",

@@ -41,20 +41,13 @@ class UsersAppController extends Controller
         }
     }
 
+
+
+
     public function downloadCsv(Request $req)
     {
-
-        $user = "SELECT user_id,username,real_name,last_active_at,status,country_code,created_at FROM users WHERE true";
-        if ($req->username != null) {
-            $user .= " AND username ILIKE '%$req->username%'";
-        }
-        if ($req->countryCode != null) {
-            $user .= " AND country_code ILIKE '%$req->countryCode%'";
-        }
-
-
-
-        $data = DB::SELECT($user);
+        $query = UserApps::userQuery($req);
+        $users = $query->get();
 
         $filename = "Data User List-" . md5(date("Y-m-d H:i:s")) . '.csv';
         $path = Storage::path($filename);
@@ -73,29 +66,34 @@ class UsersAppController extends Controller
             ],
             ";"
         );
-        //EMTER
         fputcsv($file, [], ";");
         fputcsv($file, ["Download Time :", Carbon::now()->toDateTimeString()], ";");
         fputcsv($file, [], ";");
         fputcsv($file, [
             "User Id",
             "Username",
-            "Real Name",
             "Country Code",
             "Registered At",
             "Last Active",
+            "Topics",
             "Status"
         ], ";");
-
-        foreach ($data as $row => $value) {
+        foreach ($users as $user) {
+            $topics = '';
+            if (count($user->userTopics) >= 1) {
+                foreach ($user->userTopics as $topic) {
+                    $name = $topic->topic->name ?? '';
+                    $topics = $topics . $name . ',';
+                }
+            }
             $body = [
-                $value->user_id,
-                $value->username,
-                $value->real_name,
-                $value->country_code,
-                Carbon::parse($value->created_at),
-                Carbon::parse($value->last_active_at),
-                $value->status,
+                $user->user_id,
+                $user->username,
+                $user->country_code,
+                Carbon::parse($user->created_at),
+                Carbon::parse($user->last_active_at),
+                $topics,
+                $user->status,
             ];
             fputcsv($file, $body, ";");
         }

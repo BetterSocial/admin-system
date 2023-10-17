@@ -81,7 +81,7 @@ class Controller extends BaseController
             'draw' => 0,
             'recordsTotal' => 0,
             'recordsFiltered' => 0,
-            'data' => null,
+            'data' => [],
         ], 200);
     }
 }
