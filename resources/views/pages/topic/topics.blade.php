@@ -329,7 +329,7 @@
                             </label>
                             <div class="custom-file-container__image-preview"></div>
                         </div>
-                        <input type="text" class="type-upload" name="type">
+                        <input type="text" class="type-upload" name="type" hidden>
                         <input type="text" class="topic-id" name="id" hidden>
                     </div>
                     <div class="modal-footer">
