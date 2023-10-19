@@ -325,7 +325,9 @@ class TopicController extends Controller
                         'cover_path' => $response
                     ]);
                 }
-                LogModel::insertLog('edit-topic', $type == 'icon' ?  'success changed icon topic' : 'success changed cover topic');
+                LogModel::insertLog('edit-topic', $type == 'icon'
+                    ?  'success changed icon topic'
+                    : 'success changed cover topic');
                 DB::commit();
                 return $this->successResponseWithAlert($type == 'icon'
                     ? 'Successfully changed the icon in the topic.'
