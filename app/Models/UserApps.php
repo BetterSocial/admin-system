@@ -35,6 +35,7 @@ class UserApps extends Model
         'allow_anon_dm',
         'only_received_dm_from_user_following',
         'is_backdoor_user',
+        'blocked_by_admin',
     ];
 
     public function follower()
