@@ -82,9 +82,9 @@ async function showDetailCategory(id) {
   }
 }
 
-async function showSortTopic(item) {
-  $("#topicSort").val(item.sort);
-  $("#topicId").val(item.topic_id);
+async function showSortTopic(topicId, sort) {
+  $("#topicSort").val(sort);
+  $("#topicId").val(topicId);
   $("#modalTopicSort").modal("show");
 }
 
@@ -96,10 +96,10 @@ function getNewCategory() {
     .catch((err) => {});
 }
 
-function signCategory(topic, sign) {
-  $(".topic-id-sign").val(topic.topic_id);
-  $(".name-topic-sign").val(topic.name);
-  $(".category-topic-sign").val(topic.categories);
+function signCategory(topicId, sign, name, categories) {
+  $(".topic-id-sign").val(topicId);
+  $(".name-topic-sign").val(name);
+  $(".category-topic-sign").val(categories);
   if (sign == 1) {
     $("#modalTopicSign").modal("show");
   } else {
@@ -107,8 +107,8 @@ function signCategory(topic, sign) {
   }
 }
 
-function updateImage(item) {
-  $(".topic-id").val(item.topic_id);
+function updateImage(topicId) {
+  $(".topic-id").val(topicId);
   $("#modalChangeIcon").modal("show");
 }
 
@@ -129,6 +129,7 @@ $(document).ready(function() {
   dataTable = $("#tableTopics").DataTable({
     searching: false,
     stateSave: true,
+    processing: true,
     language: {
       processing: "Loading...",
       emptyTable: "No Data Topics",
@@ -164,13 +165,12 @@ $(document).ready(function() {
         render: function(data, type, row) {
           let icon = row.icon_path;
           let img = "";
-          let item = JSON.stringify(row);
           if (icon != "" && icon != " " && icon != null) {
             img = '<img src="' + icon + '" width="30" height="20" />';
           } else {
             img = "No Icon";
           }
-          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${item})'>${img}</button>`;
+          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${row.topic_id})'>${img}</button>`;
         },
         defaultContent: "No Icon",
       },
@@ -179,7 +179,6 @@ $(document).ready(function() {
         className: "menufilter textfilter",
         render: function(data, type, row) {
           let value = "";
-          let item = JSON.stringify(row);
           value += `<button style="border: none; background: transparent; width: 100%; height: 100%" onclick='showDetailCategory(${row.topic_id})' >`;
           value += "<p>" + data + "</p>";
 
@@ -196,8 +195,7 @@ $(document).ready(function() {
         className: "menufilter textfilter",
         render: function(data, type, row) {
           let value = "";
-          let item = JSON.stringify(row);
-          value += `<button style="border: none; background: transparent" onclick='showSortTopic(${item})' >`;
+          value += `<button style="border: none; background: transparent" onclick='showSortTopic(${row.topic_id}, ${row.sort})' >`;
           value += "<p>" + data + "</p>";
 
           value += "</button>";
@@ -235,9 +233,9 @@ $(document).ready(function() {
         render: function(data, type, row) {
           let item = JSON.stringify(row);
           if (row.sign) {
-            return `<button class="btn btn-danger btn-delete" onclick='signCategory(${item}, 0)'>Remove from OB</button>`;
+            return `<button class="btn btn-danger btn-delete" onclick='signCategory(${row.topic_id}, 0, "${row.name}", "${row.categories}")'>Remove from OB</button>`;
           } else {
-            return `<button class="btn btn-primary" onclick='signCategory(${item}, 1)'>Add to OB</button>`;
+            return `<button class="btn btn-primary" onclick='signCategory(${row.topic_id}, 1, "${row.name}", "${row.categories}")'>Add to OB</button>`;
           }
         },
       },
