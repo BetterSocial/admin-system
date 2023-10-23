@@ -107,8 +107,15 @@ function signCategory(topicId, sign, name, categories) {
   }
 }
 
-function updateImage(topicId) {
+function updateImage(topicId, type = "icon") {
   $(".topic-id").val(topicId);
+  if (type == "icon") {
+    $(".title-modal-icon").text("Changing the icon in the topic");
+    $(".type-upload").val("icon");
+  } else {
+    $(".type-upload").val("cover");
+    $(".title-modal-icon").text("Changing the cover in the topic");
+  }
   $("#modalChangeIcon").modal("show");
 }
 
@@ -170,7 +177,23 @@ $(document).ready(function() {
           } else {
             img = "No Icon";
           }
-          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${row.topic_id})'>${img}</button>`;
+          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${row.topic_id}, "icon")'>${img}</button>`;
+        },
+        defaultContent: "No Icon",
+      },
+      {
+        data: "cover_path",
+        orderable: false,
+        render: function(data, type, row) {
+          let icon = row.cover_path;
+          let img = "";
+          let item = JSON.stringify(row);
+          if (icon != "" && icon != " " && icon != null) {
+            img = '<img src="' + icon + '" width="30" height="20" />';
+          } else {
+            img = "No Icon";
+          }
+          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${row.topic_id}, "cover")'>${img}</button>`;
         },
         defaultContent: "No Icon",
       },

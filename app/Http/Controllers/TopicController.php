@@ -306,21 +306,35 @@ class TopicController extends Controller
                 throw new ValidationException($validator);
             }
 
+            $type = $request->input('type');
             if ($request->hasFile('file')) {
                 $response =  $request->file->storeOnCloudinary('icons')->getSecurePath();
                 $request->merge([
                     'icon_path' => $response
                 ]);
-            }
 
-            DB::beginTransaction();
-            $topic = Topics::find($request->input('id'));
-            $topic->update([
-                'icon_path' => $response
-            ]);
-            LogModel::insertLog('edit-topic', 'success changed icon topic');
-            DB::commit();
-            return $this->successResponseWithAlert('Successfully changed the icon in the topic.', 'topic');
+
+                DB::beginTransaction();
+                $topic = Topics::find($request->input('id'));
+                if ($type == 'icon') {
+                    $topic->update([
+                        'icon_path' => $response
+                    ]);
+                } else {
+                    $topic->update([
+                        'cover_path' => $response
+                    ]);
+                }
+                LogModel::insertLog('edit-topic', $type == 'icon'
+                    ?  'success changed icon topic'
+                    : 'success changed cover topic');
+                DB::commit();
+                return $this->successResponseWithAlert($type == 'icon'
+                    ? 'Successfully changed the icon in the topic.'
+                    : 'Successfully changed the cover in the topic.', 'topic');
+            } else {
+                return $this->errorResponseWithAlert('Image is required');
+            }
         } catch (\Throwable $e) {
             DB::rollBack();
             $message = $e->getMessage();

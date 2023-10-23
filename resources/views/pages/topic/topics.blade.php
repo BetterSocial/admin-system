@@ -49,6 +49,7 @@
                                     <th>id</th>
                                     <th>Name</th>
                                     <th>Icon</th>
+                                    <th>Cover</th>
                                     <th>Categories</th>
                                     <th>Created at</th>
                                     <th>Sort</th>
@@ -305,16 +306,17 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('topic.update-image') }}" method="POST" id="formSameTopic"
+                <form action="{{ route('topic.update-image') }}" method="POST" id="formChangeIcon"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabelLimit">Changing the icon in the topic</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
+
+                        <h5 class="title-modal-icon"></h5>
                         <div class="custom-file-container" data-upload-id="myFirstImage">
                             <label>Icon <a href="javascript:void(0)" class="custom-file-container__image-clear"
                                     title="Clear Image">x</a></label>
@@ -327,6 +329,7 @@
                             </label>
                             <div class="custom-file-container__image-preview"></div>
                         </div>
+                        <input type="text" class="type-upload" name="type" hidden>
                         <input type="text" class="topic-id" name="id" hidden>
                     </div>
                     <div class="modal-footer">
