@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableUserFollowUser extends Migration
+class AlterTableUserFollowUserHistory extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterTableUserFollowUser extends Migration
      */
     public function up()
     {
-        Schema::table('user_follow_user', function (Blueprint $table) {
-            $table->timestamp('followed_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+        Schema::table('user_follow_user_history', function (Blueprint $table) {
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
         });
     }
 
