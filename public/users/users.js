@@ -38,6 +38,15 @@ $(document).ready(function() {
     const formattedDate = `${dayName}, ${dayOfMonth}-${monthName}-${year}`;
     return formattedDate;
   };
+
+  function createButton(type, text, onclick) {
+    return `<button type="button" class="btn btn-${type} btn-sm my-2" onclick="${onclick}">${text}</button>`;
+  }
+
+  function createLinkButton(url, text) {
+    return `<a href="${url}"><button type="button" class="btn btn-primary btn-sm">${text}</button></a>`;
+  }
+
   var datatble = $("#tableUsers").DataTable({
     searching: false,
     stateSave: true,
@@ -65,16 +74,37 @@ $(document).ready(function() {
         data: "Action",
         orderable: false,
         render: function(data, type, row) {
-          var html =
-            "<a href='/user-detail-view?user_id=" +
-            row.user_id +
-            "'> <button type='button' class='btn btn-primary btn-sm'>Show Detail</button> </a>";
-          if (!row.is_banned) {
-            html +=
-              `<button type='button' onclick='bannedUser(this,\"` +
-              row.user_id +
-              "\")' class='btn btn-danger btn-sm'>Ban User</button>";
+          console.log(row);
+          let html = "";
+          const userDetailViewLink = createLinkButton(
+            `/user-detail-view?user_id=${row.user_id}`,
+            "Show Detail"
+          );
+          html += userDetailViewLink;
+
+          if (row.is_banned) {
+            console.log("is banned");
+            console.log(row.username);
           }
+
+          if (!row.is_banned) {
+            let onclick = "bannedUser(this,'" + row.user_id + "')";
+            const bannedUserBtn = createButton("danger", "Ban User", onclick);
+            html += bannedUserBtn;
+          }
+
+          if (row.user_score !== null && row.hasOwnProperty("user_score")) {
+            const user_score = row.user_score;
+
+            if (user_score.hasOwnProperty("blocked_by_admin")) {
+              html += createButton("primary", "Unblock User");
+            } else {
+              html += createButton("danger", "Block User");
+            }
+          } else {
+            html += createButton("danger", "Block User");
+          }
+
           return html;
         },
       },
@@ -165,7 +195,7 @@ $(document).ready(function() {
             if (user_score.hasOwnProperty("u1_score")) {
               let u1_score = user_score.u1_score;
               if (u1_score != 0) {
-                let numericScore = parseFloat(u1_score); // Konversi ke angka
+                let numericScore = parseFloat(u1_score);
                 let formattedScore = numericScore.toFixed(3);
                 userScore = formattedScore;
               }
@@ -193,7 +223,6 @@ $(document).ready(function() {
           if (row.user_topics.length >= 1) {
             for (let index = 0; index < row.user_topics.length; index++) {
               let userTopic = row.user_topics[index];
-              console.log(userTopic);
               let topic = userTopic.topic;
               if (topic) {
                 if (topic.name != null) {

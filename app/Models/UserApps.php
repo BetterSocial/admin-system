@@ -88,7 +88,8 @@ class UserApps extends Model
             'user_id',
             'username',
             'country_code',
-            'created_at'
+            'created_at',
+            'is_banned',
         );
 
         $query->with([
@@ -145,13 +146,24 @@ class UserApps extends Model
 
             $userScoreMap = [];
 
+            // foreach ($userScores as $userScore) {
+            //     $userScore->u1_score = is_numeric($userScore->u1_score) ? $userScore->u1_score : 0;
+            //     $userScoreMap[$userScore->_id] = $userScore;
+            // }
+            // foreach ($users as $user) {
+            //     if (isset($userScoreMap[$user->user_id])) {
+            //         $userScore = $userScoreMap[$user->user_id]->u1_score;
+            //         $user->user_score = $userScore;
+            //     }
+            // }
+
             foreach ($userScores as $userScore) {
-                $userScore->u1_score = is_numeric($userScore->u1_score) ? $userScore->u1_score : 0;
                 $userScoreMap[$userScore->_id] = $userScore;
             }
+
             foreach ($users as $user) {
                 if (isset($userScoreMap[$user->user_id])) {
-                    $userScore = $userScoreMap[$user->user_id]->u1_score;
+                    $userScore = $userScoreMap[$user->user_id];
                     $user->user_score = $userScore;
                 }
             }
