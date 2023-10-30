@@ -66,7 +66,6 @@ $(document).ready(function() {
         d.username = $("#username").val();
         d.countryCode = $("#countryCode").val();
         d.topic = $("#topic").val();
-        console.log(d);
       },
     },
     columns: [
@@ -74,7 +73,6 @@ $(document).ready(function() {
         data: "Action",
         orderable: false,
         render: function(data, type, row) {
-          console.log(row);
           let html = "";
           const userDetailViewLink = createLinkButton(
             `/user-detail-view?user_id=${row.user_id}`,
@@ -82,27 +80,36 @@ $(document).ready(function() {
           );
           html += userDetailViewLink;
 
-          if (row.is_banned) {
-            console.log("is banned");
-            console.log(row.username);
-          }
-
           if (!row.is_banned) {
             let onclick = "bannedUser(this,'" + row.user_id + "')";
             const bannedUserBtn = createButton("danger", "Ban User", onclick);
             html += bannedUserBtn;
           }
 
+          let clickBlockUser = "blockUser('" + row.user_id + "')";
+          let clickUnBlockUser = "unBlockUser('" + row.user_id + "')";
+
+          const btnUnBlockUser = createButton(
+            "primary",
+            "Unblock User",
+            clickUnBlockUser
+          );
+          const btnBlockUser = createButton(
+            "danger",
+            "Block User",
+            clickBlockUser
+          );
           if (row.user_score !== null && row.hasOwnProperty("user_score")) {
-            const user_score = row.user_score;
+            let user_score = row.user_score;
 
             if (user_score.hasOwnProperty("blocked_by_admin")) {
-              html += createButton("primary", "Unblock User");
+              let { status } = user_score.blocked_by_admin;
+              html += status ? btnUnBlockUser : btnBlockUser;
             } else {
-              html += createButton("danger", "Block User");
+              html += btnBlockUser;
             }
           } else {
-            html += createButton("danger", "Block User");
+            html += btnBlockUser;
           }
 
           return html;
@@ -251,12 +258,19 @@ function downloadCsv(e) {
   popUpCsv.location =
     "/download-csv" + "?username=" + username + "&countryCode=" + countryCode;
 }
-
-function bannedUser(status, userId) {
+function confirmAction(
+  title,
+  userId,
+  url,
+  successMessage,
+  errorMessage,
+  successCallback
+) {
   var formData = new FormData();
   formData.append("user_id", userId);
+
   Swal.fire({
-    title: "Are you sure?",
+    title: title,
     text: "",
     icon: "warning",
     showCancelButton: true,
@@ -267,8 +281,8 @@ function bannedUser(status, userId) {
     if (result.isConfirmed) {
       Swal.fire({
         title: "Please Wait !",
-        showCancelButton: false, // There won't be any cancel button
-        showConfirmButton: false, // There won't be any confirm button
+        showCancelButton: false,
+        showConfirmButton: false,
         allowOutsideClick: false,
         willOpen: () => {
           Swal.showLoading();
@@ -285,23 +299,77 @@ function bannedUser(status, userId) {
         dataType: "JSON",
         contentType: false,
         processData: false,
-        url: `/users/banned/${userId}`,
+        url: url,
         success: function(data) {
-          console.log(data);
-          $("#tableUsers")
-            .DataTable()
-            .ajax.reload();
           Swal.close();
+          console.log(data);
+          successCallback(data);
         },
         error: function(data) {
           Swal.close();
-          return Swal.fire({
+          console.log(data);
+          Swal.fire({
             icon: "error",
-            title: "Oops...",
-            text: data.message,
+            title: "Error",
+            text: data.responseJSON.message || errorMessage,
           });
         },
       });
     }
   });
+}
+
+function bannedUser(status, userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/banned/${userId}`,
+    "Success",
+    "Oops...",
+    function(data) {
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
+}
+
+function blockUser(userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/admin-block-user`,
+    "Success",
+    "Error",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
+}
+
+function unBlockUser(userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/admin-unblock-user`,
+    "Success",
+    "Error",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
 }

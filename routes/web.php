@@ -131,6 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('users')->group(function () {
         Route::post('/admin-block-user', [UsersAppController::class, 'blockUserByAdmin'])->name('user.admin-block-user');
+        Route::post('/admin-unblock-user', [UsersAppController::class, 'unBlockUserByAdmin'])->name('user.admin-block-user');
     });
 
 

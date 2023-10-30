@@ -8,6 +8,7 @@ use App\Models\UserApps;
 use App\Models\UserScoreModel;
 use App\Services\ChatGetStreamService;
 use App\Services\FeedGetStreamService;
+use App\Services\QueueService;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -17,8 +18,10 @@ use Illuminate\Support\Facades\DB;
 class UsersAppController extends Controller
 {
 
+    private QueueService $queueService;
     public function __construct(private UserService $userService)
     {
+        $this->queueService = new QueueService();
     }
 
     /**
@@ -207,9 +210,38 @@ class UsersAppController extends Controller
     public function blockUserByAdmin(Request $request)
     {
         try {
-            dd($request->all());
+            $request->validate([
+                'user_id' => 'required'
+            ]);
+
+            $res = $this->queueService->blockUser($request->input('user_id'));
+
+            $code = $res['code'];
+            if ($code != 200) {
+                return $this->errorResponse($res['message'], 400);
+            }
+            return $this->successResponse($res['message']);
         } catch (\Throwable $th) {
-            //throw $th;
+            return $this->errorResponse($th->getMessage(), 400);
+        }
+    }
+
+    public function unBlockUserByAdmin(Request $request)
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required'
+            ]);
+
+            $res = $this->queueService->unBlockUser($request->input('user_id'));
+
+            $code = $res['code'];
+            if ($code != 200) {
+                return $this->errorResponse($res['message'], 400);
+            }
+            return $this->successResponse($res['message'], $res);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage(), 400);
         }
     }
 }
