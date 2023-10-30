@@ -24,8 +24,7 @@ class QueueService
             ->post($this->baseUrl . '/admin-block-user', [
                 'userId' => $userId,
             ]);
-        $body = $response->json();
-        return $body;
+        return  $response->json();
     }
     public function unBlockUser($userId)
     {
@@ -33,7 +32,6 @@ class QueueService
             ->post($this->baseUrl . '/admin-unblock-user', [
                 'userId' => $userId,
             ]);
-        $body = $response->json();
-        return $body;
+        return $response->json();
     }
 }
