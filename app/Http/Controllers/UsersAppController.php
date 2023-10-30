@@ -203,4 +203,13 @@ class UsersAppController extends Controller
             return $this->errorResponse($th->getMessage(), 400);
         }
     }
+
+    public function blockUserByAdmin(Request $request)
+    {
+        try {
+            dd($request->all());
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }
