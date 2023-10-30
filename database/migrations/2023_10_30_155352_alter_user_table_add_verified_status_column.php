@@ -25,5 +25,8 @@ class AlterUserTableAddVerifiedStatusColumn extends Migration
      */
     public function down()
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn("verified_status");
+        });
     }
 }

@@ -25,6 +25,8 @@ class AlterTableUserFollowUserHistory extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('user_follow_user_history', function (Blueprint $table) {
+            $table->dropColumn("created_at");
+        });
     }
 }
