@@ -67,9 +67,6 @@ $(document).ready(function() {
         d.countryCode = $("#countryCode").val();
         d.topic = $("#topic").val();
       },
-      error: function(data) {
-        console.log(data);
-      },
     },
     columns: [
       {
