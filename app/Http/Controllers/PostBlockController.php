@@ -6,11 +6,14 @@ use App\Models\LogModel;
 use App\Models\Polling;
 use App\Models\PollingOption;
 use App\Models\PostModel;
+use App\Models\UserApps;
 use App\Models\UserPostComment;
 use App\Services\FeedGetStreamService;
 use Illuminate\Http\Request;
 use GetStream\Stream\Client;
 use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\returnSelf;
 
 class PostBlockController extends Controller
 {
@@ -81,7 +84,7 @@ class PostBlockController extends Controller
                 'draw' => $draw,
                 'recordsTotal' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
                 'recordsFiltered' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
-                'data' => $data ?? 0,
+                'data' => $data ?? [],
             ]);
         } catch (\Throwable $th) {
             return $this->errorDataTableResponse();
@@ -94,7 +97,6 @@ class PostBlockController extends Controller
         $sortBy = $this->columns[$sortingData['column']] ?? null;
         $sortDirection = $sortingData['direction'] ?? 'asc';
 
-        // Pastikan kolom yang digunakan untuk pengurutan adalah valid
         if (!$sortBy || !in_array($sortBy, $this->columns)) {
             return $data;
         }
@@ -132,7 +134,7 @@ class PostBlockController extends Controller
 
             return $this->handlePoll($data);
         } catch (\Throwable $th) {
-            throw $th;
+            return throw $th;
         }
     }
 
@@ -181,6 +183,9 @@ class PostBlockController extends Controller
 
         $withSortDescData = [];
         foreach ($data as  $value) {
+            $userId = $value['actor']['id'];
+            $user = UserApps::select('user_id', 'blocked_by_admin')->where('user_id', $userId)->first();
+            $value['user'] = $user ?? null;
             if ($value['verb'] == 'poll') {
                 $value['poll'] = $this->getPoll($value['polling_id']);
                 $value['polling_options'] = $this->getPollOption($value['polling_id']);
@@ -223,7 +228,7 @@ class PostBlockController extends Controller
                 "set" => ["is_hide" => $request->is_hide]
             ]
         ];
-        $status = $client->batchPartialActivityUpdate($payload);
+        $client->batchPartialActivityUpdate($payload);
         LogModel::insertLog('update-feed', 'success update feed');
         return $payload;
     }
@@ -251,7 +256,7 @@ class PostBlockController extends Controller
 
         $pollingOptions = PollingOption::select('option')->where('polling_id', $pollingId)->get();
         $options = array();
-        foreach ($pollingOptions as $key => $value) {
+        foreach ($pollingOptions as $value) {
             $options[] = $value->option ?? '';
         }
         return $options;

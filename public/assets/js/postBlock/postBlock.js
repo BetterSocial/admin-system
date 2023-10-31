@@ -485,6 +485,14 @@ const bannedUserByPostId = (postId) => {
   });
 };
 
+function createButton(type, text, onclick) {
+  return `<button type="button" class="btn btn-${type} btn-sm my-2" onclick="${onclick}">${text}</button>`;
+}
+
+function createLinkButton(url, text) {
+  return `<a href="${url}"><button type="button" class="btn btn-primary btn-sm">${text}</button></a>`;
+}
+
 $(document).ready(function() {
   $("#detailCommentModal").on("hide.bs.modal", function(e) {
     let container = document.getElementById("cardBodyComment");
@@ -528,7 +536,7 @@ $(document).ready(function() {
         orderable: false,
         className: "menufilter textfilter",
         render: function(data, type, row) {
-          // console.log(row);
+          console.log(row);
           if (row.anonimity) {
             return (
               row.anon_user_info_color_name +
@@ -736,33 +744,54 @@ $(document).ready(function() {
         orderable: false,
         render: function(data, type, row) {
           // action
+          let userId = row.actor.id;
+          console.log(row);
+          let clickBlockUser = "blockUser('" + userId + "')";
+          let clickUnBlockUser = "unBlockUser('" + userId + "')";
+
+          const btnUnBlockUser = createButton(
+            "primary",
+            "Unblock User",
+            clickUnBlockUser
+          );
+          const btnBlockUser = createButton(
+            "danger",
+            "Block User",
+            clickBlockUser
+          );
           let isHide = false;
           if (row.is_hide) {
             isHide = true;
           }
           let html = "";
           if (isHide) {
-            html =
-              "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
-              row.id +
-              "\")' class='btn btn-info btn-sm'>Show Post</button>" +
-              "<br/>" +
-              "<br/>" +
-              "<button  type='button' data-deleted='false' onclick='bannedUserByPostId(\"" +
-              row.id +
-              "\")' class='btn btn-danger btn-sm'>Ban User</button>" +
-              " <br/>";
+            let clickShow = "showPost(false,'" + row.id + "')";
+            html += createButton("primary", "Show Post", clickShow);
+            let clickBanned = "bannedUserByPostId('" + row.id + "')";
+            html += createButton("danger", "Ban User", clickBanned);
+
+            if (row.hasOwnProperty("user") && row.user != null) {
+              let user = row.user;
+              if (user.blocked_by_admin) {
+                html += btnUnBlockUser;
+              } else {
+                html += btnBlockUser;
+              }
+            }
           } else {
-            html =
-              "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
-              row.id +
-              "\")' class='btn btn-danger btn-sm'>Hide Post</button>" +
-              " <br/>" +
-              " <br/>" +
-              "<button  data-deleted='true' type='button' onclick='bannedUserByPostId(\"" +
-              row.id +
-              "\")' class='btn btn-danger btn-sm'>Ban User</button>" +
-              " <br/>";
+            let clickHide = "hidePost(true,'" + row.id + "')";
+            html += createButton("danger", "Hide Post", clickHide);
+            let clickBanned = "bannedUserByPostId('" + row.id + "')";
+            html += createButton("danger", "Ban User", clickBanned);
+
+            if (row.hasOwnProperty("user") && row.user != null) {
+              let user = row.user;
+              if (user.blocked_by_admin) {
+                html += btnUnBlockUser;
+              } else {
+                html += btnBlockUser;
+              }
+            }
           }
           return html;
         },
@@ -782,3 +811,119 @@ $(document).ready(function() {
   });
   /// end
 });
+
+function confirmAction(
+  title,
+  userId,
+  url,
+  successMessage,
+  errorMessage,
+  successCallback
+) {
+  var formData = new FormData();
+  formData.append("user_id", userId);
+
+  Swal.fire({
+    title: title,
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Please Wait !",
+        showCancelButton: false,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      $.ajaxSetup({
+        headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+      });
+
+      $.ajax({
+        type: "POST",
+        data: formData,
+        dataType: "JSON",
+        contentType: false,
+        processData: false,
+        url: url,
+        success: function(data) {
+          Swal.close();
+          console.log(data);
+          successCallback(data);
+        },
+        error: function(data) {
+          Swal.close();
+          console.log(data);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: data.responseJSON.message || errorMessage,
+          });
+        },
+      });
+    }
+  });
+}
+
+function bannedUser(status, userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/banned/${userId}`,
+    "Success",
+    "Oops...",
+    function(data) {
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
+}
+
+function blockUser(userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/admin-block-user`,
+    "Success",
+    "Error",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
+}
+
+function unBlockUser(userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/admin-unblock-user`,
+    "Success",
+    "Error",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
+}

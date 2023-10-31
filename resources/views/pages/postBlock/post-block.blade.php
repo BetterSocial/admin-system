@@ -32,6 +32,7 @@
                     </div>
                     <div class="table-responsive mb-4 mt-4">
                         <table id="tablePostBlock" class="table table-hover" style="width:100%">
+                            <caption>List Post</caption>
                             <thead>
                                 <tr>
                                     <th>id</th>
@@ -66,10 +67,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p class="test-class"> testing</p>
-                    <table id="tableReaction">
-
-                    </table>
                 </div>
                 <div class="modal-footer">
                 </div>
