@@ -138,7 +138,6 @@ class UsersAppController extends Controller
                 $this->updateRemoteStatus('delete', $userApp);
                 $userApp->status = 'N';
             } else {
-                // $this->updateRemoteStatus('add', $userApp);
                 $userApp->status = 'Y';
             }
             $userApp->save();
@@ -158,14 +157,14 @@ class UsersAppController extends Controller
     {
         $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
         if ($action == 'add') {
-            $status = $client->users()->add($userApp->user_id, [
+            $client->users()->add($userApp->user_id, [
                 "created_at" => Carbon::now()->toISOString(),
                 "human_id" => $userApp->human_id,
                 "profile_pic_url" => $userApp->profile_pic_path,
                 "username" => $userApp->username
             ]);
         } elseif ($action == 'delete') {
-            $status = $client->users()->delete($userApp->user_id);
+            $client->users()->delete($userApp->user_id);
         }
     }
 
