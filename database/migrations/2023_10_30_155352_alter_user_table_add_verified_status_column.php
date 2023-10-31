@@ -14,7 +14,7 @@ class AlterUserTableAddVerifiedStatusColumn extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('verified_status', ['VERIFIED', 'UNVERIFIED']);
+            $table->enum('verified_status', ['VERIFIED', 'UNVERIFIED'])->default('VERIFIED');
         });
     }
 
