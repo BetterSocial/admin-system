@@ -27,9 +27,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/status-health/live', [StatusHealthController::class, 'live']);
 
@@ -79,7 +76,6 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('/create-locations', function () {
-        // $category_name = '';
         $data = [
             'category_name' => 'forms',
             'page_name' => 'create-locations',
@@ -112,7 +108,6 @@ Route::group(['middleware' => 'auth'], function () {
     //User Follow Data Topic
     Route::get('/follow-topics', 'UserFollowController@index');
 
-    // Route::POST("/topic-detail","UserFollowController@topicDetail");
     Route::POST("/user/topic", "UserFollowController@getList");
 
 
@@ -142,7 +137,6 @@ Route::group(['middleware' => 'auth'], function () {
     *Domain
     */
     Route::get('/domain/index', function () {
-        // $category_name = '';
         $data = [
             'category_name' => 'domain',
             'page_name' => 'domain list',
@@ -150,13 +144,11 @@ Route::group(['middleware' => 'auth'], function () {
             'scrollspy_offset' => '',
 
         ];
-        // $pageName = 'widgets';
         return view('pages.domain.domain')->with($data);
     });
 
 
     Route::get('/news/index', function () {
-        // $category_name = '';
         $data = [
             'category_name' => 'domain',
             'page_name' => 'news-link',
@@ -164,7 +156,6 @@ Route::group(['middleware' => 'auth'], function () {
             'scrollspy_offset' => '',
 
         ];
-        // $pageName = 'widgets';
         return view('pages.news.news')->with($data);
     });
 
@@ -179,7 +170,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Polling
     Route::get('/polling/index', function () {
-        // $category_name = '';
         $data = [
             'category_name' => 'polling',
             'page_name' => 'polling-list',
@@ -187,7 +177,6 @@ Route::group(['middleware' => 'auth'], function () {
             'scrollspy_offset' => '',
 
         ];
-        // $pageName = 'widgets';
         return view('pages.polling.polling')->with($data);
     });
 
@@ -244,22 +233,18 @@ Route::get('/', function () {
 });
 
 Route::get('/forgot-password', function () {
-    // $category_name = 'auth';
     $data = [
         'category_name' => 'auth',
         'page_name' => 'auth_boxed',
         'has_scrollspy' => 0,
         'scrollspy_offset' => '',
     ];
-    // $pageName = 'auth_boxed';
     return view('auth.passwords.email')->with($data);
 });
 
 
 
 
-
-//TODO hapus custom url reset-forget
 
 Route::post('/forgot-password-email-verification', 'ResetPasswordController@index')->name('forgot.password.confirm');
 
@@ -273,7 +258,6 @@ Route::get('/reset-password/{token}', function ($token) {
     ];
 
     return view('auth.passwords.reset')->with($data);
-    //    return view('auth.passwords.reset', ['token' => $token], ['page_name' => 'test']);
 })->name('password.resett');
 
 Route::post('/reset-password', 'ResetPasswordController@resetPassword')->name('reset.password.update');
