@@ -25,6 +25,8 @@ class AlterTableUserFollowUser extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('user_follow_user', function (Blueprint $table) {
+            $table->dropColumn("followed_at");
+        });
     }
 }

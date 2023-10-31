@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterTableUserFollowUserHistory extends Migration
+class AlterUserTableAddVerifiedStatusColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AlterTableUserFollowUserHistory extends Migration
      */
     public function up()
     {
-        Schema::table('user_follow_user_history', function (Blueprint $table) {
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+        Schema::table('users', function (Blueprint $table) {
+            $table->enum('verified_status', ['VERIFIED', 'UNVERIFIED'])->default('VERIFIED');
         });
     }
 
@@ -25,8 +25,8 @@ class AlterTableUserFollowUserHistory extends Migration
      */
     public function down()
     {
-        Schema::table('user_follow_user_history', function (Blueprint $table) {
-            $table->dropColumn("created_at");
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn("verified_status");
         });
     }
 }
