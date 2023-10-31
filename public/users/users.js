@@ -1,12 +1,9 @@
 $(document).ready(function() {
   const formattedDate = (data) => {
-    // Mengubah menjadi objek Date
     const date = new Date(data);
 
-    // Daftar nama hari
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    // Daftar nama bulan
     const monthsOfYear = [
       "Jan",
       "Feb",
@@ -22,19 +19,14 @@ $(document).ready(function() {
       "Dec",
     ];
 
-    // Mendapatkan nama hari dari indeks hari dalam objek Date
     const dayName = daysOfWeek[date.getDay()];
 
-    // Mendapatkan tanggal dari objek Date
     const dayOfMonth = date.getDate();
 
-    // Mendapatkan nama bulan dari indeks bulan dalam objek Date
     const monthName = monthsOfYear[date.getMonth()];
 
-    // Mendapatkan tahun dari objek Date
     const year = date.getFullYear();
 
-    // Format akhir yang diinginkan
     const formattedDate = `${dayName}, ${dayOfMonth}-${monthName}-${year}`;
     return formattedDate;
   };
@@ -144,7 +136,6 @@ $(document).ready(function() {
         data: "followers",
         orderable: false,
         render: function(data, type, row) {
-          // pengikut kita
           let followers = [];
           followers = row.followeds;
           let total = followers.length;
@@ -155,7 +146,6 @@ $(document).ready(function() {
         data: "following",
         orderable: false,
         render: function(data, type, row) {
-          // total yang kita ikuti
           let followeds = [];
           followeds = row.followers;
           let total = followeds.length;
