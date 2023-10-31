@@ -73,6 +73,7 @@ $(document).ready(function() {
         data: "Action",
         orderable: false,
         render: function(data, type, row) {
+          let { blocked_by_admin } = row;
           let html = "";
           const userDetailViewLink = createLinkButton(
             `/user-detail-view?user_id=${row.user_id}`,
@@ -99,15 +100,8 @@ $(document).ready(function() {
             "Block User",
             clickBlockUser
           );
-          if (row.user_score !== null && row.hasOwnProperty("user_score")) {
-            let user_score = row.user_score;
-
-            if (user_score.hasOwnProperty("blocked_by_admin")) {
-              let { status } = user_score.blocked_by_admin;
-              html += status ? btnUnBlockUser : btnBlockUser;
-            } else {
-              html += btnBlockUser;
-            }
+          if (blocked_by_admin) {
+            html += btnUnBlockUser;
           } else {
             html += btnBlockUser;
           }

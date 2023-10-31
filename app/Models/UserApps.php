@@ -90,6 +90,7 @@ class UserApps extends Model
             'country_code',
             'created_at',
             'is_banned',
+            'blocked_by_admin',
         );
 
         $query->with([
@@ -163,7 +164,7 @@ class UserApps extends Model
                 'data' => $users,
             ]);
         } catch (\Throwable $th) {
-            throw $th;
+            return throw $th;
         }
     }
 
@@ -176,7 +177,7 @@ class UserApps extends Model
             $user->user_score = $userScores;
             return $user;
         } catch (\Throwable $th) {
-            //throw $th;
+            return throw $th;
         }
     }
 }
