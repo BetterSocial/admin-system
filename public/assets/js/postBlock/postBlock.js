@@ -556,21 +556,9 @@ $(document).ready(function() {
         orderable: false,
         className: "menufilter textfilter",
         render: function(data, type, row) {
-          let { images_url } = row;
-          // message tab
-          if (row.post_type === 1) {
-            return `
+          return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
                 `;
-          } else if (row.post_type === 2) {
-            return `
-                <div class="btn-detail"  data-item="${row}">${data}</div>
-                `;
-          } else {
-            return `
-              <div class="btn-detail"  data-item="${row}">${data}</div>
-              `;
-          }
         },
       },
       {
@@ -745,7 +733,6 @@ $(document).ready(function() {
         render: function(data, type, row) {
           // action
           let userId = row.actor.id;
-          console.log(row);
           let clickBlockUser = "blockUser('" + userId + "')";
           let clickUnBlockUser = "unBlockUser('" + userId + "')";
 
@@ -763,35 +750,28 @@ $(document).ready(function() {
           if (row.is_hide) {
             isHide = true;
           }
+          let btnBlok = "";
+          if (row.hasOwnProperty("user") && row.user != null) {
+            let user = row.user;
+            if (user.blocked_by_admin) {
+              btnBlok = btnUnBlockUser;
+            } else {
+              btnBlok = btnBlockUser;
+            }
+          }
           let html = "";
           if (isHide) {
             let clickShow = "showPost(false,'" + row.id + "')";
             html += createButton("primary", "Show Post", clickShow);
             let clickBanned = "bannedUserByPostId('" + row.id + "')";
             html += createButton("danger", "Ban User", clickBanned);
-
-            if (row.hasOwnProperty("user") && row.user != null) {
-              let user = row.user;
-              if (user.blocked_by_admin) {
-                html += btnUnBlockUser;
-              } else {
-                html += btnBlockUser;
-              }
-            }
+            html += btnBlok;
           } else {
             let clickHide = "hidePost(true,'" + row.id + "')";
             html += createButton("danger", "Hide Post", clickHide);
             let clickBanned = "bannedUserByPostId('" + row.id + "')";
             html += createButton("danger", "Ban User", clickBanned);
-
-            if (row.hasOwnProperty("user") && row.user != null) {
-              let user = row.user;
-              if (user.blocked_by_admin) {
-                html += btnUnBlockUser;
-              } else {
-                html += btnBlockUser;
-              }
-            }
+            html += btnBlok;
           }
           return html;
         },
@@ -820,7 +800,7 @@ function confirmAction(
   errorMessage,
   successCallback
 ) {
-  var formData = new FormData();
+  let formData = new FormData();
   formData.append("user_id", userId);
 
   Swal.fire({
