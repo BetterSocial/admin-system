@@ -294,10 +294,11 @@ class TopicController extends Controller
                 $request->all(),
                 [
                     'id' => $this->validationId,
+                    'type' => 'required|in:icon,cover',
                     'file' => [
                         'required',
                         'image',
-                        'dimensions:ratio=1/1,min_width=150,min_height=150,max_width=1500,max_height=1500',
+                        'dimensions:min_width=150,min_height=150,max_width=1500,max_height=1500',
                     ],
                 ],
             );
