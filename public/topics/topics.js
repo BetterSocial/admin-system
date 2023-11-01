@@ -1,4 +1,4 @@
-var dataTable;
+let dataTable;
 
 let categories = [];
 
@@ -279,8 +279,8 @@ $(document).ready(function() {
 
   $("#formTopicSort").submit(function(e) {
     e.preventDefault();
-    var form = $(this);
-    var url = form.attr("action");
+    let form = $(this);
+    let url = form.attr("action");
     let topicId = $("#topicId").val();
     let topicSort = $("#topicSort").val();
     let data = {
@@ -329,8 +329,8 @@ $(document).ready(function() {
 
   $("#modal-category").submit(function(e) {
     e.preventDefault();
-    var form = $(this);
-    var url = form.attr("action");
+    let form = $(this);
+    let url = form.attr("action");
     let topicId = $("#topicId").val();
     let topicName = $("#topicName").val();
     let categorySelect = $("#categorySelect").val();
@@ -438,7 +438,7 @@ $(document).ready(function() {
 });
 
 function showTopic(topicId) {
-  var formData = new FormData();
+  let formData = new FormData();
   formData.append("topic_id", topicId);
 
   $.ajaxSetup({
