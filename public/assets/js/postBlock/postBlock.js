@@ -128,29 +128,29 @@ const reactionPost = async (activityId, type) => {
   }
 };
 
-const hideOrShowPost = async (id, isHide) => {
-  try {
-    const body = {
-      is_hide: isHide,
-    };
-    console.log(body);
-    const response = await fetch(`/post/hide/${id}`, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    let res = await response.json();
-    return res;
-  } catch (error) {
-    console.log(error);
-    Swal.fire("Error", "Error load data from getstream", "error").then(() => {
-      location.reload();
-    });
-  }
-};
+// const hideOrShowPost = async (id, isHide) => {
+//   try {
+//     const body = {
+//       is_hide: isHide,
+//     };
+//     console.log(body);
+//     const response = await fetch(`/post/hide/${id}`, {
+//       method: "POST",
+//       headers: {
+//         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(body),
+//     });
+//     let res = await response.json();
+//     return res;
+//   } catch (error) {
+//     console.log(error);
+//     Swal.fire("Error", "Error load data from getstream", "error").then(() => {
+//       location.reload();
+//     });
+//   }
+// };
 
 const hidePost = (status, postId) => {
   Swal.fire({
@@ -517,7 +517,6 @@ $(document).ready(function() {
       data: function(d) {
         d.total = $("#total").val();
         d.message = $("#message").val();
-        console.log(d);
       },
     },
     error: function(xhr, error, thrown) {
@@ -761,13 +760,13 @@ $(document).ready(function() {
           }
           let html = "";
           if (isHide) {
-            let clickShow = "showPost(false,'" + row.id + "')";
+            let clickShow = "hideOrShowPost(false,'" + row.id + "')";
             html += createButton("primary", "Show Post", clickShow);
             let clickBanned = "bannedUserByPostId('" + row.id + "')";
             html += createButton("danger", "Ban User", clickBanned);
             html += btnBlok;
           } else {
-            let clickHide = "hidePost(true,'" + row.id + "')";
+            let clickHide = "hideOrShowPost(true,'" + row.id + "')";
             html += createButton("danger", "Hide Post", clickHide);
             let clickBanned = "bannedUserByPostId('" + row.id + "')";
             html += createButton("danger", "Ban User", clickBanned);
@@ -794,15 +793,12 @@ $(document).ready(function() {
 
 function confirmAction(
   title,
-  userId,
+  body,
   url,
   successMessage,
   errorMessage,
   successCallback
 ) {
-  let formData = new FormData();
-  formData.append("user_id", userId);
-
   Swal.fire({
     title: title,
     text: "",
@@ -823,32 +819,28 @@ function confirmAction(
         },
       });
 
-      $.ajaxSetup({
-        headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
-      });
-
-      $.ajax({
-        type: "POST",
-        data: formData,
-        dataType: "JSON",
-        contentType: false,
-        processData: false,
-        url: url,
-        success: function(data) {
-          Swal.close();
-          console.log(data);
-          successCallback(data);
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+          "Content-Type": "application/json",
         },
-        error: function(data) {
+        body: JSON.stringify(body),
+      })
+        .then((response) => response.json())
+        .then((data) => {
           Swal.close();
-          console.log(data);
+          successCallback(data);
+        })
+        .catch((error) => {
+          Swal.close();
+          console.log(error);
           Swal.fire({
             icon: "error",
             title: "Error",
-            text: data.responseJSON.message || errorMessage,
+            text: error.message || errorMessage,
           });
-        },
-      });
+        });
     }
   });
 }
@@ -856,14 +848,19 @@ function confirmAction(
 function bannedUser(status, userId) {
   confirmAction(
     "Are you sure?",
-    userId,
+    {
+      user_id: userId,
+    },
     `/users/banned/${userId}`,
     "Success",
     "Oops...",
     function(data) {
-      $("#tableUsers")
-        .DataTable()
-        .ajax.reload();
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      dataTablePost.draw();
     }
   );
 }
@@ -871,7 +868,9 @@ function bannedUser(status, userId) {
 function blockUser(userId) {
   confirmAction(
     "Are you sure?",
-    userId,
+    {
+      user_id: userId,
+    },
     `/users/admin-block-user`,
     "Success",
     "Error",
@@ -881,9 +880,7 @@ function blockUser(userId) {
         title: "Success",
         text: data.message,
       });
-      $("#tableUsers")
-        .DataTable()
-        .ajax.reload();
+      dataTablePost.draw();
     }
   );
 }
@@ -891,7 +888,9 @@ function blockUser(userId) {
 function unBlockUser(userId) {
   confirmAction(
     "Are you sure?",
-    userId,
+    {
+      user_id: userId,
+    },
     `/users/admin-unblock-user`,
     "Success",
     "Error",
@@ -901,9 +900,27 @@ function unBlockUser(userId) {
         title: "Success",
         text: data.message,
       });
-      $("#tableUsers")
-        .DataTable()
-        .ajax.reload();
+      dataTablePost.draw();
     }
   );
 }
+
+const hideOrShowPost = (status, postId) => {
+  let body = {
+    is_hide: status,
+  };
+  console.log(body);
+  confirmAction(
+    "Are you sure?",
+    body,
+    `/post/hide/${postId}`,
+    "Success",
+    "Oops...",
+    function(data) {
+      console.log(data);
+      Swal.fire("Success", "Success hide post", "success").then(() => {
+        dataTablePost.draw();
+      });
+    }
+  );
+};

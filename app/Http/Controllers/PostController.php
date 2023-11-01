@@ -89,7 +89,7 @@ class PostController extends Controller
                 $userId = $record['user_id'];
                 $user = UserApps::find($userId);
                 if (!$user) {
-                    throw new \Exception('User not found');
+                    throw new Exception('User not found');
                 }
 
                 $post = (new PostEntityBuilder())
@@ -131,16 +131,20 @@ class PostController extends Controller
 
     public function postHide(Request $request, $id)
     {
-        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
-        $payload = [
-            [
-                'id' => $id,
-                "set" => ["is_hide" => $request->is_hide]
-            ]
-        ];
-        $status = $client->batchPartialActivityUpdate($payload);
-        LogModel::insertLog('post-hide', 'success post hide');
-        return $status;
+        try {
+            $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
+            $payload = [
+                [
+                    'id' => $id,
+                    "set" => ["is_hide" => $request->is_hide]
+                ]
+            ];
+            $client->batchPartialActivityUpdate($payload);
+            LogModel::insertLog('post-hide', 'success post hide');
+            return $this->successResponse('Success Hide Post');
+        } catch (\Throwable $th) {
+            return $this->errorResponse('Error Hide Post ' . $th->getMessage());
+        }
     }
 
     public function deleteComment($id)
