@@ -844,7 +844,11 @@ const hideOrShowPost = (status, postId) => {
     "Oops...",
     function(data) {
       console.log(data);
-      Swal.fire("Success", "Success hide post", "success").then(() => {
+      Swal.fire(
+        "Success",
+        status ? "Success hide post" : "Success show post",
+        "success"
+      ).then(() => {
         dataTablePost.draw();
       });
     }
