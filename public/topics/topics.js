@@ -473,3 +473,40 @@ function showTopic(topicId) {
     },
   });
 }
+
+$(".btn-change-category").click(function() {
+  let category = $("#categoryChangeInput").val();
+  if (category) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to change category to " + category,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+    }).then((result) => {
+      if (result.value) {
+        $("#modalChangeCategory").modal("hide");
+      }
+    });
+  }
+});
+
+$(".btn-change-category").click(function() {
+  let category = $("#categoryChangeInput").val();
+  if (category) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to delete category to " + category,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+    }).then((result) => {
+      if (result.value) {
+        $("#modalChangeCategory").modal("hide");
+        alert("ok");
+      }
+    });
+  }
+});
