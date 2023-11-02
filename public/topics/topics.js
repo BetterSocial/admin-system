@@ -474,39 +474,127 @@ function showTopic(topicId) {
   });
 }
 
+function confirmAction(
+  title,
+  body,
+  url,
+  successMessage,
+  errorMessage,
+  successCallback,
+  method = "POST"
+) {
+  Swal.fire({
+    title: title,
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Please Wait !",
+        showCancelButton: false,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      fetch(url, {
+        method: method,
+        headers: {
+          "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          Swal.close();
+          successCallback(data);
+        })
+        .catch((error) => {
+          Swal.close();
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message || errorMessage,
+          });
+        });
+    }
+  });
+}
+
 $(".btn-change-category").click(function() {
-  let category = $("#categoryChangeInput").val();
-  if (category) {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to change category to " + category,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-    }).then((result) => {
-      if (result.value) {
+  let oldCategory = $("#oldCategory").val();
+  let newCategory = $("#newCategory").val();
+  if (oldCategory) {
+    confirmAction(
+      "Are you sure?",
+      {
+        old_category: oldCategory,
+        new_category: newCategory,
+      },
+      "/topics/category",
+      "Category changed successfully",
+      "Category changed failed",
+      function(data) {
+        // close modal
+        console.log(data);
+        // show message use sweet alert
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Category changed successfully",
+        });
+
+        dataTable.ajax.reload(null, false);
         $("#modalChangeCategory").modal("hide");
-      }
+      },
+      "PUT"
+    );
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Old Category is required",
     });
   }
 });
 
-$(".btn-change-category").click(function() {
-  let category = $("#categoryChangeInput").val();
-  if (category) {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to delete category to " + category,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-    }).then((result) => {
-      if (result.value) {
+$(".btn-delete-category").click(function() {
+  let oldCategory = $("#oldCategory").val();
+  if (oldCategory) {
+    confirmAction(
+      "Are you sure?",
+      {
+        old_category: oldCategory,
+      },
+      "/topics/category",
+      "Category deleted successfully",
+      "Category deleted failed",
+      function(data) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Category deleted successfully",
+        });
+        dataTable.ajax.reload(null, false);
         $("#modalChangeCategory").modal("hide");
-        alert("ok");
-      }
+        console.log(data);
+      },
+      "DELETE"
+    );
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Old Category is required",
     });
   }
 });

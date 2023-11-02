@@ -167,7 +167,6 @@ class TopicController extends Controller
             $categories = Topics::category()->get();
             return $this->successResponse('success get category topic', $categories);
         } catch (\Throwable $th) {
-            //throw $th;
             return $this->errorResponse($th->getMessage());
         }
     }
@@ -207,7 +206,6 @@ class TopicController extends Controller
             DB::commit();
             return $this->successResponse('success delete topic');
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             LogModel::insertLog('delete-topic', 'error delete topic with error ' . $th->getMessage());
             return $this->errorResponse($th->getMessage());
@@ -363,6 +361,52 @@ class TopicController extends Controller
             return $this->successResponse('success get detail topic', $topic);
         } catch (\Throwable $th) {
             return $this->errorResponse($th->getMessage());
+        }
+    }
+
+    public function changeCategory(Request $request)
+    {
+        try {
+            $request->validate([
+                'old_category' => 'required',
+                'new_category' => 'required',
+            ]);
+            $oldCategory = $request->input('old_category');
+            $newCategory = $request->input('new_category');
+            DB::beginTransaction();
+            $topics = Topics::where('categories', 'like', "$oldCategory")->get();
+
+            foreach ($topics as $value) {
+                $value->update(['categories' => $newCategory]);
+            }
+            DB::commit();
+            return $this->successResponse('success change category topic');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->errorResponse($th->getMessage(), 400);
+        }
+    }
+
+    public function deleteCategory(Request $request)
+    {
+        try {
+            $request->validate([
+                'old_category' => 'required',
+            ]);
+
+            $oldCategory = $request->input('old_category');
+            DB::beginTransaction();
+            $topics = Topics::where('categories', 'like', "$oldCategory")->get();
+
+            foreach ($topics as $value) {
+                $value->update(['categories' => '']);
+            }
+            DB::commit();
+            return $this->successResponse('success delete category topic');
+        } catch (\Throwable $th) {
+            file_put_contents('error.txt', $th->getMessage());
+            DB::rollBack();
+            return $this->errorResponse($th->getMessage(), 400);
         }
     }
 }

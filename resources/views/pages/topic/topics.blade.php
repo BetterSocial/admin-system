@@ -357,8 +357,13 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="categoryChangeInput">Category</label>
-                        <input type="email" class="form-control" id="categoryChangeInput" name="category"
+                        <label for="oldCategory">Old Category</label>
+                        <input type="email" class="form-control" id="oldCategory" name="category"
+                            placeholder="Enter Category" aria-describedby="emailHelp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newCategory">New Category</label>
+                        <input type="email" class="form-control" id="newCategory" name="category"
                             placeholder="Enter Category" aria-describedby="emailHelp" required>
                     </div>
                 </div>

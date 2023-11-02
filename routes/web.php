@@ -38,6 +38,8 @@ Route::group(['middleware' => 'auth'], function () {
      *  topics
      */
     Route::get('/topics/index', [TopicController::class, 'index'])->name('topic');
+    Route::put('/topics/category', [TopicController::class, 'changeCategory'])->name('topic.add.category');
+    Route::delete('/topics/category', [TopicController::class, 'deleteCategory'])->name('topic.category.delete');
     Route::post('/topics/image', [TopicController::class, 'updateImage'])->name('topic.update-image');
     Route::get('/topics/detail', [TopicController::class, 'getDetail'])->name('topic.detail');
 
