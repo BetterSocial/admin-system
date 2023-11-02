@@ -81,6 +81,7 @@ class UserApps extends Model
     public static function userQuery(Request $req)
     {
         $searchName = $req->input('username');
+        $searchUserId = $req->input('user_id');
         $searchCountryCode = $req->input('countryCode');
         $searchTopic = $req->input('topic');
         $query = UserApps::select(
@@ -100,6 +101,10 @@ class UserApps extends Model
             'userTopics.topic',
         ]);
 
+
+        if ($searchUserId !== null) {
+            $query->where('user_id', 'ILIKE', $searchUserId);
+        }
 
 
         if ($searchName !== null) {

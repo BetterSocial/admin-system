@@ -663,12 +663,12 @@ $(document).ready(function() {
 
           const btnUnBlockUser = createButton(
             "primary",
-            "Unblock User",
+            "Uprank user",
             clickUnBlockUser
           );
           const btnBlockUser = createButton(
             "danger",
-            "Block User",
+            "Downrank user",
             clickBlockUser
           );
           let isHide = false;
