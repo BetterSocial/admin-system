@@ -129,30 +129,22 @@ class TopicController extends Controller
         try {
             $user = Auth::user();
             $roles = $user->roles->pluck('name')->first();
-            if ($roles == 'viewer') {
+
+            $data = Topics::find($req->topic_id);
+
+            if ($data == null || $roles == 'viewer') {
                 return response()->json([
                     'success' => false,
-                    'message' => "You not have an access"
+                    'message' => "Data Topic Not Found"
                 ]);
-            } else {
-                $data = Topics::find($req->topic_id);
-                if ($data != null) {
-                    if ($data->flg_show == 'Y') {
-                        $data->flg_show = 'N';
-                    } else {
-                        $data->flg_show = 'Y';
-                    }
-                    $data->save();
-                    return response()->json([
-                        'success' => true,
-                    ]);
-                } else {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Data Topic Not Found"
-                    ]);
-                }
             }
+
+            $data->flg_show = ($data->flg_show == 'Y') ? 'N' : 'Y';
+            $data->save();
+
+            return response()->json([
+                'success' => true,
+            ]);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -160,6 +152,7 @@ class TopicController extends Controller
             ]);
         }
     }
+
 
     public function category(Request $request)
     {
