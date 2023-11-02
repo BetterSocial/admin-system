@@ -58,6 +58,8 @@ $(document).ready(function() {
         d.username = $("#username").val();
         d.countryCode = $("#countryCode").val();
         d.topic = $("#topic").val();
+        d.user_id = $("#userId").val();
+        console.log(d);
       },
     },
     columns: [
@@ -84,12 +86,12 @@ $(document).ready(function() {
 
           const btnUnBlockUser = createButton(
             "primary",
-            "Unblock User",
+            "Uprank user",
             clickUnBlockUser
           );
           const btnBlockUser = createButton(
             "danger",
-            "Block User",
+            "Downrank user",
             clickBlockUser
           );
           if (blocked_by_admin) {
