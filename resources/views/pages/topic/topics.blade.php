@@ -27,17 +27,20 @@
                                             style="color:white">Create
                                             Topics</b></button> </a>
                             @endunlessrole
-                            <div class="mt-2"></div>
+                            <div class="my-2"></div>
                             @unlessrole('viewer')
                                 <button class="btn btn-primary btn-limit-topic"><b style="color:white">Change Limit
                                         Topic</b></button>
                             @endunlessrole
-                            <div class="mt-2"></div>
+                            <div class="my-2"></div>
                             @unlessrole('viewer')
                                 <a href="{{ route('topic.export') }}"> <button class="btn btn-primary"><b
                                             style="color:white">Export
                                             Topics</b></button> </a>
                             @endunlessrole
+                            <button class="btn btn-primary my-2" data-toggle="modal"
+                                data-target="#modalChangeCategory">Change
+                                Category</button>
                         </div>
                     </div>
 
@@ -302,6 +305,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modalChangeIcon" tabindex="1" aria-labelledby="detailModalLabelLimit"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -338,6 +342,31 @@
                             onclick="confirm('Are You sure?')">Submit</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalChangeCategory" tabindex="1" aria-labelledby="detailModalLabelLimit"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Change or Delete Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="categoryChangeInput">Category</label>
+                        <input type="email" class="form-control" id="categoryChangeInput" name="category"
+                            placeholder="Enter Category" aria-describedby="emailHelp" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn-change-category">Change</button>
+                    <button type="button" class="btn btn-danger btn-delete-category">Delete</button>
+                </div>
             </div>
         </div>
     </div>
