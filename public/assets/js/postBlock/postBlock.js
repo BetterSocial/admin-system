@@ -663,7 +663,7 @@ $(document).ready(function() {
 
           const btnUnBlockUser = createButton(
             "primary",
-            "Uprank user",
+            "Remove downrank",
             clickUnBlockUser
           );
           const btnBlockUser = createButton(

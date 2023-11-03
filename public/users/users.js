@@ -59,7 +59,6 @@ $(document).ready(function() {
         d.countryCode = $("#countryCode").val();
         d.topic = $("#topic").val();
         d.user_id = $("#userId").val();
-        console.log(d);
       },
     },
     columns: [
@@ -86,7 +85,7 @@ $(document).ready(function() {
 
           const btnUnBlockUser = createButton(
             "primary",
-            "Uprank user",
+            "Remove downrank",
             clickUnBlockUser
           );
           const btnBlockUser = createButton(
