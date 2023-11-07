@@ -598,3 +598,51 @@ $(".btn-delete-category").click(function() {
     });
   }
 });
+
+$("#formTopicSign").on("submit", function(e) {
+  e.preventDefault();
+  confirmAction(
+    "Are you sure?",
+    {
+      topic_id: $(".topic-id-sign").val(),
+      sign: 1,
+    },
+    "/topics/sign",
+    "Topic signed successfully",
+    "Topic signed failed",
+    function(data) {
+      console.log(data);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Topic signed successfully",
+      });
+      dataTable.draw();
+      $("#modalTopicSign").modal("hide");
+    }
+  );
+});
+
+$("#formUnSignTopic").on("submit", function(e) {
+  e.preventDefault();
+  confirmAction(
+    "Are you sure?",
+    {
+      topic_id: $(".topic-id-sign").val(),
+      sign: 0,
+    },
+    "/topics/un-sign",
+    "Topic unsigned successfully",
+    "Topic unsigned failed",
+    function(data) {
+      console.log(data);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Topic unsigned successfully",
+      });
+      dataTable.draw();
+      $("#modalTopicUnSign").modal("hide");
+    }
+  );
+});
