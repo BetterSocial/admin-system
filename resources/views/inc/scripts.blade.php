@@ -540,9 +540,8 @@
                 });
             }
         </script>
-        <script
-            src="{{ asset('https://maps.googleapis.com/maps/api/js?key=AIzaSyDoOlJCERKYB1Cp-C89_sscNkelSfeeBnw&callback=initMap') }}"
-            async defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}
+                &callback=initMap" async defer></script>
     @break
 
     @case('faq')
