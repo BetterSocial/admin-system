@@ -46,7 +46,9 @@
 
 
                     <div class="table-responsive mb-4 mt-4">
-                        <table id="tableTopics" class="table table-hover" style="width:100%">
+                        <table id="tableTopics" class="table table-hover" style="width:100%"
+                            aria-describedby="topics-table-description">
+                            <caption id="topics-table-description">List of topics</caption>
                             <thead>
                                 <tr>
                                     <th>id</th>

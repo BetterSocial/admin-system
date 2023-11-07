@@ -281,6 +281,8 @@ class TopicController extends Controller
     public function updateImage(Request $request)
     {
         try {
+            $type = $request->input('type', 'icon');
+
             $validator = Validator::make(
                 $request->all(),
                 [
@@ -289,44 +291,54 @@ class TopicController extends Controller
                     'file' => [
                         'required',
                         'image',
-                        'dimensions:min_width=150,min_height=150,max_width=1500,max_height=1500',
                     ],
-                ],
+                ]
+            );
+
+            $validator->sometimes(
+                'file',
+                'dimensions:min_width=150,min_height=150,max_width=1500,max_height=1500',
+                function () use ($type) {
+                    return $type == 'icon';
+                }
+            );
+
+            $validator->sometimes(
+                'file',
+                'dimensions:width=375,height=157,max_width=375,max_height=157',
+                function () use ($type) {
+                    return $type != 'icon';
+                }
             );
 
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
 
-            $type = $request->input('type');
-            if ($request->hasFile('file')) {
-                $response =  $request->file->storeOnCloudinary('icons')->getSecurePath();
-                $request->merge([
+            $response =  $request->file->storeOnCloudinary('icons')->getSecurePath();
+            $request->merge([
+                'icon_path' => $response
+            ]);
+
+
+            DB::beginTransaction();
+            $topic = Topics::find($request->input('id'));
+            if ($type == 'icon') {
+                $topic->update([
                     'icon_path' => $response
                 ]);
-
-
-                DB::beginTransaction();
-                $topic = Topics::find($request->input('id'));
-                if ($type == 'icon') {
-                    $topic->update([
-                        'icon_path' => $response
-                    ]);
-                } else {
-                    $topic->update([
-                        'cover_path' => $response
-                    ]);
-                }
-                LogModel::insertLog('edit-topic', $type == 'icon'
-                    ?  'success changed icon topic'
-                    : 'success changed cover topic');
-                DB::commit();
-                return $this->successResponseWithAlert($type == 'icon'
-                    ? 'Successfully changed the icon in the topic.'
-                    : 'Successfully changed the cover in the topic.', 'topic');
             } else {
-                return $this->errorResponseWithAlert('Image is required');
+                $topic->update([
+                    'cover_path' => $response
+                ]);
             }
+            LogModel::insertLog('edit-topic', $type == 'icon'
+                ?  'success changed icon topic'
+                : 'success changed cover topic');
+            DB::commit();
+            return $this->successResponseWithAlert($type == 'icon'
+                ? 'Successfully changed the icon in the topic.'
+                : 'Successfully changed the cover in the topic.', 'topic');
         } catch (\Throwable $e) {
             DB::rollBack();
             $message = $e->getMessage();
