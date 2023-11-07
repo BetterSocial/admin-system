@@ -188,7 +188,7 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('topic.category.sign') }}" method="post" id="formTopicLimit">
+                <form action="" method="post" id="formTopicSign">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailModalLabelTopicSign">Add Topic to OB</h5>
@@ -217,7 +217,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                        <button type="submit" class="btn btn-primary ">Submit</button>
                     </div>
                 </form>
             </div>
@@ -227,7 +227,7 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('topic.category.un-sign') }}" method="post" id="formTopicLimit">
+                <form action="" method="post" id="formUnSignTopic">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailModalLabelTopicUnSign">Remove from OB</h5>
@@ -256,7 +256,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
