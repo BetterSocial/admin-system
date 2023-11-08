@@ -20,11 +20,10 @@ class PostBlockController extends Controller
 
     private FeedGetStreamService $feedService;
 
-    private $feed;
-
     public function __construct(FeedGetStreamService $feedService)
     {
         $this->feedService = $feedService;
+        $this->posts = $this->getPostsByBlockedUser();
     }
 
 
@@ -62,6 +61,7 @@ class PostBlockController extends Controller
             $draw = (int) $req->input('draw', 0);
             $message = $req->input('message', null);
             $activityIds = [];
+            $dataTable = dataTableRequestHandle($req);
             if ($message) {
                 $posts = PostModel::where('post_content', 'ilike', '%' . $message . '%')
                     ->whereNotNull('getstream_activity_id')
@@ -75,22 +75,52 @@ class PostBlockController extends Controller
                 if (count($activityIds) == 0) {
                     return $this->errorDataTableResponse();
                 }
+                $direction = $dataTable['direction'] ?? 'asc';
+                $activityIdsArray = $activityIds->toArray();
+
+                if ($direction === 'asc') {
+                    sort($activityIdsArray);
+                } elseif ($direction === 'desc') {
+                    rsort($activityIdsArray);
+                }
+
+                $activityIds = collect($activityIdsArray);
             }
 
-            $dataTable = dataTableRequestHandle($req);
             $data = $this->getFeeds($dataTable['start'], $dataTable['length'], $activityIds);
-            $data = $this->handleSort($data, $dataTable);
+            $dataAfterSort = $this->handleSort($data, $dataTable);
             return response()->json([
                 'draw' => $draw,
                 'recordsTotal' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
                 'recordsFiltered' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
-                'data' => $data ?? [],
+                'data' => $dataAfterSort ?? [],
             ]);
         } catch (\Throwable $th) {
             return $this->errorDataTableResponse();
         }
     }
 
+
+    // private function handleSort($data, $sortingData)
+    // {
+    //     $sortBy = $this->columns[$sortingData['column']] ?? null;
+    //     $sortDirection = $sortingData['direction'] ?? 'asc';
+
+    //     if (!$sortBy || !in_array($sortBy, $this->columns)) {
+    //         return $data;
+    //     }
+
+    //     usort($data, function ($a, $b) use ($sortBy, $sortDirection) {
+    //         if ($a[$sortBy] == $b[$sortBy]) {
+    //             return 0;
+    //         }
+    //         return $sortDirection == 'asc' ?
+    //             $this->sortAsc($a, $b, $sortBy)
+    //             : $this->sortDesc($a, $b, $sortBy);
+    //     });
+
+    //     return $data;
+    // }
 
     private function handleSort($data, $sortingData)
     {
@@ -101,16 +131,11 @@ class PostBlockController extends Controller
             return $data;
         }
 
-        usort($data, function ($a, $b) use ($sortBy, $sortDirection) {
-            if ($a[$sortBy] == $b[$sortBy]) {
-                return 0;
-            }
-            return $sortDirection == 'asc' ?
-                $this->sortAsc($a, $b, $sortBy)
-                : $this->sortDesc($a, $b, $sortBy);
-        });
-
-        return $data;
+        if ($sortDirection == 'asc') {
+            return collect($data)->sortBy($sortBy)->values()->all();
+        } else {
+            return collect($data)->sortByDesc($sortBy)->values()->all();
+        }
     }
 
     private function sortAsc($a, $b, $sortBy)
@@ -128,20 +153,12 @@ class PostBlockController extends Controller
     private function getFeeds($offset = 0, $limit = 10, $searchId = [])
     {
         try {
-            $this->posts = $this->getPostsByBlockedUser();
-            $this->feed =  $this->initializeFeed();
             $data = $this->fetchDataFromFeed($searchId, $offset, $limit);
 
             return $this->handlePoll($data);
         } catch (\Throwable $th) {
             return throw $th;
         }
-    }
-
-    private function initializeFeed()
-    {
-        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
-        return $client->feed('user', "bettersocial");
     }
 
     private function fetchDataFromFeed($searchId, $offset, $limit)
@@ -158,6 +175,8 @@ class PostBlockController extends Controller
         $data = [];
 
         if ($isSearch) {
+            $searchId = $searchId->toArray();
+            $searchId = array_slice($searchId, $offset, $limit);
             foreach ($searchId as $value) {
                 $options['id_lte'] = $value;
                 $response = $this->getFeedActivities(0, 1, $options);
@@ -175,7 +194,7 @@ class PostBlockController extends Controller
 
     private function getFeedActivities($offset, $limit, $options)
     {
-        return $this->feed->getActivities($offset, $limit, $options, true, $options);
+        return $this->feedService->getActivities($offset, $limit, $options);
     }
 
     private function handlePoll($data)
