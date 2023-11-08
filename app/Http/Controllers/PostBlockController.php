@@ -100,28 +100,6 @@ class PostBlockController extends Controller
         }
     }
 
-
-    // private function handleSort($data, $sortingData)
-    // {
-    //     $sortBy = $this->columns[$sortingData['column']] ?? null;
-    //     $sortDirection = $sortingData['direction'] ?? 'asc';
-
-    //     if (!$sortBy || !in_array($sortBy, $this->columns)) {
-    //         return $data;
-    //     }
-
-    //     usort($data, function ($a, $b) use ($sortBy, $sortDirection) {
-    //         if ($a[$sortBy] == $b[$sortBy]) {
-    //             return 0;
-    //         }
-    //         return $sortDirection == 'asc' ?
-    //             $this->sortAsc($a, $b, $sortBy)
-    //             : $this->sortDesc($a, $b, $sortBy);
-    //     });
-
-    //     return $data;
-    // }
-
     private function handleSort($data, $sortingData)
     {
         $sortBy = $this->columns[$sortingData['column']] ?? null;
