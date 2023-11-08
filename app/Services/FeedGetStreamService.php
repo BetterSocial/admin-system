@@ -119,4 +119,11 @@ class FeedGetStreamService
     {
         $this->client->reactions()->delete($reactionId);
     }
+
+    public function getActivities($offset, $limit, $options)
+    {
+
+        $feed = $this->client->feed('user', "bettersocial");
+        return $feed->getActivities($offset, $limit, $options, true, $options);
+    }
 }
