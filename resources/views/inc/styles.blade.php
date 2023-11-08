@@ -692,11 +692,6 @@
     @case('alt_menu')
         {{-- Starter Kit ALt menu --}}
         <style>
-            /*
-                                       Just for demo purpose ---- Remove it.
-                                   */
-            /*<starter kit design>*/
-
             .widget-one {}
 
             .widget-one h6 {
@@ -719,8 +714,8 @@
         {{-- Starter Kit Boxed menu --}}
         <style>
             /*
-                                       The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                   */
+                                                                                                       The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                                                                                   */
 
             body {
                 max-width: 1140px;
@@ -741,10 +736,10 @@
             }
 
             /*
-                                       ====================
-                                           IE Support
-                                       ====================
-                                   */
+                                                                                                       ====================
+                                                                                                           IE Support
+                                                                                                       ====================
+                                                                                                   */
 
             @media all and (-ms-high-contrast: none),
             (-ms-high-contrast: active) {
@@ -754,8 +749,8 @@
             }
 
             /*
-                                       Just for demo purpose ---- Remove it.
-                                   */
+                                                                                                       Just for demo purpose ---- Remove it.
+                                                                                                   */
             /*<starter kit design>*/
 
             .widget-one {}
@@ -1171,6 +1166,17 @@
 
     @case('User Detail')
         <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@2.0/dist/css/pretty-print-json.css>
+    @break
+
+    @case('Post Block')
+        <style>
+            .table .message {
+                max-width: 250px;
+                white-space: nowrap;
+                overflow: auto;
+                text-overflow: ellipsis;
+            }
+        </style>
     @break
 
     @default

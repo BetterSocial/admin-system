@@ -37,8 +37,8 @@
                                 <tr>
                                     <th>id</th>
                                     <th>username</th>
-                                    <th style="max-width: 3%; min-width: 2%;">message</th>
-                                    <th class="w-15 mw-15">Comments</th>
+                                    <th>message</th>
+                                    <th>Comments</th>
                                     <th>Image</th>
                                     <th>Poll</th>
                                     <th>Upvote</th>

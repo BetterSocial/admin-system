@@ -430,12 +430,12 @@ $(document).ready(function() {
   dataTablePost = $("#tablePostBlock").DataTable({
     searching: false,
     stateSave: true,
+    serverSide: true,
     processing: true,
     language: {
       processing: "Loading...",
       emptyTable: "No Data Post",
     },
-    serverSide: true,
     ajax: {
       url: "/post-blocks/data",
       type: "POST",
@@ -443,13 +443,14 @@ $(document).ready(function() {
       data: function(d) {
         d.total = $("#total").val();
         d.message = $("#message").val();
+        console.log(d);
       },
     },
-    error: function(xhr, error, thrown) {
-      console.log("xhr", xhr);
-      console.log("error", error);
-      console.log("thrown", thrown);
-    },
+    // error: function(xhr, error, thrown) {
+    //   console.log("xhr", xhr);
+    //   console.log("error", error);
+    //   console.log("thrown", thrown);
+    // },
     columns: [
       {
         data: "id",
@@ -461,7 +462,6 @@ $(document).ready(function() {
         orderable: false,
         className: "menufilter textfilter",
         render: function(data, type, row) {
-          console.log(row);
           if (row.anonimity) {
             return (
               row.anon_user_info_color_name +
@@ -479,7 +479,7 @@ $(document).ready(function() {
       {
         data: "message",
         orderable: false,
-        className: "menufilter textfilter",
+        className: "message",
         render: function(data, type, row) {
           return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
@@ -616,10 +616,11 @@ $(document).ready(function() {
         },
       },
       {
-        data: "post_type",
+        data: "time",
         orderable: true,
         className: "menufilter textfilter",
         render: function(data, type, row) {
+          // time from post date
           const tanggal = new Date(row.time);
           const namaBulan = [
             "Jan",
