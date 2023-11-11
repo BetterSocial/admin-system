@@ -305,7 +305,7 @@ class TopicController extends Controller
 
             $validator->sometimes(
                 'file',
-                'dimensions:width=375,height=157,max_width=375,max_height=157',
+                'dimensions:width=1125,height=471',
                 function () use ($type) {
                     return $type != 'icon';
                 }
