@@ -7,6 +7,7 @@ use App\Models\Polling;
 use App\Models\PollingOption;
 use App\Models\PostModel;
 use App\Models\UserApps;
+use App\Models\UserBlockedUser;
 use App\Models\UserPostComment;
 use App\Services\FeedGetStreamService;
 use Illuminate\Http\Request;
@@ -194,7 +195,7 @@ class PostBlockController extends Controller
 
             $withSortDescData[] = $value;
         }
-        return collect($data)->sortByDesc('total_block')->values()->all();
+        return collect($withSortDescData)->sortByDesc('total_block')->values()->all();
     }
 
     public function updateFeed(Request $request, $id)
@@ -215,9 +216,11 @@ class PostBlockController extends Controller
 
     public function getPostsByBlockedUser()
     {
-        return PostModel::select('post_id')
-            ->withCount('userBlockedUser')
-            ->orderBy('user_blocked_user_count', 'DESC')
+        return  UserBlockedUser::select('post_id')
+            ->selectRaw('count(*) as total_block')
+            ->where('post_id', '!=', null)
+            ->groupBy('post_id')
+            ->orderByDesc('total_block', 'desc')
             ->get();
     }
 
