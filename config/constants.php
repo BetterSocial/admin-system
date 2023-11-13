@@ -74,6 +74,8 @@ return [
     'user_api' => env('USER_API'),
     'cloud_name_cloudinary' => env('CLOUD_NAME_CLOUDINARY'),
     'api_key_cloudinary' => env('API_KEY_CLOUDINARY'),
-    'api_secret_cloudinary' => env('API_SERCRET_CLOUDINARY')
+    'api_secret_cloudinary' => env('API_SERCRET_CLOUDINARY'),
+    'get_stream_key' => env('GET_STREAM_KEY'),
+    'get_stream_secret' => env('GET_STREAM_SECRET'),
 
 ];

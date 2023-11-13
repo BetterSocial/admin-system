@@ -116,27 +116,11 @@ class PostBlockController extends Controller
         }
     }
 
-    private function sortAsc($a, $b, $sortBy)
-    {
-        return $a[$sortBy] < $b[$sortBy] ? -1 : 1;
-    }
-
-    private function sortDesc($a, $b, $sortBy)
-    {
-        return $a[$sortBy] > $b[$sortBy] ? -1 : 1;
-    }
-
-
 
     private function getFeeds($offset = 0, $limit = 10, $searchId = [])
     {
-        try {
-            $data = $this->fetchDataFromFeed($searchId, $offset, $limit);
-
-            return $this->handlePoll($data);
-        } catch (\Throwable $th) {
-            return throw $th;
-        }
+        $data = $this->fetchDataFromFeed($searchId, $offset, $limit);
+        return $this->handlePoll($data);
     }
 
     private function fetchDataFromFeed($searchId, $offset, $limit)
@@ -210,15 +194,12 @@ class PostBlockController extends Controller
 
             $withSortDescData[] = $value;
         }
-        usort($withSortDescData, function ($a, $b) {
-            return $a['total_block'] < $b['total_block'];
-        });
-        return $withSortDescData;
+        return collect($data)->sortByDesc('total_block')->values()->all();
     }
 
     public function updateFeed(Request $request, $id)
     {
-        $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
+        $client = new Client(config('constants.get_stream_key'), config('constants.get_stream_secret'));
         $payload = [
             [
                 'id' => $id,
@@ -234,11 +215,9 @@ class PostBlockController extends Controller
 
     public function getPostsByBlockedUser()
     {
-        return DB::table('user_blocked_user')
-            ->selectRaw('post_id, count(*) as total_block')
-            ->where('post_id', '!=', null)
-            ->groupBy('post_id')
-            ->orderBy('total_block', 'DESC')
+        return PostModel::select('post_id')
+            ->withCount('userBlockedUser')
+            ->orderBy('user_blocked_user_count', 'DESC')
             ->get();
     }
 
