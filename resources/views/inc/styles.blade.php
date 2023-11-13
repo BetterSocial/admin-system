@@ -714,8 +714,8 @@
         {{-- Starter Kit Boxed menu --}}
         <style>
             /*
-                                                                                                       The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                                                                                   */
+                                                                                                               The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                                                                                           */
 
             body {
                 max-width: 1140px;
@@ -735,23 +735,12 @@
                 transition: auto;
             }
 
-            /*
-                                                                                                       ====================
-                                                                                                           IE Support
-                                                                                                       ====================
-                                                                                                   */
-
             @media all and (-ms-high-contrast: none),
             (-ms-high-contrast: active) {
                 .header-container {
                     width: 100%;
                 }
             }
-
-            /*
-                                                                                                       Just for demo purpose ---- Remove it.
-                                                                                                   */
-            /*<starter kit design>*/
 
             .widget-one {}
 
