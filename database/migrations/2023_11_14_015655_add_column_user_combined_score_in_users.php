@@ -15,6 +15,7 @@ class AddColumnUserCombinedScoreInUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->double('combined_user_score')->default(0);
+            $table->double('karma_score')->default(0);
         });
     }
 
@@ -27,6 +28,7 @@ class AddColumnUserCombinedScoreInUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('combined_user_score');
+            $table->dropColumn('karma_score');
         });
     }
 }
