@@ -14,7 +14,7 @@ class Topics extends Model
     protected $table    = 'topics';
     protected $primaryKey = 'topic_id';
     protected $fillable = [
-        'name', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort', 'sign',
+        'name', 'cover_path', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort', 'sign',
     ];
     const CREATED_AT    = 'created_at';
     public $incrementing = false;
@@ -43,6 +43,7 @@ class Topics extends Model
         return [
             'topic_id',
             'name',
+            'cover_path',
             'icon_path',
             'categories',
             'created_at',
@@ -134,13 +135,14 @@ class Topics extends Model
                 0 => 'topic_id',
                 1 => 'name',
                 2 => 'icon_path',
-                3 => 'categories',
-                4 => 'created_at',
-                5 => 'sort',
-                6 => 'followers',
-                7 => 'total_user_topics',
-                8 => 'total_posts',
-                9 => 'sign',
+                3 => 'cover_path',
+                4 => 'categories',
+                5 => 'created_at',
+                6 => 'sort',
+                7 => 'followers',
+                8 => 'total_user_topics',
+                9 => 'total_posts',
+                10 => 'sign',
             );
             $searchName = $req->input('name');
             $searchCategory = $req->input('category');
@@ -148,6 +150,7 @@ class Topics extends Model
             $query = Topics::select(
                 'topics.topic_id',
                 'topics.name',
+                'topics.cover_path',
                 'topics.icon_path',
                 'topics.categories',
                 'topics.created_at',

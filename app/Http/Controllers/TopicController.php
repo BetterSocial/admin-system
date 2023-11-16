@@ -129,30 +129,22 @@ class TopicController extends Controller
         try {
             $user = Auth::user();
             $roles = $user->roles->pluck('name')->first();
-            if ($roles == 'viewer') {
+
+            $data = Topics::find($req->topic_id);
+
+            if ($data == null || $roles == 'viewer') {
                 return response()->json([
                     'success' => false,
-                    'message' => "You not have an access"
+                    'message' => "Data Topic Not Found"
                 ]);
-            } else {
-                $data = Topics::find($req->topic_id);
-                if ($data != null) {
-                    if ($data->flg_show == 'Y') {
-                        $data->flg_show = 'N';
-                    } else {
-                        $data->flg_show = 'Y';
-                    }
-                    $data->save();
-                    return response()->json([
-                        'success' => true,
-                    ]);
-                } else {
-                    return response()->json([
-                        'success' => false,
-                        'message' => "Data Topic Not Found"
-                    ]);
-                }
             }
+
+            $data->flg_show = ($data->flg_show == 'Y') ? 'N' : 'Y';
+            $data->save();
+
+            return response()->json([
+                'success' => true,
+            ]);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -161,13 +153,13 @@ class TopicController extends Controller
         }
     }
 
+
     public function category(Request $request)
     {
         try {
             $categories = Topics::category()->get();
             return $this->successResponse('success get category topic', $categories);
         } catch (\Throwable $th) {
-            //throw $th;
             return $this->errorResponse($th->getMessage());
         }
     }
@@ -207,7 +199,6 @@ class TopicController extends Controller
             DB::commit();
             return $this->successResponse('success delete topic');
         } catch (\Throwable $th) {
-            //throw $th;
             DB::rollBack();
             LogModel::insertLog('delete-topic', 'error delete topic with error ' . $th->getMessage());
             return $this->errorResponse($th->getMessage());
@@ -237,11 +228,11 @@ class TopicController extends Controller
             ]);
             LogModel::insertLog('un-sign-category-topic', 'success update unSign Category topic');
             DB::commit();
-            return $this->successResponseWithAlert('Success Remove Topic from OB');
+            return $this->successResponse('Success Remove Topic from OB');
         } catch (\Throwable $th) {
             DB::rollBack();
             LogModel::insertLog('un-sign-category-topic', 'fail update unSign Category topic');
-            return $this->errorResponseWithAlert('Fail Remove Topic from OB');
+            return $this->errorResponse('Fail Remove Topic from OB');
         }
     }
 
@@ -263,11 +254,11 @@ class TopicController extends Controller
             ]);
             LogModel::insertLog('sign-category-topic', 'success update Sign Category topic');
             DB::commit();
-            return $this->successResponseWithAlert('Success Add Topic to OB');
+            return $this->successResponse('Success Add Topic to OB');
         } catch (\Throwable $th) {
             DB::rollBack();
             LogModel::insertLog('sign-category-topic', 'fail with error ' . $th->getMessage());
-            return $this->errorResponseWithAlert('Fail Add Topic to OB');
+            return $this->errorResponse('Fail Add Topic to OB');
         }
     }
 
@@ -290,37 +281,64 @@ class TopicController extends Controller
     public function updateImage(Request $request)
     {
         try {
+            $type = $request->input('type', 'icon');
+
             $validator = Validator::make(
                 $request->all(),
                 [
                     'id' => $this->validationId,
+                    'type' => 'required|in:icon,cover',
                     'file' => [
                         'required',
                         'image',
-                        'dimensions:ratio=1/1,min_width=150,min_height=150,max_width=1500,max_height=1500',
                     ],
-                ],
+                ]
+            );
+
+            $validator->sometimes(
+                'file',
+                'dimensions:min_width=150,min_height=150,max_width=1500,max_height=1500',
+                function () use ($type) {
+                    return $type == 'icon';
+                }
+            );
+
+            $validator->sometimes(
+                'file',
+                'dimensions:width=1125,height=471',
+                function () use ($type) {
+                    return $type != 'icon';
+                }
             );
 
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
 
-            if ($request->hasFile('file')) {
-                $response =  $request->file->storeOnCloudinary('icons')->getSecurePath();
-                $request->merge([
-                    'icon_path' => $response
-                ]);
-            }
+            $response =  $request->file->storeOnCloudinary('icons')->getSecurePath();
+            $request->merge([
+                'icon_path' => $response
+            ]);
+
 
             DB::beginTransaction();
             $topic = Topics::find($request->input('id'));
-            $topic->update([
-                'icon_path' => $response
-            ]);
-            LogModel::insertLog('edit-topic', 'success changed icon topic');
+            if ($type == 'icon') {
+                $topic->update([
+                    'icon_path' => $response
+                ]);
+            } else {
+                $topic->update([
+                    'cover_path' => $response
+                ]);
+            }
+            LogModel::insertLog('edit-topic', $type == 'icon'
+                ?  'success changed icon topic'
+                : 'success changed cover topic');
             DB::commit();
-            return $this->successResponseWithAlert('Successfully changed the icon in the topic.', 'topic');
+            return $this->successResponseWithAlert($type == 'icon'
+                ? 'Successfully changed the icon in the topic.'
+                : 'Successfully changed the cover in the topic.', 'topic');
         } catch (\Throwable $e) {
             DB::rollBack();
             $message = $e->getMessage();
@@ -348,6 +366,52 @@ class TopicController extends Controller
             return $this->successResponse('success get detail topic', $topic);
         } catch (\Throwable $th) {
             return $this->errorResponse($th->getMessage());
+        }
+    }
+
+    public function changeCategory(Request $request)
+    {
+        try {
+            $request->validate([
+                'old_category' => 'required',
+                'new_category' => 'required',
+            ]);
+            $oldCategory = $request->input('old_category');
+            $newCategory = $request->input('new_category');
+            DB::beginTransaction();
+            $topics = Topics::where('categories', 'like', "$oldCategory")->get();
+
+            foreach ($topics as $value) {
+                $value->update(['categories' => $newCategory]);
+            }
+            DB::commit();
+            return $this->successResponse('success change category topic');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->errorResponse($th->getMessage(), 400);
+        }
+    }
+
+    public function deleteCategory(Request $request)
+    {
+        try {
+            $request->validate([
+                'old_category' => 'required',
+            ]);
+
+            $oldCategory = $request->input('old_category');
+            DB::beginTransaction();
+            $topics = Topics::where('categories', 'like', "$oldCategory")->get();
+
+            foreach ($topics as $value) {
+                $value->update(['categories' => '']);
+            }
+            DB::commit();
+            return $this->successResponse('success delete category topic');
+        } catch (\Throwable $th) {
+            file_put_contents('error.txt', $th->getMessage());
+            DB::rollBack();
+            return $this->errorResponse($th->getMessage(), 400);
         }
     }
 }

@@ -10,19 +10,26 @@
 
                 <div class="widget-content widget-content-area br-6">
                     <div class="row">
-                        <div class=col-lg-10>
+                        <div class="col-lg-10 col-sm-8">
                             <form class="form-inline" method="POST" id="search">
                                 <div class="form-group">
-                                    <input type="text" id="username" class="form-control" placeholder="Username">
+                                    <input type="text" id="userId" class="form-control mx-3" placeholder="User Id">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="username" class="form-control mx-3" placeholder="Username">
+                                </div>
+                                <div class="form-group">
                                     <input type="text" id="countryCode" class="form-control mx-3"
                                         placeholder="Country Code">
+                                </div>
+                                <div class="form-group">
                                     <input type="text" name="topic" id="topic" class="form-control mr-3"
                                         placeholder="Topic">
-                                    <button type="submit" class="btn btn-primary">Search</button>
                                 </div>
+                                <button type="submit" class="btn btn-primary">Search</button>
                             </form>
                         </div>
-                        <div class="col-lg-2">
+                        <div class="col-lg-2 col-sm-8">
                             @unlessrole('viewer')
                                 <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b
                                         style="color:white">Download CSV</b></button>

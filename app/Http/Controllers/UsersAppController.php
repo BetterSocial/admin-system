@@ -8,6 +8,7 @@ use App\Models\UserApps;
 use App\Models\UserScoreModel;
 use App\Services\ChatGetStreamService;
 use App\Services\FeedGetStreamService;
+use App\Services\QueueService;
 use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -17,8 +18,10 @@ use Illuminate\Support\Facades\DB;
 class UsersAppController extends Controller
 {
 
+    private QueueService $queueService;
     public function __construct(private UserService $userService)
     {
+        $this->queueService = new QueueService();
     }
 
     /**
@@ -135,7 +138,6 @@ class UsersAppController extends Controller
                 $this->updateRemoteStatus('delete', $userApp);
                 $userApp->status = 'N';
             } else {
-                // $this->updateRemoteStatus('add', $userApp);
                 $userApp->status = 'Y';
             }
             $userApp->save();
@@ -155,14 +157,14 @@ class UsersAppController extends Controller
     {
         $client = new Client(env('GET_STREAM_KEY'), env('GET_STREAM_SECRET'));
         if ($action == 'add') {
-            $status = $client->users()->add($userApp->user_id, [
+            $client->users()->add($userApp->user_id, [
                 "created_at" => Carbon::now()->toISOString(),
                 "human_id" => $userApp->human_id,
                 "profile_pic_url" => $userApp->profile_pic_path,
                 "username" => $userApp->username
             ]);
         } elseif ($action == 'delete') {
-            $status = $client->users()->delete($userApp->user_id);
+            $client->users()->delete($userApp->user_id);
         }
     }
 
@@ -199,6 +201,44 @@ class UsersAppController extends Controller
             return $this->successResponse('success get data', [
                 'username' => $user->username
             ]);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage(), 400);
+        }
+    }
+
+    public function blockUserByAdmin(Request $request)
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required'
+            ]);
+
+            $res = $this->queueService->blockUser($request->input('user_id'));
+
+            $code = $res['code'];
+            if ($code != 200) {
+                return $this->errorResponse($res['message'], 400);
+            }
+            return $this->successResponse($res['message']);
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage(), 400);
+        }
+    }
+
+    public function unBlockUserByAdmin(Request $request)
+    {
+        try {
+            $request->validate([
+                'user_id' => 'required'
+            ]);
+
+            $res = $this->queueService->unBlockUser($request->input('user_id'));
+
+            $code = $res['code'];
+            if ($code != 200) {
+                return $this->errorResponse($res['message'], 400);
+            }
+            return $this->successResponse($res['message'], $res);
         } catch (\Throwable $th) {
             return $this->errorResponse($th->getMessage(), 400);
         }

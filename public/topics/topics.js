@@ -1,4 +1,4 @@
-var dataTable;
+let dataTable;
 
 let categories = [];
 
@@ -82,9 +82,9 @@ async function showDetailCategory(id) {
   }
 }
 
-async function showSortTopic(item) {
-  $("#topicSort").val(item.sort);
-  $("#topicId").val(item.topic_id);
+async function showSortTopic(topicId, sort) {
+  $("#topicSort").val(sort);
+  $("#topicId").val(topicId);
   $("#modalTopicSort").modal("show");
 }
 
@@ -96,10 +96,10 @@ function getNewCategory() {
     .catch((err) => {});
 }
 
-function signCategory(topic, sign) {
-  $(".topic-id-sign").val(topic.topic_id);
-  $(".name-topic-sign").val(topic.name);
-  $(".category-topic-sign").val(topic.categories);
+function signCategory(topicId, sign, name, categories) {
+  $(".topic-id-sign").val(topicId);
+  $(".name-topic-sign").val(name);
+  $(".category-topic-sign").val(categories);
   if (sign == 1) {
     $("#modalTopicSign").modal("show");
   } else {
@@ -107,8 +107,15 @@ function signCategory(topic, sign) {
   }
 }
 
-function updateImage(item) {
-  $(".topic-id").val(item.topic_id);
+function updateImage(topicId, type = "icon") {
+  $(".topic-id").val(topicId);
+  if (type == "icon") {
+    $(".title-modal-icon").text("Changing the icon in the topic");
+    $(".type-upload").val("icon");
+  } else {
+    $(".type-upload").val("cover");
+    $(".title-modal-icon").text("Changing the cover in the topic");
+  }
   $("#modalChangeIcon").modal("show");
 }
 
@@ -164,13 +171,27 @@ $(document).ready(function() {
         render: function(data, type, row) {
           let icon = row.icon_path;
           let img = "";
-          let item = JSON.stringify(row);
           if (icon != "" && icon != " " && icon != null) {
             img = '<img src="' + icon + '" width="30" height="20" />';
           } else {
             img = "No Icon";
           }
-          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${item})'>${img}</button>`;
+          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${row.topic_id}, "icon")'>${img}</button>`;
+        },
+        defaultContent: "No Icon",
+      },
+      {
+        data: "cover_path",
+        orderable: false,
+        render: function(data, type, row) {
+          let icon = row.cover_path;
+          let img = "";
+          if (icon != "" && icon != " " && icon != null) {
+            img = '<img src="' + icon + '" width="30" height="20" />';
+          } else {
+            img = "No Icon";
+          }
+          return `<button style="background: transparent; outline: none; border: none" onclick='updateImage(${row.topic_id}, "cover")'>${img}</button>`;
         },
         defaultContent: "No Icon",
       },
@@ -179,7 +200,6 @@ $(document).ready(function() {
         className: "menufilter textfilter",
         render: function(data, type, row) {
           let value = "";
-          let item = JSON.stringify(row);
           value += `<button style="border: none; background: transparent; width: 100%; height: 100%" onclick='showDetailCategory(${row.topic_id})' >`;
           value += "<p>" + data + "</p>";
 
@@ -196,8 +216,7 @@ $(document).ready(function() {
         className: "menufilter textfilter",
         render: function(data, type, row) {
           let value = "";
-          let item = JSON.stringify(row);
-          value += `<button style="border: none; background: transparent" onclick='showSortTopic(${item})' >`;
+          value += `<button style="border: none; background: transparent" onclick='showSortTopic(${row.topic_id}, ${row.sort})' >`;
           value += "<p>" + data + "</p>";
 
           value += "</button>";
@@ -233,11 +252,13 @@ $(document).ready(function() {
       {
         data: "sign",
         render: function(data, type, row) {
-          let item = JSON.stringify(row);
+          let topicId = row.topic_id;
+          let name = row.name;
+          let categories = row.categories;
           if (row.sign) {
-            return `<button class="btn btn-danger btn-delete" onclick='signCategory(${item}, 0)'>Remove from OB</button>`;
+            return `<button class="btn btn-danger btn-delete" onclick='signCategory(${topicId}, 0, "${name}", "${categories}")'>Remove from OB</button>`;
           } else {
-            return `<button class="btn btn-primary" onclick='signCategory(${item}, 1)'>Add to OB</button>`;
+            return `<button class="btn btn-primary" onclick='signCategory(${topicId}, 1, "${name}", "${categories}")'>Add to OB</button>`;
           }
         },
       },
@@ -258,8 +279,8 @@ $(document).ready(function() {
 
   $("#formTopicSort").submit(function(e) {
     e.preventDefault();
-    var form = $(this);
-    var url = form.attr("action");
+    let form = $(this);
+    let url = form.attr("action");
     let topicId = $("#topicId").val();
     let topicSort = $("#topicSort").val();
     let data = {
@@ -308,8 +329,8 @@ $(document).ready(function() {
 
   $("#modal-category").submit(function(e) {
     e.preventDefault();
-    var form = $(this);
-    var url = form.attr("action");
+    let form = $(this);
+    let url = form.attr("action");
     let topicId = $("#topicId").val();
     let topicName = $("#topicName").val();
     let categorySelect = $("#categorySelect").val();
@@ -417,7 +438,7 @@ $(document).ready(function() {
 });
 
 function showTopic(topicId) {
-  var formData = new FormData();
+  let formData = new FormData();
   formData.append("topic_id", topicId);
 
   $.ajaxSetup({
@@ -452,3 +473,176 @@ function showTopic(topicId) {
     },
   });
 }
+
+function confirmAction(
+  title,
+  body,
+  url,
+  successMessage,
+  errorMessage,
+  successCallback,
+  method = "POST"
+) {
+  Swal.fire({
+    title: title,
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Please Wait !",
+        showCancelButton: false,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      fetch(url, {
+        method: method,
+        headers: {
+          "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          Swal.close();
+          successCallback(data);
+        })
+        .catch((error) => {
+          Swal.close();
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message || errorMessage,
+          });
+        });
+    }
+  });
+}
+
+$(".btn-change-category").click(function() {
+  let oldCategory = $("#oldCategory").val();
+  let newCategory = $("#newCategory").val();
+  if (oldCategory) {
+    confirmAction(
+      "Are you sure?",
+      {
+        old_category: oldCategory,
+        new_category: newCategory,
+      },
+      "/topics/category",
+      "Category changed successfully",
+      "Category changed failed",
+      function(data) {
+        // close modal
+        console.log(data);
+        // show message use sweet alert
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Category changed successfully",
+        });
+
+        dataTable.ajax.reload(null, false);
+        $("#modalChangeCategory").modal("hide");
+      },
+      "PUT"
+    );
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Old Category is required",
+    });
+  }
+});
+
+$(".btn-delete-category").click(function() {
+  let oldCategory = $("#oldCategory").val();
+  if (oldCategory) {
+    confirmAction(
+      "Are you sure?",
+      {
+        old_category: oldCategory,
+      },
+      "/topics/category",
+      "Category deleted successfully",
+      "Category deleted failed",
+      function(data) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Category deleted successfully",
+        });
+        dataTable.ajax.reload(null, false);
+        $("#modalChangeCategory").modal("hide");
+        console.log(data);
+      },
+      "DELETE"
+    );
+  } else {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Old Category is required",
+    });
+  }
+});
+
+$("#formTopicSign").on("submit", function(e) {
+  e.preventDefault();
+  confirmAction(
+    "Are you sure?",
+    {
+      topic_id: $(".topic-id-sign").val(),
+      sign: 1,
+    },
+    "/topics/sign",
+    "Topic signed successfully",
+    "Topic signed failed",
+    function(data) {
+      console.log(data);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Topic signed successfully",
+      });
+      dataTable.draw();
+      $("#modalTopicSign").modal("hide");
+    }
+  );
+});
+
+$("#formUnSignTopic").on("submit", function(e) {
+  e.preventDefault();
+  confirmAction(
+    "Are you sure?",
+    {
+      topic_id: $(".topic-id-sign").val(),
+      sign: 0,
+    },
+    "/topics/un-sign",
+    "Topic unsigned successfully",
+    "Topic unsigned failed",
+    function(data) {
+      console.log(data);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Topic unsigned successfully",
+      });
+      dataTable.draw();
+      $("#modalTopicUnSign").modal("hide");
+    }
+  );
+});

@@ -27,28 +27,34 @@
                                             style="color:white">Create
                                             Topics</b></button> </a>
                             @endunlessrole
-                            <div class="mt-2"></div>
+                            <div class="my-2"></div>
                             @unlessrole('viewer')
                                 <button class="btn btn-primary btn-limit-topic"><b style="color:white">Change Limit
                                         Topic</b></button>
                             @endunlessrole
-                            <div class="mt-2"></div>
+                            <div class="my-2"></div>
                             @unlessrole('viewer')
                                 <a href="{{ route('topic.export') }}"> <button class="btn btn-primary"><b
                                             style="color:white">Export
                                             Topics</b></button> </a>
                             @endunlessrole
+                            <button class="btn btn-primary my-2" data-toggle="modal"
+                                data-target="#modalChangeCategory">Change
+                                Category</button>
                         </div>
                     </div>
 
 
                     <div class="table-responsive mb-4 mt-4">
-                        <table id="tableTopics" class="table table-hover" style="width:100%">
+                        <table id="tableTopics" class="table table-hover" style="width:100%"
+                            aria-describedby="topics-table-description">
+                            <caption id="topics-table-description">List of topics</caption>
                             <thead>
                                 <tr>
                                     <th>id</th>
                                     <th>Name</th>
                                     <th>Icon</th>
+                                    <th>Cover</th>
                                     <th>Categories</th>
                                     <th>Created at</th>
                                     <th>Sort</th>
@@ -182,7 +188,7 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('topic.category.sign') }}" method="post" id="formTopicLimit">
+                <form action="" method="post" id="formTopicSign">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailModalLabelTopicSign">Add Topic to OB</h5>
@@ -211,7 +217,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                        <button type="submit" class="btn btn-primary ">Submit</button>
                     </div>
                 </form>
             </div>
@@ -221,7 +227,7 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('topic.category.un-sign') }}" method="post" id="formTopicLimit">
+                <form action="" method="post" id="formUnSignTopic">
                     @csrf
                     <div class="modal-header">
                         <h5 class="modal-title" id="detailModalLabelTopicUnSign">Remove from OB</h5>
@@ -250,7 +256,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>
             </div>
@@ -301,20 +307,22 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modalChangeIcon" tabindex="1" aria-labelledby="detailModalLabelLimit"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form action="{{ route('topic.update-image') }}" method="POST" id="formSameTopic"
+                <form action="{{ route('topic.update-image') }}" method="POST" id="formChangeIcon"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabelLimit">Changing the icon in the topic</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
+
+                        <h5 class="title-modal-icon"></h5>
                         <div class="custom-file-container" data-upload-id="myFirstImage">
                             <label>Icon <a href="javascript:void(0)" class="custom-file-container__image-clear"
                                     title="Clear Image">x</a></label>
@@ -327,6 +335,7 @@
                             </label>
                             <div class="custom-file-container__image-preview"></div>
                         </div>
+                        <input type="text" class="type-upload" name="type" hidden>
                         <input type="text" class="topic-id" name="id" hidden>
                     </div>
                     <div class="modal-footer">
@@ -335,6 +344,36 @@
                             onclick="confirm('Are You sure?')">Submit</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalChangeCategory" tabindex="1" aria-labelledby="detailModalLabelLimit"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Change or Delete Category</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="oldCategory">Old Category</label>
+                        <input type="email" class="form-control" id="oldCategory" name="category"
+                            placeholder="Enter Category" aria-describedby="emailHelp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newCategory">New Category</label>
+                        <input type="email" class="form-control" id="newCategory" name="category"
+                            placeholder="Enter Category" aria-describedby="emailHelp" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn-change-category">Change</button>
+                    <button type="button" class="btn btn-danger btn-delete-category">Delete</button>
+                </div>
             </div>
         </div>
     </div>

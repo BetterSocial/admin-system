@@ -128,80 +128,6 @@ const reactionPost = async (activityId, type) => {
   }
 };
 
-const hideOrShowPost = async (id, isHide) => {
-  try {
-    const body = {
-      is_hide: isHide,
-    };
-    console.log(body);
-    const response = await fetch(`/post/hide/${id}`, {
-      method: "POST",
-      headers: {
-        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-    let res = await response.json();
-    return res;
-  } catch (error) {
-    console.log(error);
-    Swal.fire("Error", "Error load data from getstream", "error").then(() => {
-      location.reload();
-    });
-  }
-};
-
-const hidePost = (status, postId) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, hide it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      hideOrShowPost(postId, status)
-        .then((res) => {
-          console.log(res);
-          Swal.fire("Success", "Success hide post", "success").then(() => {
-            location.reload();
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  });
-};
-
-const showPost = (status, postId) => {
-  Swal.fire({
-    title: "Are you sure?",
-    text: "",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, show it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      hideOrShowPost(postId, status)
-        .then((res) => {
-          console.log(res);
-          Swal.fire("Success", "Success show post", "success").then(() => {
-            location.reload();
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  });
-};
-
 function tableCreate() {
   const exampleArray = [
     {
@@ -485,6 +411,14 @@ const bannedUserByPostId = (postId) => {
   });
 };
 
+function createButton(type, text, onclick) {
+  return `<button type="button" class="btn btn-${type} btn-sm my-2" onclick="${onclick}">${text}</button>`;
+}
+
+function createLinkButton(url, text) {
+  return `<a href="${url}"><button type="button" class="btn btn-primary btn-sm">${text}</button></a>`;
+}
+
 $(document).ready(function() {
   $("#detailCommentModal").on("hide.bs.modal", function(e) {
     let container = document.getElementById("cardBodyComment");
@@ -496,12 +430,12 @@ $(document).ready(function() {
   dataTablePost = $("#tablePostBlock").DataTable({
     searching: false,
     stateSave: true,
+    serverSide: true,
     processing: true,
     language: {
       processing: "Loading...",
       emptyTable: "No Data Post",
     },
-    serverSide: true,
     ajax: {
       url: "/post-blocks/data",
       type: "POST",
@@ -512,11 +446,11 @@ $(document).ready(function() {
         console.log(d);
       },
     },
-    error: function(xhr, error, thrown) {
-      console.log("xhr", xhr);
-      console.log("error", error);
-      console.log("thrown", thrown);
-    },
+    // error: function(xhr, error, thrown) {
+    //   console.log("xhr", xhr);
+    //   console.log("error", error);
+    //   console.log("thrown", thrown);
+    // },
     columns: [
       {
         data: "id",
@@ -528,7 +462,6 @@ $(document).ready(function() {
         orderable: false,
         className: "menufilter textfilter",
         render: function(data, type, row) {
-          // console.log(row);
           if (row.anonimity) {
             return (
               row.anon_user_info_color_name +
@@ -546,23 +479,11 @@ $(document).ready(function() {
       {
         data: "message",
         orderable: false,
-        className: "menufilter textfilter",
+        className: "message",
         render: function(data, type, row) {
-          let { images_url } = row;
-          // message tab
-          if (row.post_type === 1) {
-            return `
+          return `
                 <div class="btn-detail"  data-item="${row}">${data}</div>
                 `;
-          } else if (row.post_type === 2) {
-            return `
-                <div class="btn-detail"  data-item="${row}">${data}</div>
-                `;
-          } else {
-            return `
-              <div class="btn-detail"  data-item="${row}">${data}</div>
-              `;
-          }
         },
       },
       {
@@ -695,10 +616,11 @@ $(document).ready(function() {
         },
       },
       {
-        data: "post_type",
+        data: "time",
         orderable: true,
         className: "menufilter textfilter",
         render: function(data, type, row) {
+          // time from post date
           const tanggal = new Date(row.time);
           const namaBulan = [
             "Jan",
@@ -773,33 +695,46 @@ $(document).ready(function() {
         orderable: false,
         render: function(data, type, row) {
           // action
+          let userId = row.actor.id;
+          let clickBlockUser = "blockUser('" + userId + "')";
+          let clickUnBlockUser = "unBlockUser('" + userId + "')";
+
+          const btnUnBlockUser = createButton(
+            "primary",
+            "Remove downrank",
+            clickUnBlockUser
+          );
+          const btnBlockUser = createButton(
+            "danger",
+            "Downrank user",
+            clickBlockUser
+          );
           let isHide = false;
           if (row.is_hide) {
             isHide = true;
           }
+          let btnBlok = "";
+          if (row.hasOwnProperty("user") && row.user != null) {
+            let user = row.user;
+            if (user.blocked_by_admin) {
+              btnBlok = btnUnBlockUser;
+            } else {
+              btnBlok = btnBlockUser;
+            }
+          }
           let html = "";
           if (isHide) {
-            html =
-              "<button type='button' data-deleted='false' onclick='showPost(false,\"" +
-              row.id +
-              "\")' class='btn btn-info btn-sm'>Show Post</button>" +
-              "<br/>" +
-              "<br/>" +
-              "<button  type='button' data-deleted='false' onclick='bannedUserByPostId(\"" +
-              row.id +
-              "\")' class='btn btn-danger btn-sm'>Ban User</button>" +
-              " <br/>";
+            let clickShow = "hideOrShowPost(false,'" + row.id + "')";
+            html += createButton("primary", "Show Post", clickShow);
+            let clickBanned = "bannedUserByPostId('" + row.id + "')";
+            html += createButton("danger", "Ban User", clickBanned);
+            html += btnBlok;
           } else {
-            html =
-              "<button data-deleted='true' type='button' onclick='hidePost(true,\"" +
-              row.id +
-              "\")' class='btn btn-danger btn-sm'>Hide Post</button>" +
-              " <br/>" +
-              " <br/>" +
-              "<button  data-deleted='true' type='button' onclick='bannedUserByPostId(\"" +
-              row.id +
-              "\")' class='btn btn-danger btn-sm'>Ban User</button>" +
-              " <br/>";
+            let clickHide = "hideOrShowPost(true,'" + row.id + "')";
+            html += createButton("danger", "Hide Post", clickHide);
+            let clickBanned = "bannedUserByPostId('" + row.id + "')";
+            html += createButton("danger", "Ban User", clickBanned);
+            html += btnBlok;
           }
           return html;
         },
@@ -819,3 +754,141 @@ $(document).ready(function() {
   });
   /// end
 });
+
+function confirmAction(
+  title,
+  body,
+  url,
+  successMessage,
+  errorMessage,
+  successCallback
+) {
+  Swal.fire({
+    title: title,
+    text: "",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Please Wait !",
+        showCancelButton: false,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        willOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          Swal.close();
+          successCallback(data);
+        })
+        .catch((error) => {
+          Swal.close();
+          console.log(error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: error.message || errorMessage,
+          });
+        });
+    }
+  });
+}
+
+function bannedUser(status, userId) {
+  confirmAction(
+    "Are you sure?",
+    {
+      user_id: userId,
+    },
+    `/users/banned/${userId}`,
+    "Success",
+    "Oops...",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      dataTablePost.draw();
+    }
+  );
+}
+
+function blockUser(userId) {
+  confirmAction(
+    "Are you sure?",
+    {
+      user_id: userId,
+    },
+    `/users/admin-block-user`,
+    "Success",
+    "Error",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      dataTablePost.draw();
+    }
+  );
+}
+
+function unBlockUser(userId) {
+  confirmAction(
+    "Are you sure?",
+    {
+      user_id: userId,
+    },
+    `/users/admin-unblock-user`,
+    "Success",
+    "Error",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      dataTablePost.draw();
+    }
+  );
+}
+
+const hideOrShowPost = (status, postId) => {
+  let body = {
+    is_hide: status,
+  };
+  console.log(body);
+  confirmAction(
+    "Are you sure?",
+    body,
+    `/post/hide/${postId}`,
+    "Success",
+    "Oops...",
+    function(data) {
+      console.log(data);
+      Swal.fire(
+        "Success",
+        status ? "Success hide post" : "Success show post",
+        "success"
+      ).then(() => {
+        dataTablePost.draw();
+      });
+    }
+  );
+};

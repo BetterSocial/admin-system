@@ -1,12 +1,9 @@
 $(document).ready(function() {
   const formattedDate = (data) => {
-    // Mengubah menjadi objek Date
     const date = new Date(data);
 
-    // Daftar nama hari
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    // Daftar nama bulan
     const monthsOfYear = [
       "Jan",
       "Feb",
@@ -22,22 +19,26 @@ $(document).ready(function() {
       "Dec",
     ];
 
-    // Mendapatkan nama hari dari indeks hari dalam objek Date
     const dayName = daysOfWeek[date.getDay()];
 
-    // Mendapatkan tanggal dari objek Date
     const dayOfMonth = date.getDate();
 
-    // Mendapatkan nama bulan dari indeks bulan dalam objek Date
     const monthName = monthsOfYear[date.getMonth()];
 
-    // Mendapatkan tahun dari objek Date
     const year = date.getFullYear();
 
-    // Format akhir yang diinginkan
     const formattedDate = `${dayName}, ${dayOfMonth}-${monthName}-${year}`;
     return formattedDate;
   };
+
+  function createButton(type, text, onclick) {
+    return `<button type="button" class="btn btn-${type} btn-sm my-2" onclick="${onclick}">${text}</button>`;
+  }
+
+  function createLinkButton(url, text) {
+    return `<a href="${url}"><button type="button" class="btn btn-primary btn-sm">${text}</button></a>`;
+  }
+
   var datatble = $("#tableUsers").DataTable({
     searching: false,
     stateSave: true,
@@ -57,7 +58,7 @@ $(document).ready(function() {
         d.username = $("#username").val();
         d.countryCode = $("#countryCode").val();
         d.topic = $("#topic").val();
-        console.log(d);
+        d.user_id = $("#userId").val();
       },
     },
     columns: [
@@ -65,16 +66,39 @@ $(document).ready(function() {
         data: "Action",
         orderable: false,
         render: function(data, type, row) {
-          var html =
-            "<a href='/user-detail-view?user_id=" +
-            row.user_id +
-            "'> <button type='button' class='btn btn-primary btn-sm'>Show Detail</button> </a>";
+          let { blocked_by_admin } = row;
+          let html = "";
+          const userDetailViewLink = createLinkButton(
+            `/user-detail-view?user_id=${row.user_id}`,
+            "Show Detail"
+          );
+          html += userDetailViewLink;
+
           if (!row.is_banned) {
-            html +=
-              `<button type='button' onclick='bannedUser(this,\"` +
-              row.user_id +
-              "\")' class='btn btn-danger btn-sm'>Ban User</button>";
+            let onclick = "bannedUser(this,'" + row.user_id + "')";
+            const bannedUserBtn = createButton("danger", "Ban User", onclick);
+            html += bannedUserBtn;
           }
+
+          let clickBlockUser = "blockUser('" + row.user_id + "')";
+          let clickUnBlockUser = "unBlockUser('" + row.user_id + "')";
+
+          const btnUnBlockUser = createButton(
+            "primary",
+            "Remove downrank",
+            clickUnBlockUser
+          );
+          const btnBlockUser = createButton(
+            "danger",
+            "Downrank user",
+            clickBlockUser
+          );
+          if (blocked_by_admin) {
+            html += btnUnBlockUser;
+          } else {
+            html += btnBlockUser;
+          }
+
           return html;
         },
       },
@@ -113,7 +137,6 @@ $(document).ready(function() {
         data: "followers",
         orderable: false,
         render: function(data, type, row) {
-          // pengikut kita
           let followers = [];
           followers = row.followeds;
           let total = followers.length;
@@ -124,7 +147,6 @@ $(document).ready(function() {
         data: "following",
         orderable: false,
         render: function(data, type, row) {
-          // total yang kita ikuti
           let followeds = [];
           followeds = row.followers;
           let total = followeds.length;
@@ -165,7 +187,7 @@ $(document).ready(function() {
             if (user_score.hasOwnProperty("u1_score")) {
               let u1_score = user_score.u1_score;
               if (u1_score != 0) {
-                let numericScore = parseFloat(u1_score); // Konversi ke angka
+                let numericScore = parseFloat(u1_score);
                 let formattedScore = numericScore.toFixed(3);
                 userScore = formattedScore;
               }
@@ -193,7 +215,6 @@ $(document).ready(function() {
           if (row.user_topics.length >= 1) {
             for (let index = 0; index < row.user_topics.length; index++) {
               let userTopic = row.user_topics[index];
-              console.log(userTopic);
               let topic = userTopic.topic;
               if (topic) {
                 if (topic.name != null) {
@@ -222,12 +243,19 @@ function downloadCsv(e) {
   popUpCsv.location =
     "/download-csv" + "?username=" + username + "&countryCode=" + countryCode;
 }
-
-function bannedUser(status, userId) {
+function confirmAction(
+  title,
+  userId,
+  url,
+  successMessage,
+  errorMessage,
+  successCallback
+) {
   var formData = new FormData();
   formData.append("user_id", userId);
+
   Swal.fire({
-    title: "Are you sure?",
+    title: title,
     text: "",
     icon: "warning",
     showCancelButton: true,
@@ -238,8 +266,8 @@ function bannedUser(status, userId) {
     if (result.isConfirmed) {
       Swal.fire({
         title: "Please Wait !",
-        showCancelButton: false, // There won't be any cancel button
-        showConfirmButton: false, // There won't be any confirm button
+        showCancelButton: false,
+        showConfirmButton: false,
         allowOutsideClick: false,
         willOpen: () => {
           Swal.showLoading();
@@ -256,23 +284,77 @@ function bannedUser(status, userId) {
         dataType: "JSON",
         contentType: false,
         processData: false,
-        url: `/users/banned/${userId}`,
+        url: url,
         success: function(data) {
-          console.log(data);
-          $("#tableUsers")
-            .DataTable()
-            .ajax.reload();
           Swal.close();
+          console.log(data);
+          successCallback(data);
         },
         error: function(data) {
           Swal.close();
-          return Swal.fire({
+          console.log(data);
+          Swal.fire({
             icon: "error",
-            title: "Oops...",
-            text: data.message,
+            title: "Error",
+            text: data.responseJSON.message || errorMessage,
           });
         },
       });
     }
   });
+}
+
+function bannedUser(status, userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/banned/${userId}`,
+    "Success",
+    "Oops...",
+    function(data) {
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
+}
+
+function blockUser(userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/admin-block-user`,
+    "Success",
+    "Error",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
+}
+
+function unBlockUser(userId) {
+  confirmAction(
+    "Are you sure?",
+    userId,
+    `/users/admin-unblock-user`,
+    "Success",
+    "Error",
+    function(data) {
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message,
+      });
+      $("#tableUsers")
+        .DataTable()
+        .ajax.reload();
+    }
+  );
 }

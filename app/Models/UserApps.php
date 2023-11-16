@@ -35,6 +35,7 @@ class UserApps extends Model
         'allow_anon_dm',
         'only_received_dm_from_user_following',
         'is_backdoor_user',
+        'blocked_by_admin',
     ];
 
     public function follower()
@@ -80,6 +81,7 @@ class UserApps extends Model
     public static function userQuery(Request $req)
     {
         $searchName = $req->input('username');
+        $searchUserId = $req->input('user_id');
         $searchCountryCode = $req->input('countryCode');
         $searchTopic = $req->input('topic');
         $query = UserApps::select(
@@ -87,7 +89,9 @@ class UserApps extends Model
             'user_id',
             'username',
             'country_code',
-            'created_at'
+            'created_at',
+            'is_banned',
+            'blocked_by_admin',
         );
 
         $query->with([
@@ -97,6 +101,10 @@ class UserApps extends Model
             'userTopics.topic',
         ]);
 
+
+        if ($searchUserId !== null) {
+            $query->where('user_id', 'ILIKE', $searchUserId);
+        }
 
 
         if ($searchName !== null) {
@@ -143,14 +151,13 @@ class UserApps extends Model
             $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
 
             $userScoreMap = [];
-
             foreach ($userScores as $userScore) {
-                $userScore->u1_score = is_numeric($userScore->u1_score) ? $userScore->u1_score : 0;
                 $userScoreMap[$userScore->_id] = $userScore;
             }
+
             foreach ($users as $user) {
                 if (isset($userScoreMap[$user->user_id])) {
-                    $userScore = $userScoreMap[$user->user_id]->u1_score;
+                    $userScore = $userScoreMap[$user->user_id];
                     $user->user_score = $userScore;
                 }
             }
@@ -162,7 +169,7 @@ class UserApps extends Model
                 'data' => $users,
             ]);
         } catch (\Throwable $th) {
-            throw $th;
+            return throw $th;
         }
     }
 
@@ -175,7 +182,7 @@ class UserApps extends Model
             $user->user_score = $userScores;
             return $user;
         } catch (\Throwable $th) {
-            //throw $th;
+            return throw $th;
         }
     }
 }
