@@ -714,8 +714,8 @@
         {{-- Starter Kit Boxed menu --}}
         <style>
             /*
-                                                                                                               The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                                                                                           */
+                                                                                                                       The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                                                                                                   */
 
             body {
                 max-width: 1140px;
@@ -1161,9 +1161,6 @@
         <style>
             .table .message {
                 max-width: 250px;
-                /* white-space: nowrap;
-                overflow: auto;
-                text-overflow: ellipsis; */
                 word-wrap: break-word;
             }
         </style>
