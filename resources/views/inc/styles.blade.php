@@ -1161,9 +1161,10 @@
         <style>
             .table .message {
                 max-width: 250px;
-                white-space: nowrap;
+                /* white-space: nowrap;
                 overflow: auto;
-                text-overflow: ellipsis;
+                text-overflow: ellipsis; */
+                word-wrap: break-word;
             }
         </style>
     @break
