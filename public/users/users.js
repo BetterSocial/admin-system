@@ -108,7 +108,10 @@ $(document).ready(function() {
       },
       {
         data: "username",
-        className: "username",
+        className: "username-table",
+        render: function(data, type, row) {
+          return `<a href="https://www.instagram.com/${data}" target="_blank">${data}</a>`;
+        },
       },
       {
         data: "country_code",
@@ -167,6 +170,17 @@ $(document).ready(function() {
             " <a href='/user-show-post-list?user_id=" +
             row.user_id +
             "'> <button type='button' class='btn btn-primary btn-sm'>#posts</button> </a>"
+          );
+        },
+      },
+      {
+        data: "posts",
+        orderable: false,
+        render: function(data, type, row) {
+          return (
+            " <a href='/users/comments?user_id=" +
+            row.user_id +
+            "'> <button type='button' class='btn btn-primary btn-sm'>#coments</button> </a>"
           );
         },
       },

@@ -541,7 +541,7 @@
             }
         </script>
         <script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}
-                &callback=initMap" async defer></script>
+                                &callback=initMap" async defer></script>
     @break
 
     @case('faq')
@@ -1220,9 +1220,13 @@
         </script>
     @break
 
-    @default
-        <script>
-            console.log('No custom script available.')
-        </script>
-@endswitch
-<!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    @case('userComment')
+        <script src="{{ asset('plugins/table/datatable/datatables.js') }}"></script>
+        <script src="{{ asset('users/userComment.js') }}"></script>
+
+        @default
+            <script>
+                console.log('No custom script available.')
+            </script>
+    @endswitch
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->

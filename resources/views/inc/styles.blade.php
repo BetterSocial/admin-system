@@ -714,8 +714,8 @@
         {{-- Starter Kit Boxed menu --}}
         <style>
             /*
-                                                                                                                                                               The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                                                                                                                                           */
+                                                                                                                                                                                                               The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                                                                                                                                                                                           */
 
             body {
                 max-width: 1140px;
@@ -1125,10 +1125,10 @@
 
     @case('view Users')
         <style>
-            // make wrap text if long text
-            .table .username {
-                width: 200px;
-                text-wrap: wrap;
+            .table .username-table {
+                max-width: 150px;
+                width: 100px;
+                word-wrap: break-word;
             }
         </style>
 

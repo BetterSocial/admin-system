@@ -51,6 +51,7 @@
                                     <th>Followers</th>
                                     <th>Following</th>
                                     <th>Posts</th>
+                                    <th>Comment</th>
                                     <th>Sessions</th>
                                     <th>User Score</th>
                                     <th>Blocked (signed:2/anon:1)</th>

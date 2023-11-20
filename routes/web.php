@@ -12,6 +12,7 @@ use App\Http\Controllers\StatusHealthController;
 use App\Http\Controllers\UsersAppController;
 use App\Http\Controllers\ViewUserController;
 use App\Http\Controllers\TopicController;
+use App\Http\Controllers\UserCommentController;
 use App\Http\Controllers\UserFollowController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -131,6 +132,8 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('user.admin-block-user');
         Route::post('/admin-unblock-user', [UsersAppController::class, 'unBlockUserByAdmin'])
             ->name('user.admin-block-user');
+        Route::get('/comments', [UserCommentController::class, 'index'])->name('user.comments');
+        Route::post('/comments/data', [UserCommentController::class, 'getData'])->name('user.comments.data');
     });
 
 
