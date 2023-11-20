@@ -1,5 +1,7 @@
 let dataTablePost;
 
+let token = $("meta[name=csrf-token]").attr("content");
+
 const getUsernameByAnonymousId = async (userId) => {
   let body = {
     user_id: userId,
@@ -9,7 +11,7 @@ const getUsernameByAnonymousId = async (userId) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json", // Set header untuk JSON
-        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+        "X-CSRF-Token": token,
       },
       body: JSON.stringify(body), // Mengubah objek menjadi JSON string
     });
@@ -20,7 +22,6 @@ const getUsernameByAnonymousId = async (userId) => {
       return "-";
     }
   } catch (err) {
-    console.log("-", err);
     return "err";
   }
 };
@@ -35,12 +36,11 @@ const getFeeds = async (feedGroup, user_id) => {
     const response = await fetch("/post-blocks/data", {
       method: "POST",
       headers: {
-        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+        "X-CSRF-Token": token,
       },
       body: JSON.stringify(body),
     });
     let res = await response.json();
-    console.log(res.status);
     if (res.status === "success") {
       return res.data;
     } else {
@@ -82,7 +82,6 @@ const createInput = async (message) => {
 const reactionPost = async (activityId, type) => {
   let { message, url } = handleType(type);
   let value = await createInput(message);
-  console.log(value);
   if (value && value >= 1) {
     Swal.fire({
       title: "Are you sure?",
@@ -103,7 +102,7 @@ const reactionPost = async (activityId, type) => {
           const response = await fetch(url, {
             method: "POST",
             headers: {
-              "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+              "X-CSRF-Token": token,
               "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
@@ -260,11 +259,10 @@ const deleteComment = async (commentId) => {
         const response = await fetch(`/post/comment/${commentId}`, {
           method: "DELETE",
           headers: {
-            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "X-CSRF-Token": token,
           },
         });
         let res = await response.json();
-        console.log(res);
         if (res.status === "success") {
           Swal.fire(
             "Success",
@@ -389,7 +387,7 @@ const bannedUserByPostId = (postId) => {
         const response = await fetch(`/post/banned-user`, {
           method: "POST",
           headers: {
-            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "X-CSRF-Token": token,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
@@ -439,7 +437,7 @@ $(document).ready(function() {
     ajax: {
       url: "/post-blocks/data",
       type: "POST",
-      headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+      headers: { "X-CSRF-Token": token },
       data: function(d) {
         d.total = $("#total").val();
         d.message = $("#message").val();
@@ -786,7 +784,7 @@ function confirmAction(
       fetch(url, {
         method: "POST",
         headers: {
-          "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+          "X-CSRF-Token": token,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
