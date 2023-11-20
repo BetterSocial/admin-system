@@ -714,8 +714,8 @@
         {{-- Starter Kit Boxed menu --}}
         <style>
             /*
-                                                                                                               The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                                                                                           */
+                                                                                                                                                               The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
+                                                                                                                                                           */
 
             body {
                 max-width: 1140px;
@@ -1124,6 +1124,14 @@
     @break
 
     @case('view Users')
+        <style>
+            // make wrap text if long text
+            .table .username {
+                width: 200px;
+                text-wrap: wrap;
+            }
+        </style>
+
         <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/datatables.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('plugins/table/datatable/dt-global_style.css') }}">
     @break

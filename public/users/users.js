@@ -108,7 +108,7 @@ $(document).ready(function() {
       },
       {
         data: "username",
-        className: "menufilter textfilter",
+        className: "username",
       },
       {
         data: "country_code",
