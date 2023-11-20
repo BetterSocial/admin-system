@@ -29,30 +29,24 @@ class UserPostComment extends Model
 
     public static function data(Request $request)
     {
-        try {
-            // this function use datatable
+        $columns = array(
+            0 => 'post_id',
+            1 => 'comment_id',
+            2 => 'comment',
+        );
+        $userId = $request->input('user_id');
+        $query = UserPostComment::query();
+        $query->where('commenter_user_id', $userId);
 
-            $columns = array(
-                0 => 'post_id',
-                1 => 'comment_id',
-                2 => 'comment',
-            );
-            $userId = $request->input('user_id');
-            $query = UserPostComment::query();
-            $query->where('commenter_user_id', $userId);
+        $total = $query->count();
+        $query = limitOrderQuery($request, $query, $columns);
+        $userPostComments = $query->get();
 
-            $total = $query->count();
-            $query = limitOrderQuery($request, $query, $columns);
-            $userPostComments = $query->get();
-
-            return response()->json([
-                'draw' => intval($request->input('draw', 1)),
-                'recordsTotal' => $total,
-                'recordsFiltered' => $total,
-                'data' => $userPostComments,
-            ]);
-        } catch (\Throwable $th) {
-            throw $th; // Rethrow the exception automatically
-        }
+        return response()->json([
+            'draw' => intval($request->input('draw', 1)),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total,
+            'data' => $userPostComments,
+        ]);
     }
 }
