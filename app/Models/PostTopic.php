@@ -13,4 +13,16 @@ class PostTopic extends Model
         'post_id',
         'topic_id',
     ];
+
+    public function topic()
+    {
+        return $this->belongsTo(Topics::class, 'topic_id');
+    }
+
+    public function scopeFilterSearchName($query, $searchTerm)
+    {
+        return $query->with('topic')->whereHas('topic', function ($query) use ($searchTerm) {
+            $query->where('name', 'like', '%' . $searchTerm . '%');
+        });
+    }
 }
