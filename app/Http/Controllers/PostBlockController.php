@@ -6,6 +6,7 @@ use App\Models\LogModel;
 use App\Models\Polling;
 use App\Models\PollingOption;
 use App\Models\PostModel;
+use App\Models\PostTopic;
 use App\Models\UserApps;
 use App\Models\UserBlockedUser;
 use App\Models\UserPostComment;
@@ -71,8 +72,12 @@ class PostBlockController extends Controller
                 $comments = UserPostComment::where('comment', 'ilike', '%' . $message . '%')
                     ->get()
                     ->pluck('post_id');
+                $topics = PostTopic::filterSearchName($message)
+                    ->get()
+                    ->pluck('post_id');
 
-                $activityIds = $posts->concat($comments)->unique()->values();
+                $activityIds = $posts->concat($comments)->merge($topics)->unique()->values();
+                file_put_contents('activityIds.txt', json_encode($activityIds));
                 if (count($activityIds) == 0) {
                     return $this->errorDataTableResponse();
                 }
