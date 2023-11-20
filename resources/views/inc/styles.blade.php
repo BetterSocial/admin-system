@@ -713,10 +713,6 @@
     @case('boxed')
         {{-- Starter Kit Boxed menu --}}
         <style>
-            /*
-                                                                                                                               The below code is for DEMO purpose --- Use it if you are using this demo otherwise Remove it
-                                                                                                                           */
-
             body {
                 max-width: 1140px;
                 margin: 0 auto;
