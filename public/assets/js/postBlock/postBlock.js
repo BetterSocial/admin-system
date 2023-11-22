@@ -652,6 +652,22 @@ $(document).ready(function() {
         },
       },
       {
+        data: "topics",
+        name: "topics",
+        orderable: false,
+        className: "menufilter",
+        render: function(data, type, row) {
+          if (data.length >= 1) {
+            let topics = "";
+            data.map((item) => {
+              topics += `#${item} <br>`;
+            });
+            return topics;
+          }
+          return data;
+        },
+      },
+      {
         data: "post_type",
         orderable: false,
         className: "menufilter textfilter",

@@ -46,6 +46,7 @@
                                     <th>Total Block</th>
                                     <th>Status</th>
                                     <th>Post Date</th>
+                                    <th>Topics</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
