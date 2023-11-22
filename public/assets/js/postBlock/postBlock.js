@@ -662,7 +662,6 @@ $(document).ready(function() {
           if (data.length >= 1) {
             let topics = "";
             data.map((item) => {
-              // topics.push();
               topics += `#${item} <br>`;
             });
             return topics;
