@@ -72,12 +72,15 @@ class PostBlockController extends Controller
                 $comments = UserPostComment::where('comment', 'ilike', '%' . $message . '%')
                     ->get()
                     ->pluck('post_id');
-                $topics = PostTopic::filterSearchName($message)
+                $postIds = PostTopic::filterSearchName($message)
                     ->get()
                     ->pluck('post_id');
+                $postsFromTopic = PostModel::whereIn('post_id', $postIds)
+                    ->whereNotNull('getstream_activity_id')
+                    ->get()
+                    ->pluck('getstream_activity_id');
 
-                $activityIds = $posts->concat($comments)->merge($topics)->unique()->values();
-                file_put_contents('activityIds.txt', json_encode($activityIds));
+                $activityIds = $posts->concat($comments)->merge($postsFromTopic)->unique()->values();
                 if (count($activityIds) == 0) {
                     return $this->errorDataTableResponse();
                 }
@@ -146,10 +149,14 @@ class PostBlockController extends Controller
             $searchId = $searchId->toArray();
             $searchId = array_slice($searchId, $offset, $limit);
             foreach ($searchId as $value) {
-                $options['id_lte'] = $value;
-                $response = $this->getFeedActivities(0, 1, $options);
-                if (count($response["results"]) >= 1) {
-                    $data[] = $response["results"][0];
+                try {
+                    $options['id_lte'] = $value;
+                    $response = $this->getFeedActivities(0, 1, $options);
+                    if (count($response["results"]) >= 1) {
+                        $data[] = $response["results"][0];
+                    }
+                } catch (\Throwable $th) {
+                    continue;
                 }
             }
         } else {
