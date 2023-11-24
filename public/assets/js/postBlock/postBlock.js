@@ -10,10 +10,10 @@ const getUsernameByAnonymousId = async (userId) => {
     const response = await fetch("/user-name-by-anonymous-id", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set header untuk JSON
+        "Content-Type": "application/json",
         "X-CSRF-Token": token,
       },
-      body: JSON.stringify(body), // Mengubah objek menjadi JSON string
+      body: JSON.stringify(body),
     });
     let res = await response.json();
     if (res.status === "success") {
@@ -41,6 +41,7 @@ const getFeeds = async (feedGroup, user_id) => {
       body: JSON.stringify(body),
     });
     let res = await response.json();
+    console.log(res.status);
     if (res.status === "success") {
       return res.data;
     } else {
@@ -82,6 +83,7 @@ const createInput = async (message) => {
 const reactionPost = async (activityId, type) => {
   let { message, url } = handleType(type);
   let value = await createInput(message);
+  console.log(value);
   if (value && value >= 1) {
     Swal.fire({
       title: "Are you sure?",
@@ -176,7 +178,6 @@ const detail = (data) => {
     if (comment) {
     }
   }
-  //   $("#detailModal").modal("show");
   getFeeds;
 };
 
@@ -263,6 +264,7 @@ const deleteComment = async (commentId) => {
           },
         });
         let res = await response.json();
+        console.log(res);
         if (res.status === "success") {
           Swal.fire(
             "Success",
@@ -393,7 +395,6 @@ const bannedUserByPostId = (postId) => {
           body: JSON.stringify(body),
         });
         let res = await response.json();
-        console.log(res);
         if (res.status === "success") {
           Swal.fire("Success", "Success banned user", "success").then(() => {
             dataTablePost.draw();
@@ -402,7 +403,6 @@ const bannedUserByPostId = (postId) => {
           Swal.fire("Error", res.message).then(() => {});
         }
       } catch (err) {
-        console.log(err);
         Swal.fire("Error", err).then(() => {});
       }
     }
@@ -444,17 +444,14 @@ $(document).ready(function() {
         console.log(d);
       },
     },
-    // error: function(xhr, error, thrown) {
-    //   console.log("xhr", xhr);
-    //   console.log("error", error);
-    //   console.log("thrown", thrown);
-    // },
     columns: [
+      // 1. ID
       {
         data: "id",
         orderable: false,
         className: "menufilter textfilter",
       },
+      // 2. username
       {
         data: "verb",
         orderable: false,
@@ -474,6 +471,7 @@ $(document).ready(function() {
           }
         },
       },
+      // 3. mesasge
       {
         data: "message",
         orderable: false,
@@ -484,6 +482,7 @@ $(document).ready(function() {
                 `;
         },
       },
+      // 4. comments
       {
         data: "message",
         orderable: false,
@@ -510,6 +509,7 @@ $(document).ready(function() {
           return value;
         },
       },
+      // 5. image
       {
         data: "message",
         orderable: false,
@@ -535,6 +535,7 @@ $(document).ready(function() {
           }
         },
       },
+      // 6. Poll Options
       {
         data: "verb",
         orderable: false,
@@ -555,6 +556,7 @@ $(document).ready(function() {
           return value;
         },
       },
+      // 7. Upvote
       {
         data: "id",
         orderable: true,
@@ -569,6 +571,7 @@ $(document).ready(function() {
           return html;
         },
       },
+      // 8. Downvote
       {
         data: "anonimity",
         orderable: true,
@@ -583,6 +586,7 @@ $(document).ready(function() {
           return html;
         },
       },
+      // 9. total block
       {
         data: "post_type",
         orderable: true,
@@ -592,6 +596,7 @@ $(document).ready(function() {
           return row.total_block;
         },
       },
+      // 10. Status
       {
         data: "post_type",
         orderable: false,
@@ -613,6 +618,7 @@ $(document).ready(function() {
           // status tab
         },
       },
+      // 11. post date
       {
         data: "time",
         orderable: true,
@@ -651,6 +657,7 @@ $(document).ready(function() {
           return tanggalFormatted;
         },
       },
+      // 12. topics
       {
         data: "topics",
         name: "topics",
@@ -667,43 +674,7 @@ $(document).ready(function() {
           return data;
         },
       },
-      {
-        data: "post_type",
-        orderable: false,
-        className: "menufilter textfilter",
-        render: function(data, type, row) {
-          const tanggal = new Date(row.time);
-          const namaBulan = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ];
-
-          const tanggalFormatted =
-            tanggal.getDate() +
-            " " +
-            namaBulan[tanggal.getMonth()] +
-            " " +
-            tanggal.getFullYear() +
-            " " +
-            ("0" + tanggal.getHours()).slice(-2) +
-            ":" +
-            ("0" + tanggal.getMinutes()).slice(-2) +
-            ":" +
-            ("0" + tanggal.getSeconds()).slice(-2);
-
-          return tanggalFormatted;
-        },
-      },
+      // 13. action
       {
         data: "post_type",
         orderable: false,
@@ -766,6 +737,7 @@ $(document).ready(function() {
     dataTablePost.draw();
     e.preventDefault();
   });
+
   /// end
 });
 
