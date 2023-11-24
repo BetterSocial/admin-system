@@ -1,7 +1,5 @@
 let dataTablePost;
 
-let token = $("meta[name=csrf-token]").attr("content");
-
 const getUsernameByAnonymousId = async (userId) => {
   let body = {
     user_id: userId,
@@ -11,7 +9,7 @@ const getUsernameByAnonymousId = async (userId) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json", // Set header untuk JSON
-        "X-CSRF-Token": token,
+        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
       },
       body: JSON.stringify(body), // Mengubah objek menjadi JSON string
     });
@@ -22,6 +20,7 @@ const getUsernameByAnonymousId = async (userId) => {
       return "-";
     }
   } catch (err) {
+    console.log("-", err);
     return "err";
   }
 };
@@ -36,11 +35,12 @@ const getFeeds = async (feedGroup, user_id) => {
     const response = await fetch("/post-blocks/data", {
       method: "POST",
       headers: {
-        "X-CSRF-Token": token,
+        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
       },
       body: JSON.stringify(body),
     });
     let res = await response.json();
+    console.log(res.status);
     if (res.status === "success") {
       return res.data;
     } else {
@@ -82,6 +82,7 @@ const createInput = async (message) => {
 const reactionPost = async (activityId, type) => {
   let { message, url } = handleType(type);
   let value = await createInput(message);
+  console.log(value);
   if (value && value >= 1) {
     Swal.fire({
       title: "Are you sure?",
@@ -102,7 +103,7 @@ const reactionPost = async (activityId, type) => {
           const response = await fetch(url, {
             method: "POST",
             headers: {
-              "X-CSRF-Token": token,
+              "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
               "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
@@ -259,10 +260,11 @@ const deleteComment = async (commentId) => {
         const response = await fetch(`/post/comment/${commentId}`, {
           method: "DELETE",
           headers: {
-            "X-CSRF-Token": token,
+            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
           },
         });
         let res = await response.json();
+        console.log(res);
         if (res.status === "success") {
           Swal.fire(
             "Success",
@@ -387,7 +389,7 @@ const bannedUserByPostId = (postId) => {
         const response = await fetch(`/post/banned-user`, {
           method: "POST",
           headers: {
-            "X-CSRF-Token": token,
+            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
             "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
@@ -437,7 +439,7 @@ $(document).ready(function() {
     ajax: {
       url: "/post-blocks/data",
       type: "POST",
-      headers: { "X-CSRF-Token": token },
+      headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
       data: function(d) {
         d.total = $("#total").val();
         d.message = $("#message").val();
@@ -450,11 +452,13 @@ $(document).ready(function() {
     //   console.log("thrown", thrown);
     // },
     columns: [
+      // 1. ID
       {
         data: "id",
         orderable: false,
         className: "menufilter textfilter",
       },
+      // 2. username
       {
         data: "verb",
         orderable: false,
@@ -474,6 +478,7 @@ $(document).ready(function() {
           }
         },
       },
+      // 3. mesasge
       {
         data: "message",
         orderable: false,
@@ -484,6 +489,7 @@ $(document).ready(function() {
                 `;
         },
       },
+      // 4. comments
       {
         data: "message",
         orderable: false,
@@ -510,6 +516,7 @@ $(document).ready(function() {
           return value;
         },
       },
+      // 5. image
       {
         data: "message",
         orderable: false,
@@ -535,6 +542,7 @@ $(document).ready(function() {
           }
         },
       },
+      // 6. Poll Options
       {
         data: "verb",
         orderable: false,
@@ -555,6 +563,7 @@ $(document).ready(function() {
           return value;
         },
       },
+      // 7. Upvote
       {
         data: "id",
         orderable: true,
@@ -569,6 +578,7 @@ $(document).ready(function() {
           return html;
         },
       },
+      // 8. Downvote
       {
         data: "anonimity",
         orderable: true,
@@ -583,6 +593,7 @@ $(document).ready(function() {
           return html;
         },
       },
+      // 9. total block
       {
         data: "post_type",
         orderable: true,
@@ -592,6 +603,7 @@ $(document).ready(function() {
           return row.total_block;
         },
       },
+      // 10. Status
       {
         data: "post_type",
         orderable: false,
@@ -613,6 +625,7 @@ $(document).ready(function() {
           // status tab
         },
       },
+      // 11. post date
       {
         data: "time",
         orderable: true,
@@ -651,6 +664,7 @@ $(document).ready(function() {
           return tanggalFormatted;
         },
       },
+      // 12. topics
       {
         data: "topics",
         name: "topics",
@@ -667,43 +681,7 @@ $(document).ready(function() {
           return data;
         },
       },
-      {
-        data: "post_type",
-        orderable: false,
-        className: "menufilter textfilter",
-        render: function(data, type, row) {
-          const tanggal = new Date(row.time);
-          const namaBulan = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ];
-
-          const tanggalFormatted =
-            tanggal.getDate() +
-            " " +
-            namaBulan[tanggal.getMonth()] +
-            " " +
-            tanggal.getFullYear() +
-            " " +
-            ("0" + tanggal.getHours()).slice(-2) +
-            ":" +
-            ("0" + tanggal.getMinutes()).slice(-2) +
-            ":" +
-            ("0" + tanggal.getSeconds()).slice(-2);
-
-          return tanggalFormatted;
-        },
-      },
+      // 13. action
       {
         data: "post_type",
         orderable: false,
@@ -766,6 +744,7 @@ $(document).ready(function() {
     dataTablePost.draw();
     e.preventDefault();
   });
+
   /// end
 });
 
@@ -800,7 +779,7 @@ function confirmAction(
       fetch(url, {
         method: "POST",
         headers: {
-          "X-CSRF-Token": token,
+          "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
