@@ -1,5 +1,7 @@
 let dataTablePost;
 
+let token = $("meta[name=csrf-token]").attr("content");
+
 const getUsernameByAnonymousId = async (userId) => {
   let body = {
     user_id: userId,
@@ -8,10 +10,10 @@ const getUsernameByAnonymousId = async (userId) => {
     const response = await fetch("/user-name-by-anonymous-id", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set header untuk JSON
-        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+        "Content-Type": "application/json",
+        "X-CSRF-Token": token,
       },
-      body: JSON.stringify(body), // Mengubah objek menjadi JSON string
+      body: JSON.stringify(body),
     });
     let res = await response.json();
     if (res.status === "success") {
@@ -20,7 +22,6 @@ const getUsernameByAnonymousId = async (userId) => {
       return "-";
     }
   } catch (err) {
-    console.log("-", err);
     return "err";
   }
 };
@@ -35,7 +36,7 @@ const getFeeds = async (feedGroup, user_id) => {
     const response = await fetch("/post-blocks/data", {
       method: "POST",
       headers: {
-        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+        "X-CSRF-Token": token,
       },
       body: JSON.stringify(body),
     });
@@ -103,7 +104,7 @@ const reactionPost = async (activityId, type) => {
           const response = await fetch(url, {
             method: "POST",
             headers: {
-              "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+              "X-CSRF-Token": token,
               "Content-Type": "application/json",
             },
             body: JSON.stringify(body),
@@ -177,7 +178,6 @@ const detail = (data) => {
     if (comment) {
     }
   }
-  //   $("#detailModal").modal("show");
   getFeeds;
 };
 
@@ -260,7 +260,7 @@ const deleteComment = async (commentId) => {
         const response = await fetch(`/post/comment/${commentId}`, {
           method: "DELETE",
           headers: {
-            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "X-CSRF-Token": token,
           },
         });
         let res = await response.json();
@@ -389,13 +389,12 @@ const bannedUserByPostId = (postId) => {
         const response = await fetch(`/post/banned-user`, {
           method: "POST",
           headers: {
-            "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+            "X-CSRF-Token": token,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
         });
         let res = await response.json();
-        console.log(res);
         if (res.status === "success") {
           Swal.fire("Success", "Success banned user", "success").then(() => {
             dataTablePost.draw();
@@ -404,7 +403,6 @@ const bannedUserByPostId = (postId) => {
           Swal.fire("Error", res.message).then(() => {});
         }
       } catch (err) {
-        console.log(err);
         Swal.fire("Error", err).then(() => {});
       }
     }
@@ -439,18 +437,13 @@ $(document).ready(function() {
     ajax: {
       url: "/post-blocks/data",
       type: "POST",
-      headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
+      headers: { "X-CSRF-Token": token },
       data: function(d) {
         d.total = $("#total").val();
         d.message = $("#message").val();
         console.log(d);
       },
     },
-    // error: function(xhr, error, thrown) {
-    //   console.log("xhr", xhr);
-    //   console.log("error", error);
-    //   console.log("thrown", thrown);
-    // },
     columns: [
       // 1. ID
       {
@@ -779,7 +772,7 @@ function confirmAction(
       fetch(url, {
         method: "POST",
         headers: {
-          "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+          "X-CSRF-Token": token,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
