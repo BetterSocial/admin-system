@@ -5,6 +5,7 @@ use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LimitTopicController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PostBlockController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\RssLinkController;
@@ -149,22 +150,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::POST('/add-logo', 'DomainController@saveLogo');
     });
 
-
-    Route::get('/news/index', function () {
-        $data = [
-            'category_name' => 'domain',
-            'page_name' => 'news-link',
-            'has_scrollspy' => 0,
-            'scrollspy_offset' => '',
-
-        ];
-        return view('pages.news.news')->with($data);
+    Route::prefix('news')->group(function () {
+        Route::get('/index', [NewsController::class, 'index'])->name('news');
+        Route::POST('/data', 'NewsController@getData');
+        // Remove this route as it is no longer needed
+        Route::GET('/news-link', 'NewsController@readAsJson');
     });
 
-
-    Route::GET('/news-link', 'NewsController@readAsJson');
-
-    Route::POST('/news/data', 'NewsController@getData');
 
 
     //Polling
