@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CreateTopicController;
+use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LimitTopicController;
 use App\Http\Controllers\LogController;
@@ -141,15 +142,11 @@ Route::group(['middleware' => 'auth'], function () {
     /*
     *Domain
     */
-    Route::get('/domain/index', function () {
-        $data = [
-            'category_name' => 'domain',
-            'page_name' => 'domain list',
-            'has_scrollspy' => 0,
-            'scrollspy_offset' => '',
-
-        ];
-        return view('pages.domain.domain')->with($data);
+    Route::prefix('domain')->group(function () {
+        Route::get('/index', [DomainController::class, 'index'])->name('domain');
+        Route::POST('/data', 'DomainController@getData');
+        Route::GET('/form-logo', 'DomainController@formEdit');
+        Route::POST('/add-logo', 'DomainController@saveLogo');
     });
 
 
@@ -164,9 +161,6 @@ Route::group(['middleware' => 'auth'], function () {
         return view('pages.news.news')->with($data);
     });
 
-    Route::POST('/domain/data', 'DomainController@getData');
-    Route::GET('/domain/form-logo', 'DomainController@formEdit');
-    Route::POST('/domain/add-logo', 'DomainController@saveLogo');
 
     Route::GET('/news-link', 'NewsController@readAsJson');
 

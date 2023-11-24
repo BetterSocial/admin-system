@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Log;
 
 class DomainController extends Controller
 {
+    public function index()
+    {
+        $data = [
+            'category_name' => 'domain',
+            'page_name' => 'domain list',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+
+        ];
+        return view('pages.domain.domain', $data);
+    }
     public function getData(Request $req)
     {
 
@@ -25,7 +36,9 @@ class DomainController extends Controller
             4 => 'created_at',
             5 => 'updated_at'
         );
-        $topic = "SELECT domain_page_id,domain_name,logo,short_description,created_at,'updated_at' FROM domain_page WHERE true";
+        $topic =
+            "SELECT domain_page_id,domain_name,logo,short_description,created_at,'updated_at'
+             FROM domain_page WHERE true";
         if ($req->domainName != null) {
             $topic .= " AND domain_name ILIKE '%$req->domainName%'";
         }
@@ -34,7 +47,9 @@ class DomainController extends Controller
         $data = DB::SELECT($topic);
         $total = count($data);
 
-        $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+        $topic .= " ORDER BY " .
+            $columns[$req->order[0]['column']] . " " .
+            $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
 
         $dataLimit = DB::SELECT($topic);
         return response()->json([
