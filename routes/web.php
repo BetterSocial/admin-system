@@ -145,7 +145,7 @@ Route::group(['middleware' => 'auth'], function () {
     */
     Route::prefix('domain')->group(function () {
         Route::get('/index', [DomainController::class, 'index'])->name('domain');
-        Route::POST('/data', 'DomainController@getData');
+        Route::POST('/data', [DomainController::class, 'getData'])->name('masterDomain.data');
         Route::GET('/form-logo', 'DomainController@formEdit');
         Route::POST('/add-logo', 'DomainController@saveLogo');
     });

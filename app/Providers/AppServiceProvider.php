@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\DomainRepository;
+use App\Repositories\DomainRepositoryImpl;
 use App\Services\ApiKeyService;
 use App\Services\FeedGetStreamService;
 use App\Services\ImageService;
@@ -34,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
             $apiKeyService = $app->make(ApiKeyService::class);
             return new UserServiceImpl($apiKeyService);
         });
+
+        $this->app->singleton(DomainRepository::class, DomainRepositoryImpl::class);
     }
 
     /**
