@@ -181,14 +181,7 @@ const detail = (data) => {
   getFeeds;
 };
 
-const generateCommentObject = (
-  id,
-  text,
-  avatar,
-  username,
-  isAnonymous,
-  emojiCode
-) => ({
+const generateCommentObject = (id, text, avatar, username, isAnonymous, emojiCode) => ({
   id,
   text,
   avatar,
@@ -197,9 +190,7 @@ const generateCommentObject = (
   emojiCode,
 });
 const createImageElement = (avatar, isAnonymous, emojiCode) => {
-  const element = isAnonymous
-    ? document.createElement("span")
-    : document.createElement("img");
+  const element = isAnonymous ? document.createElement("span") : document.createElement("img");
   if (isAnonymous) {
     element.innerText = emojiCode;
   } else {
@@ -266,28 +257,19 @@ const deleteComment = async (commentId) => {
         let res = await response.json();
         console.log(res);
         if (res.status === "success") {
-          Swal.fire(
-            "Success",
-            "Successfully deleted the comment",
-            "success"
-          ).then(() => {
+          Swal.fire("Success", "Successfully deleted the comment", "success").then(() => {
             location.reload();
           });
         } else {
-          Swal.fire(
-            "Error",
-            "An error occurred while deleting the comment"
-          ).then(() => {
+          Swal.fire("Error", "An error occurred while deleting the comment").then(() => {
             location.reload();
           });
         }
       } catch (err) {
         console.log(err);
-        Swal.fire("Error", "An error occurred while deleting the comment").then(
-          () => {
-            location.reload();
-          }
-        );
+        Swal.fire("Error", "An error occurred while deleting the comment").then(() => {
+          location.reload();
+        });
       }
     }
   });
@@ -327,9 +309,7 @@ const detailComment = async (post) => {
   const container = document.getElementById("cardBodyComment");
 
   const createCommentLevel = (item) => {
-    const username = item.data.is_anonymous
-      ? item.user_id
-      : item.user.data.username;
+    const username = item.data.is_anonymous ? item.user_id : item.user.data.username;
     const commentItem = generateCommentObject(
       item.id,
       item.data.text,
@@ -353,9 +333,7 @@ const detailComment = async (post) => {
 
         if (child.children_counts.comment >= 1) {
           child.latest_children.comment.forEach((grandchild) => {
-            const grandchildComment = createComment(
-              createCommentLevel(grandchild)
-            );
+            const grandchildComment = createComment(createCommentLevel(grandchild));
             grandchildComment.style.marginLeft = "36px";
             container.append(grandchildComment);
           });
@@ -433,16 +411,24 @@ $(document).ready(function() {
     language: {
       processing: "Loading...",
       emptyTable: "No Data Post",
+      info: "",
+      infoEmpty: "",
+      infoFiltered: "",
+      zeroRecords: "No matching records found",
+      search: "Cari:",
     },
     ajax: {
       url: "/post-blocks/data",
       type: "POST",
       headers: { "X-CSRF-Token": token },
       data: function(d) {
-        d.total = $("#total").val();
+        // d.total = $("#total").val();
         d.message = $("#message").val();
         console.log(d);
       },
+    },
+    initComplete: function(settings, json) {
+      console.log(json);
     },
     columns: [
       // 1. ID
@@ -458,11 +444,7 @@ $(document).ready(function() {
         className: "menufilter textfilter",
         render: function(data, type, row) {
           if (row.anonimity) {
-            return (
-              row.anon_user_info_color_name +
-              " " +
-              row.anon_user_info_emoji_name
-            );
+            return row.anon_user_info_color_name + " " + row.anon_user_info_emoji_name;
           } else {
             if (row.actor.error) {
               return row.actor.error;
@@ -498,8 +480,7 @@ $(document).ready(function() {
               value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
               comment.forEach((element) => {
                 let item =
-                  "<p>" + element.user?.data.username ??
-                  "username not found" + ": " + element.data.text + "</p>";
+                  "<p>" + element.user?.data.username ?? "username not found" + ": " + element.data.text + "</p>";
                 value = value + item;
               });
 
@@ -626,20 +607,7 @@ $(document).ready(function() {
         render: function(data, type, row) {
           // time from post date
           const tanggal = new Date(row.time);
-          const namaBulan = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ];
+          const namaBulan = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
           const tanggalFormatted =
             tanggal.getDate() +
@@ -684,16 +652,8 @@ $(document).ready(function() {
           let clickBlockUser = "blockUser('" + userId + "')";
           let clickUnBlockUser = "unBlockUser('" + userId + "')";
 
-          const btnUnBlockUser = createButton(
-            "primary",
-            "Remove downrank",
-            clickUnBlockUser
-          );
-          const btnBlockUser = createButton(
-            "danger",
-            "Downrank user",
-            clickBlockUser
-          );
+          const btnUnBlockUser = createButton("primary", "Remove downrank", clickUnBlockUser);
+          const btnBlockUser = createButton("danger", "Downrank user", clickBlockUser);
           let isHide = false;
           if (row.is_hide) {
             isHide = true;
@@ -741,14 +701,7 @@ $(document).ready(function() {
   /// end
 });
 
-function confirmAction(
-  title,
-  body,
-  url,
-  successMessage,
-  errorMessage,
-  successCallback
-) {
+function confirmAction(title, body, url, successMessage, errorMessage, successCallback) {
   Swal.fire({
     title: title,
     text: "",
@@ -860,21 +813,10 @@ const hideOrShowPost = (status, postId) => {
     is_hide: status,
   };
   console.log(body);
-  confirmAction(
-    "Are you sure?",
-    body,
-    `/post/hide/${postId}`,
-    "Success",
-    "Oops...",
-    function(data) {
-      console.log(data);
-      Swal.fire(
-        "Success",
-        status ? "Success hide post" : "Success show post",
-        "success"
-      ).then(() => {
-        dataTablePost.draw();
-      });
-    }
-  );
+  confirmAction("Are you sure?", body, `/post/hide/${postId}`, "Success", "Oops...", function(data) {
+    console.log(data);
+    Swal.fire("Success", status ? "Success hide post" : "Success show post", "success").then(() => {
+      dataTablePost.draw();
+    });
+  });
 };
