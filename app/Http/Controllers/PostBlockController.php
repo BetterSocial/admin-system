@@ -100,8 +100,6 @@ class PostBlockController extends Controller
             $dataAfterSort = $this->handleSort($data, $dataTable);
             return response()->json([
                 'draw' => $draw,
-                'recordsTotal' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
-                'recordsFiltered' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
                 'data' => $dataAfterSort ?? [],
             ]);
         } catch (\Throwable $th) {
