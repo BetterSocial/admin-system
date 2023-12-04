@@ -11,19 +11,11 @@
 
                 <div class="widget-content widget-content-area br-6">
                     <div class="row">
-                        <div class=col-lg-10>
-                            <form class="form-inline" method="POST" id="search">
-                                <div class="form-group">
-                                    <input type="text" id="total" class="form-control mr-3" placeholder="total"
-                                        name="total" value="50">
-                                    <button type="submit" class="btn btn-primary">Filter Total Post</button>
-                                </div>
-                            </form>
-                        </div>
                         <div class="col-lg-10 mt-4">
                             <form class="form-inline" method="POST" id="searchMessage">
                                 <div class="form-group">
-                                    <input type="text" id="message" class="form-control" placeholder="Search">
+                                    <input type="text" id="message" class="form-control"
+                                        placeholder="Search">
                                     &nbsp;&nbsp;
                                     <button type="submit" class="btn btn-primary">Search</button>
                                 </div>
@@ -75,7 +67,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="detailCommentModal" tabindex="1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="detailCommentModal" tabindex="1" aria-labelledby="detailModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

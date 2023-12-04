@@ -31,7 +31,6 @@ const getFeeds = async (feedGroup, user_id) => {
     feed_group: feedGroup,
     user_id: user_id,
   };
-  let data = [];
   try {
     const response = await fetch("/post-blocks/data", {
       method: "POST",
@@ -171,14 +170,7 @@ function tableCreate() {
 const detail = (data) => {
   console.log(data);
   tableCreate();
-  $(".test-class").val("testing set");
-  let { latest_reactions } = data;
-  if (latest_reactions) {
-    let { comment } = latest_reactions;
-    if (comment) {
-    }
-  }
-  getFeeds;
+  getFeeds();
 };
 
 const generateCommentObject = (id, text, avatar, username, isAnonymous, emojiCode) => ({
@@ -422,7 +414,6 @@ $(document).ready(function() {
       type: "POST",
       headers: { "X-CSRF-Token": token },
       data: function(d) {
-        // d.total = $("#total").val();
         d.message = $("#message").val();
         console.log(d);
       },
@@ -479,8 +470,8 @@ $(document).ready(function() {
               let postInJson = JSON.stringify(row);
               value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
               comment.forEach((element) => {
-                let item =
-                  "<p>" + element.user?.data.username ?? "username not found" + ": " + element.data.text + "</p>";
+                let username = element.user?.data?.username || "username not found";
+                let item = "<p>" + username + ": " + element.data.text + "</p>";
                 value = value + item;
               });
 
