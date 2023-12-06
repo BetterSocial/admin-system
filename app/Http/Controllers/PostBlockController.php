@@ -65,7 +65,9 @@ class PostBlockController extends Controller
             $activityIds = [];
             $dataTable = dataTableRequestHandle($req);
             if ($message) {
+                // make search post_id and post content
                 $posts = PostModel::where('post_content', 'ilike', '%' . $message . '%')
+                    ->orWhere('post_id', 'ilike', '%' . $message . '%')
                     ->whereNotNull('getstream_activity_id')
                     ->get()
                     ->pluck('getstream_activity_id');
