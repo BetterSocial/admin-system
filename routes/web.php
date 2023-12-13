@@ -145,7 +145,10 @@ Route::group(['middleware' => 'auth'], function () {
     */
     Route::prefix('domain')->group(function () {
         Route::get('/index', [DomainController::class, 'index'])->name('domain');
-        Route::POST('/data', [DomainController::class, 'getData'])->name('masterDomain.data');
+        Route::POST(
+            '/' . config('constants.DATA_KEYWORD'),
+            [DomainController::class, 'getData']
+        )->name('masterDomain.data');
         Route::GET('/form-logo', 'DomainController@formEdit');
         Route::POST('/add-logo', 'DomainController@saveLogo');
         Route::post('/update-status', 'DomainController@updateStatus');
@@ -153,7 +156,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('news')->group(function () {
         Route::get('/index', [NewsController::class, 'index'])->name('news');
-        Route::POST('/data', 'NewsController@getData');
+        Route::POST(
+            '/' . config('constants.DATA_KEYWORD'),
+            'NewsController@getData'
+        );
         // Remove this route as it is no longer needed
         Route::GET('/news-link', 'NewsController@readAsJson');
     });
