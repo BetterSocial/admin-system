@@ -65,7 +65,8 @@ class PostBlockController extends Controller
             $activityIds = [];
             $dataTable = dataTableRequestHandle($req);
             if ($message) {
-                $posts = PostModel::where('post_content', 'ilike', '%' . $message . '%')
+                $posts = PostModel::where('getstream_activity_id', $message)
+                    ->orWhere('post_content', 'ilike', '%' . $message . '%')
                     ->whereNotNull('getstream_activity_id')
                     ->get()
                     ->pluck('getstream_activity_id');
@@ -100,8 +101,6 @@ class PostBlockController extends Controller
             $dataAfterSort = $this->handleSort($data, $dataTable);
             return response()->json([
                 'draw' => $draw,
-                'recordsTotal' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
-                'recordsFiltered' => count($activityIds) >= 1  ? count($activityIds) : $req->input('total', 100),
                 'data' => $dataAfterSort ?? [],
             ]);
         } catch (\Throwable $th) {

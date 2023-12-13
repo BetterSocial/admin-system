@@ -10,10 +10,10 @@ const getUsernameByAnonymousId = async (userId) => {
     const response = await fetch("/user-name-by-anonymous-id", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Set header untuk JSON
+        "Content-Type": "application/json",
         "X-CSRF-Token": token,
       },
-      body: JSON.stringify(body), // Mengubah objek menjadi JSON string
+      body: JSON.stringify(body),
     });
     let res = await response.json();
     if (res.status === "success") {
@@ -31,7 +31,6 @@ const getFeeds = async (feedGroup, user_id) => {
     feed_group: feedGroup,
     user_id: user_id,
   };
-  let data = [];
   try {
     const response = await fetch("/post-blocks/data", {
       method: "POST",
@@ -41,6 +40,7 @@ const getFeeds = async (feedGroup, user_id) => {
       body: JSON.stringify(body),
     });
     let res = await response.json();
+    console.log(res.status);
     if (res.status === "success") {
       return res.data;
     } else {
@@ -82,6 +82,7 @@ const createInput = async (message) => {
 const reactionPost = async (activityId, type) => {
   let { message, url } = handleType(type);
   let value = await createInput(message);
+  console.log(value);
   if (value && value >= 1) {
     Swal.fire({
       title: "Are you sure?",
@@ -169,25 +170,10 @@ function tableCreate() {
 const detail = (data) => {
   console.log(data);
   tableCreate();
-  $(".test-class").val("testing set");
-  let { latest_reactions } = data;
-  if (latest_reactions) {
-    let { comment } = latest_reactions;
-    if (comment) {
-    }
-  }
-  //   $("#detailModal").modal("show");
-  getFeeds;
+  getFeeds();
 };
 
-const generateCommentObject = (
-  id,
-  text,
-  avatar,
-  username,
-  isAnonymous,
-  emojiCode
-) => ({
+const generateCommentObject = (id, text, avatar, username, isAnonymous, emojiCode) => ({
   id,
   text,
   avatar,
@@ -196,9 +182,7 @@ const generateCommentObject = (
   emojiCode,
 });
 const createImageElement = (avatar, isAnonymous, emojiCode) => {
-  const element = isAnonymous
-    ? document.createElement("span")
-    : document.createElement("img");
+  const element = isAnonymous ? document.createElement("span") : document.createElement("img");
   if (isAnonymous) {
     element.innerText = emojiCode;
   } else {
@@ -263,29 +247,21 @@ const deleteComment = async (commentId) => {
           },
         });
         let res = await response.json();
+        console.log(res);
         if (res.status === "success") {
-          Swal.fire(
-            "Success",
-            "Successfully deleted the comment",
-            "success"
-          ).then(() => {
+          Swal.fire("Success", "Successfully deleted the comment", "success").then(() => {
             location.reload();
           });
         } else {
-          Swal.fire(
-            "Error",
-            "An error occurred while deleting the comment"
-          ).then(() => {
+          Swal.fire("Error", "An error occurred while deleting the comment").then(() => {
             location.reload();
           });
         }
       } catch (err) {
         console.log(err);
-        Swal.fire("Error", "An error occurred while deleting the comment").then(
-          () => {
-            location.reload();
-          }
-        );
+        Swal.fire("Error", "An error occurred while deleting the comment").then(() => {
+          location.reload();
+        });
       }
     }
   });
@@ -325,9 +301,7 @@ const detailComment = async (post) => {
   const container = document.getElementById("cardBodyComment");
 
   const createCommentLevel = (item) => {
-    const username = item.data.is_anonymous
-      ? item.user_id
-      : item.user.data.username;
+    const username = item.data.is_anonymous ? item.user_id : item.user.data.username;
     const commentItem = generateCommentObject(
       item.id,
       item.data.text,
@@ -351,9 +325,7 @@ const detailComment = async (post) => {
 
         if (child.children_counts.comment >= 1) {
           child.latest_children.comment.forEach((grandchild) => {
-            const grandchildComment = createComment(
-              createCommentLevel(grandchild)
-            );
+            const grandchildComment = createComment(createCommentLevel(grandchild));
             grandchildComment.style.marginLeft = "36px";
             container.append(grandchildComment);
           });
@@ -393,7 +365,6 @@ const bannedUserByPostId = (postId) => {
           body: JSON.stringify(body),
         });
         let res = await response.json();
-        console.log(res);
         if (res.status === "success") {
           Swal.fire("Success", "Success banned user", "success").then(() => {
             dataTablePost.draw();
@@ -402,7 +373,6 @@ const bannedUserByPostId = (postId) => {
           Swal.fire("Error", res.message).then(() => {});
         }
       } catch (err) {
-        console.log(err);
         Swal.fire("Error", err).then(() => {});
       }
     }
@@ -433,39 +403,39 @@ $(document).ready(function() {
     language: {
       processing: "Loading...",
       emptyTable: "No Data Post",
+      info: "",
+      infoEmpty: "",
+      infoFiltered: "",
+      zeroRecords: "No matching records found",
+      search: "Cari:",
     },
     ajax: {
       url: "/post-blocks/data",
       type: "POST",
       headers: { "X-CSRF-Token": token },
       data: function(d) {
-        d.total = $("#total").val();
         d.message = $("#message").val();
         console.log(d);
       },
     },
-    // error: function(xhr, error, thrown) {
-    //   console.log("xhr", xhr);
-    //   console.log("error", error);
-    //   console.log("thrown", thrown);
-    // },
+    initComplete: function(settings, json) {
+      console.log(json);
+    },
     columns: [
+      // 1. ID
       {
         data: "id",
         orderable: false,
         className: "menufilter textfilter",
       },
+      // 2. username
       {
         data: "verb",
         orderable: false,
         className: "menufilter textfilter",
         render: function(data, type, row) {
           if (row.anonimity) {
-            return (
-              row.anon_user_info_color_name +
-              " " +
-              row.anon_user_info_emoji_name
-            );
+            return row.anon_user_info_color_name + " " + row.anon_user_info_emoji_name;
           } else {
             if (row.actor.error) {
               return row.actor.error;
@@ -474,6 +444,7 @@ $(document).ready(function() {
           }
         },
       },
+      // 3. mesasge
       {
         data: "message",
         orderable: false,
@@ -484,6 +455,7 @@ $(document).ready(function() {
                 `;
         },
       },
+      // 4. comments
       {
         data: "message",
         orderable: false,
@@ -498,9 +470,8 @@ $(document).ready(function() {
               let postInJson = JSON.stringify(row);
               value += `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
               comment.forEach((element) => {
-                let item =
-                  "<p>" + element.user?.data.username ??
-                  "username not found" + ": " + element.data.text + "</p>";
+                let username = element.user?.data?.username || "username not found";
+                let item = "<p>" + username + ": " + element.data.text + "</p>";
                 value = value + item;
               });
 
@@ -510,6 +481,7 @@ $(document).ready(function() {
           return value;
         },
       },
+      // 5. image
       {
         data: "message",
         orderable: false,
@@ -535,6 +507,7 @@ $(document).ready(function() {
           }
         },
       },
+      // 6. Poll Options
       {
         data: "verb",
         orderable: false,
@@ -555,6 +528,7 @@ $(document).ready(function() {
           return value;
         },
       },
+      // 7. Upvote
       {
         data: "id",
         orderable: true,
@@ -569,6 +543,7 @@ $(document).ready(function() {
           return html;
         },
       },
+      // 8. Downvote
       {
         data: "anonimity",
         orderable: true,
@@ -583,6 +558,7 @@ $(document).ready(function() {
           return html;
         },
       },
+      // 9. total block
       {
         data: "post_type",
         orderable: true,
@@ -592,6 +568,7 @@ $(document).ready(function() {
           return row.total_block;
         },
       },
+      // 10. Status
       {
         data: "post_type",
         orderable: false,
@@ -613,6 +590,7 @@ $(document).ready(function() {
           // status tab
         },
       },
+      // 11. post date
       {
         data: "time",
         orderable: true,
@@ -620,20 +598,7 @@ $(document).ready(function() {
         render: function(data, type, row) {
           // time from post date
           const tanggal = new Date(row.time);
-          const namaBulan = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ];
+          const namaBulan = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
           const tanggalFormatted =
             tanggal.getDate() +
@@ -651,6 +616,7 @@ $(document).ready(function() {
           return tanggalFormatted;
         },
       },
+      // 12. topics
       {
         data: "topics",
         name: "topics",
@@ -667,43 +633,7 @@ $(document).ready(function() {
           return data;
         },
       },
-      {
-        data: "post_type",
-        orderable: false,
-        className: "menufilter textfilter",
-        render: function(data, type, row) {
-          const tanggal = new Date(row.time);
-          const namaBulan = [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
-          ];
-
-          const tanggalFormatted =
-            tanggal.getDate() +
-            " " +
-            namaBulan[tanggal.getMonth()] +
-            " " +
-            tanggal.getFullYear() +
-            " " +
-            ("0" + tanggal.getHours()).slice(-2) +
-            ":" +
-            ("0" + tanggal.getMinutes()).slice(-2) +
-            ":" +
-            ("0" + tanggal.getSeconds()).slice(-2);
-
-          return tanggalFormatted;
-        },
-      },
+      // 13. action
       {
         data: "post_type",
         orderable: false,
@@ -713,16 +643,8 @@ $(document).ready(function() {
           let clickBlockUser = "blockUser('" + userId + "')";
           let clickUnBlockUser = "unBlockUser('" + userId + "')";
 
-          const btnUnBlockUser = createButton(
-            "primary",
-            "Remove downrank",
-            clickUnBlockUser
-          );
-          const btnBlockUser = createButton(
-            "danger",
-            "Downrank user",
-            clickBlockUser
-          );
+          const btnUnBlockUser = createButton("primary", "Remove downrank", clickUnBlockUser);
+          const btnBlockUser = createButton("danger", "Downrank user", clickBlockUser);
           let isHide = false;
           if (row.is_hide) {
             isHide = true;
@@ -766,17 +688,11 @@ $(document).ready(function() {
     dataTablePost.draw();
     e.preventDefault();
   });
+
   /// end
 });
 
-function confirmAction(
-  title,
-  body,
-  url,
-  successMessage,
-  errorMessage,
-  successCallback
-) {
+function confirmAction(title, body, url, successMessage, errorMessage, successCallback) {
   Swal.fire({
     title: title,
     text: "",
@@ -888,21 +804,10 @@ const hideOrShowPost = (status, postId) => {
     is_hide: status,
   };
   console.log(body);
-  confirmAction(
-    "Are you sure?",
-    body,
-    `/post/hide/${postId}`,
-    "Success",
-    "Oops...",
-    function(data) {
-      console.log(data);
-      Swal.fire(
-        "Success",
-        status ? "Success hide post" : "Success show post",
-        "success"
-      ).then(() => {
-        dataTablePost.draw();
-      });
-    }
-  );
+  confirmAction("Are you sure?", body, `/post/hide/${postId}`, "Success", "Oops...", function(data) {
+    console.log(data);
+    Swal.fire("Success", status ? "Success hide post" : "Success show post", "success").then(() => {
+      dataTablePost.draw();
+    });
+  });
 };

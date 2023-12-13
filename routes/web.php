@@ -186,8 +186,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/post/downvote', [PostController::class, 'downvote'])->name('post.downvote');
     Route::post('/post/banned-user', [PostController::class, 'bannedUserByPost'])->name('post.banned-user');
 
-    Route::get('/post-blocks', [PostBlockController::class, 'index'])->name('post-block');
-    Route::post('/post-blocks/data', [PostBlockController::class, 'data'])->name('post-block.data');
+    Route::prefix('post-blocks')->group(function () {
+        Route::get('/', [PostBlockController::class, 'index'])->name('post-block');
+        Route::post('/data', [PostBlockController::class, 'data'])->name('post-block.data');
+    });
     Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
     Route::delete('/post/comment/{id}', [PostController::class, 'deleteComment'])->name('post.comment.delete');
 
