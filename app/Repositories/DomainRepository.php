@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 interface DomainRepository
 {
-    public function getData($domainName, $orderColumn, $orderDir, $start, $length);
+    public function getData($domainName, $orderColumn, $orderDir, $start, $length, $draw);
     public function getDomainById($id);
     public function createDomain($req);
     public function updateDomain($req);

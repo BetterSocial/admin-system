@@ -148,6 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::POST('/data', [DomainController::class, 'getData'])->name('masterDomain.data');
         Route::GET('/form-logo', 'DomainController@formEdit');
         Route::POST('/add-logo', 'DomainController@saveLogo');
+        Route::post('/update-status', 'DomainController@updateStatus');
     });
 
     Route::prefix('news')->group(function () {

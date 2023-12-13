@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class DomainRepositoryImpl implements DomainRepository
 {
-    public function getData($domainName, $orderColumn, $orderDir, $start, $length)
+    public function getData($domainName, $orderColumn, $orderDir, $start, $length, $draw)
     {
         // Define columns
         $columns = array(
@@ -16,7 +16,8 @@ class DomainRepositoryImpl implements DomainRepository
             2 => 'logo',
             3 => 'short_description',
             4 => 'created_at',
-            5 => 'updated_at'
+            5 => 'updated_at',
+            6 => 'status',
         );
 
         // Base query
@@ -39,7 +40,7 @@ class DomainRepositoryImpl implements DomainRepository
         $dataLimit = $query->get();
 
         return [
-            'draw'            => intval($start / $length) + 1,
+            'draw'            => $draw,
             'recordsTotal'    => $total,
             "recordsFiltered" => $total,
             'data'            => $dataLimit,

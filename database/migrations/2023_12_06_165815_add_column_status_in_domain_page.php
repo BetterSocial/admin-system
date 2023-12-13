@@ -14,10 +14,9 @@ class AddColumnStatusInDomainPage extends Migration
      */
     public function up()
     {
-        DB::statement("CREATE TYPE status AS ENUM ('show', 'hide')");
-
-
-        DB::statement("ALTER TABLE domain_page ADD COLUMN status status NOT NULL DEFAULT 'show'");
+        Schema::table('domain_page', function (Blueprint $table) {
+            $table->boolean('status')->default(true)->nullable();
+        });
     }
 
     /**
@@ -30,7 +29,5 @@ class AddColumnStatusInDomainPage extends Migration
         Schema::table('domain_page', function (Blueprint $table) {
             $table->dropColumn('status');
         });
-
-        DB::statement('DROP TYPE status');
     }
 }

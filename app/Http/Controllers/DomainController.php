@@ -31,12 +31,14 @@ class DomainController extends Controller
     }
     public function getData(Request $req)
     {
+        $draw = (int) $req->input('draw', 0);
         return response()->json($this->domainRepository->getData(
             $req->domainName,
             $req->order[0]['column'],
             $req->order[0]['dir'],
             $req->start,
-            $req->length
+            $req->length,
+            $draw,
         ));
     }
 
@@ -86,6 +88,25 @@ class DomainController extends Controller
                 'success' => false,
                 'message' => $e->getMessage()
             ]);
+        }
+    }
+
+    public function updateStatus(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required',
+                'status' => 'required|boolean'
+            ]);
+            DB::beginTransaction();
+            $domain = Domain::find($request->id);
+            $domain->status = $request->status;
+            $domain->save();
+            DB::commit();
+            return $this->successResponse('Success update status');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->errorResponse($th->getMessage());
         }
     }
 }

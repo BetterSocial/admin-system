@@ -12,7 +12,7 @@ class Domain extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'domain_page';
-    protected $primaryKey= 'domain_page_id';
+    protected $primaryKey = 'domain_page_id';
     public $incrementing = false;
     protected $keyType = 'string';
     const CREATED_AT = 'created_at';
@@ -28,20 +28,22 @@ class Domain extends Authenticatable
         'domain_name',
         'logo',
         'short_description',
-        ];
+        'status',
+        'credder_score',
+        'credder_last_checked',
+    ];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [ ];
+    protected $hidden = [];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [ ];
-
+    protected $casts = [];
 }
