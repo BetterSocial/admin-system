@@ -77,5 +77,6 @@ return [
     'api_secret_cloudinary' => env('API_SERCRET_CLOUDINARY'),
     'get_stream_key' => env('GET_STREAM_KEY'),
     'get_stream_secret' => env('GET_STREAM_SECRET'),
+    'DATA_KEYWORD' => 'data',
 
 ];
