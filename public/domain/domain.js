@@ -137,7 +137,7 @@ $(document).ready(function() {
         data: "status",
         className: "menufilter textfilter",
         render: function(data, type, row) {
-          if (data == true) {
+          if (data) {
             return (
               '<button type="button" class="btn btn-danger" onclick=\'updateStatus("' +
               row.domain_page_id +
@@ -160,42 +160,3 @@ $(document).ready(function() {
     e.preventDefault();
   });
 });
-
-// function showTopic(topicId){
-//   var formData = new FormData();
-//   formData.append('topic_id', topicId);
-
-//   $.ajaxSetup({
-//     headers: { "X-CSRF-Token" : $("meta[name=csrf-token]").attr("content") }
-//   });
-//   $.ajax({
-//       type: 'POST',
-//       dataType:'JSON',
-//       data:formData,
-//       contentType: false,
-//       processData: false,
-//       url: '/show/topics',
-//       success: function(data){
-//           console.log(data);
-//           if(data.success){
-//               datatble.ajax.reload(null,false);
-
-//           }else{
-
-//               return Swal.fire({
-//                   icon: 'error',
-//                   title: 'Oops...',
-//                   text: data.message,})
-//           }
-//       },
-//       error: function(data){
-//         console.log(data);
-//           return Swal.fire({
-//               icon: 'error',
-//               title: 'Oops...',
-//               text: data.message})
-
-//      }
-//   });
-
-// }
