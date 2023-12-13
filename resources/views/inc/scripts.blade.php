@@ -5,6 +5,7 @@
 {{-- <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> --}}
 
 
+<script src="{{ asset('assets/js/global.js') }}"></script>
 @if (
     $page_name != 'coming_soon' &&
         $page_name != 'contact_us' &&
@@ -205,7 +206,8 @@
     @case('session_timeout')
         {{-- Compoentnts session timeout --}}
         <script src="{{ asset('assets/js/components/session-timeout/bootstrap-session-timeout.js') }}"></script>
-        <script src="{{ asset('assets/js/components/session-timeout/custom-bootstrap_session_timeout.js') }}"></script>
+        <script src="{{ asset('assets/js/components/session-timeout/custom-bootstrap_session_timeout.js') }}">
+        </script>
     @break
 
     @case('notifications')
@@ -541,7 +543,7 @@
             }
         </script>
         <script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}
-                                &callback=initMap" async defer></script>
+                                                        &callback=initMap" async defer></script>
     @break
 
     @case('faq')
