@@ -9,6 +9,7 @@ use App\Http\Requests\UserAddTopicRequest;
 use App\Models\LogErrorModel;
 use App\Models\LogModel;
 use App\Models\Topics;
+use App\Services\ChatGetStreamService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -27,6 +28,10 @@ class TopicController extends Controller
      */
 
     private $validationId = 'required|exists:topics,topic_id';
+
+    public function __construct(private ChatGetStreamService $chatGetStreamService)
+    {
+    }
 
 
     public function index(Request $request)
@@ -326,6 +331,17 @@ class TopicController extends Controller
             if ($type == 'icon') {
                 $topic->update([
                     'icon_path' => $response
+                ]);
+                $topicName = strtolower($topic->name);
+                $this->chatGetStreamService->updateChannel('topics', $topicName, [
+                    'image' => $response,
+                    'channel_image' => $response,
+                    'channelImage' => $response,
+                ]);
+                $this->chatGetStreamService->updateChannel('topics', 'topic_' . $topicName, [
+                    'image' => $response,
+                    'channel_image' => $response,
+                    'channelImage' => $response,
                 ]);
             } else {
                 $topic->update([

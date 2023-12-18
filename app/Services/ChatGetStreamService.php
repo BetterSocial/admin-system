@@ -20,4 +20,17 @@ class ChatGetStreamService
             "mark_messages_deleted" => true,
         ]);
     }
+
+    public function getChannel($channelType, $channelId)
+    {
+        return $this->client->Channel($channelType, $channelId);
+    }
+
+    public function updateChannel($channelType, $channelId, $data)
+    {
+        $channel = $this->client->Channel($channelType, $channelId);
+        $channel->update($data);
+    }
+
+    // get message by id
 }

@@ -55,7 +55,8 @@ class FeedGetStreamService
     {
         $yesterday = Carbon::yesterday();
         $time = $yesterday->toIso8601String();
-        $this->client->feed('user_excl', $userId)->updateActivityToTargets("e585beb2-b4e7-11ed-a5a9-0e0d34fb440f", $time, [], [], []);
+        $this->client->feed('user_excl', $userId)
+            ->updateActivityToTargets("e585beb2-b4e7-11ed-a5a9-0e0d34fb440f", $time, [], [], []);
     }
 
     public function updateExpireFeed($userId)
@@ -81,9 +82,7 @@ class FeedGetStreamService
                 $this->client->doPartialActivityUpdate($value['id'], null, null, $set, $unset);
             }
             return $this->getFeeds($userId);
-            //code...
         } catch (\Throwable $th) {
-            //throw $th;
             return false;
         }
     }

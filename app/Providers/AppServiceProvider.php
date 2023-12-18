@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Repositories\DomainRepository;
 use App\Repositories\DomainRepositoryImpl;
 use App\Services\ApiKeyService;
+use App\Services\ChatGetStreamService;
 use App\Services\FeedGetStreamService;
 use App\Services\ImageService;
 use App\Services\ImageServiceImpl;
@@ -30,6 +31,10 @@ class AppServiceProvider extends ServiceProvider
             return new FeedGetStreamService();
         });
 
+        $this->app->singleton(ChatGetStreamService::class, function () {
+            return new ChatGetStreamService();
+        });
+
         $this->app->singleton(ImageService::class, ImageServiceImpl::class);
 
         $this->app->singleton(UserService::class, function ($app) {
@@ -47,7 +52,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
-        // Schema::defaultStringLength(191);
     }
 }
