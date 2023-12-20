@@ -13,8 +13,13 @@ class TopicsExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        return Topics::all();
+        $collection =  Topics::get();
+        foreach ($collection as $value) {
+            $value->total_user_topics =  strval($value->userTopics()->count());
+        }
+        return $collection;
     }
+
 
     public function headings(): array
     {
@@ -28,6 +33,9 @@ class TopicsExport implements FromCollection, WithHeadings
             'Is custom Topic',
             'Sort',
             'Deleted At',
+            'Sign',
+            'Cover path',
+            'Total followers',
         ];
     }
 }
