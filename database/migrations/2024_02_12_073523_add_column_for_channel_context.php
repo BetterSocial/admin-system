@@ -14,9 +14,9 @@ class AddColumnForChannelContext extends Migration
     public function up()
     {
         Schema::table('chat_anon_user_info', function (Blueprint $table) {
-            $table->enum('context', ['other profile', 'chat', 'post', 'follow']);
-            $table->string('initiator');
-            $table->string('source_id');
+            $table->enum('context', ['other profile', 'chat', 'post', 'follow'])->nullable();
+            $table->string('initiator')->nullable();
+            $table->string('source_id')->nullable();
         });
     }
 
