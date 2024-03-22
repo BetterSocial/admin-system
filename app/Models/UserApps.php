@@ -149,7 +149,6 @@ class UserApps extends Model
             $users = $query->get();
             $userIds = $users->pluck('user_id')->toArray();
             $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
-
             $userScoreMap = [];
             foreach ($userScores as $userScore) {
                 $userScoreMap[$userScore->_id] = $userScore;
@@ -158,6 +157,7 @@ class UserApps extends Model
             foreach ($users as $user) {
                 if (isset($userScoreMap[$user->user_id])) {
                     $userScore = $userScoreMap[$user->user_id];
+                    $userScore['age_score'] = 0;
                     $user->user_score = $userScore;
                 }
             }
