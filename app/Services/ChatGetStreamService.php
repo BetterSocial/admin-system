@@ -28,8 +28,16 @@ class ChatGetStreamService
 
     public function updateChannel($channelType, $channelId, $data)
     {
-        $channel = $this->client->Channel($channelType, $channelId);
-        $channel->update($data);
+        try {
+            $channel = $this->client->Channel($channelType, $channelId);
+            $channel->update($data);
+        } catch (\Throwable $th) {
+            $status = json_decode($th->getMessage());
+            if ($status->StatusCode == 404) {
+                $data['channel_type'] = 3;
+                $this->client->Channel($channelType, $channelId, $data)->create('bettersocial');
+            }
+        }
     }
 
     // get message by id
