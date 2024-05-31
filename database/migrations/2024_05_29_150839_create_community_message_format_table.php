@@ -14,6 +14,7 @@ class CreateCommunityMessageFormatTable extends Migration
     public function up()
     {
         Schema::create('community_message_format', function (Blueprint $table) {
+            $table->string('community_message_format_id', 50)->nullable(false)->primary();
             $table->string('user_id', 50);
             $table->bigInteger('topic_id');
             $table->string('message');
