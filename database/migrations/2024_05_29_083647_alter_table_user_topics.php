@@ -13,7 +13,7 @@ class AlterTableUserTopics extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE user_topics ADD COLUMN notified BOOLEAN DEFAULT FALSE, ADD COLUMN is_anonymous BOOLEAN');
+        DB::statement('ALTER TABLE user_topics ADD COLUMN notify_user BOOLEAN DEFAULT FALSE, ADD COLUMN is_anonymous BOOLEAN');
     }
 
     /**
