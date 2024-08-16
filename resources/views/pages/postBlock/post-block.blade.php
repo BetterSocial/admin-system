@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="detailModal" tabindex="1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="detailModal" tabindex="0" aria-labelledby="detailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="detailCommentModal" tabindex="1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal fade" id="detailCommentModal" tabindex="0" aria-labelledby="detailModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
