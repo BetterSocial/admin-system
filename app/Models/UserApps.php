@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -168,7 +169,7 @@ class UserApps extends Model
                 'recordsFiltered' => $total,
                 'data' => $users,
             ]);
-        } catch (\Throwable $th) {
+        } catch (Exception $th) {
             throw $th;
         }
     }
@@ -181,7 +182,7 @@ class UserApps extends Model
             $userScores = UserScoreModel::find($userId);
             $user->user_score = $userScores;
             return $user;
-        } catch (\Throwable $th) {
+        } catch (Exception $th) {
             throw $th;
         }
     }
