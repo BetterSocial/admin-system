@@ -169,7 +169,7 @@ class UserApps extends Model
                 'data' => $users,
             ]);
         } catch (\Throwable $th) {
-            return throw $th;
+            throw $th;
         }
     }
 
@@ -182,7 +182,7 @@ class UserApps extends Model
             $user->user_score = $userScores;
             return $user;
         } catch (\Throwable $th) {
-            return throw $th;
+            throw $th;
         }
     }
 }
