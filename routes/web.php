@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+const INDEX = '/index';
 
 Route::get('/status-health/live', [StatusHealthController::class, 'live']);
 
@@ -40,14 +41,19 @@ Route::group(['middleware' => 'auth'], function () {
     /*
      *  topics
      */
-    Route::get('/topics/index', [TopicController::class, 'index'])->name('topic');
-    Route::put('/topics/category', [TopicController::class, 'changeCategory'])->name('topic.add.category');
-    Route::delete('/topics/category', [TopicController::class, 'deleteCategory'])->name('topic.category.delete');
-    Route::post('/topics/image', [TopicController::class, 'updateImage'])->name('topic.update-image');
-    Route::get('/topics/detail', [TopicController::class, 'getDetail'])->name('topic.detail');
+    Route::prefix('topics')->group(function () {
+        Route::get(INDEX, [TopicController::class, 'index'])->name('topic');
+        Route::put('/category', [TopicController::class, 'changeCategory'])->name('topic.add.category');
+        Route::delete('/category', [TopicController::class, 'deleteCategory'])->name('topic.category.delete');
+        Route::post('/image', [TopicController::class, 'updateImage'])->name('topic.update-image');
+        Route::get('/detail', [TopicController::class, 'getDetail'])->name('topic.detail');
+        Route::POST('/data', [TopicController::class, 'getData'])->name('masterTopics.data');
+        Route::get('/export', [TopicController::class, 'export'])->name('topic.export');
+        Route::post('/un-sign', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
+        Route::post('/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
+    });
 
     Route::get('/create-topics', [CreateTopicController::class, 'index'])->name('topic.create');
-    Route::POST('/topics/data', [TopicController::class, 'getData'])->name('masterTopics.data');
     Route::POST('/add/topics', [TopicController::class, 'addTopics'])->name('create.topics');
     Route::POST('/show/topics', [TopicController::class, 'showTopics'])->name('add.topics');
     Route::post('/topic/category', [TopicController::class, 'category'])->name('topic.category');
@@ -55,9 +61,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/topic/{id}', [TopicController::class, 'delete'])->name('topic.delete');
     Route::get('/topic/limit', [LimitTopicController::class, 'getData'])->name('topic.limit');
     Route::post('/topic/limit', [LimitTopicController::class, 'create'])->name('topic.limit.create');
-    Route::get('/topics/export/', [TopicController::class, 'export'])->name('topic.export');
-    Route::post('topics/un-sign', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
-    Route::post('topics/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
     Route::post('/topic/remove-duplicate', [TopicController::class, 'removeDuplicate'])->name('topic.remove-duplicate');
 
 
@@ -144,7 +147,7 @@ Route::group(['middleware' => 'auth'], function () {
     *Domain
     */
     Route::prefix('domain')->group(function () {
-        Route::get('/index', [DomainController::class, 'index'])->name('domain');
+        Route::get(INDEX, [DomainController::class, 'index'])->name('domain');
         Route::POST(
             '/' . config('constants.DATA_KEYWORD'),
             [DomainController::class, 'getData']
@@ -155,7 +158,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::prefix('news')->group(function () {
-        Route::get('/index', [NewsController::class, 'index'])->name('news');
+        Route::get(INDEX, [NewsController::class, 'index'])->name('news');
         Route::POST(
             '/' . config('constants.DATA_KEYWORD'),
             'NewsController@getData'
