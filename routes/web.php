@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+const INDEX = '/index';
 
 Route::get('/status-health/live', [StatusHealthController::class, 'live']);
 
@@ -41,7 +42,7 @@ Route::group(['middleware' => 'auth'], function () {
      *  topics
      */
     Route::prefix('topics')->group(function () {
-        Route::get('/index', [TopicController::class, 'index'])->name('topic');
+        Route::get(INDEX, [TopicController::class, 'index'])->name('topic');
         Route::put('/category', [TopicController::class, 'changeCategory'])->name('topic.add.category');
         Route::delete('/category', [TopicController::class, 'deleteCategory'])->name('topic.category.delete');
         Route::post('/image', [TopicController::class, 'updateImage'])->name('topic.update-image');
@@ -146,7 +147,7 @@ Route::group(['middleware' => 'auth'], function () {
     *Domain
     */
     Route::prefix('domain')->group(function () {
-        Route::get('/index', [DomainController::class, 'index'])->name('domain');
+        Route::get(INDEX, [DomainController::class, 'index'])->name('domain');
         Route::POST(
             '/' . config('constants.DATA_KEYWORD'),
             [DomainController::class, 'getData']
@@ -157,7 +158,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::prefix('news')->group(function () {
-        Route::get('/index', [NewsController::class, 'index'])->name('news');
+        Route::get(INDEX, [NewsController::class, 'index'])->name('news');
         Route::POST(
             '/' . config('constants.DATA_KEYWORD'),
             'NewsController@getData'
