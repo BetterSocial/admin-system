@@ -102,6 +102,7 @@
 
             alertContainer.style.display = 'block';
         };
+
         let dataTablePost;
 
         let token = $("meta[name=csrf-token]").attr("content");
@@ -144,7 +145,6 @@
                     body: JSON.stringify(body),
                 });
                 let res = await response.json();
-                console.log(res.status);
                 if (res.status === "success") {
                     return res.data;
                 } else {
