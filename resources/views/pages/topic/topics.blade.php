@@ -421,7 +421,7 @@
 
         async function getCategory() {
             try {
-                const response = await fetch("/topic/category", {
+                const response = await fetch("{{ route('topic.category') }}", {
                     method: "POST",
                     headers: {
                         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
@@ -747,6 +747,7 @@
                         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content")
                     },
                 });
+                console.log('data', data);
                 $.ajax({
                     type: "PUT",
                     url: url,
@@ -760,11 +761,6 @@
 
                             getNewCategory();
                             dataTable.ajax.reload(null, false);
-                            // return Swal.fire({
-                            //     icon: "success",
-                            //     title: "Success",
-                            //     text: "Topic Updated",
-                            // });
                         } else {
                             return Swal.fire({
                                 icon: "error",
