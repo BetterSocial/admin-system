@@ -89,8 +89,10 @@ class Topics extends Model
         return $query->select('categories')
             ->whereNotNull('categories') // Hanya pilih yang tidak null
             ->where('categories', '!=', '') // Hanya pilih yang tidak kosong
-            ->groupBy('categories');
+            ->groupBy('categories')
+            ->orderBy('categories', 'asc'); // Urutkan dari A ke Z
     }
+
 
     public function scopeWithQuery($query, Request $request)
     {
