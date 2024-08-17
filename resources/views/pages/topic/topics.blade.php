@@ -421,7 +421,7 @@
 
         async function getCategory() {
             try {
-                const response = await fetch("/topic/category", {
+                const response = await fetch("{{ route('topic.category') }}", {
                     method: "POST",
                     headers: {
                         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
@@ -433,6 +433,86 @@
                 }
             } catch (err) {}
         }
+
+        async function updateCategoryList() {
+            try {
+                const response = await fetch("{{ route('topic.category') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
+                    },
+                });
+                let res = await response.json();
+                if (res.status === "success") {
+                    categories = res.data;
+                    const categorySelect = $("#categorySelect");
+                    categorySelect.empty(); // Kosongkan dropdown sebelum diisi ulang
+                    categorySelect.append('<option value="">Select Category</option>');
+                    categories.forEach((item) => {
+                        categorySelect.append(
+                            `<option value="${item.categories}">${item.categories}</option>`
+                        );
+                    });
+                }
+            } catch (err) {
+                console.error("Error updating category list", err);
+            }
+        }
+
+        $("#modal-category").submit(async function(e) {
+            e.preventDefault();
+            let form = $(this);
+            let url = form.attr("action");
+            let topicId = $("#topicId").val();
+            let topicName = $("#topicName").val();
+            let categorySelect = $("#categorySelect").val();
+            let categoryInput = $("#categoryInput").val();
+
+            let category = categoryInput ? categoryInput : categorySelect;
+
+            let data = {
+                topic_id: topicId,
+                name: topicName,
+                categories: category,
+            };
+
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRF-Token": $("meta[name=csrf-token]").attr("content")
+                },
+            });
+
+            $.ajax({
+                type: "PUT",
+                url: url,
+                data: data,
+                success: async function(data) {
+                    if (data.status === "success") {
+                        $("#detailCategory").modal("hide");
+                        $("#detailCategory").on("hidden.bs.modal", function() {
+                            cleanCode();
+                        });
+
+                        await updateCategoryList(); // Update the category list after success
+                        dataTable.ajax.reload(null, false);
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: data.message,
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr, status, error);
+                },
+            });
+        });
+
+        $("#detailCategory").on("show.bs.modal", function(e) {
+            $('#categoryInput').val(''); // Clear the New Category field
+            updateCategoryList(); // Always update category list when modal is shown
+        });
 
         function createItemSelectCategory(categories, category) {
             let categorySelect = document.getElementById("categorySelect");
@@ -747,6 +827,7 @@
                         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content")
                     },
                 });
+                console.log('data', data);
                 $.ajax({
                     type: "PUT",
                     url: url,
@@ -760,11 +841,6 @@
 
                             getNewCategory();
                             dataTable.ajax.reload(null, false);
-                            // return Swal.fire({
-                            //     icon: "success",
-                            //     title: "Success",
-                            //     text: "Topic Updated",
-                            // });
                         } else {
                             return Swal.fire({
                                 icon: "error",

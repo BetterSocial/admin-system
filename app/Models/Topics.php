@@ -14,7 +14,15 @@ class Topics extends Model
     protected $table    = 'topics';
     protected $primaryKey = 'topic_id';
     protected $fillable = [
-        'name', 'cover_path', 'icon_path', 'categories', 'created_at', 'flg_show', 'is_custom_topic', 'sort', 'sign',
+        'name',
+        'cover_path',
+        'icon_path',
+        'categories',
+        'created_at',
+        'flg_show',
+        'is_custom_topic',
+        'sort',
+        'sign',
     ];
     const CREATED_AT    = 'created_at';
     public $incrementing = false;
@@ -78,8 +86,13 @@ class Topics extends Model
 
     public function scopeCategory($query)
     {
-        return $query->select('categories')->groupBy('categories');
+        return $query->select('categories')
+            ->whereNotNull('categories') // Hanya pilih yang tidak null
+            ->where('categories', '!=', '') // Hanya pilih yang tidak kosong
+            ->groupBy('categories')
+            ->orderBy('categories', 'asc'); // Urutkan dari A ke Z
     }
+
 
     public function scopeWithQuery($query, Request $request)
     {
