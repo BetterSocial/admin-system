@@ -194,13 +194,19 @@
                 url
             } = handleType(type);
             let value = await createInput(message);
+
             if (value && value >= 1) {
                 try {
                     Swal.showLoading();
+
+                    // Get current page number
+                    const currentPage = dataTablePost.page();
+
                     const body = {
                         activity_id: activityId,
                         total: value,
                     };
+
                     const response = await fetch(url, {
                         method: "POST",
                         headers: {
@@ -209,12 +215,13 @@
                         },
                         body: JSON.stringify(body),
                     });
+
                     let res = await response.json();
                     if (res.status === "success") {
-                        dataTablePost.draw();
+                        // Redraw the table and go back to the same page
+                        dataTablePost.draw(false).page(currentPage).draw(false);
                     } else {
                         Swal.fire("Error", `Error ${message}`, "error").then(() => {});
-
                     }
                 } catch (error) {
                     Swal.fire("Error", `Error ${message}`, "error").then(() => {});
@@ -222,9 +229,10 @@
                     Swal.hideLoading();
                 }
             } else {
-                Swal.fire(`Value must be greater than equal to one`);
+                Swal.fire(`Value must be greater than or equal to one`);
             }
         };
+
 
         function tableCreate() {
             const exampleArray = [{
@@ -528,6 +536,13 @@
                         d.message = $("#message").val();
                         console.log(d);
                     },
+                },
+
+                stateSaveCallback: function(settings, data) {
+                    localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data));
+                },
+                stateLoadCallback: function(settings) {
+                    return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance));
                 },
                 initComplete: function(settings, json) {
                     console.log(json);
