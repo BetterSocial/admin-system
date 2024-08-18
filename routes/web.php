@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 const INDEX = '/index';
+const DATA = '/data';
 
 Route::get('/status-health/live', [StatusHealthController::class, 'live']);
 
@@ -47,7 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/category', [TopicController::class, 'deleteCategory'])->name('topic.category.delete');
         Route::post('/image', [TopicController::class, 'updateImage'])->name('topic.update-image');
         Route::get('/detail', [TopicController::class, 'getDetail'])->name('topic.detail');
-        Route::POST('/data', [TopicController::class, 'getData'])->name('masterTopics.data');
+        Route::POST(DATA, [TopicController::class, 'getData'])->name('masterTopics.data');
         Route::get('/export', [TopicController::class, 'export'])->name('topic.export');
         Route::post('/un-sign', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
         Route::post('/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
@@ -197,7 +198,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('post-blocks')->group(function () {
         Route::get('/', [PostBlockController::class, 'index'])->name('post-block');
-        Route::post('/data', [PostBlockController::class, 'data'])->name('post-block.data');
+        Route::post(DATA, [PostBlockController::class, 'data'])->name('post-block.data');
     });
     Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
     Route::delete('/post/comment/{id}', [PostController::class, 'deleteComment'])->name('post.comment.delete');
@@ -216,7 +217,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/', [ImageController::class, 'index'])->name('images');
         Route::post('/upload', [ImageController::class, 'uploadImage'])->name('images.upload');
-        Route::post('/data', [ImageController::class, 'data'])->name('images.data');
+        Route::post(DATA, [ImageController::class, 'data'])->name('images.data');
     });
 
     Route::post('user-name-by-anonymous-id', [UsersAppController::class, 'getNameByAnonymousId']);
