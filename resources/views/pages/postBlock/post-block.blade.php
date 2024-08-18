@@ -89,6 +89,23 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal untuk Preview Gambar -->
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagePreviewModalLabel">Image Preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="previewImage" src="" alt="Preview Image" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('js')
     <script>
@@ -617,31 +634,22 @@
                     },
                     // 5. image
                     {
-                        data: "message",
+                        data: "images_url", // Ubah sesuai dengan data yang benar dari server Anda
                         orderable: false,
-                        className: "menufilter textfilter",
+                        className: "text-center",
                         render: function(data, type, row) {
-                            let {
-                                images_url
-                            } = row;
-                            // image tab
-                            if (images_url.length > 1) {
-                                let value =
-                                    `<div class="btn-detail" style="100px"  data-item="${row}">`;
-                                images_url.map((item) => {
-                                    value +=
-                                        `<a href="${item}" target="_blank"><img src="${item}" alt="${data}" class="rounded h-10" width="128" height="128"></a>`;
+                            if (data && data.length > 0) {
+                                // Jika ada beberapa gambar, render semuanya sebagai thumbnail yang bisa diklik
+                                let imagesHtml = '';
+                                data.forEach(function(url) {
+                                    imagesHtml += `
+                                        <a href="#" class="image-preview" data-image-url="${url}">
+                                            <img src="${url}" alt="Image" class="rounded" width="100" height="100" style="margin-right: 5px;">
+                                        </a>`;
                                 });
-                                value += "</div>";
-                                return value;
-                            } else if (images_url.length == 1) {
-                                return `
-                    <div class="btn-detail" style="100px"  data-item="${row}"><a href="${images_url}" target="_blank"><img src="${images_url}" alt="${data}" class="rounded h-10" width="128" height="128"></a></div>
-                    `;
+                                return imagesHtml;
                             } else {
-                                return `
-                <div class="btn-detail"  data-item="${row}">-</div>
-                `;
+                                return 'No Image';
                             }
                         },
                     },
@@ -836,6 +844,13 @@
             $("#search").on("submit", function(e) {
                 dataTablePost.draw();
                 e.preventDefault();
+            });
+
+            $('#tablePostBlock').on('click', '.image-preview', function(e) {
+                e.preventDefault();
+                const imageUrl = $(this).data('image-url');
+                $('#previewImage').attr('src', imageUrl);
+                $('#imagePreviewModal').modal('show');
             });
 
             /// end
