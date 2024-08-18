@@ -206,8 +206,7 @@
     @case('session_timeout')
         {{-- Compoentnts session timeout --}}
         <script src="{{ asset('assets/js/components/session-timeout/bootstrap-session-timeout.js') }}"></script>
-        <script src="{{ asset('assets/js/components/session-timeout/custom-bootstrap_session_timeout.js') }}">
-        </script>
+        <script src="{{ asset('assets/js/components/session-timeout/custom-bootstrap_session_timeout.js') }}"></script>
     @break
 
     @case('notifications')
@@ -542,8 +541,7 @@
                 });
             }
         </script>
-        <script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}" async
-            defer></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key={{ config('app.google_maps_api_key') }}" async defer></script>
     @break
 
     @case('faq')
@@ -1120,11 +1118,6 @@
 
     @case('create-topics')
         <script src="{{ asset('assets/js/scrollspyNav.js') }}"></script>
-        <script src="{{ asset('plugins/file-upload/file-upload-with-preview.min.js') }}"></script>
-        <script>
-            var firstUpload = new FileUploadWithPreview('myFirstImage')
-        </script>
-        <script src="{{ asset('topics/addTopics.js') }}"></script>
     @break
 
     @case('view Users')
@@ -1231,4 +1224,7 @@
                 console.log('No custom script available.')
             </script>
     @endswitch
+
+
+    <script src="{{ asset('backend/libraries/cropperjs/cropper.min.js') }}"></script>
     <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
