@@ -212,9 +212,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('rss', [RssLinkController::class, 'edit'])->name('rss.edit');
     Route::delete('rss/{id}', [RssLinkController::class, 'remove'])->name('rss.remove');
 
-    Route::get('/image', [ImageController::class, 'index'])->name('images');
-    Route::post('/image/upload', [ImageController::class, 'uploadImage'])->name('images.upload');
-    Route::post('/image/data', [ImageController::class, 'data'])->name('images.data');
+    Route::prefix('image')->group(function () {
+
+        Route::get('/', [ImageController::class, 'index'])->name('images');
+        Route::post('/upload', [ImageController::class, 'uploadImage'])->name('images.upload');
+        Route::post('/data', [ImageController::class, 'data'])->name('images.data');
+    });
 
     Route::post('user-name-by-anonymous-id', [UsersAppController::class, 'getNameByAnonymousId']);
 });
