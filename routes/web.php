@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/un-sign', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
         Route::post('/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
         Route::get('/add', [TopicController::class, 'createTopic'])->name('topic.create');
+        Route::delete('/destroy/{id}', [TopicController::class, 'destroy'])->name('topic.destroy');
     });
 
     Route::POST('/add/topics', [TopicController::class, 'addTopics'])->name('create.topics');
