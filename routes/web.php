@@ -52,9 +52,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/export', [TopicController::class, 'export'])->name('topic.export');
         Route::post('/un-sign', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
         Route::post('/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
+        Route::get('/add', [TopicController::class, 'createTopic'])->name('topic.create');
     });
 
-    Route::get('/create-topics', [CreateTopicController::class, 'index'])->name('topic.create');
     Route::POST('/add/topics', [TopicController::class, 'addTopics'])->name('create.topics');
     Route::POST('/show/topics', [TopicController::class, 'showTopics'])->name('add.topics');
     Route::post('/topic/category', [TopicController::class, 'category'])->name('topic.category');

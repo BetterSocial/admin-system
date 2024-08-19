@@ -29,9 +29,7 @@ class TopicController extends Controller
 
     private $validationId = 'required|exists:topics,topic_id';
 
-    public function __construct(private ChatGetStreamService $chatGetStreamService)
-    {
-    }
+    public function __construct(private ChatGetStreamService $chatGetStreamService) {}
 
 
     public function index(Request $request)
@@ -46,6 +44,19 @@ class TopicController extends Controller
 
         ];
         return view('pages.topic.topics')->with($data);
+    }
+
+    public function createTopic(Request $request)
+    {
+
+        $data = [
+            'category_name' => 'forms',
+            'page_name' => 'create-topics',
+            'has_scrollspy' => 1,
+            'scrollspy_offset' => 100,
+
+        ];
+        return view('pages.topic.form_add_topics')->with($data);
     }
 
     public function getData(Request $req)

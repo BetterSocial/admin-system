@@ -55,7 +55,7 @@
                                         <input id="file" type="file"
                                             class="custom-file-container__custom-file__custom-file-input"
                                             accept="image/x-png" name="file">
-                                        <input type="hidden" name="MAX_FILE_SIZE" value="1024" />
+                                        <input type="hidden" name="MAX_FILE_SIZE" />
                                         <span class="custom-file-container__custom-file__custom-file-control"></span>
                                     </label>
                                     <div class="custom-file-container__image-preview"></div>
@@ -158,7 +158,6 @@
                 }
             });
 
-
             // Update cropper ketika nilai width atau height diubah
             document.getElementById('resizeWidth').addEventListener('input', function() {
                 const width = parseInt(this.value, 10);
@@ -185,136 +184,41 @@
                         height: parseInt(document.getElementById('resizeHeight').value, 10),
                     });
 
-                    // Tampilkan hasil crop di preview
-                    const croppedImagePreview = document.querySelector(
-                        '.custom-file-container__image-preview');
-                    croppedImagePreview.style.backgroundImage = `url(${croppedCanvas.toDataURL()})`;
-                    croppedImagePreview.style.display = 'block';
+                    // Konversi canvas ke Blob agar bisa dikirim melalui FormData
+                    croppedCanvas.toBlob(function(blob) {
+                        const fileInputElement = document.getElementById('file');
+                        const dataTransfer = new DataTransfer();
 
-                    // Simpan hasil crop ke input hidden untuk di-submit ke server
-                    document.getElementById('croppedImageData').value = croppedCanvas.toDataURL();
+                        const croppedFile = new File([blob], "cropped_image.png", {
+                            type: 'image/png',
+                            lastModified: new Date().getTime()
+                        });
 
-                    // Close modal
-                    $('#cropperModal').modal('hide');
+                        dataTransfer.items.add(croppedFile);
+                        fileInputElement.files = dataTransfer.files;
+
+                        // Update preview di form
+                        const croppedImagePreview = document.querySelector(
+                            '.custom-file-container__image-preview');
+                        croppedImagePreview.style.backgroundImage =
+                            `url(${croppedCanvas.toDataURL()})`;
+                        croppedImagePreview.style.display = 'block';
+
+                        // Close modal setelah cropping selesai
+                        $('#cropperModal').modal('hide');
+                    });
                 }
             });
 
             // Form submission logic
-            $("#createTopic").on("submit", function(e) {
-                e.preventDefault();
-                var name = $("#name").val();
-                var category = $("#category").val();
-                let sort = $("#sort").val();
-                let croppedImageData = $("#croppedImageData").val();
-
-                if (name == null || name == "") {
-                    return Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Name must be fill",
-                    });
-                }
-                if (category == null || category == "") {
-                    return Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Category must be fill",
-                    });
-                }
-
-                var formData = new FormData();
-                formData.append("name", name);
-                formData.append("category", category);
-                formData.append("sort", sort);
-                formData.append("cropped_image_data", croppedImageData);
-
-                Swal.fire({
-                    title: "Please Wait !",
-                    html: "Data uploading",
-                    showCancelButton: false, // There won't be any cancel button
-                    showConfirmButton: false, // There won't be any confirm button
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    },
-                });
-
-                $.ajaxSetup({
-                    headers: {
-                        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content")
-                    },
-                });
-
-                $.ajax({
-                    type: "POST",
-                    dataType: "JSON",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    url: "{{ route('create.topics') }}",
-                    success: function(data) {
-                        console.log(data);
-                        Swal.close();
-                        if (data.status == "success") {
-                            $("#createTopic")[0].reset();
-                            $("#myFirstImage").val("");
-                            return Swal.fire({
-                                icon: "success",
-                                title: "Success",
-                                text: "Topic Created",
-                            });
-                        } else {
-                            return Swal.fire({
-                                icon: "error",
-                                title: "error",
-                                text: data.message,
-                            });
-                        }
-                    },
-                    error: function(data, xhr, message) {
-                        Swal.close();
-                        console.log(data);
-                        console.log(xhr);
-                        console.log(message);
-                        return Swal.fire({
-                            icon: "error",
-                            title: "Internal Server Error",
-                            text: data.responseJSON.errors.file[0],
-                        });
-                    },
-                });
-            });
-
-            document.getElementById('cropButton').addEventListener('click', function() {
-                if (cropper) {
-                    const cropData = cropper.getData(true); // Mendapatkan data crop dalam bentuk pixel asli
-
-                    // Perbarui dimensi berdasarkan ukuran crop yang baru
-                    document.getElementById('imageDimensions').textContent =
-                        `Dimensions: ${Math.round(cropData.width)}px x ${Math.round(cropData.height)}px`;
-
-                    croppedCanvas = cropper.getCroppedCanvas({
-                        width: parseInt(document.getElementById('resizeWidth').value, 10),
-                        height: parseInt(document.getElementById('resizeHeight').value, 10),
-                    });
-
-                    // Tampilkan hasil crop di preview
-                    const croppedImagePreview = document.querySelector(
-                        '.custom-file-container__image-preview');
-                    croppedImagePreview.style.backgroundImage = `url(${croppedCanvas.toDataURL()})`;
-                    croppedImagePreview.style.display = 'block';
-
-                    // Simpan hasil crop ke input hidden untuk di-submit ke server
-                    document.getElementById('croppedImageData').value = croppedCanvas.toDataURL();
-
-                    // Close modal
-                    $('#cropperModal').modal('hide');
+            document.getElementById('createTopic').addEventListener('submit', function(e) {
+                // Anda bisa menambahkan validasi tambahan di sini jika diperlukan
+                // Misalnya cek apakah gambar telah di-crop sebelum submit
+                if (!document.getElementById('file').files.length) {
+                    e.preventDefault();
+                    alert("Please crop the image before submitting.");
                 }
             });
-
-
-
-
         });
     </script>
 @endpush
