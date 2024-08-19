@@ -786,11 +786,22 @@
                     {
                         data: "topic_id",
                         render: function(data, type, row) {
+                            let content = '';
                             let topicId = row.topic_id;
                             console.log(topicId);
-                            return `
+
+                            let total = 0;
+                            if (row.posts.length >= 1) {
+                                total = row.posts.length;
+                            }
+                            if (total == 0) {
+                                content = `
                                     <button class="btn btn-danger btn-delete-topic" onclick="deleteTopic(${row.topic_id})">Delete</button>
                                     `;
+
+                            }
+
+                            return content;
                         },
                     }
                 ],
