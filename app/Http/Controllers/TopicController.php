@@ -8,7 +8,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserAddTopicRequest;
 use App\Models\LogErrorModel;
 use App\Models\LogModel;
+use App\Models\PostTopic;
 use App\Models\Topics;
+use App\Models\UserTopicModel;
 use App\Services\ChatGetStreamService;
 use Carbon\Carbon;
 use Exception;
@@ -439,6 +441,25 @@ class TopicController extends Controller
             file_put_contents('error.txt', $th->getMessage());
             DB::rollBack();
             return $this->errorResponse($th->getMessage(), 400);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction();
+            // Hapus semua relasi terkait
+            PostTopic::where('topic_id', $id)->delete();
+            UserTopicModel::where('topic_id', $id)->delete();
+
+            // Hapus topik
+            $topic = Topics::findOrFail($id);
+            $topic->delete();
+            DB::commit();
+            return $this->successResponse('succes delete topic');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return $this->errorResponse('Failed to delete ');
         }
     }
 }

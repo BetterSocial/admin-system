@@ -399,6 +399,58 @@
                 .find("textarea")
                 .val("");
         }
+        $(document).on('click', '.btn-delete-topic', function() {
+
+        });
+
+        function deleteTopic(topicId) {
+            console.log('topicid', topicId);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `/topics/destroy/${topicId}`,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            if (response.status === 'success') {
+                                dataTable.ajax.reload(null, false);
+                            } else {
+                                Swal.fire(
+                                    'Error!',
+                                    response.message,
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.log(xhr);
+                            console.log(status);
+                            console.log(error);
+                            Swal.fire(
+                                'Error!',
+                                'An error occurred while trying to delete the topic.',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+
+        }
+
+
+
 
         $('#detailCategory').on('show.bs.modal', function(e) {
             $('#categoryInput').val(''); // Clear the New Category field
@@ -732,12 +784,15 @@
                         },
                     },
                     {
-                        data: "flg_show",
-                        orderable: false,
+                        data: "topic_id",
                         render: function(data, type, row) {
-                            return "<div></div>";
+                            let topicId = row.topic_id;
+                            console.log(topicId);
+                            return `
+                                    <button class="btn btn-danger btn-delete-topic" onclick="deleteTopic(${row.topic_id})">Delete</button>
+                                    `;
                         },
-                    },
+                    }
                 ],
             });
 
