@@ -1175,4 +1175,8 @@
             console.log('No custom Styles available.')
         </script>
 @endswitch
+
+
+<link rel="stylesheet" href="{{ asset('backend/libraries/cropperjs/cropper.min.css') }}">
+
 <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
