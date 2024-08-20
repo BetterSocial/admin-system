@@ -399,9 +399,6 @@
                 .find("textarea")
                 .val("");
         }
-        $(document).on('click', '.btn-delete-topic', function() {
-
-        });
 
         function deleteTopic(topicId) {
             console.log('topicid', topicId);
@@ -498,8 +495,9 @@
                 if (res.status === "success") {
                     categories = res.data;
                     const categorySelect = $("#categorySelect");
-                    categorySelect.empty(); // Kosongkan dropdown sebelum diisi ulang
+                    categorySelect.empty();
                     categorySelect.append('<option value="">Select Category</option>');
+                    categorySelect.append('<option value="delete">** Delete Category **</option>');
                     categories.forEach((item) => {
                         categorySelect.append(
                             `<option value="${item.categories}">${item.categories}</option>`
@@ -899,12 +897,13 @@
                         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content")
                     },
                 });
-                console.log('data', data);
+                console.log(url);
                 $.ajax({
                     type: "PUT",
                     url: url,
                     data: data,
                     success: function(data) {
+                        console.log(data);
                         if (data.status === "success") {
                             $("#detailCategory").modal("hide");
                             $("#detailCategory").on("hidden.bs.modal", function() {
@@ -925,11 +924,11 @@
                         console.log(xhr);
                         console.log('status', status);
                         console.log('errrors', error);
-                        // return Swal.fire({
-                        //     icon: "error",
-                        //     title: xhr.statusText,
-                        //     text: xhr.responseJSON.message,
-                        // });
+                        return Swal.fire({
+                            icon: "error",
+                            title: 'Error',
+                            text: 'Oops...',
+                        });
                     },
                 });
             });
@@ -1035,9 +1034,6 @@
                     "Category changed successfully",
                     "Category changed failed",
                     function(data) {
-                        // close modal
-                        console.log(data);
-                        // show message use sweet alert
                         Swal.fire({
                             icon: "success",
                             title: "Success",

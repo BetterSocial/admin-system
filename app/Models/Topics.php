@@ -279,4 +279,13 @@ class Topics extends Model
         $query->where('topic_id', $id);
         return $query->first();
     }
+
+    public static function deleteCategory($id)
+    {
+        DB::beginTransaction();
+        $topic = Topics::find($id);
+        $topic->update(['categories' => '']);
+        DB::commit();
+        return $topic;
+    }
 }
