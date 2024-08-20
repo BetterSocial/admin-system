@@ -52,7 +52,7 @@
                             <caption id="topics-table-description">List of topics</caption>
                             <thead>
                                 <tr>
-                                    <th>id</th>
+                                    <th>Id</th>
                                     <th>Name</th>
                                     <th>Icon</th>
                                     <th>Cover</th>
@@ -670,18 +670,25 @@
                         d.category = $("#category").val();
                     },
                 },
-                error: function(xhr, error, thrown) {},
+                error: function(xhr, error, thrown) {
+                    console.log(xhr);
+                    console.log(error);
+                    console.log(thrown);
+                },
                 columns: [{
                         data: "topic_id",
-                        visible: false,
+                        className: "menufilter textfilter",
+                        render: function(data, type, row) {
+                            return data;
+                        },
                     },
                     {
                         data: "name",
                         className: "menufilter textfilter",
                         render: function(data, type, row) {
                             return `
-                <div class="btn-detail"  data-item="${row}">${data}</div>
-                `;
+                                    <div class="btn-detail"  data-item="${row}">${data}</div>
+                                    `;
                         },
                     },
                     {
@@ -788,7 +795,6 @@
                         render: function(data, type, row) {
                             let content = '';
                             let topicId = row.topic_id;
-                            console.log(topicId);
 
                             let total = 0;
                             if (row.posts.length >= 1) {
