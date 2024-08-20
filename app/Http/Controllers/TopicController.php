@@ -197,8 +197,14 @@ class TopicController extends Controller
                     'topic_id' => 'Topic Id is Required'
                 ]
             );
-            $topic = Topics::find($request->topic_id);
-            Topics::updateTopic($topic, $request);
+
+            if ($request->input('categories') == 'delete') {
+                $topic =   Topics::deleteCategory($request->topic_id);
+                return $this->successResponse('success delete data', $topic);
+            } else {
+                $topic = Topics::find($request->topic_id);
+                Topics::updateTopic($topic, $request);
+            }
             LogModel::insertLog('update-topic', 'success update topic');
             return $this->successResponse('success update topic');
         } catch (\Throwable $th) {
