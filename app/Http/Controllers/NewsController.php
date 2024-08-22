@@ -116,9 +116,7 @@ class NewsController extends Controller
     public function getData(Request $req)
     {
         try {
-            //code...
             $columns = array(
-                // datatable column index  => database column name
                 0 => 'news_link_id',
                 1 => 'news_url',
                 2 => 'domain_page',
@@ -154,7 +152,6 @@ class NewsController extends Controller
                 'data'            => $dataLimit,
             ]);
         } catch (\Throwable $th) {
-            //throw $th;
             LogModel::insertLog('news', $th->getMessage());
             return $this->errorDataTableResponse();
         }
