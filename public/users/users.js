@@ -61,6 +61,10 @@ $(document).ready(function() {
         d.user_id = $("#userId").val();
       },
     },
+    lengthMenu: [
+        [10, 25, 50, 100, 1000],
+        [10, 25, 50, 100, 1000]
+    ],
     columns: [
       {
         data: "Action",

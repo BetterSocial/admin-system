@@ -668,6 +668,10 @@
                         d.category = $("#category").val();
                     },
                 },
+                lengthMenu: [
+                    [10, 25, 50, 100, 1000],
+                    [10, 25, 50, 100, 1000]
+                ],
                 error: function(xhr, error, thrown) {
                     console.log(xhr);
                     console.log(error);
