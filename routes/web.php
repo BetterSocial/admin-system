@@ -161,7 +161,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('news')->group(function () {
         Route::get(INDEX, [NewsController::class, 'index'])->name('news');
-        Route::get(
+        Route::post(
             '/' . config('constants.DATA_KEYWORD'),
             [NewsController::class, 'getData']
         );

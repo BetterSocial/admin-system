@@ -1,8 +1,9 @@
-let datatble;
 $(document).ready(function() {
-  datatble = $("#tableNews").DataTable({
+  var datatble = $("#tableNews").DataTable({
     searching: false,
     stateSave: true,
+    lengthMenu: [50, 100, 250],
+    pageLength: 50,
     language: {
       loadingRecords: "</br></br></br></br>;",
       processing: "Loading...",
@@ -11,29 +12,14 @@ $(document).ready(function() {
     serverSide: true,
     ajax: {
       url: "/news/data",
-      type: "get",
-      headers: {
-        "X-CSRF-Token": $("meta[name=csrf-token]").attr("content"),
-      },
+      type: "POST",
+      headers: { "X-CSRF-Token": $("meta[name=csrf-token]").attr("content") },
       data: function(d) {
-        let sitename = $("#siteName").val();
-        if (sitename) {
-          d.siteName;
-        }
-        let title = $("#title").val();
-        if (title) {
-          d.title;
-        }
-        let keyword = $("#keyword").val();
-        if (keyword) {
-          d.keyword;
-        }
+        d.siteName = $("#siteName").val();
+        d.title = $("#title").val();
+        d.keyword = $("#keyword").val();
       },
     },
-    lengthMenu: [
-      [10, 100, 1000],
-      [10, 100, 1000],
-    ],
     columns: [
       {
         data: "news_link_id",
@@ -41,7 +27,7 @@ $(document).ready(function() {
       },
       {
         data: "news_url",
-
+        orderable: true,
         render: function(data, type, row) {
           return (
             " <a href=" +
@@ -52,28 +38,34 @@ $(document).ready(function() {
       },
       {
         data: "domain_name",
+        orderable: true,
       },
       {
         data: "site_name",
+        orderable: true,
       },
       {
         data: "title",
+        orderable: true,
       },
 
       {
         data: "author",
+        orderable: true,
       },
       {
         data: "keyword",
+        orderable: true,
       },
       {
         data: "created_at",
+        orderable: true,
       },
     ],
   });
 
   $("#search").on("submit", function(e) {
-    e.preventDefault();
     datatble.draw();
+    e.preventDefault();
   });
 });
