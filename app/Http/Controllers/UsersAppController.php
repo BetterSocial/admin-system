@@ -64,7 +64,11 @@ class UsersAppController extends Controller
         fputcsv(
             $file,
             [
-                '', '', '', '', '',
+                '',
+                '',
+                '',
+                '',
+                '',
                 "Data User List"
             ],
             ";"
