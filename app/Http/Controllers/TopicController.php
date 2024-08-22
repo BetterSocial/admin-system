@@ -371,9 +371,7 @@ class TopicController extends Controller
                 ?  'success changed icon topic'
                 : 'success changed cover topic');
             DB::commit();
-            return $this->successResponseWithAlert($type == 'icon'
-                ? 'Successfully changed the icon in the topic.'
-                : 'Successfully changed the cover in the topic.', 'topic');
+            return redirect()->route('topic');
         } catch (\Throwable $e) {
             DB::rollBack();
             $message = $e->getMessage();

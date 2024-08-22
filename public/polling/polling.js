@@ -10,6 +10,10 @@ $(document).ready(function () {
       processing: "Loading...",
       emptyTable: "No Post List",
     },
+    lengthMenu: [
+        [10, 100, 1000],
+        [10, 100, 1000]
+    ],
     ajax: {
       url: "/polling/data",
       type: "POST",

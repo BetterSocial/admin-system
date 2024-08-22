@@ -87,6 +87,10 @@
                     emptyTable: "No Data Topics",
                 },
                 serverSide: true,
+                lengthMenu: [
+                    [10, 100, 1000],
+                    [10, 100, 1000]
+                ],
                 ajax: {
                     url: "/image/data",
                     type: "POST",

@@ -50,6 +50,10 @@ $(document).ready(function() {
       emptyTable: "No User Follow",
     },
     serverSide: true,
+    lengthMenu: [
+        [10, 100, 1000],
+        [10, 100, 1000]
+    ],
     ajax: {
       url: "/users/data",
       type: "POST",

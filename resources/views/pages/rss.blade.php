@@ -135,7 +135,12 @@
     <script>
         let dataTable;
         $(document).ready(function() {
-            $('#tableRss').DataTable();
+            $('#tableRss').DataTable({
+                lengthMenu: [
+                    [10, 100, 1000],
+                    [10, 100, 1000]
+                ],
+            });
 
 
             $('#tableRss').on('click', '.btn-edit', function() {

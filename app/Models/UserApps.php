@@ -170,7 +170,12 @@ class UserApps extends Model
                 'data' => $users,
             ]);
         } catch (Exception $th) {
-            throw $th;
+            return response()->json([
+                'draw'            => 0,
+                'recordsTotal'    => 0,
+                "recordsFiltered" => 0,
+                'data'            => [],
+            ]);
         }
     }
 

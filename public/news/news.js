@@ -22,6 +22,10 @@ $(document).ready(function () {
               d.keyword = $('#keyword').val();
           },
         },
+        lengthMenu: [
+            [10, 100, 1000],
+            [10, 100, 1000]
+        ],
         columns		: [
             {
                 
