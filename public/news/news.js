@@ -1,8 +1,8 @@
+let datatble;
 $(document).ready(function() {
-  var datatble = $("#tableNews").DataTable({
+  datatble = $("#tableNews").DataTable({
     searching: false,
     stateSave: true,
-    lengthMenu: [50, 100, 250],
     pageLength: 50,
     language: {
       loadingRecords: "</br></br></br></br>;",
@@ -71,7 +71,7 @@ $(document).ready(function() {
   });
 
   $("#search").on("submit", function(e) {
-    datatble.draw();
     e.preventDefault();
+    datatble.draw();
   });
 });
