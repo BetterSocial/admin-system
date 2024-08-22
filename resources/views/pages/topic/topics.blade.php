@@ -341,8 +341,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-submit-category"
-                            onclick="confirm('Are You sure?')">Submit</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
                     </div>
                 </form>
             </div>
