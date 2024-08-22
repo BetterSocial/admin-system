@@ -161,9 +161,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('news')->group(function () {
         Route::get(INDEX, [NewsController::class, 'index'])->name('news');
-        Route::POST(
+        Route::get(
             '/' . config('constants.DATA_KEYWORD'),
-            'NewsController@getData'
+            [NewsController::class, 'getData']
         );
         // Remove this route as it is no longer needed
         Route::GET('/news-link', 'NewsController@readAsJson');

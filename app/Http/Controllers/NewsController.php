@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\NewsLink;
 use App\Models\Domain;
+use App\Models\LogModel;
 use Illuminate\Support\Facades\Log;
 use DOMDocument;
 use Illuminate\Support\Facades\DB;
@@ -114,41 +115,48 @@ class NewsController extends Controller
 
     public function getData(Request $req)
     {
-        $columns = array(
-            // datatable column index  => database column name
-            0 => 'news_link_id',
-            1 => 'news_url',
-            2 => 'domain_page',
-            3 => 'site_name',
-            4 => 'title',
-            5 => 'author',
-            6 => 'keyword',
-            7 => 'created_at',
-        );
-        $topic = "SELECT A.news_link_id,A.news_url,B.domain_name,A.site_name,A.title,A.author,A.keyword,A.created_at FROM news_link A 
+        try {
+            //code...
+            $columns = array(
+                // datatable column index  => database column name
+                0 => 'news_link_id',
+                1 => 'news_url',
+                2 => 'domain_page',
+                3 => 'site_name',
+                4 => 'title',
+                5 => 'author',
+                6 => 'keyword',
+                7 => 'created_at',
+            );
+            $topic = "SELECT A.news_link_id,A.news_url,B.domain_name,A.site_name,A.title,A.author,A.keyword,A.created_at FROM news_link A 
         JOIN domain_page B ON A.domain_page_id = B.domain_page_id  WHERE true";
-        if ($req->siteName != null) {
-            $topic .= " AND name ILIKE '%$req->name%'";
+            if ($req->siteName != null) {
+                $topic .= " AND name ILIKE '%$req->name%'";
+            }
+            if ($req->title != null) {
+                $topic .= " AND categories ILIKE '%$req->category%'";
+            }
+            if ($req->keyword != null) {
+                $topic .= " AND categories ILIKE '%$req->category%'";
+            }
+
+
+            $data = DB::SELECT($topic);
+            $total = count($data);
+
+            $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+
+            $dataLimit = DB::SELECT($topic);
+            return response()->json([
+                'draw'            => $req->draw,
+                'recordsTotal'    => $total,
+                "recordsFiltered" => $total,
+                'data'            => $dataLimit,
+            ]);
+        } catch (\Throwable $th) {
+            //throw $th;
+            LogModel::insertLog('news', $th->getMessage());
+            return $this->errorDataTableResponse();
         }
-        if ($req->title != null) {
-            $topic .= " AND categories ILIKE '%$req->category%'";
-        }
-        if ($req->keyword != null) {
-            $topic .= " AND categories ILIKE '%$req->category%'";
-        }
-
-
-        $data = DB::SELECT($topic);
-        $total = count($data);
-
-        $topic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
-
-        $dataLimit = DB::SELECT($topic);
-        return response()->json([
-            'draw'            => $req->draw,
-            'recordsTotal'    => $total,
-            "recordsFiltered" => $total,
-            'data'            => $dataLimit,
-        ]);
     }
 }
