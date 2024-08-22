@@ -50,6 +50,10 @@ $(document).ready(function() {
       emptyTable: "No User Follow",
     },
     serverSide: true,
+    lengthMenu: [
+        [10, 100, 1000],
+        [10, 100, 1000]
+    ],
     ajax: {
       url: "/users/data",
       type: "POST",
@@ -61,10 +65,6 @@ $(document).ready(function() {
         d.user_id = $("#userId").val();
       },
     },
-    lengthMenu: [
-        [10, 25, 50, 100, 1000],
-        [10, 25, 50, 100, 1000]
-    ],
     columns: [
       {
         data: "Action",

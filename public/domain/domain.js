@@ -49,6 +49,10 @@ $(document).ready(function() {
         d.domainName = $("#domainName").val();
       },
     },
+    lengthMenu: [
+        [10, 100, 1000],
+        [10, 100, 1000]
+    ],
     columns: [
       {
         data: "action",

@@ -44,7 +44,12 @@
     <script>
         let dataTable;
         $(document).ready(function() {
-            $('#tableLog').DataTable();
+            $('#tableLog').DataTable({
+                lengthMenu: [
+                    [10, 100, 1000],
+                    [10, 100, 1000]
+                ],
+            });
         })
     </script>
 @endpush

@@ -23,6 +23,10 @@ $(document).ready(function () {
         d.country = $("#country").val();
       },
     },
+    lengthMenu: [
+        [10, 100, 1000],
+        [10, 100, 1000]
+    ],
     columns: [
       {
         data: "location_id",

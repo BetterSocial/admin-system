@@ -534,6 +534,10 @@
                 stateSave: true,
                 serverSide: true,
                 processing: true,
+                lengthMenu: [
+                    [10, 100, 1000],
+                    [10, 100, 1000]
+                ],
                 language: {
                     processing: "Loading...",
                     emptyTable: "No Data Post",
