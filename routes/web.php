@@ -48,7 +48,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('/category', [TopicController::class, 'deleteCategory'])->name('topic.category.delete');
         Route::post('/image', [TopicController::class, 'updateImage'])->name('topic.update-image');
         Route::get('/detail', [TopicController::class, 'getDetail'])->name('topic.detail');
-        Route::POST(DATA, [TopicController::class, 'getData'])->name('masterTopics.data');
+        Route::get(DATA, [TopicController::class, 'getData'])->name('topic.data');
         Route::get('/export', [TopicController::class, 'export'])->name('topic.export');
         Route::post('/un-sign', [TopicController::class, 'unSignCategory'])->name('topic.category.un-sign');
         Route::post('/sign', [TopicController::class, 'signCategory'])->name('topic.category.sign');
