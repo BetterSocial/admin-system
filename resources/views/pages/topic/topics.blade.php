@@ -772,11 +772,6 @@
                         data: "total_posts",
                         render: function(data, type, row) {
                             return data;
-                            let total = 0;
-                            if (row.posts.length >= 1) {
-                                total = row.posts.length;
-                            }
-                            return total;
                         },
                     },
                     {
