@@ -203,9 +203,9 @@ class PostBlockController extends Controller
                 }
             }
 
-            $latestReactions = $value['latest_reactions'] ?? [];
-            $value['count_upvotes'] = isset($latestReactions['upvotes']) ? count($latestReactions['upvotes']) : 0;
-            $value['count_downvotes'] = isset($latestReactions['downvotes']) ? count($latestReactions['downvotes']) : 0;
+            $latestReactions = $value['reaction_counts'] ?? [];
+            $value['count_upvotes'] = isset($latestReactions['upvotes']) ? $latestReactions['upvotes'] : 0;
+            $value['count_downvotes'] = isset($latestReactions['downvotes']) ? $latestReactions['downvotes'] : 0;
 
             $withSortDescData[] = $value;
         }
