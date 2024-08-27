@@ -153,10 +153,11 @@ class Topics extends Model
                 5 => 'created_at',
                 6 => 'sort',
                 7 => 'followers',
-                8 => 'total_user_topics',
-                9 => 'total_posts',
+                8 => 'total_user_topics', // Menggunakan total_user_topics dari query
+                9 => 'total_posts', // Menggunakan total_posts dari query
                 10 => 'sign',
             );
+
             $searchName = $req->input('name');
             $searchCategory = $req->input('category');
 
@@ -167,25 +168,15 @@ class Topics extends Model
                 'topics.icon_path',
                 'topics.categories',
                 'topics.created_at',
-                'topics.sort',
-                'topics.flg_show',
-                'topics.sign'
+                DB::raw('COALESCE(topics.sort, 0) as sort'), // Pastikan sort diolah dengan benar
+                'topics.sign',
+                DB::raw('COALESCE((SELECT count(*) FROM user_topics WHERE user_topics.topic_id = topics.topic_id GROUP BY user_topics.topic_id), 0) as total_user_topics'), // COALESCE untuk default 0
+                DB::raw('COALESCE((SELECT count(*) FROM post_topics WHERE post_topics.topic_id = topics.topic_id GROUP BY post_topics.topic_id), 0) as total_posts') // COALESCE untuk default 0
             )
-                ->selectSub(function ($query) {
-                    $query->selectRaw('count(*)')
-                        ->from('user_topics')
-                        ->whereRaw('user_topics.topic_id = topics.topic_id')
-                        ->groupBy('user_topics.topic_id');
-                }, 'total_user_topics')
-                ->selectSub(function ($query) {
-                    $query->selectRaw('count(*)')
-                        ->from('post_topics')
-                        ->whereRaw('post_topics.topic_id = topics.topic_id')
-                        ->groupBy('post_topics.topic_id');
-                }, 'total_posts')
                 ->whereNull('topics.deleted_at');
 
             $query->with('userTopics', 'posts');
+
             if ($searchName !== null) {
                 $query->where('topics.name', 'ILIKE', '%' . $searchName . '%');
             }
@@ -196,10 +187,10 @@ class Topics extends Model
 
             $total = $query->count();
 
-
             $query = limitOrderQuery($req, $query, $columns);
 
             $data = $query->get();
+
             return response()->json([
                 'draw' => (int) $req->input('draw', 1),
                 'recordsTotal' => $total,
@@ -212,6 +203,8 @@ class Topics extends Model
             ], 500);
         }
     }
+
+
 
     public static function removeDuplicateTopicName($option)
     {

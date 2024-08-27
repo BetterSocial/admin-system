@@ -657,8 +657,8 @@
                 },
                 serverSide: true,
                 ajax: {
-                    url: "/topics/data",
-                    type: "POST",
+                    url: "{{ route('topic.data') }}",
+                    type: "GET",
                     headers: {
                         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content")
                     },
@@ -769,13 +769,9 @@
                         },
                     },
                     {
-                        data: "sign",
+                        data: "total_posts",
                         render: function(data, type, row) {
-                            let total = 0;
-                            if (row.posts.length >= 1) {
-                                total = row.posts.length;
-                            }
-                            return total;
+                            return data;
                         },
                     },
                     {

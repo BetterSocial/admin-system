@@ -549,7 +549,7 @@
                 },
                 ajax: {
                     url: "/post-blocks/data",
-                    type: "POST",
+                    type: "get",
                     headers: {
                         "X-CSRF-Token": token
                     },
@@ -681,48 +681,32 @@
                     },
                     // 7. Upvote
                     {
-                        data: "id",
+                        data: "count_upvotes",
                         orderable: true,
                         className: "menufilter textfilter",
                         render: function(data, type, row) {
-                            // upvote
-                            let {
-                                reaction_counts
-                            } = row;
-                            let upvote = reaction_counts.upvotes || 0;
-                            let activityId = row.id;
-                            let html = "";
-                            html =
-                                `<button style="border: none; background: transparent" onclick='reactionPost("${activityId}", "upvote")'> ${upvote} </button>`;
-                            return html;
+                            let upvote = data || 0;
+                            return `<button style="border: none; background: transparent" onclick='reactionPost("${row.id}", "upvote")'> ${upvote} </button>`;
                         },
                     },
-                    // 8. Downvote
                     {
-                        data: "anonimity",
+                        data: "count_downvotes",
                         orderable: true,
                         className: "menufilter textfilter",
                         render: function(data, type, row) {
-                            // downvote;
-                            let {
-                                reaction_counts
-                            } = row;
-                            let downvote = reaction_counts.downvotes || 0;
-                            let activityId = row.id;
-                            let html = "";
-                            html =
-                                `<button style="border: none; background: transparent" onclick='reactionPost("${activityId}", "downvote")'> ${downvote} </button>`;
-                            return html;
+                            let downvote = data || 0;
+                            return `<button style="border: none; background: transparent" onclick='reactionPost("${row.id}", "downvote")'> ${downvote} </button>`;
                         },
                     },
+
                     // 9. total block
                     {
-                        data: "post_type",
+                        data: "total_block",
                         orderable: true,
                         className: "menufilter textfilter",
                         render: function(data, type, row) {
-                            // total block
-                            return row.total_block;
+                            // Render total_block, default to 0 if null
+                            return data || 0;
                         },
                     },
                     // 10. Status

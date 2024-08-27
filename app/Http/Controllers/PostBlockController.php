@@ -117,12 +117,23 @@ class PostBlockController extends Controller
             return $data;
         }
 
+        // Convert null values to 0 for sorting
+        foreach ($data as &$item) {
+            if (!isset($item['count_upvotes'])) {
+                $item['count_upvotes'] = 0;
+            }
+            if (!isset($item['count_downvotes'])) {
+                $item['count_downvotes'] = 0;
+            }
+        }
+
         if ($sortDirection == 'asc') {
             return collect($data)->sortBy($sortBy)->values()->all();
         } else {
             return collect($data)->sortByDesc($sortBy)->values()->all();
         }
     }
+
 
 
     private function getFeeds($offset = 0, $limit = 10, $searchId = [])
@@ -173,41 +184,35 @@ class PostBlockController extends Controller
 
     private function handlePoll($data)
     {
-
         $withSortDescData = [];
-        foreach ($data as  $value) {
+        foreach ($data as $value) {
             $userId = $value['actor']['id'];
             $user = UserApps::select('user_id', 'blocked_by_admin')->where('user_id', $userId)->first();
             $value['user'] = $user ?? null;
+
             if ($value['verb'] == 'poll') {
                 $value['poll'] = $this->getPoll($value['polling_id']);
                 $value['polling_options'] = $this->getPollOption($value['polling_id']);
             }
+
+            // Ensure total_block is always initialized
             $value['total_block'] = 0;
             foreach ($this->posts as $post) {
                 if ($post->post_id == $value['id']) {
                     $value['total_block'] = $post->total_block;
                 }
             }
-            $latestReactions = $value['latest_reactions'];
 
-            if (isset($latestReactions['upvotes'])) {
-                $upvotesCount = count($latestReactions['upvotes']);
-                $value['count_upvotes'] = $upvotesCount;
-            } else {
-                $value['count_upvotes'] = 0;
-            }
-            if (isset($latestReactions['downvotes'])) {
-                $downvotesCount = count($latestReactions['downvotes']);
-                $value['count_downvotes'] = $downvotesCount;
-            } else {
-                $value['count_downvotes'] = 0;
-            }
+            $latestReactions = $value['latest_reactions'] ?? [];
+            $value['count_upvotes'] = isset($latestReactions['upvotes']) ? count($latestReactions['upvotes']) : 0;
+            $value['count_downvotes'] = isset($latestReactions['downvotes']) ? count($latestReactions['downvotes']) : 0;
 
             $withSortDescData[] = $value;
         }
         return collect($withSortDescData)->sortByDesc('total_block')->values()->all();
     }
+
+
 
     public function updateFeed(Request $request, $id)
     {
