@@ -199,7 +199,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('post-blocks')->group(function () {
         Route::get('/', [PostBlockController::class, 'index'])->name('post-block');
-        Route::post(DATA, [PostBlockController::class, 'data'])->name('post-block.data');
+        Route::get(DATA, [PostBlockController::class, 'data'])->name('post-block.data');
     });
     Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
     Route::delete('/post/comment/{id}', [PostController::class, 'deleteComment'])->name('post.comment.delete');
