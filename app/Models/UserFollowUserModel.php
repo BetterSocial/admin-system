@@ -17,7 +17,9 @@ class UserFollowUserModel extends Model
      */
     protected $fillable = [
         'user_id_follower',
-        'user_id_followed'
+        'user_id_followed',
+        'followed_at',
+        'is_anonymous',
     ];
     public $incrementing = false;
 

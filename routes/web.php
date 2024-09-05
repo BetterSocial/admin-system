@@ -116,9 +116,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::POST('/users/banned/{id}',  [UsersAppController::class, 'bannedUser']);
 
     //User Follow Data Topic
-    Route::get('/follow-topics', 'UserFollowController@index');
-
-    Route::POST("/user/topic", "UserFollowController@getList");
+    // Route::get('/follow-topics', 'UserFollowController@index');
+    Route::get('/follow-topics', [UserFollowController::class, 'index']);
+    Route::get('/user/topic', [UserFollowController::class, 'getList']);
 
 
 

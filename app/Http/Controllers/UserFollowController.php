@@ -28,55 +28,47 @@ class UserFollowController extends Controller
 
     public function getList(Request $req)
     {
-        $columns = array(
-            // datatable column index  => database column name
+        $columns = [
             0 => 'user_id',
             1 => 'username',
-            2 => 'real_name',
-            3 => 'country_code',
-            4 => 'created_at'
-        );
+            2 => 'country_code',
+            3 => 'created_at',
+            4 => 'is_anonymous',
+        ];
 
-        $userTopic = "SELECT C.user_id,C.username,C.real_name,C.country_code,A.created_at FROM user_topics A
-        JOIN topics B ON B.topic_id = A.topic_id 
-        JOIN users C ON C.user_id = A.user_id 
-        WHERE A.topic_id = " . $req->topic_id . " 
-        GROUP BY C.user_id,C.username,C.real_name,C.country_code,A.created_at";
+        $orderColumn = $columns[$req->order[0]['column']] ?? 'created_at'; // Default order column
+        $orderDirection = $req->order[0]['dir'] === 'asc' ? 'asc' : 'desc'; // Ensure valid order direction
 
-        $data = DB::SELECT($userTopic);
-        $total = count($data);
+        // Sanitize inputs
+        $topicId = (int) $req->input('topic_id');
+        $limit = (int) $req->input('length', 10);
+        $offset = (int) $req->input('start', 0);
 
-        $userTopic .= " ORDER BY " . $columns[$req->order[0]['column']] . " " . $req->order[0]['dir'] . " LIMIT $req->length OFFSET $req->start ";
+        // Query using Eloquent with relations
+        $query = UserApps::select('user_id', 'username', 'country_code', 'created_at', 'is_anonymous')
+            ->whereHas('userTopics', function ($query) use ($topicId) {
+                $query->where('topic_id', $topicId);
+            })
+            ->with(['userTopics'])
+            ->groupBy('user_id', 'username', 'country_code', 'created_at', 'is_anonymous');
 
-        $dataLimit = DB::SELECT($userTopic);
+        // Get total records before applying limit and offset
+        $total = $query->count();
+
+        // Apply ordering, limit, and offset
+        $users = $query->orderBy($orderColumn, $orderDirection)
+            ->limit($limit)
+            ->offset($offset)
+            ->get();
+
         return response()->json([
-            'draw'            => $req->draw,
-            'recordsTotal'    => $total,
-            "recordsFiltered" => $total,
-            'data'            => $dataLimit,
+            'draw' => (int) $req->input('draw', 1),
+            'recordsTotal' => $total,
+            'recordsFiltered' => $total,
+            'data' => $users,
         ]);
     }
-    //     $detailTopic = Topics::find($req->topic_id);
-    //     if($detailTopic == null){
-    //         return response()->json([
-    //             'success'=>false,
-    //             'message'=>'Data Topic Not Found'
-    //         ]);
-    //     }
-    //     else{
-    //         $html = view('pages.userFollow.user_follow_topic',
-    //         ['category_name' => 'user_follow',
-    //         'page_name' => 'User Follow Topic',
-    //         'has_scrollspy' => 1,
-    //         'scrollspy_offset' => '',
-    //         'detail_topic'=>$detailTopic])->render();
 
-    //         return response()->json([
-    //             'success'=>true,
-    //             'html'=>$html
-    //         ]);
-    //     }
-    // }
     public function userFollowDetail(Request $req)
     {
 
