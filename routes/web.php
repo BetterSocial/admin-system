@@ -104,7 +104,7 @@ Route::group(['middleware' => 'auth'], function () {
      * Users
      */
     Route::get('/view-users', [ViewUserController::class, 'index']);
-    Route::POST('/users/data', [UsersAppController::class, 'getData'])->name('masterUsers.data');
+    Route::get('/users/data', [UsersAppController::class, 'getData'])->name('masterUsers.data');
     Route::GET('/download-csv', 'UsersAppController@downloadCsv')->name('download');
 
 

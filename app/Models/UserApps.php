@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UserApps extends Model
 {
@@ -37,6 +38,12 @@ class UserApps extends Model
         'only_received_dm_from_user_following',
         'is_backdoor_user',
         'blocked_by_admin',
+        'verified_status',
+        'combinned_user_score',
+        'karma_score',
+        'is_karma_unlocked',
+        'followers_count_old',
+        'followers_count',
     ];
 
     public function follower()
@@ -139,29 +146,19 @@ class UserApps extends Model
                 8 => '',
                 9 => '',
                 10 => '',
-                11 => '',
+                11 => 'karma_score',
+                12 => '',
+                13 => '',
             );
 
-            $query = UserApps::userQuery($req);
+            // Query user dengan karma_score langsung dari UserApps
+            $query = UserApps::userQuery($req)
+                ->select('user_id', 'username', 'country_code', 'created_at', DB::raw('FLOOR(karma_score) as karma_score'), 'is_anonymous'); // Pilih kolom yang diperlukan termasuk karma_score
 
             $total = $query->count();
 
             $query = limitOrderQuery($req, $query, $columns);
             $users = $query->get();
-            $userIds = $users->pluck('user_id')->toArray();
-            $userScores = UserScoreModel::whereIn('_id', $userIds)->get();
-            $userScoreMap = [];
-            foreach ($userScores as $userScore) {
-                $userScoreMap[$userScore->_id] = $userScore;
-            }
-
-            foreach ($users as $user) {
-                if (isset($userScoreMap[$user->user_id])) {
-                    $userScore = $userScoreMap[$user->user_id];
-                    $userScore['age_score'] = 0;
-                    $user->user_score = $userScore;
-                }
-            }
 
             return response()->json([
                 'draw' => (int) $req->input('draw', 1),
@@ -178,6 +175,8 @@ class UserApps extends Model
             ]);
         }
     }
+
+
 
     public static function getUserDetail($userId)
     {
