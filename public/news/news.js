@@ -2,8 +2,8 @@ $(document).ready(function() {
   var datatble = $("#tableNews").DataTable({
     searching: false,
     stateSave: true,
-    lengthMenu: [50, 100, 250],
-    pageLength: 50,
+    lengthMenu: [50, 100, 1000],
+    pageLength: 100,
     language: {
       loadingRecords: "</br></br></br></br>;",
       processing: "Loading...",

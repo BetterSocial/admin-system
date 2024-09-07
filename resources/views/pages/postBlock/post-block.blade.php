@@ -535,9 +535,10 @@
                 serverSide: true,
                 processing: true,
                 lengthMenu: [
-                    [10, 100, 1000],
-                    [10, 100, 1000]
+                    [10, 25, 100],
+                    [10, 25, 100]
                 ],
+                pageLength: 100,
                 language: {
                     processing: "Loading...",
                     emptyTable: "No Data Post",
@@ -555,7 +556,6 @@
                     },
                     data: function(d) {
                         d.message = $("#message").val();
-                        console.log(d);
                     },
                 },
 

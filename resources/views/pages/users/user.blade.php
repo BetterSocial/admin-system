@@ -125,8 +125,8 @@
             var datatble = $("#tableUsers").DataTable({
                 searching: false,
                 stateSave: true,
-                lengthMenu: [50, 100, 250],
-                pageLength: 50,
+                lengthMenu: [10, 100, 1000],
+                pageLength: 100,
                 language: {
                     loadingRecords: "</br></br></br></br>;",
                     processing: "Loading...",
