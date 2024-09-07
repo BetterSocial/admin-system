@@ -110,6 +110,17 @@ class UserApps extends Model
         ]);
 
 
+        $filterAnonymousUsers = $req->input('is_anon', 'on');
+
+        if ($filterAnonymousUsers == 'on') {
+            // Jika on, hanya ambil pengguna yang tidak anonymous (is_anonymous = false)
+            $query->where('is_anonymous', false);
+        }
+
+        // Jika off, ambil semua user tanpa filter tambahan
+
+
+
         if ($searchUserId !== null) {
             $query->where('user_id', 'ILIKE', $searchUserId);
         }
@@ -154,6 +165,7 @@ class UserApps extends Model
             // Query user dengan karma_score langsung dari UserApps
             $query = UserApps::userQuery($req)
                 ->select('user_id', 'username', 'country_code', 'created_at', DB::raw('FLOOR(karma_score) as karma_score'), 'is_anonymous'); // Pilih kolom yang diperlukan termasuk karma_score
+
 
             $total = $query->count();
 
