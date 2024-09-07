@@ -26,10 +26,22 @@
                                     <input type="text" name="topic" id="topic" class="form-control mr-3"
                                         placeholder="Topic">
                                 </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="is_anon1" name="is_anon" class="custom-control-input"
+                                            value="on" checked>
+                                        <label class="custom-control-label" for="is_anon1">On</label>
+                                    </div>
+                                    <div class="custom-control custom-radio mx-2">
+                                        <input type="radio" id="is_anon2" name="is_anon" class="custom-control-input"
+                                            value="off">
+                                        <label class="custom-control-label" for="is_anon2">Off</label>
+                                    </div>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Search</button>
                             </form>
                         </div>
-                        <div class="col-lg-2 col-sm-8">
+                        <div class="col-lg-2 col-sm-4">
                             @unlessrole('viewer')
                                 <button class="btn btn-primary" onClick='downloadCsv()' id='downloadCsv'><b
                                         style="color:white">Download CSV</b></button>
@@ -132,10 +144,11 @@
                         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content")
                     },
                     data: function(d) {
-                        // d.username = $("#username").val();
-                        // d.countryCode = $("#countryCode").val();
-                        // d.topic = $("#topic").val();
-                        // d.user_id = $("#userId").val();
+                        d.username = $("#username").val();
+                        d.countryCode = $("#countryCode").val();
+                        d.topic = $("#topic").val();
+                        d.user_id = $("#userId").val();
+                        d.is_anon = $('input[name="is_anon"]:checked').val();
                     },
                 },
                 columns: [{
