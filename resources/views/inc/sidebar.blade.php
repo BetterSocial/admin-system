@@ -16,15 +16,10 @@
         <nav id="sidebar">
             <div class="shadow-bottom"></div>
             <ul class="list-unstyled menu-categories" id="accordionExample">
-                @if (
-                    $page_name != 'alt_menu' &&
-                        $page_name != 'blank_page' &&
-                        $page_name != 'boxed' &&
-                        $page_name != 'breadcrumb')
+                @if ($page_name != 'alt_menu' && $page_name != 'blank_page' && $page_name != 'boxed' && $page_name != 'breadcrumb')
                     @hasanyrole('editor|admin|viewer')
                         <li class="menu {{ $category_name === 'dashboard' ? 'active' : '' }}">
-                            <a href="/dashboard"
-                                data-active="{{ $category_name === 'dashboard' ? 'true' : 'false' }}"
+                            <a href="/dashboard" data-active="{{ $category_name === 'dashboard' ? 'true' : 'false' }}"
                                 aria-expanded="{{ $category_name === 'locations' ? 'true' : 'false' }}"
                                 class="dropdown-toggle">
                                 <div class="">
@@ -34,8 +29,7 @@
                         </li>
                         <li class="menu {{ $category_name === 'domain' ? 'active' : '' }}">
                             <a href="#app" data-active="{{ $category_name === 'domain' ? 'true' : 'false' }}"
-                                data-toggle="collapse"
-                                aria-expanded="{{ $category_name === 'apps' ? 'true' : 'false' }}"
+                                data-toggle="collapse" aria-expanded="{{ $category_name === 'apps' ? 'true' : 'false' }}"
                                 class="dropdown-toggle">
                                 <div class="">
                                     <span>Domain</span>
@@ -74,8 +68,7 @@
                         </li>
 
                         <li class="menu {{ $category_name === 'polling' ? 'active' : '' }}">
-                            <a href="/polling/index"
-                                data-active="{{ $category_name === 'polling' ? 'true' : 'false' }}"
+                            <a href="/polling/index" data-active="{{ $category_name === 'polling' ? 'true' : 'false' }}"
                                 aria-expanded="{{ $category_name === 'polling' ? 'true' : 'false' }}"
                                 class="dropdown-toggle">
                                 <div class="">
@@ -85,8 +78,7 @@
                         </li>
 
                         <li class="menu {{ $category_name === 'topics' ? 'active' : '' }}">
-                            <a href="/topics/index"
-                                data-active="{{ $category_name === 'topics' ? 'true' : 'false' }}"
+                            <a href="/topics/index" data-active="{{ $category_name === 'topics' ? 'true' : 'false' }}"
                                 aria-expanded="{{ $category_name === 'topics' ? 'true' : 'false' }}"
                                 class="dropdown-toggle">
                                 <div class="">
@@ -96,7 +88,7 @@
                         </li>
 
                         <li class="menu {{ $category_name === 'viewUsers' ? 'active' : '' }}">
-                            <a href="/view-users"
+                            <a href="{{ route('user') }}"
                                 data-active="{{ $category_name === 'viewUsers' ? 'true' : 'false' }}"
                                 aria-expanded="{{ $category_name === 'viewUsers' ? 'true' : 'false' }}"
                                 class="dropdown-toggle">
@@ -107,8 +99,7 @@
                         </li>
 
                         <li class="menu {{ $category_name === 'post-block' ? 'active' : '' }}">
-                            <a href="/post-blocks"
-                                data-active="{{ $category_name === 'post-block' ? 'true' : 'false' }}"
+                            <a href="/post-blocks" data-active="{{ $category_name === 'post-block' ? 'true' : 'false' }}"
                                 aria-expanded="{{ $category_name === 'post-block' ? 'true' : 'false' }}"
                                 class="dropdown-toggle">
                                 <div class="">
@@ -117,30 +108,24 @@
                             </a>
                         </li>
                         <li class="menu {{ $category_name === 'post' ? 'active' : '' }}">
-                            <a href="{{ route('post') }}"
-                                data-active="{{ $category_name === 'post' ? 'true' : 'false' }}"
-                                aria-expanded="{{ $category_name === 'post' ? 'true' : 'false' }}"
-                                class="dropdown-toggle">
+                            <a href="{{ route('post') }}" data-active="{{ $category_name === 'post' ? 'true' : 'false' }}"
+                                aria-expanded="{{ $category_name === 'post' ? 'true' : 'false' }}" class="dropdown-toggle">
                                 <div class="">
                                     <span>Post</span>
                                 </div>
                             </a>
                         </li>
                         <li class="menu {{ $category_name === 'logs' ? 'active' : '' }}">
-                            <a href="{{ route('logs') }}"
-                                data-active="{{ $category_name === 'logs' ? 'true' : 'false' }}"
-                                aria-expanded="{{ $category_name === 'logs' ? 'true' : 'false' }}"
-                                class="dropdown-toggle">
+                            <a href="{{ route('logs') }}" data-active="{{ $category_name === 'logs' ? 'true' : 'false' }}"
+                                aria-expanded="{{ $category_name === 'logs' ? 'true' : 'false' }}" class="dropdown-toggle">
                                 <div class="">
                                     <span>Logs</span>
                                 </div>
                             </a>
                         </li>
                         <li class="menu {{ $category_name === 'rss' ? 'active' : '' }}">
-                            <a href="{{ route('rss') }}"
-                                data-active="{{ $category_name === 'rss' ? 'true' : 'false' }}"
-                                aria-expanded="{{ $category_name === 'rss' ? 'true' : 'false' }}"
-                                class="dropdown-toggle">
+                            <a href="{{ route('rss') }}" data-active="{{ $category_name === 'rss' ? 'true' : 'false' }}"
+                                aria-expanded="{{ $category_name === 'rss' ? 'true' : 'false' }}" class="dropdown-toggle">
                                 <div class="">
                                     <span>Rss Link</span>
                                 </div>
@@ -164,9 +149,8 @@
                             class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-terminal">
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-terminal">
                                     <polyline points="4 17 10 11 4 5"></polyline>
                                     <line x1="12" y1="19" x2="20" y2="19">
                                     </line>
@@ -175,8 +159,8 @@
                             </div>
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
                                     class="feather feather-chevron-right">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
@@ -203,9 +187,8 @@
                         <a href="javascript:void(0);" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-home">
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
                                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                     <polyline points="9 22 9 12 15 12 15 22"></polyline>
                                 </svg>
@@ -215,13 +198,11 @@
                     </li>
 
                     <li class="menu">
-                        <a href="#submenu" data-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">
+                        <a href="#submenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-airplay">
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-airplay">
                                     <path
                                         d="M5 17H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1">
                                     </path>
@@ -231,15 +212,14 @@
                             </div>
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
                                     class="feather feather-chevron-right">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled" id="submenu"
-                            data-parent="#accordionExample">
+                        <ul class="collapse submenu list-unstyled" id="submenu" data-parent="#accordionExample">
                             <li>
                                 <a href="javascript:void(0);"> Submenu 1 </a>
                             </li>
@@ -250,13 +230,11 @@
                     </li>
 
                     <li class="menu">
-                        <a href="#submenu2" data-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">
+                        <a href="#submenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
                             <div class="">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-file">
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
                                     <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z">
                                     </path>
                                     <polyline points="13 2 13 9 20 9"></polyline>
@@ -265,25 +243,23 @@
                             </div>
                             <div>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round"
                                     class="feather feather-chevron-right">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
                             </div>
                         </a>
-                        <ul class="collapse submenu list-unstyled" id="submenu2"
-                            data-parent="#accordionExample">
+                        <ul class="collapse submenu list-unstyled" id="submenu2" data-parent="#accordionExample">
                             <li>
                                 <a href="javascript:void(0);"> Submenu 1 </a>
                             </li>
                             <li>
                                 <a href="#sm2" data-toggle="collapse" aria-expanded="false"
-                                    class="dropdown-toggle"> Submenu 2 <svg
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-chevron-right">
+                                    class="dropdown-toggle"> Submenu 2 <svg xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-chevron-right">
                                         <polyline points="9 18 15 12 9 6"></polyline>
                                     </svg> </a>
                                 <ul class="collapse list-unstyled sub-submenu" id="sm2"

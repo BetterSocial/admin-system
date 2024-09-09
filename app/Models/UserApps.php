@@ -160,11 +160,12 @@ class UserApps extends Model
                 11 => 'karma_score',
                 12 => '',
                 13 => '',
+                13 => 'blocked_by_admin'
             );
 
             // Query user dengan karma_score langsung dari UserApps
             $query = UserApps::userQuery($req)
-                ->select('user_id', 'username', 'country_code', 'created_at', DB::raw('FLOOR(karma_score) as karma_score'), 'is_anonymous'); // Pilih kolom yang diperlukan termasuk karma_score
+                ->select('user_id', 'username', 'country_code', 'created_at', DB::raw('FLOOR(karma_score) as karma_score'), 'is_anonymous', 'blocked_by_admin'); // Pilih kolom yang diperlukan termasuk karma_score
 
 
             $total = $query->count();
