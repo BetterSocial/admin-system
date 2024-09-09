@@ -68,6 +68,7 @@
                                     <th>karma_score</th>
                                     <th>Blocked (signed:2/anon:1)</th>
                                     <th>Topics</th>
+                                    <th>Blocked by admin</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -138,7 +139,7 @@
                     [10, 100, 1000]
                 ],
                 ajax: {
-                    url: "/users/data",
+                    url: "{{ route('user.data') }}",
                     type: "get",
                     headers: {
                         "X-CSRF-Token": $("meta[name=csrf-token]").attr("content")
@@ -318,6 +319,13 @@
                                 }
                             }
                             return `<p> ${text} </p>`;
+                        },
+                    },
+                    {
+                        data: "blocked_by_admin",
+                        orderable: false,
+                        render: function(data, type, row) {
+                            return data;
                         },
                     },
                 ],
