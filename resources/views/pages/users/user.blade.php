@@ -338,12 +338,13 @@
         });
 
         function downloadCsv(e) {
+            // e.preventDefault();
             var username = $("#username").val();
             var countryCode = $("#countryCode").val();
 
-            var popUpCsv = window.open("{{ route('download') }}", "_blank");
+            var popUpCsv = window.open("{{ route('user.download') }}", "_blank");
             popUpCsv.location =
-                "/download-csv" + "?username=" + username + "&countryCode=" + countryCode;
+                "{{ route('user.download') }}" + "?username=" + username + "&countryCode=" + countryCode;
         }
 
         function confirmAction(
