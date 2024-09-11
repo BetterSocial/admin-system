@@ -24,6 +24,18 @@ class UsersAppController extends Controller
         $this->queueService = new QueueService();
     }
 
+    public function index(Request $request)
+    {
+        $data = [
+            'category_name' => 'viewUsers',
+            'page_name' => 'view Users',
+            'has_scrollspy' => 0,
+            'scrollspy_offset' => '',
+
+        ];
+        return view('pages.users.user')->with($data);
+    }
+
     /**
      * Create a new controller instance.
      *

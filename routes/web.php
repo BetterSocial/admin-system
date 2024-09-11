@@ -103,9 +103,9 @@ Route::group(['middleware' => 'auth'], function () {
     /*
      * Users
      */
-    Route::get('/user', [ViewUserController::class, 'index'])->name('user');
+    Route::get('/user', [UsersAppController::class, 'index'])->name('user');
     Route::get('/user/data', [UsersAppController::class, 'getData'])->name('user.data');
-    Route::GET('/download-csv', 'UsersAppController@downloadCsv')->name('download');
+    Route::get('/user/download-csv', [UsersAppController::class, 'downloadCsv'])->name('user.download');
 
 
     /*
