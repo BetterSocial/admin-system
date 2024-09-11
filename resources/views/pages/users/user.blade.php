@@ -229,29 +229,19 @@
                     },
 
                     {
-                        data: "followers",
-                        orderable: false,
+                        data: "followers_count",
+                        orderable: true,
                         render: function(data, type, row) {
-                            let followers = [];
-                            followers = row.followeds;
-                            let total = followers.length;
+                            let total = data;
                             return `<a href="/user-follow-detail?type=FOLLOWERS&user_id=${row.user_id}"> <button type='button' class='btn btn-primary  btn-sm'>#Followers ${total}</button> </a>`;
                         },
                     },
                     {
-                        data: "following",
-                        orderable: false,
+                        data: "following_count",
+                        orderable: true,
                         render: function(data, type, row) {
-                            let followeds = [];
-                            followeds = row.followers;
-                            let total = followeds.length;
-                            return (
-                                "<a href='/user-follow-detail?type=FOLLOWING&user_id=" +
-                                row.user_id +
-                                "'> <button type='button' class='btn btn-primary btn-sm'>#Following " +
-                                total +
-                                "</button> </a>"
-                            );
+                            let total = data;
+                            return `<a href="/user-follow-detail?type=FOLLOWING&user_id=${row.user_id}"> <button type='button' class='btn btn-primary btn-sm'>#Following ${total}</button> </a>`;
                         },
                     },
                     {

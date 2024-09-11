@@ -100,6 +100,9 @@ class UserApps extends Model
             'created_at',
             'is_banned',
             'blocked_by_admin',
+            DB::raw("(SELECT COUNT(*) FROM user_follow_user WHERE user_id_follower = users.user_id) as followers_count"),
+            DB::raw("(SELECT COUNT(*) FROM user_follow_user WHERE user_id_followed = users.user_id) as following_count"),
+            DB::raw('FLOOR(karma_score) as karma_score'),
         );
 
         $query->with([
@@ -152,8 +155,8 @@ class UserApps extends Model
                 3 => 'country_code',
                 4 => 'created_at',
                 5 => '',
-                6 => "followers",
-                7 => 'following',
+                6 => "followers_count",
+                7 => 'following_count',
                 8 => '',
                 9 => '',
                 10 => '',
@@ -164,14 +167,13 @@ class UserApps extends Model
             );
 
             // Query user dengan karma_score langsung dari UserApps
-            $query = UserApps::userQuery($req)
-                ->select('user_id', 'username', 'country_code', 'created_at', DB::raw('FLOOR(karma_score) as karma_score'), 'is_anonymous', 'blocked_by_admin'); // Pilih kolom yang diperlukan termasuk karma_score
-
+            $query = UserApps::userQuery($req);
 
             $total = $query->count();
 
             $query = limitOrderQuery($req, $query, $columns);
             $users = $query->get();
+
 
             return response()->json([
                 'draw' => (int) $req->input('draw', 1),
