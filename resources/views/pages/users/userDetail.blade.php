@@ -144,3 +144,11 @@
         </div>
     </div>
 @endsection
+
+@push('js')
+    <script>
+        const userData = @json($data);
+        const elem = document.getElementById("account");
+        elem.innerHTML = prettyPrintJson.toHtml(userData);
+    </script>
+@endpush
