@@ -32,8 +32,6 @@ class ShowPostListController extends Controller
 
         $feed = new FeedGetStreamService();
         $feeds = $feed->getFeeds($req->user_id);
-
-        // file_put_contents('users.json', json_encode($req->user_id));
         return response()->json([
             'draw'            => $req->draw,
             'recordsTotal'    => 0,
