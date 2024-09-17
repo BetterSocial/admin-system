@@ -211,7 +211,7 @@
             });
 
             // Form submission logic
-            document.getElementById('createTopic').addEventListener('submit', function(e) {
+            /*document.getElementById('createTopic').addEventListener('submit', function(e) {
                 // Anda bisa menambahkan validasi tambahan di sini jika diperlukan
                 // Misalnya cek apakah gambar telah di-crop sebelum submit
                 if (!document.getElementById('file').files.length) {
@@ -219,6 +219,7 @@
                     alert("Please crop the image before submitting.");
                 }
             });
+            */
         });
     </script>
 @endpush
