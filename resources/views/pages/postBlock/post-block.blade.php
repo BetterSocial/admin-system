@@ -16,10 +16,22 @@
 
                 <div class="widget-content widget-content-area br-6">
                     <div class="row">
-                        <div class="col-lg-10 mt-4">
+                        <div class="col-4">
+                            <form class="form-inline" method="GET" id="searchTopic">
+                                <div class="form-group">
+                                    <input type="text" name="topic" id="topic" class="form-control"
+                                        placeholder="Search by Topic">
+                                    &nbsp;&nbsp;
+                                    <button type="submit" class="btn btn-primary">Search</button>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="col-4">
                             <form class="form-inline" method="POST" id="searchMessage">
                                 <div class="form-group">
-                                    <input type="text" id="message" class="form-control" placeholder="Search">
+                                    <input type="text" id="message" class="form-control"
+                                        placeholder="Search by Username">
                                     &nbsp;&nbsp;
                                     <button type="submit" class="btn btn-primary">Search</button>
                                 </div>
@@ -549,13 +561,14 @@
                     search: "Cari:",
                 },
                 ajax: {
-                    url: "/post-blocks/data",
+                    url: "{{ route('post-block.data') }}",
                     type: "get",
                     headers: {
                         "X-CSRF-Token": token
                     },
                     data: function(d) {
                         d.message = $("#message").val();
+                        d.topic = $('#topic').val();
                     },
                 },
 
@@ -822,6 +835,11 @@
                     },
                 ],
             });
+
+            $('#searchTopic').on('submit', function(e) {
+                e.preventDefault();
+                dataTablePost.draw();
+            })
 
             $("#searchMessage").on("submit", function(e) {
                 e.preventDefault();
