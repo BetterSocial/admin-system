@@ -11,6 +11,11 @@ class UserBlockedUser extends Model
     use HasFactory;
     protected $table    = 'user_blocked_user';
     protected $primaryKey = 'blocked_action_id';
+    protected $fillable = [
+        'user_id_blocker',
+        'user_id_blocked',
+        'reason_blocked'
+    ];
 
     public static function postByBlocked()
     {
