@@ -86,7 +86,7 @@ class TopicController extends Controller
                         'not_regex:/[&\s]/',
                     ],
                     'sort' => 'required|integer',
-                    'category' => '',
+                    'category' => 'nullable',
                     'file' => [
                         'nullable',
                         'image',
@@ -128,6 +128,7 @@ class TopicController extends Controller
             return $this->successResponseWithAlert('Successfully added the topic.', 'topic');
         } catch (Exception $e) {
             DB::rollBack();
+            dd($e);
             $message = $e->getMessage();
             if ($e  instanceof ValidationException) {
 
