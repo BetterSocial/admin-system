@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="table-responsive mb-4 mt-4">
-                        <table id="tablePostBlock" class="table table-hover" style="width:100%">
+                        <table id="tablePostBlocks" class="table table-hover" style="width:100%">
                             <caption>List Post</caption>
                             <thead>
                                 <tr>
@@ -58,7 +58,47 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @foreach ($posts as $item)
+                                    <tr>
+                                        <td>{{ $item->post_id }}</td>
+                                        <td>{{ $item->username }}</td>
+                                        <td>{{ $item->post_content }}</td>
+                                        <td>
+                                            @foreach ($item->comments as $comment)
+                                                <p>{{ $comment->comment }}</p>
+                                            @endforeach
+                                        </td>
+                                        <td>image</td>
+                                        <td>poll</td>
+                                        <td>
+                                            @if ($item->statistic)
+                                                {{ $item->statistic->upvote_count ?? 0 }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->statistic)
+                                                {{ $item->statistic->downvote_count ?? 0 }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->statistic)
+                                                {{ $item->statistic->block_count ?? 0 }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+                                        <td>status</td>
+                                        <td>Post data</td>
+                                        <td>Topics</td>
+                                        <td>Action</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
