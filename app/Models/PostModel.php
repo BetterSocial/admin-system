@@ -55,4 +55,9 @@ class PostModel extends Model
     {
         return $this->hasOne(PostStatisticModel::class, 'post_id', 'getstream_activity_id');
     }
+
+    public function polling()
+    {
+        return $this->hasMany(Polling::class, 'post_id', 'post_id');
+    }
 }

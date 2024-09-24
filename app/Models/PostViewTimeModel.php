@@ -11,6 +11,8 @@ class PostViewTimeModel extends Model
     public $timestamps = false;
     protected $table = 'post_view_time';
     protected $primaryKey = 'post_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'user_id',
         'view_time',

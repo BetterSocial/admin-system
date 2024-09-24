@@ -50,10 +50,10 @@ class PostBlockController extends Controller
     public function index(Request $request)
     {
         $query  = PostModel::query();
-        $query->with('user', 'comments', 'statistic')->where('getstream_activity_id', '!=', null);
+        $query->with('user', 'comments', 'statistic', 'topics', 'polling')->where('getstream_activity_id', '!=', null);
         $posts = $query->get();
         // return $posts;
-        return view('pages.postBlock.post-block', [
+        return view('pages.postBlock.page-post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
             'has_scrollspy' => 0,

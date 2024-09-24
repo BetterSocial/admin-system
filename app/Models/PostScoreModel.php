@@ -15,6 +15,8 @@ class PostScoreModel extends Model
     use HasFactory;
     protected $table = 'post_score';
     protected $primaryKey = 'post_score_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
     protected $fillable = [
         'feed_id',
         'post_score'

@@ -15,19 +15,9 @@
                 </div>
 
                 <div class="widget-content widget-content-area br-6">
-                    <div class="row">
-                        <div class="col-lg-10 mt-4">
-                            <form class="form-inline" method="POST" id="searchMessage">
-                                <div class="form-group">
-                                    <input type="text" id="message" class="form-control" placeholder="Search">
-                                    &nbsp;&nbsp;
-                                    <button type="submit" class="btn btn-primary">Search</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="table-responsive mb-4 mt-4">
-                        <table id="tablePostBlock" class="table table-hover" style="width:100%">
+
+                    <div class="table mb-4 mt-4">
+                        <table id="tablePostBlocks" class="table table-hover" style="width:100%">
                             <caption>List Post</caption>
                             <thead>
                                 <tr>
@@ -46,7 +36,109 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                                @foreach ($posts as $item)
+                                    <tr>
+                                        <td>{{ $item->post_id }}</td>
+                                        <td>{{ $item->username }}</td>
+                                        <td>{{ $item->post_content }}</td>
+                                        <td>
+                                            @if (!empty($item->comments))
+                                                <a href="javascript:void(0);" onclick="showComments('{{ $item->post_id }}')"
+                                                    class="text-primary">
+                                                    {{ count($item->comments) }} Comments
+                                                </a>
+                                            @else
+                                                <p>No comments</p>
+                                            @endif
+                                        </td>
+                                        <td>image</td>
+                                        <td>
+                                            @php
+                                                $polling = $item->polling;
+                                            @endphp
+                                            @if ($polling)
+                                                <ul>
+                                                    @foreach ($polling as $pollItem)
+                                                        <li>{{ $pollItem->question }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->statistic)
+                                                {{ $item->statistic->upvote_count ?? 0 }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->statistic)
+                                                {{ $item->statistic->downvote_count ?? 0 }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($item->statistic)
+                                                {{ $item->statistic->block_count ?? 0 }}
+                                            @else
+                                                0
+                                            @endif
+                                        </td>
+                                        <td>status</td>
+                                        <td>{{ $item->created_at }}</td>
+                                        <td>
+                                            @if ($item->topics)
+                                                <ul>
+                                                    @foreach ($item->topics as $topic)
+                                                        <li>{{ $topic->name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
+                                        </td>
+                                        {{-- Menampilkan Action seperti Block/Unblock, Hide/Show Post --}}
+                                        <td>
+                                            @if (isset($item->user) && isset($item->user->user_id))
+                                                @php
+                                                    $userId = $item->user->user_id;
+                                                    $isHidden = $item->is_hide ?? false;
+                                                    $isBlocked = $item->user->blocked_by_admin ?? false;
+                                                @endphp
+
+                                                {{-- Button for blocking/unblocking the user --}}
+                                                @if ($isBlocked)
+                                                    <button class="btn btn-primary btn-sm my-1"
+                                                        onclick="unBlockUser('{{ $userId }}')">Remove
+                                                        Downrank</button>
+                                                @else
+                                                    <button class="btn btn-danger btn-sm my-1"
+                                                        onclick="blockUser('{{ $userId }}')">Downrank User</button>
+                                                @endif
+
+                                                {{-- Button for hiding/showing the post --}}
+                                                @if ($isHidden)
+                                                    <button class="btn btn-primary btn-sm my-1"
+                                                        onclick="hideOrShowPost(false, '{{ $item->post_id }}')">Show
+                                                        Post</button>
+                                                @else
+                                                    <button class="btn btn-danger btn-sm my-1"
+                                                        onclick="hideOrShowPost(true, '{{ $item->post_id }}')">Hide
+                                                        Post</button>
+                                                @endif
+
+                                                {{-- Button for banning the user --}}
+                                                <button class="btn btn-danger btn-sm my-1"
+                                                    onclick="bannedUserByPostId('{{ $item->post_id }}')">Ban User</button>
+                                            @else
+                                                <p class="text-muted">User not found</p>
+                                            @endif
+                                        </td>
+
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -109,6 +201,7 @@
 @endsection
 @push('js')
     <script>
+        let postBlockUrl = "{{ route('post-block') }}";
         const showAlert = (title, message, type) => {
             const alertContainer = document.getElementById('alert-container');
             const alertMessage = document.getElementById('alert-message');
@@ -119,6 +212,52 @@
 
             alertContainer.style.display = 'block';
         };
+
+        // Fungsi untuk menampilkan komentar di modal
+        const showComments = async (postId) => {
+            // Kosongkan kontainer sebelum menampilkan komentar baru
+            const container = document.getElementById("cardBodyComment");
+            container.innerHTML = "";
+
+            // Panggil API untuk mendapatkan komentar berdasarkan postId
+            try {
+                const response = await fetch(`/post/${postId}/comments`, {
+                    method: "GET",
+                    headers: {
+                        "X-CSRF-Token": token,
+                        "Content-Type": "application/json",
+                    },
+                });
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    const comments = data.comments;
+
+                    // Loop melalui komentar dan tampilkan di dalam modal
+                    comments.forEach((comment) => {
+                        const commentElement = createComment({
+                            id: comment.id,
+                            text: comment.comment,
+                            avatar: comment.is_anonymous ?
+                                'https://path-to-anonymous-avatar.com/anon.png' : comment.user
+                                .profile_pic_path,
+                            username: comment.is_anonymous ? 'Anonymous' : comment.user.username,
+                            isAnonymous: comment.is_anonymous,
+                        });
+                        container.append(commentElement);
+                    });
+
+                    // Tampilkan modal setelah komentar berhasil dimuat
+                    $("#detailCommentModal").modal("show");
+                } else {
+                    Swal.fire("Error", "Failed to load comments", "error");
+                }
+            } catch (error) {
+                Swal.fire("Error", "Failed to load comments", "error");
+            }
+        };
+
+
 
         let dataTablePost;
 
@@ -490,7 +629,7 @@
                         const body = {
                             activity_id: postId,
                         };
-                        const response = await fetch(`/post/banned-user`, {
+                        const response = await fetch("{{ route('post.banned-user') }}", {
                             method: "POST",
                             headers: {
                                 "X-CSRF-Token": token,
@@ -501,7 +640,8 @@
                         let res = await response.json();
                         if (res.status === "success") {
                             Swal.fire("Success", "Success banned user", "success").then(() => {
-                                dataTablePost.draw();
+
+                                window.location.href = postBlockUrl;
                             });
                         } else {
                             Swal.fire("Error", res.message).then(() => {});
@@ -522,324 +662,7 @@
         }
 
         $(document).ready(function() {
-            $("#detailCommentModal").on("hide.bs.modal", function(e) {
-                let container = document.getElementById("cardBodyComment");
-                while (container.firstChild) {
-                    container.removeChild(container.lastChild);
-                }
-            });
-
-            dataTablePost = $("#tablePostBlock").DataTable({
-                searching: false,
-                stateSave: true,
-                serverSide: true,
-                processing: true,
-                lengthMenu: [
-                    [10, 25, 100],
-                    [10, 25, 100]
-                ],
-                pageLength: 100,
-                language: {
-                    processing: "Loading...",
-                    emptyTable: "No Data Post",
-                    info: "",
-                    infoEmpty: "",
-                    infoFiltered: "",
-                    zeroRecords: "No matching records found",
-                    search: "Cari:",
-                },
-                ajax: {
-                    url: "/post-blocks/data",
-                    type: "get",
-                    headers: {
-                        "X-CSRF-Token": token
-                    },
-                    data: function(d) {
-                        d.message = $("#message").val();
-                    },
-                },
-
-                stateSaveCallback: function(settings, data) {
-                    localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data));
-                },
-                stateLoadCallback: function(settings) {
-                    return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance));
-                },
-                initComplete: function(settings, json) {
-                    console.log(json);
-                },
-                columns: [
-                    // 1. ID
-                    {
-                        data: "id",
-                        orderable: false,
-                        className: "menufilter textfilter",
-                    },
-                    // 2. username
-                    {
-                        data: "verb",
-                        orderable: false,
-                        className: "menufilter textfilter",
-                        render: function(data, type, row) {
-                            if (row.anonimity) {
-                                return row.anon_user_info_color_name + " " + row
-                                    .anon_user_info_emoji_name;
-                            } else {
-                                if (row.actor.error) {
-                                    return row.actor.error;
-                                }
-                                return row.actor?.data?.username ?? "User not found";
-                            }
-                        },
-                    },
-                    // 3. mesasge
-                    {
-                        data: "message",
-                        orderable: false,
-                        className: "message",
-                        render: function(data, type, row) {
-                            return `
-                <div class="btn-detail"  data-item="${row}">${data}</div>
-                `;
-                        },
-                    },
-                    // 4. comments
-                    {
-                        data: "message",
-                        orderable: false,
-                        className: "menufilter textfilter",
-                        render: function(data, type, row) {
-                            // comments tab;
-                            let value = "";
-                            let {
-                                latest_reactions
-                            } = row;
-                            if (latest_reactions) {
-                                let {
-                                    comment
-                                } = latest_reactions;
-                                if (comment) {
-                                    let postInJson = JSON.stringify(row);
-                                    value +=
-                                        `<button style="border: none; background: transparent" onclick='detailComment(${postInJson})' >`;
-                                    comment.forEach((element) => {
-                                        let username = element.user?.data?.username ||
-                                            "username not found";
-                                        let item = "<p>" + username + ": " + element.data
-                                            .text + "</p>";
-                                        value = value + item;
-                                    });
-
-                                    value += "</button>";
-                                }
-                            }
-                            return value;
-                        },
-                    },
-                    // 5. image
-                    {
-                        data: "images_url", // Ubah sesuai dengan data yang benar dari server Anda
-                        orderable: false,
-                        className: "text-center",
-                        render: function(data, type, row) {
-                            if (data && data.length > 0) {
-                                // Jika ada beberapa gambar, render semuanya sebagai thumbnail yang bisa diklik
-                                let imagesHtml = '';
-                                data.forEach(function(url) {
-                                    imagesHtml += `
-                                        <a href="#" class="image-preview" data-image-url="${url}">
-                                            <img src="${url}" alt="Image" class="rounded" width="100" height="100" style="margin-right: 5px;">
-                                        </a>`;
-                                });
-                                return imagesHtml;
-                            } else {
-                                return 'No Image';
-                            }
-                        },
-                    },
-                    // 6. Poll Options
-                    {
-                        data: "verb",
-                        orderable: false,
-                        className: "menufilter textfilter",
-                        render: function(data, type, row) {
-                            // poll options tab;
-                            let value = "";
-                            if (data === "poll") {
-                                value = value + "<ul>";
-                                row.polling_options.forEach(renderProductList);
-
-                                function renderProductList(element, index, arr) {
-                                    let item = "<li>" + element + "</li>";
-                                    value = value + item;
-                                }
-
-                                value = value + "</ul>";
-                            }
-                            return value;
-                        },
-                    },
-                    // 7. Upvote
-                    {
-                        data: "count_upvotes",
-                        orderable: true,
-                        className: "menufilter textfilter",
-                        render: function(data, type, row) {
-                            let upvote = data || 0;
-                            return `<button style="border: none; background: transparent" onclick='reactionPost("${row.id}", "upvote")'> ${upvote} </button>`;
-                        },
-                    },
-                    {
-                        data: "count_downvotes",
-                        orderable: true,
-                        className: "menufilter textfilter",
-                        render: function(data, type, row) {
-                            let downvote = data || 0;
-                            return `<button style="border: none; background: transparent" onclick='reactionPost("${row.id}", "downvote")'> ${downvote} </button>`;
-                        },
-                    },
-
-                    // 9. total block
-                    {
-                        data: "total_block",
-                        orderable: true,
-                        className: "menufilter textfilter",
-                        render: function(data, type, row) {
-                            // Render total_block, default to 0 if null
-                            return data || 0;
-                        },
-                    },
-                    // 10. Status
-                    {
-                        data: "post_type",
-                        orderable: false,
-                        className: "menufilter textfilter",
-                        render: function(data, type, row) {
-                            //status
-                            let isHide = false;
-                            if (row.is_hide) {
-                                isHide = true;
-                            }
-                            let html = "";
-                            if (isHide) {
-                                html = `<p class="info">Hidden</p>`;
-                            } else {
-                                html = `<p>Show</p>`;
-                            }
-
-                            return html;
-                            // status tab
-                        },
-                    },
-                    // 11. post date
-                    {
-                        data: "time",
-                        orderable: true,
-                        className: "menufilter textfilter",
-                        render: function(data, type, row) {
-                            // time from post date
-                            const tanggal = new Date(row.time);
-                            const namaBulan = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
-                                "Aug", "Sep", "Oct", "Nov", "Dec"
-                            ];
-
-                            const tanggalFormatted =
-                                tanggal.getDate() +
-                                " " +
-                                namaBulan[tanggal.getMonth()] +
-                                " " +
-                                tanggal.getFullYear() +
-                                " " +
-                                ("0" + tanggal.getHours()).slice(-2) +
-                                ":" +
-                                ("0" + tanggal.getMinutes()).slice(-2) +
-                                ":" +
-                                ("0" + tanggal.getSeconds()).slice(-2);
-
-                            return tanggalFormatted;
-                        },
-                    },
-                    // 12. topics
-                    {
-                        data: "topics",
-                        name: "topics",
-                        orderable: false,
-                        className: "menufilter",
-                        render: function(data, type, row) {
-                            if (data.length >= 1) {
-                                let topics = "";
-                                data.map((item) => {
-                                    topics += `#${item} <br>`;
-                                });
-                                return topics;
-                            }
-                            return data;
-                        },
-                    },
-                    // 13. action
-                    {
-                        data: "post_type",
-                        orderable: false,
-                        render: function(data, type, row) {
-                            // action
-                            let userId = row.actor.id;
-                            let clickBlockUser = "blockUser('" + userId + "')";
-                            let clickUnBlockUser = "unBlockUser('" + userId + "')";
-
-                            const btnUnBlockUser = createButton("primary", "Remove downrank",
-                                clickUnBlockUser);
-                            const btnBlockUser = createButton("danger", "Downrank user",
-                                clickBlockUser);
-                            let isHide = false;
-                            if (row.is_hide) {
-                                isHide = true;
-                            }
-                            let btnBlok = "";
-                            if (row.hasOwnProperty("user") && row.user != null) {
-                                let user = row.user;
-                                if (user.blocked_by_admin) {
-                                    btnBlok = btnUnBlockUser;
-                                } else {
-                                    btnBlok = btnBlockUser;
-                                }
-                            }
-                            let html = "";
-                            if (isHide) {
-                                let clickShow = "hideOrShowPost(false,'" + row.id + "')";
-                                html += createButton("primary", "Show Post", clickShow);
-                                let clickBanned = "bannedUserByPostId('" + row.id + "')";
-                                html += createButton("danger", "Ban User", clickBanned);
-                                html += btnBlok;
-                            } else {
-                                let clickHide = "hideOrShowPost(true,'" + row.id + "')";
-                                html += createButton("danger", "Hide Post", clickHide);
-                                let clickBanned = "bannedUserByPostId('" + row.id + "')";
-                                html += createButton("danger", "Ban User", clickBanned);
-                                html += btnBlok;
-                            }
-                            return html;
-                        },
-                    },
-                ],
-            });
-
-            $("#searchMessage").on("submit", function(e) {
-                e.preventDefault();
-                dataTablePost.draw();
-                e.preventDefault();
-            });
-
-            $("#search").on("submit", function(e) {
-                dataTablePost.draw();
-                e.preventDefault();
-            });
-
-            $('#tablePostBlock').on('click', '.image-preview', function(e) {
-                e.preventDefault();
-                const imageUrl = $(this).data('image-url');
-                $('#previewImage').attr('src', imageUrl);
-                $('#imagePreviewModal').modal('show');
-            });
+            $('#tablePostBlocks').dataTable({})
 
             /// end
         });
@@ -904,8 +727,11 @@
                         icon: "success",
                         title: "Success",
                         text: data.message,
+                    }).then(() => {
+                        // Redirect ke route setelah sukses
+                        window.location.href = postBlockUrl;
                     });
-                    dataTablePost.draw();
+
                 }
             );
         }
@@ -923,8 +749,10 @@
                         icon: "success",
                         title: "Success",
                         text: data.message,
+                    }).then(() => {
+                        // Redirect ke route setelah sukses
+                        window.location.href = postBlockUrl;
                     });
-                    dataTablePost.draw();
                 }
             );
         }
@@ -942,8 +770,10 @@
                         icon: "success",
                         title: "Success",
                         text: data.message,
-                    });
-                    dataTablePost.draw();
+                    }).then(() => {
+                        window.location.href = postBlockUrl;
+                    })
+
                 }
             );
         }
@@ -952,11 +782,11 @@
             let body = {
                 is_hide: status,
             };
-            console.log(body);
             confirmAction("Are you sure?", body, `/post/hide/${postId}`, "Success", "Oops...", function(data) {
-                console.log(data);
+
                 Swal.fire("Success", status ? "Success hide post" : "Success show post", "success").then(() => {
-                    dataTablePost.draw();
+                    // dataTablePost.draw();
+                    window.location.href = postBlockUrl;
                 });
             });
         };

@@ -10,4 +10,6 @@ class PostUpvotedModel extends Model
     use HasFactory;
     protected $table = 'post_upvoted';
     protected $primaryKey = 'post_id';
+    public $incrementing = false;
+    protected $keyType = 'string';
 }
