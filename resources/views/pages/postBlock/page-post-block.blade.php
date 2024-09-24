@@ -45,8 +45,12 @@
                                         <td>
                                             @if (!empty($item->comments))
                                                 <a href="javascript:void(0);" onclick="showComments('{{ $item->post_id }}')"
-                                                    class="text-primary">
-                                                    {{ count($item->comments) }} Comments
+                                                    class="" style="color: inherit; text-decoration: none;">
+                                                    <ul>
+                                                        @foreach ($item->comments as $comment)
+                                                            <li>{{ $comment->comment }}</li>
+                                                        @endforeach
+                                                    </ul>
                                                 </a>
                                             @else
                                                 <p>No comments</p>

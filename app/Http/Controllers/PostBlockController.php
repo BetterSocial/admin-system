@@ -52,7 +52,6 @@ class PostBlockController extends Controller
         $query  = PostModel::query();
         $query->with('user', 'comments', 'statistic', 'topics', 'polling')->where('getstream_activity_id', '!=', null);
         $posts = $query->get();
-        // return $posts;
         return view('pages.postBlock.page-post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
