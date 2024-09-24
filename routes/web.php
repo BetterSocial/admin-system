@@ -203,6 +203,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::post('/post/hide/{id}', [PostController::class, 'postHide'])->name('post.hide');
     Route::delete('/post/comment/{id}', [PostController::class, 'deleteComment'])->name('post.comment.delete');
+    Route::get('/post/{postId}/comments', [PostController::class, 'getComments']);
+
 
     /**
      * logs

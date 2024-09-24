@@ -49,11 +49,15 @@ class PostBlockController extends Controller
 
     public function index(Request $request)
     {
-        return view('pages.postBlock.post-block', [
+        $query  = PostModel::query();
+        $query->with('user', 'comments', 'statistic', 'topics', 'polling')->where('getstream_activity_id', '!=', null);
+        $posts = $query->get();
+        return view('pages.postBlock.page-post-block', [
             'category_name' => 'post-block',
             'page_name' => 'Post Block',
             'has_scrollspy' => 0,
             'scrollspy_offset' => '',
+            'posts' => $posts
         ]);
     }
 
@@ -99,6 +103,7 @@ class PostBlockController extends Controller
 
             $data = $this->getFeeds($dataTable['start'], $dataTable['length'], $activityIds);
             $dataAfterSort = $this->handleSort($data, $dataTable);
+            file_put_contents('data.json', json_encode($dataAfterSort));
             return response()->json([
                 'draw' => $draw,
                 'data' => $dataAfterSort ?? [],

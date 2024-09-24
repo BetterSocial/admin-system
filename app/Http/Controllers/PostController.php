@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entities\PostEntityBuilder;
 use App\Jobs\CreatePostJob;
 use App\Models\LogModel;
+use App\Models\PostModel;
 use App\Models\UserApps;
 use App\Services\ApiKeyService;
 use App\Services\FeedGetStreamService;
@@ -259,6 +260,33 @@ class PostController extends Controller
             }
         } catch (\Throwable $th) {
             return $this->errorResponse('Internal server error with message: ' . $th->getMessage());
+        }
+    }
+
+    public function getComments($postId)
+    {
+        $post = PostModel::with('comments.user')->find($postId);
+
+        if ($post) {
+            return response()->json([
+                'status' => 'success',
+                'comments' => $post->comments->map(function ($comment) {
+                    return [
+                        'id' => $comment->id,
+                        'comment' => $comment->comment,
+                        'user' => $comment->user ? [
+                            'username' => $comment->user->username,
+                            'profile_pic_path' => $comment->user->profile_pic_path,
+                        ] : null,
+                        'is_anonymous' => $comment->is_anonymous,
+                    ];
+                }),
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Post not found',
+            ], 404);
         }
     }
 }

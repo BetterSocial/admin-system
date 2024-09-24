@@ -14,4 +14,9 @@ class Polling extends Model
     protected $keyType = 'uuid';
     const CREATED_AT    = 'created_at';
     const UPDATED_AT    = 'updated_at';
+
+    public function post()
+    {
+        return $this->belongsTo(PostModel::class, 'post_id', 'post_id');
+    }
 }

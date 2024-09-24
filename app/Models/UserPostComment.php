@@ -14,12 +14,13 @@ class UserPostComment extends Model
 
     protected $fillable = [
         'post_id',
-        'parent_comment_id',
         'comment_id',
         'author_user_id',
         'commenter_user_id',
+        'comment',
+        'parent_comment_id',
         'is_anonymous',
-        'comment'
+
     ];
 
     public function user()
