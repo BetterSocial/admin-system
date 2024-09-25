@@ -86,7 +86,7 @@
                 <form action="{{ route('user.custome-rank') }}" method="post" id="modal-category">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabel">Custome Rank</h5>
+                        <h5 class="modal-title" id="detailModalLabel">Custom Rank</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -223,7 +223,7 @@
 
                             const btnCustomeRank = createButton(
                                 "info",
-                                "Custome Rank",
+                                "Custom Rank",
                                 clickCustomeRank
                             );
 
