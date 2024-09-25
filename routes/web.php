@@ -141,6 +141,8 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('user.admin-block-user');
         Route::get('/comments', [UserCommentController::class, 'index'])->name('user.comments');
         Route::post('/comments/data', [UserCommentController::class, 'getData'])->name('user.comments.data');
+
+        Route::post('/customer-rank', [UsersAppController::class, 'customeRank'])->name('user.custome-rank');
     });
 
 

@@ -247,4 +247,23 @@ class UsersAppController extends Controller
             return $this->errorResponse($th->getMessage(), 400);
         }
     }
+
+    public function customeRank(Request $request)
+    {
+        try {
+            $request->validate([
+                'userId' => 'required|exists:users,user_id',
+                'score' => 'required'
+            ]);
+            $res = $this->queueService->customeRank($request->input('userId'), $request->input('score'));
+
+            $code = $res['code'];
+            if ($code != 200) {
+                return $this->errorResponseWithAlert('Failed to proses custome rank', 400);
+            }
+            return $this->successResponseWithAlert('being processed in queue');
+        } catch (\Throwable $th) {
+            return $this->errorResponseWithAlert($th->getMessage());
+        }
+    }
 }
