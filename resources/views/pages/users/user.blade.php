@@ -76,6 +76,39 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="customeRankModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form action="{{ route('user.custome-rank') }}" method="post" id="modal-category">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="detailModalLabel">Custom Rank</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="">
+                            <div id="cardCategory" class="">
+                                <input type="text" id="userIdModal" name="userId" hidden>
+                                <div class="form-group">
+                                    <label for="">Score</label>
+                                    <input type="number" class="form-control" placeholder="1.0" name="score"
+                                        step="0.1" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-submit-category">Submit</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 @endsection
@@ -174,6 +207,7 @@
 
                             let clickBlockUser = "blockUser('" + row.user_id + "')";
                             let clickUnBlockUser = "unBlockUser('" + row.user_id + "')";
+                            let clickCustomeRank = "customeRank('" + row.user_id + "')";
 
                             const btnUnBlockUser = createButton(
                                 "primary",
@@ -185,11 +219,21 @@
                                 "Downrank user",
                                 clickBlockUser
                             );
+
+
+                            const btnCustomeRank = createButton(
+                                "info",
+                                "Custom Rank",
+                                clickCustomeRank
+                            );
+
                             if (blocked_by_admin) {
                                 html += btnUnBlockUser;
                             } else {
                                 html += btnBlockUser;
                             }
+
+                            html += btnCustomeRank;
 
                             return html;
                         },
@@ -462,6 +506,13 @@
                         .ajax.reload();
                 }
             );
+        }
+
+
+        function customeRank(userId) {
+            console.log(userId);
+            $('#userIdModal').val(userId);
+            $("#customeRankModal").modal("show");
         }
     </script>
 @endpush

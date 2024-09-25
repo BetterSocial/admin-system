@@ -34,4 +34,14 @@ class QueueService
             ]);
         return $response->json();
     }
+
+    public function customeRank($userId, $score)
+    {
+        $response = $this->client
+            ->post($this->baseUrl . '/set-wpu-user', [
+                'userId' => $userId,
+                'score' => $score,
+            ]);
+        return $response->json();
+    }
 }
